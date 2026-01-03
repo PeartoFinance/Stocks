@@ -1,0 +1,87 @@
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Next.js Build Output
+/.next/
+/out/
+
+# Production Build
+/build
+
+# Misc / OS Files
+.DS_Store
+*.pem
+
+# Debug Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local Env Files (CRITICAL: Do not commit secrets)
+.env*.local
+.env
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# --- Next.js Essentials ---
+node_modules/
+.next/
+out/
+build/
+
+# --- Environment Secrets ---
+# Block all env files by default, except the example template
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+!.env.example
+
+# --- TypeScript & Config ---
+*.tsbuildinfo
+next-env.d.ts
+.eslintcache
+
+# --- Testing (Vitest / Playwright / Cypress) ---
+/coverage
+/test-results
+/playwright-report
+/blob-report
+/test-results/
+/screenshots/
+/videos/
+
+# --- IDE & Editors ---
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# --- OS Metadata ---
+.DS_Store
+Thumbs.db
+
+# --- Logs ---
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.env

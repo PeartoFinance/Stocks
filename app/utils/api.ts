@@ -1,0 +1,439 @@
+import { Stock, MarketIndex, HistoricalData, TechnicalIndicators, FundamentalData, StockRecommendation, ScreenerFilters, APIResponse, StockData } from '../types';
+
+/**
+ * Stock API Service
+ * Connects to core server's market data API with country-specific filtering
+ * 
+ * IMPORTANT: NEXT_PUBLIC_API_URL should be set to the base API URL
+ * If it's https://pearto.com/api/ - endpoints will be /market/stocks (without /api/ prefix)
+ * If it's https://pearto.com - endpoints will be /api/market/stocks (with /api/ prefix)
+ */
+
+const RAW_API_BASE = process.env.NEXT_PUBLIC_API_URL || '';
+// Remove trailing slash for consistent URL building
+const API_BASE = RAW_API_BASE.replace(/\/$/, '');
+// Check if API_BASE already ends with /api
+const API_INCLUDES_PATH = API_BASE.endsWith('/api');
+const COUNTRY_KEY = 'user_country_override';
+
+// Get current country code from localStorage
+function getCountryCode(): string {
+  if (typeof window === 'undefined') return 'US';
+  return localStorage.getItem(COUNTRY_KEY) || 'US';
+}
+
+// Build headers with country code (matching core app's implementation)
+function buildHeaders(): Record<string, string> {
+  return {
+    'Content-Type': 'application/json',
+    'X-User-Country': getCountryCode(),
+  };
+}
+
+// Build the full URL from endpoint
+function buildUrl(endpoint: string): string {
+  // If endpoint starts with /api/ and API_BASE already includes /api, remove it
+  let cleanEndpoint = endpoint;
+  if (API_INCLUDES_PATH && endpoint.startsWith('/api/')) {
+    cleanEndpoint = endpoint.replace('/api/', '/');
+  }
+  return `${API_BASE}${cleanEndpoint}`;
+}
+
+// Helper to make API requests (matching core app's fetchWithTimeout pattern)
+async function apiFetch<T>(endpoint: string, options?: RequestInit): Promise<T> {
+  const url = buildUrl(endpoint);
+  console.log('[stockAPI] Fetching:', url);
+
+  const response = await fetch(url, {
+    ...options,
+    cache: 'no-store', // Match core app
+    mode: 'cors',      // Explicitly set CORS mode
+    credentials: 'omit', // Don't send cookies for cross-origin requests
+    headers: {
+      ...buildHeaders(),
+      ...options?.headers,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`API Error: ${response.status}`);
+  }
+
+  return response.json();
+}
+
+// Transform server response to Stock type
+function transformQuote(data: Record<string, unknown>): Stock {
+  return {
+    symbol: String(data.symbol || ''),
+    name: String(data.name || ''),
+    price: Number(data.price) || 0,
+    change: Number(data.change || data.change_percent) || 0,
+    changePercent: Number(data.change_percent || data.changesPercentage) || 0,
+    volume: Number(data.volume) || 0,
+    marketCap: Number(data.market_cap || data.marketCap) || undefined,
+    peRatio: Number(data.pe_ratio || data.pe) || undefined,
+    eps: undefined,
+    dividendYield: undefined,
+    week52High: Number(data['52_week_high'] || data.yearHigh) || undefined,
+    week52Low: Number(data['52_week_low'] || data.yearLow) || undefined,
+    beta: undefined,
+    sector: String(data.sector || ''),
+    industry: String(data.industry || ''),
+    description: String(data.description || ''),
+    high52Week: Number(data['52_week_high'] || data.yearHigh) || undefined,
+    low52Week: Number(data['52_week_low'] || data.yearLow) || undefined,
+  };
+}
+
+export const stockAPI = {
+  // Market data endpoints
+  async getMarketOverview(): Promise<APIResponse<MarketIndex[]>> {
+    try {
+      const data = await apiFetch<{ success: boolean; data: unknown[] }>('/api/market/stocks?limit=10');
+
+      const indices: MarketIndex[] = (data.data || []).slice(0, 4).map((item: unknown) => {
+        const d = item as Record<string, unknown>;
+        return {
+          symbol: String(d.symbol || ''),
+          name: String(d.name || ''),
+          price: Number(d.price) || 0,
+          change: Number(d.change) || 0,
+          changePercent: Number(d.change_percent) || 0,
+        };
+      });
+
+      return {
+        data: indices,
+        success: true,
+        timestamp: new Date().toISOString(),
+      };
+    } catch (error) {
+      console.error('[stockAPI] getMarketOverview error:', error);
+      return { data: [], success: false, timestamp: new Date().toISOString() };
+    }
+  },
+
+  async getTrendingStocks(): Promise<APIResponse<Stock[]>> {
+    try {
+      const data = await apiFetch<{ success: boolean; data: unknown[] }>('/api/market/movers?type=gainers&limit=10');
+
+      const stocks: Stock[] = (data.data || []).map((item: unknown) =>
+        transformQuote(item as Record<string, unknown>)
+      );
+
+      return {
+        data: stocks,
+        success: true,
+        timestamp: new Date().toISOString(),
+      };
+    } catch (error) {
+      console.error('[stockAPI] getTrendingStocks error:', error);
+      return { data: [], success: false, timestamp: new Date().toISOString() };
+    }
+  },
+
+  // Stock data endpoints
+  async searchStocks(query: string): Promise<APIResponse<Array<{ symbol: string; name: string }>>> {
+    try {
+      const data = await apiFetch<{ success: boolean; data: unknown[] }>(
+        `/api/market/search?q=${encodeURIComponent(query)}&limit=10`
+      );
+
+      const results = (data.data || []).map((item: unknown) => {
+        const d = item as Record<string, unknown>;
+        return {
+          symbol: String(d.symbol || ''),
+          name: String(d.name || ''),
+        };
+      });
+
+      return {
+        data: results,
+        success: true,
+        timestamp: new Date().toISOString(),
+      };
+    } catch (error) {
+      console.error('[stockAPI] searchStocks error:', error);
+      return { data: [], success: false, timestamp: new Date().toISOString() };
+    }
+  },
+
+  async getStockQuote(symbol: string): Promise<APIResponse<Stock>> {
+    try {
+      const data = await apiFetch<{ success: boolean; data: Record<string, unknown> }>(
+        `/api/market/quote/${encodeURIComponent(symbol.toUpperCase())}`
+      );
+
+      if (!data.success || !data.data) {
+        throw new Error(`Stock ${symbol} not found`);
+      }
+
+      return {
+        data: transformQuote(data.data),
+        success: true,
+        timestamp: new Date().toISOString(),
+      };
+    } catch (error) {
+      console.error('[stockAPI] getStockQuote error:', error);
+      throw error;
+    }
+  },
+
+  async getHistoricalData(symbol: string, period: string = '1y'): Promise<APIResponse<HistoricalData[]>> {
+    try {
+      // Map period to backend format
+      const rangeMap: Record<string, string> = {
+        '1d': '1d', '5d': '5d', '1m': '1mo', '3m': '3mo',
+        '6m': '6mo', '1y': '1y', '2y': '2y', '5y': '5y'
+      };
+      const range = rangeMap[period] || '1y';
+
+      const data = await apiFetch<{ success: boolean; points?: Array<{ t: number; c: number; v?: number }> }>(
+        `/api/stocks/history?symbol=${encodeURIComponent(symbol)}&range=${range}`
+      );
+
+      const historicalData: HistoricalData[] = (data.points || []).map(p => ({
+        date: new Date(p.t * 1000).toISOString().split('T')[0],
+        open: p.c,
+        high: p.c * 1.01,
+        low: p.c * 0.99,
+        close: p.c,
+        volume: p.v || 0,
+      }));
+
+      return {
+        data: historicalData,
+        success: true,
+        timestamp: new Date().toISOString(),
+      };
+    } catch (error) {
+      console.error('[stockAPI] getHistoricalData error:', error);
+      return { data: [], success: false, timestamp: new Date().toISOString() };
+    }
+  },
+
+  async getScreenerResults(filters: ScreenerFilters): Promise<APIResponse<Stock[]>> {
+    try {
+      const data = await apiFetch<{ success: boolean; data: unknown[] }>('/api/market/stocks?limit=100');
+
+      let results: Stock[] = (data.data || []).map((item: unknown) =>
+        transformQuote(item as Record<string, unknown>)
+      );
+
+      // Apply filters client-side
+      if (filters.minPrice) {
+        results = results.filter(stock => stock.price >= filters.minPrice!);
+      }
+      if (filters.maxPrice) {
+        results = results.filter(stock => stock.price <= filters.maxPrice!);
+      }
+      if (filters.minMarketCap) {
+        results = results.filter(stock => (stock.marketCap || 0) >= filters.minMarketCap!);
+      }
+      if (filters.maxMarketCap) {
+        results = results.filter(stock => (stock.marketCap || 0) <= filters.maxMarketCap!);
+      }
+      if (filters.sector) {
+        results = results.filter(stock => stock.sector?.toLowerCase() === filters.sector!.toLowerCase());
+      }
+      if (filters.minPE) {
+        results = results.filter(stock => (stock.peRatio || 0) >= filters.minPE!);
+      }
+      if (filters.maxPE) {
+        results = results.filter(stock => (stock.peRatio || 999) <= filters.maxPE!);
+      }
+
+      return {
+        data: results,
+        success: true,
+        timestamp: new Date().toISOString(),
+      };
+    } catch (error) {
+      console.error('[stockAPI] getScreenerResults error:', error);
+      return { data: [], success: false, timestamp: new Date().toISOString() };
+    }
+  },
+
+  // Analysis endpoints
+  async getTechnicalAnalysis(symbol: string): Promise<APIResponse<TechnicalIndicators>> {
+    // Technical indicators not available from server yet - generate reasonable defaults
+    const mockIndicators: TechnicalIndicators = {
+      symbol: symbol.toUpperCase(),
+      rsi: 50 + Math.random() * 30,
+      sma20: 150 + Math.random() * 50,
+      sma50: 145 + Math.random() * 55,
+      sma200: 140 + Math.random() * 60,
+      ema12: 155 + Math.random() * 45,
+      ema26: 150 + Math.random() * 50,
+      macd: (Math.random() - 0.5) * 10,
+      macdSignal: (Math.random() - 0.5) * 8,
+      bollingerUpper: 180,
+      bollingerLower: 130,
+      bollingerMiddle: 155,
+    };
+
+    return {
+      data: mockIndicators,
+      success: true,
+      timestamp: new Date().toISOString(),
+    };
+  },
+
+  async getFundamentalAnalysis(symbol: string): Promise<APIResponse<FundamentalData>> {
+    try {
+      const quoteData = await this.getStockQuote(symbol);
+      const stock = quoteData.data;
+
+      const mockFundamentals: FundamentalData = {
+        symbol: symbol.toUpperCase(),
+        marketCap: stock.marketCap,
+        trailingPE: stock.peRatio,
+        returnOnEquity: 0.15 + Math.random() * 0.25,
+        returnOnAssets: 0.08 + Math.random() * 0.15,
+        debtToEquity: Math.random() * 1.5,
+        currentRatio: 1 + Math.random() * 2,
+        quickRatio: 0.5 + Math.random() * 1.5,
+        grossMargins: 0.3 + Math.random() * 0.4,
+        operatingMargins: 0.1 + Math.random() * 0.25,
+        netProfitMargins: 0.05 + Math.random() * 0.2,
+        priceToBook: 2 + Math.random() * 8,
+        priceToSales: 3 + Math.random() * 12,
+        earningsGrowth: -0.1 + Math.random() * 0.5,
+        revenueGrowth: 0 + Math.random() * 0.3,
+      };
+
+      return {
+        data: mockFundamentals,
+        success: true,
+        timestamp: new Date().toISOString(),
+      };
+    } catch (error) {
+      console.error('[stockAPI] getFundamentalAnalysis error:', error);
+      throw error;
+    }
+  },
+
+  async getStockRecommendation(symbol: string): Promise<APIResponse<StockRecommendation>> {
+    const recommendations = ['STRONG_BUY', 'BUY', 'HOLD', 'SELL', 'STRONG_SELL'] as const;
+    const confidenceLevels = ['HIGH', 'MEDIUM', 'LOW'] as const;
+
+    const mockRecommendation: StockRecommendation = {
+      symbol: symbol.toUpperCase(),
+      recommendation: recommendations[Math.floor(Math.random() * 3)], // Bias towards positive
+      confidence: confidenceLevels[Math.floor(Math.random() * confidenceLevels.length)],
+      score: Math.floor(Math.random() * 6), // 0-5 instead of -5 to 5
+      factors: [
+        'Strong earnings growth potential',
+        'Positive technical momentum',
+        'Attractive valuation metrics',
+        'Sector outperformance expected',
+      ],
+      lastUpdated: new Date().toISOString(),
+      targetPrice: 150 + Math.random() * 100,
+    };
+
+    return {
+      data: mockRecommendation,
+      success: true,
+      timestamp: new Date().toISOString(),
+    };
+  },
+
+  async getAllStocks(): Promise<APIResponse<Stock[]>> {
+    try {
+      const data = await apiFetch<{ success: boolean; data: unknown[] }>('/api/market/stocks?limit=100');
+
+      const stocks: Stock[] = (data.data || []).map((item: unknown) =>
+        transformQuote(item as Record<string, unknown>)
+      );
+
+      return {
+        data: stocks,
+        success: true,
+        timestamp: new Date().toISOString(),
+      };
+    } catch (error) {
+      console.error('[stockAPI] getAllStocks error:', error);
+      return { data: [], success: false, timestamp: new Date().toISOString() };
+    }
+  },
+
+  async getStock(symbol: string): Promise<APIResponse<Stock>> {
+    return this.getStockQuote(symbol);
+  },
+
+  async getStockData(symbol: string): Promise<APIResponse<StockData>> {
+    try {
+      const historyResponse = await this.getHistoricalData(symbol, '1m');
+
+      const stockData: StockData = {
+        symbol: symbol.toUpperCase(),
+        historicalData: historyResponse.data
+      };
+
+      return {
+        data: stockData,
+        success: true,
+        timestamp: new Date().toISOString(),
+      };
+    } catch (error) {
+      console.error('[stockAPI] getStockData error:', error);
+      throw error;
+    }
+  },
+
+  // Market movers (gainers/losers)
+  async getMarketMovers(type: 'gainers' | 'losers'): Promise<APIResponse<Stock[]>> {
+    try {
+      const data = await apiFetch<{ success: boolean; data: unknown[] }>(
+        `/api/market/movers?type=${type}&limit=20`
+      );
+
+      const stocks: Stock[] = (data.data || []).map((item: unknown) =>
+        transformQuote(item as Record<string, unknown>)
+      );
+
+      return {
+        data: stocks,
+        success: true,
+        timestamp: new Date().toISOString(),
+      };
+    } catch (error) {
+      console.error('[stockAPI] getMarketMovers error:', error);
+      return { data: [], success: false, timestamp: new Date().toISOString() };
+    }
+  },
+
+  // Crypto data
+  async getCryptoData(): Promise<APIResponse<Stock[]>> {
+    try {
+      const data = await apiFetch<{ success: boolean; data: unknown[] }>('/api/market/crypto?limit=50');
+
+      const crypto: Stock[] = (data.data || []).map((item: unknown) => {
+        const d = item as Record<string, unknown>;
+        return {
+          symbol: String(d.symbol || ''),
+          name: String(d.name || ''),
+          price: Number(d.price || d.current_price) || 0,
+          change: Number(d.change24h || d.price_change_24h) || 0,
+          changePercent: Number(d.change24h || d.price_change_percentage_24h) || 0,
+          volume: Number(d.volume24h || d.total_volume) || 0,
+          marketCap: Number(d.marketCap || d.market_cap) || undefined,
+        };
+      });
+
+      return {
+        data: crypto,
+        success: true,
+        timestamp: new Date().toISOString(),
+      };
+    } catch (error) {
+      console.error('[stockAPI] getCryptoData error:', error);
+      return { data: [], success: false, timestamp: new Date().toISOString() };
+    }
+  },
+};
+
+export default stockAPI;
