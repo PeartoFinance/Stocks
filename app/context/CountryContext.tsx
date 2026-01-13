@@ -70,11 +70,11 @@ export function CountryProvider({ children }: CountryProviderProps) {
     // Fetch list of active countries
     const refreshCountries = useCallback(async () => {
         try {
-            const res = await fetch(`${API_BASE}/api/countries`);
+            const res = await fetch(`${API_BASE}/api/geo/countries`);
             if (res.ok) {
                 const data = await res.json();
-                setCountries(data.countries || []);
-                return data.countries || [];
+                setCountries(data || []);
+                return data || [];
             }
         } catch (e) {
             console.warn('[CountryContext] Failed to fetch countries:', e);
@@ -85,10 +85,10 @@ export function CountryProvider({ children }: CountryProviderProps) {
     // Auto-detect country from server
     const detectCountry = useCallback(async () => {
         try {
-            const res = await fetch(`${API_BASE}/api/geo`);
+            const res = await fetch(`${API_BASE}/api/geo/detect`);
             if (res.ok) {
                 const data = await res.json();
-                return data.country || DEFAULT_COUNTRY;
+                return data.countryCode || DEFAULT_COUNTRY;
             }
         } catch (e) {
             console.warn('[CountryContext] Geo detection failed:', e);

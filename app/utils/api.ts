@@ -69,21 +69,21 @@ function transformQuote(data: Record<string, unknown>): Stock {
     symbol: String(data.symbol || ''),
     name: String(data.name || ''),
     price: Number(data.price) || 0,
-    change: Number(data.change || data.change_percent) || 0,
-    changePercent: Number(data.change_percent || data.changesPercentage) || 0,
+    change: Number(data.change) || 0,
+    changePercent: Number(data.changePercent) || 0,
     volume: Number(data.volume) || 0,
-    marketCap: Number(data.market_cap || data.marketCap) || undefined,
-    peRatio: Number(data.pe_ratio || data.pe) || undefined,
-    eps: undefined,
-    dividendYield: undefined,
-    week52High: Number(data['52_week_high'] || data.yearHigh) || undefined,
-    week52Low: Number(data['52_week_low'] || data.yearLow) || undefined,
-    beta: undefined,
+    marketCap: Number(data.marketCap || data.market_cap) || undefined,
+    peRatio: Number(data.peRatio || data.pe_ratio) || undefined,
+    eps: Number(data.eps) || undefined,
+    dividendYield: Number(data.dividendYield || data.dividend_yield) || undefined,
+    week52High: Number(data.high52w || data['52_week_high'] || data.yearHigh) || undefined,
+    week52Low: Number(data.low52w || data['52_week_low'] || data.yearLow) || undefined,
+    beta: Number(data.beta) || undefined,
     sector: String(data.sector || ''),
     industry: String(data.industry || ''),
     description: String(data.description || ''),
-    high52Week: Number(data['52_week_high'] || data.yearHigh) || undefined,
-    low52Week: Number(data['52_week_low'] || data.yearLow) || undefined,
+    high52Week: Number(data.high52w || data['52_week_high'] || data.yearHigh) || undefined,
+    low52Week: Number(data.low52w || data['52_week_low'] || data.yearLow) || undefined,
   };
 }
 
@@ -91,16 +91,16 @@ export const stockAPI = {
   // Market data endpoints
   async getMarketOverview(): Promise<APIResponse<MarketIndex[]>> {
     try {
-      const data = await apiFetch<{ success: boolean; data: unknown[] }>('/api/market/stocks?limit=10');
+      const data = await apiFetch<unknown[]>('/api/stocks/most-active?limit=10');
 
-      const indices: MarketIndex[] = (data.data || []).slice(0, 4).map((item: unknown) => {
+      const indices: MarketIndex[] = (data || []).slice(0, 4).map((item: unknown) => {
         const d = item as Record<string, unknown>;
         return {
           symbol: String(d.symbol || ''),
           name: String(d.name || ''),
           price: Number(d.price) || 0,
           change: Number(d.change) || 0,
-          changePercent: Number(d.change_percent) || 0,
+          changePercent: Number(d.changePercent) || 0,
         };
       });
 
@@ -117,9 +117,9 @@ export const stockAPI = {
 
   async getTrendingStocks(): Promise<APIResponse<Stock[]>> {
     try {
-      const data = await apiFetch<{ success: boolean; data: unknown[] }>('/api/market/movers?type=gainers&limit=10');
+      const data = await apiFetch<{ gainers: unknown[] }>('/api/stocks/movers?type=gainers&limit=10');
 
-      const stocks: Stock[] = (data.data || []).map((item: unknown) =>
+      const stocks: Stock[] = (data.gainers || []).map((item: unknown) =>
         transformQuote(item as Record<string, unknown>)
       );
 
@@ -137,11 +137,11 @@ export const stockAPI = {
   // Stock data endpoints
   async searchStocks(query: string): Promise<APIResponse<Array<{ symbol: string; name: string }>>> {
     try {
-      const data = await apiFetch<{ success: boolean; data: unknown[] }>(
-        `/api/market/search?q=${encodeURIComponent(query)}&limit=10`
+      const data = await apiFetch<unknown[]>(
+        `/api/stocks/search?q=${encodeURIComponent(query)}&limit=10`
       );
 
-      const results = (data.data || []).map((item: unknown) => {
+      const results = (data || []).map((item: unknown) => {
         const d = item as Record<string, unknown>;
         return {
           symbol: String(d.symbol || ''),
@@ -162,16 +162,16 @@ export const stockAPI = {
 
   async getStockQuote(symbol: string): Promise<APIResponse<Stock>> {
     try {
-      const data = await apiFetch<{ success: boolean; data: Record<string, unknown> }>(
-        `/api/market/quote/${encodeURIComponent(symbol.toUpperCase())}`
+      const data = await apiFetch<Record<string, unknown>>(
+        `/api/stocks/profile/${encodeURIComponent(symbol.toUpperCase())}`
       );
 
-      if (!data.success || !data.data) {
+      if (!data) {
         throw new Error(`Stock ${symbol} not found`);
       }
 
       return {
-        data: transformQuote(data.data),
+        data: transformQuote(data),
         success: true,
         timestamp: new Date().toISOString(),
       };
@@ -216,9 +216,9 @@ export const stockAPI = {
 
   async getScreenerResults(filters: ScreenerFilters): Promise<APIResponse<Stock[]>> {
     try {
-      const data = await apiFetch<{ success: boolean; data: unknown[] }>('/api/market/stocks?limit=100');
+      const data = await apiFetch<unknown[]>('/api/stocks/quotes?symbols=AAPL,GOOGL,MSFT,TSLA,AMZN,META,NVDA,NFLX,AMD,INTC&limit=100');
 
-      let results: Stock[] = (data.data || []).map((item: unknown) =>
+      let results: Stock[] = (data || []).map((item: unknown) =>
         transformQuote(item as Record<string, unknown>)
       );
 
@@ -343,9 +343,9 @@ export const stockAPI = {
 
   async getAllStocks(): Promise<APIResponse<Stock[]>> {
     try {
-      const data = await apiFetch<{ success: boolean; data: unknown[] }>('/api/market/stocks?limit=100');
+      const data = await apiFetch<unknown[]>('/api/stocks/most-active?limit=100');
 
-      const stocks: Stock[] = (data.data || []).map((item: unknown) =>
+      const stocks: Stock[] = (data || []).map((item: unknown) =>
         transformQuote(item as Record<string, unknown>)
       );
 
@@ -387,11 +387,11 @@ export const stockAPI = {
   // Market movers (gainers/losers)
   async getMarketMovers(type: 'gainers' | 'losers'): Promise<APIResponse<Stock[]>> {
     try {
-      const data = await apiFetch<{ success: boolean; data: unknown[] }>(
-        `/api/market/movers?type=${type}&limit=20`
+      const data = await apiFetch<{ gainers?: unknown[]; losers?: unknown[] }>(
+        `/api/stocks/movers?type=${type}&limit=20`
       );
 
-      const stocks: Stock[] = (data.data || []).map((item: unknown) =>
+      const stocks: Stock[] = (data[type] || []).map((item: unknown) =>
         transformQuote(item as Record<string, unknown>)
       );
 
@@ -409,17 +409,17 @@ export const stockAPI = {
   // Crypto data
   async getCryptoData(): Promise<APIResponse<Stock[]>> {
     try {
-      const data = await apiFetch<{ success: boolean; data: unknown[] }>('/api/market/crypto?limit=50');
+      const data = await apiFetch<unknown[]>('/api/crypto/quotes?symbols=BTC,ETH,BNB,XRP,ADA,SOL,DOGE,DOT,AVAX,MATIC&limit=50');
 
-      const crypto: Stock[] = (data.data || []).map((item: unknown) => {
+      const crypto: Stock[] = (data || []).map((item: unknown) => {
         const d = item as Record<string, unknown>;
         return {
           symbol: String(d.symbol || ''),
           name: String(d.name || ''),
           price: Number(d.price || d.current_price) || 0,
-          change: Number(d.change24h || d.price_change_24h) || 0,
-          changePercent: Number(d.change24h || d.price_change_percentage_24h) || 0,
-          volume: Number(d.volume24h || d.total_volume) || 0,
+          change: Number(d.change || d.price_change_24h) || 0,
+          changePercent: Number(d.changePercent || d.price_change_percentage_24h) || 0,
+          volume: Number(d.volume || d.total_volume) || 0,
           marketCap: Number(d.marketCap || d.market_cap) || undefined,
         };
       });
