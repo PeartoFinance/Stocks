@@ -19,108 +19,75 @@ import {
 import { formatPrice, formatNumber } from '@/lib/utils';
 import toast from 'react-hot-toast';
 import AIAnalysisPanel from '../components/ai/AIAnalysisPanel';
+import { stockAPI } from '../utils/api';
 
 interface IPO {
-  id: string;
+  id: string | number;
   company: string;
   symbol: string;
-  exchange: string;
-  sector: string;
-  priceRange: [number, number];
-  shares: number;
-  estimatedValue: number;
-  filingDate: string;
-  expectedDate: string;
-  status: 'upcoming' | 'pricing' | 'trading' | 'withdrawn';
-  underwriters: string[];
-  description: string;
+  exchange?: string;
+  sector?: string;
+  priceRange: string;
+  shares?: number;
+  estimatedValue?: number;
+  filingDate?: string;
+  expectedDate?: string;
+  openDate?: string;
+  closeDate?: string;
+  listingDate?: string;
+  status: string;
+  underwriters?: string[];
+  description?: string;
   logo?: string;
+  offerType?: string;
 }
 
 export default function IPOsPage() {
   const [ipos, setIpos] = useState<IPO[]>([]);
   const [filteredIpos, setFilteredIpos] = useState<IPO[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'upcoming' | 'recent' | 'all'>('upcoming');
+  const [activeTab, setActiveTab] = useState<'upcoming' | 'recent' | 'all'>('all');
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortField, setSortField] = useState<keyof IPO>('expectedDate');
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
-
-  // Mock IPO data
-  const mockIpos: IPO[] = [
-    {
-      id: '1',
-      company: 'TechCorp AI Solutions',
-      symbol: 'TCAI',
-      exchange: 'NASDAQ',
-      sector: 'Artificial Intelligence',
-      priceRange: [18, 22],
-      shares: 15000000,
-      estimatedValue: 300000000,
-      filingDate: '2025-10-15',
-      expectedDate: '2025-11-25',
-      status: 'upcoming',
-      underwriters: ['Goldman Sachs', 'Morgan Stanley', 'JP Morgan'],
-      description: 'Leading AI solutions provider for enterprise automation and machine learning platforms.'
-    },
-    {
-      id: '2',
-      company: 'GreenEnergy Innovations',
-      symbol: 'GREN',
-      exchange: 'NYSE',
-      sector: 'Clean Energy',
-      priceRange: [25, 30],
-      shares: 12000000,
-      estimatedValue: 330000000,
-      filingDate: '2025-10-20',
-      expectedDate: '2025-12-05',
-      status: 'upcoming',
-      underwriters: ['Bank of America', 'Credit Suisse'],
-      description: 'Renewable energy technology and solar panel manufacturing company.'
-    },
-    {
-      id: '3',
-      company: 'BioMed Therapeutics',
-      symbol: 'BIOM',
-      exchange: 'NASDAQ',
-      sector: 'Biotechnology',
-      priceRange: [35, 42],
-      shares: 8000000,
-      estimatedValue: 312000000,
-      filingDate: '2025-09-30',
-      expectedDate: '2025-11-20',
-      status: 'pricing',
-      underwriters: ['Goldman Sachs', 'Jefferies'],
-      description: 'Innovative biotechnology company developing novel cancer treatment therapies.'
-    },
-    {
-      id: '4',
-      company: 'CloudSync Technologies',
-      symbol: 'CSYN',
-      exchange: 'NASDAQ',
-      sector: 'Cloud Computing',
-      priceRange: [16, 20],
-      shares: 20000000,
-      estimatedValue: 360000000,
-      filingDate: '2025-11-01',
-      expectedDate: '2025-12-15',
-      status: 'upcoming',
-      underwriters: ['Morgan Stanley', 'Citigroup'],
-      description: 'Enterprise cloud synchronization and data management solutions provider.'
-    }
-  ];
+  const [sortField, setSortField] = useState<string>('expectedDate');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+  const [stats, setStats] = useState({ total: 0, upcoming: 0, pricing: 0, totalValue: 0 });
 
   useEffect(() => {
     const fetchIpos = async () => {
       try {
         setLoading(true);
-        // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 800));
-        setIpos(mockIpos);
-        setFilteredIpos(mockIpos);
+        const data = await stockAPI.getStockOffers();
+        
+        const mappedIpos: IPO[] = data.map((item: any) => ({
+          id: item.id,
+          company: item.companyName || 'Unknown Company',
+          symbol: item.symbol || '',
+          exchange: 'N/A',
+          sector: 'N/A',
+          priceRange: item.priceRange || 'TBD',
+          shares: 0,
+          estimatedValue: 0,
+          openDate: item.openDate,
+          closeDate: item.closeDate,
+          listingDate: item.listingDate,
+          expectedDate: item.listingDate || item.closeDate || item.openDate,
+          status: item.status || 'upcoming',
+          offerType: item.offerType || 'IPO',
+          underwriters: [],
+          description: `${item.offerType || 'IPO'} offering for ${item.companyName || item.symbol}`
+        }));
+        
+        setIpos(mappedIpos);
+        setFilteredIpos(mappedIpos);
+        
+        const upcoming = mappedIpos.filter(i => i.status === 'upcoming').length;
+        const pricing = mappedIpos.filter(i => i.status === 'pricing').length;
+        setStats({ total: mappedIpos.length, upcoming, pricing, totalValue: 0 });
       } catch (error) {
         console.error('Error fetching IPOs:', error);
         toast.error('Failed to load IPO data');
+        setIpos([]);
+        setFilteredIpos([]);
       } finally {
         setLoading(false);
       }
@@ -133,48 +100,45 @@ export default function IPOsPage() {
     let filtered = ipos.filter(ipo => {
       const matchesSearch = ipo.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
         ipo.symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        ipo.sector.toLowerCase().includes(searchTerm.toLowerCase());
+        (ipo.sector && ipo.sector.toLowerCase().includes(searchTerm.toLowerCase()));
 
       const matchesTab = activeTab === 'all' ||
-        (activeTab === 'upcoming' && ['upcoming', 'pricing'].includes(ipo.status)) ||
-        (activeTab === 'recent' && ipo.status === 'trading');
+        (activeTab === 'upcoming' && ['upcoming', 'pricing', 'open'].includes(ipo.status)) ||
+        (activeTab === 'recent' && ['trading', 'listed', 'closed'].includes(ipo.status));
 
       return matchesSearch && matchesTab;
     });
 
-    // Sort IPOs
     filtered.sort((a, b) => {
-      const aValue = a[sortField];
-      const bValue = b[sortField];
-
-      if (sortDirection === 'asc') {
-        return aValue! < bValue! ? -1 : aValue! > bValue! ? 1 : 0;
-      } else {
-        return aValue! > bValue! ? -1 : aValue! < bValue! ? 1 : 0;
-      }
+      const aValue = a.expectedDate || '';
+      const bValue = b.expectedDate || '';
+      return sortDirection === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
     });
 
     setFilteredIpos(filtered);
   }, [ipos, searchTerm, activeTab, sortField, sortDirection]);
 
-  const handleSort = (field: keyof IPO) => {
+  const handleSort = (field: string) => {
     if (sortField === field) {
       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
     } else {
       setSortField(field);
-      setSortDirection('asc');
+      setSortDirection('desc');
     }
   };
 
-  const getStatusBadge = (status: IPO['status']) => {
-    const statusConfig = {
+  const getStatusBadge = (status: string) => {
+    const statusConfig: Record<string, { bg: string; text: string; label: string }> = {
       upcoming: { bg: 'bg-blue-100', text: 'text-blue-700', label: 'Upcoming' },
       pricing: { bg: 'bg-orange-100', text: 'text-orange-700', label: 'Pricing' },
+      open: { bg: 'bg-green-100', text: 'text-green-700', label: 'Open' },
       trading: { bg: 'bg-green-100', text: 'text-green-700', label: 'Trading' },
+      listed: { bg: 'bg-green-100', text: 'text-green-700', label: 'Listed' },
+      closed: { bg: 'bg-gray-100', text: 'text-gray-700', label: 'Closed' },
       withdrawn: { bg: 'bg-red-100', text: 'text-red-700', label: 'Withdrawn' }
     };
 
-    const config = statusConfig[status];
+    const config = statusConfig[status.toLowerCase()] || statusConfig.upcoming;
     return (
       <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${config.bg} ${config.text}`}>
         {config.label}
@@ -231,8 +195,8 @@ export default function IPOsPage() {
                   <Calendar className="h-8 w-8 text-blue-600" />
                   <span className="text-sm text-gray-500">This Month</span>
                 </div>
-                <p className="text-3xl font-bold text-gray-900">8</p>
-                <p className="text-sm text-green-600 font-medium">+3 from last month</p>
+                <p className="text-3xl font-bold text-gray-900">{stats.upcoming}</p>
+                <p className="text-sm text-gray-600">Upcoming offers</p>
               </div>
 
               <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
@@ -240,8 +204,8 @@ export default function IPOsPage() {
                   <DollarSign className="h-8 w-8 text-green-600" />
                   <span className="text-sm text-gray-500">Total Value</span>
                 </div>
-                <p className="text-3xl font-bold text-gray-900">{formatNumber(1250000000)}</p>
-                <p className="text-sm text-gray-600">Estimated market cap</p>
+                <p className="text-3xl font-bold text-gray-900">{stats.total}</p>
+                <p className="text-sm text-gray-600">Total offers</p>
               </div>
 
               <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
@@ -249,8 +213,8 @@ export default function IPOsPage() {
                   <TrendingUp className="h-8 w-8 text-purple-600" />
                   <span className="text-sm text-gray-500">Avg Performance</span>
                 </div>
-                <p className="text-3xl font-bold text-gray-900">+15.3%</p>
-                <p className="text-sm text-green-600 font-medium">First day returns</p>
+                <p className="text-3xl font-bold text-gray-900">{stats.pricing}</p>
+                <p className="text-sm text-gray-600">In pricing stage</p>
               </div>
 
               <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
@@ -258,8 +222,8 @@ export default function IPOsPage() {
                   <Building2 className="h-8 w-8 text-orange-600" />
                   <span className="text-sm text-gray-500">Sectors</span>
                 </div>
-                <p className="text-3xl font-bold text-gray-900">12</p>
-                <p className="text-sm text-gray-600">Active industries</p>
+                <p className="text-3xl font-bold text-gray-900">{filteredIpos.length}</p>
+                <p className="text-sm text-gray-600">Filtered results</p>
               </div>
             </motion.div>
 
@@ -331,52 +295,64 @@ export default function IPOsPage() {
 
                   <div className="mb-4">
                     <p className="text-sm text-gray-600 mb-2">{ipo.description}</p>
-                    <span className="inline-flex px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">
-                      {ipo.sector}
-                    </span>
+                    {ipo.offerType && (
+                      <span className="inline-flex px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">
+                        {ipo.offerType}
+                      </span>
+                    )}
                   </div>
 
                   <div className="grid grid-cols-2 gap-4 mb-4">
                     <div>
                       <p className="text-xs text-gray-500 mb-1">Price Range</p>
-                      <p className="font-semibold text-gray-900">
-                        {formatPrice(ipo.priceRange[0])} - {formatPrice(ipo.priceRange[1])}
-                      </p>
+                      <p className="font-semibold text-gray-900">{ipo.priceRange}</p>
                     </div>
-                    <div>
-                      <p className="text-xs text-gray-500 mb-1">Estimated Value</p>
-                      <p className="font-semibold text-gray-900">{formatNumber(ipo.estimatedValue)}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-500 mb-1">Shares Offered</p>
-                      <p className="font-semibold text-gray-900">{formatNumber(ipo.shares)}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-500 mb-1">Expected Date</p>
-                      <p className="font-semibold text-gray-900">
-                        {new Date(ipo.expectedDate).toLocaleDateString()}
-                      </p>
-                    </div>
+                    {ipo.openDate && (
+                      <div>
+                        <p className="text-xs text-gray-500 mb-1">Open Date</p>
+                        <p className="font-semibold text-gray-900">
+                          {new Date(ipo.openDate).toLocaleDateString()}
+                        </p>
+                      </div>
+                    )}
+                    {ipo.closeDate && (
+                      <div>
+                        <p className="text-xs text-gray-500 mb-1">Close Date</p>
+                        <p className="font-semibold text-gray-900">
+                          {new Date(ipo.closeDate).toLocaleDateString()}
+                        </p>
+                      </div>
+                    )}
+                    {ipo.listingDate && (
+                      <div>
+                        <p className="text-xs text-gray-500 mb-1">Listing Date</p>
+                        <p className="font-semibold text-gray-900">
+                          {new Date(ipo.listingDate).toLocaleDateString()}
+                        </p>
+                      </div>
+                    )}
                   </div>
 
-                  <div className="mb-4">
-                    <p className="text-xs text-gray-500 mb-2">Lead Underwriters</p>
-                    <div className="flex flex-wrap gap-1">
-                      {ipo.underwriters.slice(0, 2).map((underwriter) => (
-                        <span
-                          key={underwriter}
-                          className="inline-flex px-2 py-1 text-xs bg-blue-50 text-blue-700 rounded-md"
-                        >
-                          {underwriter}
-                        </span>
-                      ))}
-                      {ipo.underwriters.length > 2 && (
-                        <span className="inline-flex px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-md">
-                          +{ipo.underwriters.length - 2} more
-                        </span>
-                      )}
+                  {ipo.underwriters && ipo.underwriters.length > 0 && (
+                    <div className="mb-4">
+                      <p className="text-xs text-gray-500 mb-2">Lead Underwriters</p>
+                      <div className="flex flex-wrap gap-1">
+                        {ipo.underwriters.slice(0, 2).map((underwriter) => (
+                          <span
+                            key={underwriter}
+                            className="inline-flex px-2 py-1 text-xs bg-blue-50 text-blue-700 rounded-md"
+                          >
+                            {underwriter}
+                          </span>
+                        ))}
+                        {ipo.underwriters.length > 2 && (
+                          <span className="inline-flex px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-md">
+                            +{ipo.underwriters.length - 2} more
+                          </span>
+                        )}
+                      </div>
                     </div>
-                  </div>
+                  )}
 
                   <div className="flex justify-between items-center pt-4 border-t border-gray-100">
                     <button className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 transition-colors">

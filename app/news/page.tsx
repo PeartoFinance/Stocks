@@ -17,6 +17,7 @@ import {
   Video
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { stockAPI } from '../utils/api';
 
 interface NewsArticle {
   id: string;
@@ -27,12 +28,21 @@ interface NewsArticle {
   source: string;
   publishedAt: string;
   category: string;
-  tags: string[];
   imageUrl?: string;
-  readTime: number;
-  views: number;
-  sentiment: 'positive' | 'negative' | 'neutral';
-  isPremium: boolean;
+}
+
+function mapNewsItem(item: any): NewsArticle {
+  return {
+    id: String(item.id || ''),
+    title: String(item.title || ''),
+    summary: String(item.summary || ''),
+    content: String(item.full_content || item.content || ''),
+    author: String(item.author || 'Unknown'),
+    source: String(item.source || 'News'),
+    publishedAt: String(item.published_at || new Date().toISOString()),
+    category: String(item.category || 'General'),
+    imageUrl: String(item.image || item.image_url || ''),
+  };
 }
 
 export default function NewsPage() {
@@ -42,130 +52,69 @@ export default function NewsPage() {
   const [activeCategory, setActiveCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedNews, setSelectedNews] = useState<NewsArticle | null>(null);
+  const [categories, setCategories] = useState<string[]>(['All']);
+  const [stats, setStats] = useState({ total: 0, sources: 0 });
 
-  // Mock news data
-  const mockNews: NewsArticle[] = [
-    {
-      id: '1',
-      title: 'Federal Reserve Signals Potential Rate Cut in Q2 2026',
-      summary: 'Fed Chairman Jerome Powell hints at monetary policy adjustments amid economic indicators showing cooling inflation.',
-      content: 'The Federal Reserve is considering a potential interest rate reduction in the second quarter of 2026, according to recent statements from Chairman Jerome Powell...',
-      author: 'Sarah Johnson',
-      source: 'Financial Times',
-      publishedAt: '2025-11-17T08:30:00Z',
-      category: 'Monetary Policy',
-      tags: ['Federal Reserve', 'Interest Rates', 'Jerome Powell', 'Inflation'],
-      readTime: 4,
-      views: 15420,
-      sentiment: 'positive',
-      isPremium: false
-    },
-    {
-      id: '2',
-      title: 'Tech Giants Report Strong Q4 Earnings Despite Market Volatility',
-      summary: 'Apple, Microsoft, and Google exceed analyst expectations with robust quarterly performance driven by AI investments.',
-      content: 'Major technology companies have delivered impressive fourth-quarter results, defying market expectations...',
-      author: 'Michael Chen',
-      source: 'TechCrunch',
-      publishedAt: '2025-11-17T07:15:00Z',
-      category: 'Technology',
-      tags: ['Apple', 'Microsoft', 'Google', 'Q4 Earnings', 'AI'],
-      readTime: 6,
-      views: 28350,
-      sentiment: 'positive',
-      isPremium: true
-    },
-    {
-      id: '3',
-      title: 'Cryptocurrency Market Sees Major Institutional Adoption Wave',
-      summary: 'BlackRock and Fidelity announce expansion of crypto investment products following regulatory clarity.',
-      content: 'The cryptocurrency market is experiencing unprecedented institutional adoption as major financial firms...',
-      author: 'David Rodriguez',
-      source: 'CoinDesk',
-      publishedAt: '2025-11-17T06:45:00Z',
-      category: 'Cryptocurrency',
-      tags: ['BlackRock', 'Fidelity', 'Bitcoin', 'ETF', 'Regulation'],
-      readTime: 5,
-      views: 19850,
-      sentiment: 'positive',
-      isPremium: false
-    },
-    {
-      id: '4',
-      title: 'Climate Investment Funds Reach Record $2.5 Trillion Milestone',
-      summary: 'ESG-focused investments continue surge as renewable energy sector attracts unprecedented capital flows.',
-      content: 'Environmental, social, and governance (ESG) investment funds have reached a historic milestone...',
-      author: 'Emma Thompson',
-      source: 'Bloomberg',
-      publishedAt: '2025-11-17T05:30:00Z',
-      category: 'ESG',
-      tags: ['ESG', 'Climate Change', 'Renewable Energy', 'Investment Funds'],
-      readTime: 7,
-      views: 12750,
-      sentiment: 'positive',
-      isPremium: true
-    },
-    {
-      id: '5',
-      title: 'Global Supply Chain Disruptions Impact Manufacturing Sector',
-      summary: 'Automotive and electronics industries face continued challenges from geopolitical tensions and trade restrictions.',
-      content: 'Manufacturing companies worldwide are grappling with supply chain disruptions that continue to affect production...',
-      author: 'James Wilson',
-      source: 'Reuters',
-      publishedAt: '2025-11-17T04:20:00Z',
-      category: 'Manufacturing',
-      tags: ['Supply Chain', 'Manufacturing', 'Automotive', 'Electronics'],
-      readTime: 5,
-      views: 8930,
-      sentiment: 'negative',
-      isPremium: false
-    }
-  ];
-
-  const categories = ['All', 'Technology', 'Monetary Policy', 'Cryptocurrency', 'ESG', 'Manufacturing', 'Healthcare', 'Energy'];
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/api/news/categories`, {
+          headers: { 'X-User-Country': localStorage.getItem('user_country_override') || 'US' }
+        });
+        const cats = await response.json();
+        setCategories(['All', ...cats]);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     const fetchNews = async () => {
       try {
         setLoading(true);
-        await new Promise(resolve => setTimeout(resolve, 800));
-        setNews(mockNews);
-        setFilteredNews(mockNews);
+        const response = await stockAPI.getPublishedNews(activeCategory === 'All' ? undefined : activeCategory);
+        
+        if (response.items && response.items.length > 0) {
+          const mappedNews = response.items.map(mapNewsItem);
+          setNews(mappedNews);
+          setFilteredNews(mappedNews);
+          
+          const uniqueSources = new Set(mappedNews.map(n => n.source));
+          setStats({ total: mappedNews.length, sources: uniqueSources.size });
+        } else {
+          setNews([]);
+          setFilteredNews([]);
+          setStats({ total: 0, sources: 0 });
+        }
       } catch (error) {
         console.error('Error fetching news:', error);
         toast.error('Failed to load news data');
+        setNews([]);
+        setFilteredNews([]);
       } finally {
         setLoading(false);
       }
     };
 
     fetchNews();
-  }, []);
+  }, [activeCategory]);
 
   useEffect(() => {
-    let filtered = news.filter(article => {
+    if (!searchTerm) {
+      setFilteredNews(news);
+      return;
+    }
+
+    const filtered = news.filter(article => {
       const matchesSearch = article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           article.summary.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           article.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-      
-      const matchesCategory = activeCategory === 'All' || article.category === activeCategory;
-      
-      return matchesSearch && matchesCategory;
+                           article.summary.toLowerCase().includes(searchTerm.toLowerCase());
+      return matchesSearch;
     });
 
-    // Sort by published date (newest first)
-    filtered.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
-
     setFilteredNews(filtered);
-  }, [news, searchTerm, activeCategory]);
-
-  const getSentimentColor = (sentiment: NewsArticle['sentiment']) => {
-    switch (sentiment) {
-      case 'positive': return 'text-green-600 bg-green-50';
-      case 'negative': return 'text-red-600 bg-red-50';
-      case 'neutral': return 'text-gray-600 bg-gray-50';
-    }
-  };
+  }, [news, searchTerm]);
 
   const formatTimeAgo = (dateString: string) => {
     const date = new Date(dateString);
@@ -221,28 +170,28 @@ export default function NewsPage() {
           <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
             <div className="flex items-center justify-between mb-4">
               <Newspaper className="h-8 w-8 text-blue-600" />
-              <span className="text-sm text-gray-500">Today</span>
+              <span className="text-sm text-gray-500">Articles</span>
             </div>
-            <p className="text-3xl font-bold text-gray-900">47</p>
-            <p className="text-sm text-green-600 font-medium">+12 from yesterday</p>
+            <p className="text-3xl font-bold text-gray-900">{stats.total}</p>
+            <p className="text-sm text-gray-600">Total available</p>
           </div>
           
           <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
             <div className="flex items-center justify-between mb-4">
               <TrendingUp className="h-8 w-8 text-green-600" />
-              <span className="text-sm text-gray-500">Trending</span>
+              <span className="text-sm text-gray-500">Category</span>
             </div>
-            <p className="text-3xl font-bold text-gray-900">Fed Rate</p>
-            <p className="text-sm text-gray-600">Most discussed topic</p>
+            <p className="text-2xl font-bold text-gray-900">{activeCategory}</p>
+            <p className="text-sm text-gray-600">Current filter</p>
           </div>
           
           <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
             <div className="flex items-center justify-between mb-4">
-              <Eye className="h-8 w-8 text-purple-600" />
-              <span className="text-sm text-gray-500">Total Views</span>
+              <Filter className="h-8 w-8 text-purple-600" />
+              <span className="text-sm text-gray-500">Filtered</span>
             </div>
-            <p className="text-3xl font-bold text-gray-900">285K</p>
-            <p className="text-sm text-green-600 font-medium">+18% vs last week</p>
+            <p className="text-3xl font-bold text-gray-900">{filteredNews.length}</p>
+            <p className="text-sm text-gray-600">Matching results</p>
           </div>
           
           <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
@@ -250,8 +199,8 @@ export default function NewsPage() {
               <Globe className="h-8 w-8 text-orange-600" />
               <span className="text-sm text-gray-500">Sources</span>
             </div>
-            <p className="text-3xl font-bold text-gray-900">24</p>
-            <p className="text-sm text-gray-600">Trusted publications</p>
+            <p className="text-3xl font-bold text-gray-900">{stats.sources}</p>
+            <p className="text-sm text-gray-600">Unique publishers</p>
           </div>
         </motion.div>
 
@@ -317,14 +266,9 @@ export default function NewsPage() {
                     <span className="text-sm font-medium text-blue-600">{article.source}</span>
                     <span className="text-gray-300">•</span>
                     <span className="text-sm text-gray-500">{formatTimeAgo(article.publishedAt)}</span>
-                    {article.isPremium && (
-                      <span className="inline-flex px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-700 rounded-full">
-                        Premium
-                      </span>
-                    )}
                   </div>
-                  <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getSentimentColor(article.sentiment)}`}>
-                    {article.sentiment}
+                  <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-blue-50 text-blue-600">
+                    {article.category}
                   </span>
                 </div>
 
@@ -336,26 +280,11 @@ export default function NewsPage() {
                   {article.summary}
                 </p>
 
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {article.tags.slice(0, 3).map((tag) => (
-                    <span
-                      key={tag}
-                      className="inline-flex px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-md"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
                 <div className="flex justify-between items-center pt-4 border-t border-gray-100">
                   <div className="flex items-center space-x-4 text-sm text-gray-500">
                     <span className="flex items-center space-x-1">
                       <Clock className="h-4 w-4" />
-                      <span>{article.readTime} min read</span>
-                    </span>
-                    <span className="flex items-center space-x-1">
-                      <Eye className="h-4 w-4" />
-                      <span>{article.views.toLocaleString()} views</span>
+                      <span>Read article</span>
                     </span>
                   </div>
                   <button className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 transition-colors">
