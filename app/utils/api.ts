@@ -434,6 +434,21 @@ export const stockAPI = {
       return { data: [], success: false, timestamp: new Date().toISOString() };
     }
   },
+
+  // News endpoints
+  async getPublishedNews(category?: string): Promise<{ items: any[]; total: number }> {
+    try {
+      const endpoint = category && category !== 'All' 
+        ? `/api/news/published?category=${encodeURIComponent(category)}`
+        : '/api/news/published';
+      
+      const data = await apiFetch<{ items: any[]; total: number }>(endpoint);
+      return data;
+    } catch (error) {
+      console.error('[stockAPI] getPublishedNews error:', error);
+      return { items: [], total: 0 };
+    }
+  },
 };
 
 export default stockAPI;
