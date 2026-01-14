@@ -449,6 +449,23 @@ export const stockAPI = {
       return { items: [], total: 0 };
     }
   },
+
+  // IPO endpoints
+  async getStockOffers(status?: string, type?: string): Promise<any[]> {
+    try {
+      let endpoint = '/api/market/offers';
+      const params = [];
+      if (status) params.push(`status=${encodeURIComponent(status)}`);
+      if (type) params.push(`type=${encodeURIComponent(type)}`);
+      if (params.length > 0) endpoint += `?${params.join('&')}`;
+      
+      const data = await apiFetch<any[]>(endpoint);
+      return data;
+    } catch (error) {
+      console.error('[stockAPI] getStockOffers error:', error);
+      return [];
+    }
+  },
 };
 
 export default stockAPI;
