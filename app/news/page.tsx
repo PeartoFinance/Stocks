@@ -52,22 +52,41 @@ export default function NewsPage() {
   const [activeCategory, setActiveCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedNews, setSelectedNews] = useState<NewsArticle | null>(null);
+  const [categories, setCategories] = useState<string[]>(['All']);
+  const [stats, setStats] = useState({ total: 0, sources: 0 });
 
-  const categories = ['All', 'Technology', 'Monetary Policy', 'Cryptocurrency', 'ESG', 'Manufacturing', 'Healthcare', 'Energy'];
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/api/news/categories`, {
+          headers: { 'X-User-Country': localStorage.getItem('user_country_override') || 'US' }
+        });
+        const cats = await response.json();
+        setCategories(['All', ...cats]);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     const fetchNews = async () => {
       try {
         setLoading(true);
-        const response = await stockAPI.getPublishedNews(activeCategory);
+        const response = await stockAPI.getPublishedNews(activeCategory === 'All' ? undefined : activeCategory);
         
         if (response.items && response.items.length > 0) {
           const mappedNews = response.items.map(mapNewsItem);
           setNews(mappedNews);
           setFilteredNews(mappedNews);
+          
+          const uniqueSources = new Set(mappedNews.map(n => n.source));
+          setStats({ total: mappedNews.length, sources: uniqueSources.size });
         } else {
           setNews([]);
           setFilteredNews([]);
+          setStats({ total: 0, sources: 0 });
         }
       } catch (error) {
         console.error('Error fetching news:', error);
@@ -151,28 +170,28 @@ export default function NewsPage() {
           <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
             <div className="flex items-center justify-between mb-4">
               <Newspaper className="h-8 w-8 text-blue-600" />
-              <span className="text-sm text-gray-500">Today</span>
+              <span className="text-sm text-gray-500">Articles</span>
             </div>
-            <p className="text-3xl font-bold text-gray-900">47</p>
-            <p className="text-sm text-green-600 font-medium">+12 from yesterday</p>
+            <p className="text-3xl font-bold text-gray-900">{stats.total}</p>
+            <p className="text-sm text-gray-600">Total available</p>
           </div>
           
           <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
             <div className="flex items-center justify-between mb-4">
               <TrendingUp className="h-8 w-8 text-green-600" />
-              <span className="text-sm text-gray-500">Trending</span>
+              <span className="text-sm text-gray-500">Category</span>
             </div>
-            <p className="text-3xl font-bold text-gray-900">Fed Rate</p>
-            <p className="text-sm text-gray-600">Most discussed topic</p>
+            <p className="text-2xl font-bold text-gray-900">{activeCategory}</p>
+            <p className="text-sm text-gray-600">Current filter</p>
           </div>
           
           <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
             <div className="flex items-center justify-between mb-4">
-              <Eye className="h-8 w-8 text-purple-600" />
-              <span className="text-sm text-gray-500">Total Views</span>
+              <Filter className="h-8 w-8 text-purple-600" />
+              <span className="text-sm text-gray-500">Filtered</span>
             </div>
-            <p className="text-3xl font-bold text-gray-900">285K</p>
-            <p className="text-sm text-green-600 font-medium">+18% vs last week</p>
+            <p className="text-3xl font-bold text-gray-900">{filteredNews.length}</p>
+            <p className="text-sm text-gray-600">Matching results</p>
           </div>
           
           <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
@@ -180,8 +199,8 @@ export default function NewsPage() {
               <Globe className="h-8 w-8 text-orange-600" />
               <span className="text-sm text-gray-500">Sources</span>
             </div>
-            <p className="text-3xl font-bold text-gray-900">24</p>
-            <p className="text-sm text-gray-600">Trusted publications</p>
+            <p className="text-3xl font-bold text-gray-900">{stats.sources}</p>
+            <p className="text-sm text-gray-600">Unique publishers</p>
           </div>
         </motion.div>
 
