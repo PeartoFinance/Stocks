@@ -65,7 +65,7 @@ export function CountryProvider({ children }: { children: ReactNode }) {
 
     const detectCountry = useCallback(async () => {
         try {
-            const res = await fetch(`${API_BASE}/api/geo/detect`);
+            const res = await fetch(`${API_BASE}/api/geo`);
             if (res.ok) {
                 const data = await res.json();
                 return data.countryCode || DEFAULT_COUNTRY;

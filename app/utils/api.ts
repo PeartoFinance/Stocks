@@ -185,22 +185,22 @@ export const stockAPI = {
     try {
       // Map period to backend format
       const rangeMap: Record<string, string> = {
-        '1d': '1d', '5d': '5d', '1m': '1mo', '3m': '3mo',
-        '6m': '6mo', '1y': '1y', '2y': '2y', '5y': '5y'
+        '1d': '1d', '5d': '5d', '1mo': '1mo', '3mo': '3mo',
+        '6mo': '6mo', '1y': '1y', '2y': '2y', '5y': '5y'
       };
       const range = rangeMap[period] || '1y';
 
-      const data = await apiFetch<{ success: boolean; points?: Array<{ t: number; c: number; v?: number }> }>(
-        `/api/stocks/history?symbol=${encodeURIComponent(symbol)}&range=${range}`
+      const data = await apiFetch<{ symbol: string; period: string; interval: string; data: Array<{ date: string; open: number; high: number; low: number; close: number; volume: number }> }>(
+        `/api/stocks/history/${encodeURIComponent(symbol)}?period=${range}&interval=1d`
       );
 
-      const historicalData: HistoricalData[] = (data.points || []).map(p => ({
-        date: new Date(p.t * 1000).toISOString().split('T')[0],
-        open: p.c,
-        high: p.c * 1.01,
-        low: p.c * 0.99,
-        close: p.c,
-        volume: p.v || 0,
+      const historicalData: HistoricalData[] = (data.data || []).map(p => ({
+        date: p.date,
+        open: p.open || p.close,
+        high: p.high || p.close,
+        low: p.low || p.close,
+        close: p.close,
+        volume: p.volume || 0,
       }));
 
       return {
@@ -463,6 +463,26 @@ export const stockAPI = {
       return data;
     } catch (error) {
       console.error('[stockAPI] getStockOffers error:', error);
+      return [];
+    }
+  },
+
+  // ETF endpoints
+  async getETFs(filters?: { category?: string; minAUM?: string; maxExpenseRatio?: string; minYield?: string; limit?: number }): Promise<any[]> {
+    try {
+      let endpoint = '/api/stocks/etfs';
+      const params = [];
+      if (filters?.category) params.push(`category=${encodeURIComponent(filters.category)}`);
+      if (filters?.minAUM) params.push(`minAUM=${encodeURIComponent(filters.minAUM)}`);
+      if (filters?.maxExpenseRatio) params.push(`maxExpenseRatio=${encodeURIComponent(filters.maxExpenseRatio)}`);
+      if (filters?.minYield) params.push(`minYield=${encodeURIComponent(filters.minYield)}`);
+      if (filters?.limit) params.push(`limit=${filters.limit}`);
+      if (params.length > 0) endpoint += `?${params.join('&')}`;
+      
+      const data = await apiFetch<any[]>(endpoint);
+      return data;
+    } catch (error) {
+      console.error('[stockAPI] getETFs error:', error);
       return [];
     }
   },
