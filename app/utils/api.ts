@@ -466,6 +466,26 @@ export const stockAPI = {
       return [];
     }
   },
+
+  // ETF endpoints
+  async getETFs(filters?: { category?: string; minAUM?: string; maxExpenseRatio?: string; minYield?: string; limit?: number }): Promise<any[]> {
+    try {
+      let endpoint = '/api/stocks/etfs';
+      const params = [];
+      if (filters?.category) params.push(`category=${encodeURIComponent(filters.category)}`);
+      if (filters?.minAUM) params.push(`minAUM=${encodeURIComponent(filters.minAUM)}`);
+      if (filters?.maxExpenseRatio) params.push(`maxExpenseRatio=${encodeURIComponent(filters.maxExpenseRatio)}`);
+      if (filters?.minYield) params.push(`minYield=${encodeURIComponent(filters.minYield)}`);
+      if (filters?.limit) params.push(`limit=${filters.limit}`);
+      if (params.length > 0) endpoint += `?${params.join('&')}`;
+      
+      const data = await apiFetch<any[]>(endpoint);
+      return data;
+    } catch (error) {
+      console.error('[stockAPI] getETFs error:', error);
+      return [];
+    }
+  },
 };
 
 export default stockAPI;
