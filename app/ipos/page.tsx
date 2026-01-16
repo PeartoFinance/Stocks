@@ -386,12 +386,11 @@ export default function IPOsPage() {
                 pageData={{
                   upcomingCount: ipos.filter(i => i.status === 'upcoming').length,
                   pricingCount: ipos.filter(i => i.status === 'pricing').length,
-                  totalValue: ipos.reduce((sum, i) => sum + i.estimatedValue, 0),
-                  sectors: Array.from(new Set(ipos.map(i => i.sector))),
+                  totalValue: ipos.reduce((sum, i) => sum + (i.estimatedValue ?? 0), 0),                  sectors: Array.from(new Set(ipos.map(i => i.sector))),
                   topIPOs: ipos.slice(0, 3).map(i => ({
                     company: i.company,
                     symbol: i.symbol,
-                    value: i.estimatedValue,
+                    value: i.estimatedValue ?? 0,
                     status: i.status
                   }))
                 }}

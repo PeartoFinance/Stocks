@@ -59,7 +59,7 @@ export default function TechnicalChartPage() {
     setIndicators({ rsi, sma50, ema20 });
   };
 
-  useEffect(() => { loadData(); }, [symbol, period]);
+  useEffect(() => { loadData(); }, []);
 
   return (
     <main className="p-8">
