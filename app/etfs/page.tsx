@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Search, Filter, TrendingUp, TrendingDown, Star, BarChart3, DollarSign } from 'lucide-react';
 import AIAnalysisPanel from '../components/ai/AIAnalysisPanel';
+import { stockAPI } from '../utils/api';
+import toast from 'react-hot-toast';
 
 interface ETF {
   symbol: string;
@@ -32,44 +34,23 @@ export default function ETFScreener() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const generateETFData = () => {
-      const etfList = [
-        { symbol: 'SPY', name: 'SPDR S&P 500 ETF Trust', category: 'Large Blend' },
-        { symbol: 'QQQ', name: 'Invesco QQQ Trust', category: 'Technology' },
-        { symbol: 'VTI', name: 'Vanguard Total Stock Market ETF', category: 'Large Blend' },
-        { symbol: 'IWM', name: 'iShares Russell 2000 ETF', category: 'Small Blend' },
-        { symbol: 'EFA', name: 'iShares MSCI EAFE ETF', category: 'Foreign Large Blend' },
-        { symbol: 'VEA', name: 'Vanguard FTSE Developed Markets ETF', category: 'Foreign Large Blend' },
-        { symbol: 'IEMG', name: 'iShares Core MSCI Emerging Markets IMI Index ETF', category: 'Emerging Markets' },
-        { symbol: 'AGG', name: 'iShares Core U.S. Aggregate Bond ETF', category: 'Intermediate Core Bond' },
-        { symbol: 'VNQ', name: 'Vanguard Real Estate Index Fund ETF', category: 'Real Estate' },
-        { symbol: 'GLD', name: 'SPDR Gold Shares', category: 'Commodities' },
-        { symbol: 'XLK', name: 'Technology Select Sector SPDR Fund', category: 'Technology' },
-        { symbol: 'XLF', name: 'Financial Select Sector SPDR Fund', category: 'Financial' },
-        { symbol: 'XLE', name: 'Energy Select Sector SPDR Fund', category: 'Energy' },
-        { symbol: 'XLV', name: 'Health Care Select Sector SPDR Fund', category: 'Health' },
-        { symbol: 'ARKK', name: 'ARK Innovation ETF', category: 'Technology' }
-      ];
-
-      return etfList.map(etf => ({
-        ...etf,
-        price: Math.random() * 500 + 50,
-        change: (Math.random() - 0.5) * 10,
-        changePercent: (Math.random() - 0.5) * 5,
-        volume: Math.floor(Math.random() * 50000000) + 1000000,
-        aum: `${(Math.random() * 300 + 10).toFixed(1)}B`,
-        expenseRatio: Math.random() * 1.5 + 0.03,
-        yield: Math.random() * 5 + 0.5,
-        inception: `${2000 + Math.floor(Math.random() * 23)}-${String(Math.floor(Math.random() * 12) + 1).padStart(2, '0')}-${String(Math.floor(Math.random() * 28) + 1).padStart(2, '0')}`
-      }));
+    const fetchETFs = async () => {
+      try {
+        setIsLoading(true);
+        const data = await stockAPI.getETFs({ limit: 100 });
+        setETFs(data);
+        setFilteredETFs(data);
+      } catch (error) {
+        console.error('Error fetching ETFs:', error);
+        toast.error('Failed to load ETF data');
+        setETFs([]);
+        setFilteredETFs([]);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    setTimeout(() => {
-      const mockData = generateETFData();
-      setETFs(mockData);
-      setFilteredETFs(mockData);
-      setIsLoading(false);
-    }, 1000);
+    fetchETFs();
   }, []);
 
   useEffect(() => {
@@ -78,7 +59,7 @@ export default function ETFScreener() {
         etf.name.toLowerCase().includes(searchTerm.toLowerCase());
 
       const matchesCategory = filters.category === 'all' || etf.category === filters.category;
-      const matchesMinAUM = !filters.minAUM || parseFloat(etf.aum.replace('B', '')) >= parseFloat(filters.minAUM);
+      const matchesMinAUM = !filters.minAUM || parseFloat((etf.aum || '0').replace('B', '')) >= parseFloat(filters.minAUM);
       const matchesMaxExpenseRatio = !filters.maxExpenseRatio || etf.expenseRatio <= parseFloat(filters.maxExpenseRatio);
       const matchesMinYield = !filters.minYield || etf.yield >= parseFloat(filters.minYield);
 
@@ -95,6 +76,14 @@ export default function ETFScreener() {
       return `${(num / 1000).toFixed(1)}K`;
     }
     return num.toString();
+  };
+
+  const calculateTotalAUM = () => {
+    const total = filteredETFs.reduce((acc, etf) => {
+      const aumValue = parseFloat((etf.aum || '0').replace('B', ''));
+      return acc + (isNaN(aumValue) ? 0 : aumValue);
+    }, 0);
+    return total.toFixed(1);
   };
 
   return (
@@ -138,12 +127,13 @@ export default function ETFScreener() {
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option value="all">All Categories</option>
-                    <option value="Large Blend">Large Blend</option>
                     <option value="Technology">Technology</option>
-                    <option value="Foreign Large Blend">International</option>
-                    <option value="Real Estate">Real Estate</option>
-                    <option value="Commodities">Commodities</option>
                     <option value="Financial">Financial</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Energy">Energy</option>
+                    <option value="Real Estate">Real Estate</option>
+                    <option value="Consumer">Consumer</option>
+                    <option value="Industrial">Industrial</option>
                   </select>
                 </div>
 
@@ -191,7 +181,7 @@ export default function ETFScreener() {
                   <div>
                     <p className="text-sm text-gray-600">Avg Expense Ratio</p>
                     <p className="text-2xl font-bold text-gray-900">
-                      {(filteredETFs.reduce((acc, etf) => acc + etf.expenseRatio, 0) / filteredETFs.length || 0).toFixed(2)}%
+                      {(filteredETFs.reduce((acc, etf) => acc + (etf.expenseRatio || 0), 0) / filteredETFs.length || 0).toFixed(2)}%
                     </p>
                   </div>
                   <DollarSign className="h-8 w-8 text-green-600" />
@@ -203,7 +193,7 @@ export default function ETFScreener() {
                   <div>
                     <p className="text-sm text-gray-600">Avg Yield</p>
                     <p className="text-2xl font-bold text-gray-900">
-                      {(filteredETFs.reduce((acc, etf) => acc + etf.yield, 0) / filteredETFs.length || 0).toFixed(1)}%
+                      {(filteredETFs.reduce((acc, etf) => acc + (etf.yield || 0), 0) / filteredETFs.length || 0).toFixed(1)}%
                     </p>
                   </div>
                   <TrendingUp className="h-8 w-8 text-purple-600" />
@@ -214,7 +204,9 @@ export default function ETFScreener() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">Total AUM</p>
-                    <p className="text-2xl font-bold text-gray-900">$2.1T</p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      ${calculateTotalAUM()}T
+                    </p>
                   </div>
                   <Star className="h-8 w-8 text-yellow-600" />
                 </div>
@@ -268,13 +260,13 @@ export default function ETFScreener() {
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm font-medium text-gray-900">${etf.price.toFixed(2)}</div>
+                            <div className="text-sm font-medium text-gray-900">${etf.price?.toFixed(2) || 'N/A'}</div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div className={`flex items-center space-x-1 ${etf.changePercent >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                              {etf.changePercent >= 0 ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
+                            <div className={`flex items-center space-x-1 ${(etf.changePercent || 0) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                              {(etf.changePercent || 0) >= 0 ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
                               <span className="text-sm font-medium">
-                                {etf.changePercent >= 0 ? '+' : ''}{etf.changePercent.toFixed(2)}%
+                                {(etf.changePercent || 0) >= 0 ? '+' : ''}{etf.changePercent?.toFixed(2) || '0.00'}%
                               </span>
                             </div>
                           </td>
@@ -282,13 +274,13 @@ export default function ETFScreener() {
                             <div className="text-sm text-gray-900">{formatNumber(etf.volume)}</div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900">{etf.aum}</div>
+                            <div className="text-sm text-gray-900">{etf.aum || 'N/A'}</div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900">{etf.expenseRatio.toFixed(2)}%</div>
+                            <div className="text-sm text-gray-900">{etf.expenseRatio?.toFixed(2) || 'N/A'}%</div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900">{etf.yield.toFixed(1)}%</div>
+                            <div className="text-sm text-gray-900">{etf.yield?.toFixed(1) || 'N/A'}%</div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
@@ -319,8 +311,8 @@ export default function ETFScreener() {
                     yield: e.yield,
                     expenseRatio: e.expenseRatio
                   })),
-                  avgExpenseRatio: (filteredETFs.reduce((acc, e) => acc + e.expenseRatio, 0) / filteredETFs.length || 0).toFixed(2),
-                  avgYield: (filteredETFs.reduce((acc, e) => acc + e.yield, 0) / filteredETFs.length || 0).toFixed(1)
+                  avgExpenseRatio: (filteredETFs.reduce((acc, e) => acc + (e.expenseRatio || 0), 0) / filteredETFs.length || 0).toFixed(2),
+                  avgYield: (filteredETFs.reduce((acc, e) => acc + (e.yield || 0), 0) / filteredETFs.length || 0).toFixed(1)
                 }}
                 autoAnalyze={!isLoading && filteredETFs.length > 0}
                 quickPrompts={[
