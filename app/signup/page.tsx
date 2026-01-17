@@ -7,7 +7,7 @@ import { useAuth } from '@/app/context/AuthContext';
 import { User, Mail, Lock, Loader2, Eye, EyeOff, Gift } from 'lucide-react';
 
 export default function SignupPage() {
-    const { signup, isAuthenticated } = useAuth();
+    const { register, isAuthenticated } = useAuth();
     const router = useRouter();
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -44,7 +44,7 @@ export default function SignupPage() {
         }
 
         try {
-            await signup(name, email, password, referralCode || undefined);
+            await register(name, email, password);
             router.push('/profile');
         } catch (err: unknown) {
             const message = err instanceof Error ? err.message : 'Signup failed';
