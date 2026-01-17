@@ -7,7 +7,10 @@ import {
   TrendingDown,
   Activity,
   Plus,
-  BarChart3
+  BarChart3,
+  AreaChart,
+  CandlestickChart,
+  LineChart
 } from 'lucide-react';
 import { stockAPI } from '../../utils/api';
 import { Stock, HistoricalData } from '../../types';
@@ -33,8 +36,8 @@ export default function StockDetailPage({ params }: PageProps) {
     try {
       setChartLoading(true);
       const periodMap: Record<string, string> = {
-        '1 Day': '1d', '5 Days': '5d', '1 Month': '1mo', 
-        'YTD': '1y', '1 Year': '1y', '5 Years': '5y', 'Max': '5y'
+        '1D': '1d', '5D': '5d', '1M': '1mo', 
+        'YTD': '1y', '1Y': '1y', '5Y': '5y', 'Max': '5y'
       };
       const mappedPeriod = periodMap[period] || '1d';
       const historyResponse = await stockAPI.getHistoricalData(symbol, mappedPeriod);
@@ -127,12 +130,12 @@ export default function StockDetailPage({ params }: PageProps) {
     `${change >= 0 ? '+' : ''}${change.toFixed(2)} (${percent >= 0 ? '+' : ''}${percent.toFixed(2)}%)`;
 
   const tabs = ['Overview', 'Financials', 'Forecast', 'Statistics', 'Metrics', 'Dividends', 'History', 'Profile', 'Chart'];
-  const periods = ['1 Day', '5 Days', '1 Month', 'YTD', '1 Year', '5 Years', 'Max'];
+  const periods = ['1D', '5D', '1M', 'YTD', '1Y', '5Y', 'Max'];
   const chartTypes = [
-    { key: 'area', label: 'Area', icon: '📈' },
-    { key: 'candlestick', label: 'Candle', icon: '🕯️' },
-    { key: 'line', label: 'Line', icon: '📊' },
-    { key: 'mountain', label: 'Mountain', icon: '⛰️' }
+    { key: 'area', label: 'Area', icon: AreaChart },
+    { key: 'candlestick', label: 'Candle', icon: CandlestickChart },
+    { key: 'line', label: 'Line', icon: LineChart },
+    { key: 'mountain', label: 'Mountain', icon: AreaChart }
   ] as const;
 
   return (
@@ -284,103 +287,143 @@ export default function StockDetailPage({ params }: PageProps) {
         {/* Center Column - Chart */}
         <div className="lg:col-span-2">
           <div className="bg-white rounded-lg p-6 shadow-sm">
-            {/* Chart Period and Type Buttons */}
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-4">
-                {/* Period Buttons */}
-                <div className="flex space-x-2">
-                  {periods.map((period) => (
-                    <button
-                      key={period}
-                      onClick={() => handlePeriodChange(period)}
-                      disabled={chartLoading}
-                      className={`px-4 py-2 text-sm rounded-lg font-medium transition-colors disabled:opacity-50 ${
-                        chartPeriod === period
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                      }`}
-                    >
-                      {chartLoading && chartPeriod === period ? (
-                        <Activity className="h-4 w-4 animate-spin" />
-                      ) : (
-                        period
-                      )}
-                    </button>
-                  ))}
+            {/* Professional Chart Controls Header */}
+            <div className="mb-8 p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
+              {/* First Row - Duration Controls */}
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+                <div className="flex items-center gap-3">
+                  <span className="text-sm font-semibold text-gray-700">Duration</span>
+                  <div className="flex bg-slate-50 rounded-lg p-1 border border-slate-200 overflow-x-auto">
+                    {periods.map((period) => (
+                      <button
+                        key={period}
+                        onClick={() => handlePeriodChange(period)}
+                        disabled={chartLoading}
+                        className={`px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 disabled:opacity-50 whitespace-nowrap ${
+                          chartPeriod === period
+                            ? 'bg-white text-gray-900 shadow-sm border border-gray-200'
+                            : 'text-gray-600 hover:text-gray-900 hover:bg-white/50'
+                        }`}
+                      >
+                        {chartLoading && chartPeriod === period ? (
+                          <Activity className="h-4 w-4 animate-spin" />
+                        ) : (
+                          period
+                        )}
+                      </button>
+                    ))}
+                  </div>
                 </div>
                 
-                {/* Chart Type Buttons */}
-                <div className="flex space-x-1 bg-gray-100 rounded-lg p-1">
-                  {chartTypes.map((type) => (
-                    <button
-                      key={type.key}
-                      onClick={() => setChartType(type.key)}
-                      className={`px-3 py-1.5 text-sm rounded-md font-medium transition-colors ${
-                        chartType === type.key
-                          ? 'bg-white text-gray-900 shadow-sm'
-                          : 'text-gray-600 hover:text-gray-900'
-                      }`}
-                      title={type.label}
-                    >
-                      {type.icon} {type.label}
-                    </button>
-                  ))}
+                {/* Price Change Indicator */}
+                <div className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold ${
+                  isPositive 
+                    ? 'bg-red-50 text-red-700 border border-red-200' 
+                    : 'bg-green-50 text-green-700 border border-green-200'
+                }`}>
+                  {isPositive ? (
+                    <TrendingDown className="h-4 w-4" />
+                  ) : (
+                    <TrendingUp className="h-4 w-4" />
+                  )}
+                  <span>{formatChange(stock.change, stock.changePercent)}</span>
+                  <span className="text-xs opacity-75 font-normal">(Today)</span>
                 </div>
               </div>
               
-              <div className={`text-lg font-bold ${
-                isPositive ? 'text-red-600' : 'text-green-600'
-              }`}>
-                {formatChange(stock.change, stock.changePercent)} (1D)
+              {/* Second Row - Chart Type Controls */}
+              <div className="flex items-center gap-3">
+                <span className="text-sm font-semibold text-gray-700">Chart Type</span>
+                <div className="flex bg-slate-50 rounded-lg p-1 border border-slate-200 overflow-x-auto">
+                  {chartTypes.map((type) => {
+                    const IconComponent = type.icon;
+                    return (
+                      <button
+                        key={type.key}
+                        onClick={() => setChartType(type.key)}
+                        className={`flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 whitespace-nowrap ${
+                          chartType === type.key
+                            ? 'bg-blue-600 text-white shadow-md'
+                            : 'text-gray-600 hover:text-gray-900 hover:bg-white/50'
+                        }`}
+                      >
+                        <IconComponent className="h-4 w-4" />
+                        <span>{type.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
 
-            {/* Chart */}
-            <div className="h-96 bg-white rounded-lg border border-gray-200 relative">
-              {historicalData.length > 0 ? (
-                <StockChart 
-                  data={historicalData} 
-                  isPositive={!isPositive} 
-                  height={384}
-                  chartType={chartType}
-                />
-              ) : (
-                <div className="flex items-center justify-center h-full">
-                  <div className="text-center text-gray-500">
-                    {chartLoading ? (
-                      <>
-                        <Activity className="h-16 w-16 mx-auto mb-4 text-blue-600 animate-spin" />
-                        <p className="text-lg font-medium">Loading chart data...</p>
-                      </>
-                    ) : (
-                      <>
-                        <BarChart3 className="h-16 w-16 mx-auto mb-4 text-gray-300" />
-                        <p className="text-lg font-medium">No chart data available</p>
-                        <p className="text-sm">Try selecting a different time period</p>
-                      </>
-                    )}
+            {/* Chart Container */}
+            <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
+              <div className="h-96 relative">
+                {historicalData.length > 0 ? (
+                  <StockChart 
+                    data={historicalData} 
+                    isPositive={!isPositive} 
+                    height={384}
+                    chartType={chartType}
+                  />
+                ) : (
+                  <div className="flex items-center justify-center h-full bg-gray-50">
+                    <div className="text-center text-gray-500">
+                      {chartLoading ? (
+                        <>
+                          <Activity className="h-12 w-12 mx-auto mb-3 text-blue-500 animate-spin" />
+                          <p className="text-lg font-medium text-gray-700">Loading chart data...</p>
+                          <p className="text-sm text-gray-500">Fetching {chartPeriod.toLowerCase()} data</p>
+                        </>
+                      ) : (
+                        <>
+                          <BarChart3 className="h-12 w-12 mx-auto mb-3 text-gray-300" />
+                          <p className="text-lg font-medium text-gray-700">No chart data available</p>
+                          <p className="text-sm text-gray-500">Try selecting a different time period</p>
+                        </>
+                      )}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
             
-            {/* Chart Stats */}
-            <div className="grid grid-cols-4 gap-4 mt-6 pt-6 border-t border-gray-100">
-              <div className="text-center">
-                <p className="text-sm text-gray-500 mb-1">Today's High</p>
-                <p className="text-lg font-bold text-gray-900">{formatPrice(stock.price * 1.02)}</p>
+            {/* Chart Statistics */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+              <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 border border-blue-200">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium text-blue-700">Today's High</span>
+                  <TrendingUp className="h-4 w-4 text-blue-600" />
+                </div>
+                <p className="text-xl font-bold text-blue-900">{formatPrice(stock.price * 1.02)}</p>
               </div>
-              <div className="text-center">
-                <p className="text-sm text-gray-500 mb-1">Today's Low</p>
-                <p className="text-lg font-bold text-gray-900">{formatPrice(stock.price * 0.98)}</p>
+              
+              <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-xl p-4 border border-red-200">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium text-red-700">Today's Low</span>
+                  <TrendingDown className="h-4 w-4 text-red-600" />
+                </div>
+                <p className="text-xl font-bold text-red-900">{formatPrice(stock.price * 0.98)}</p>
               </div>
-              <div className="text-center">
-                <p className="text-sm text-gray-500 mb-1">Volume</p>
-                <p className="text-lg font-bold text-gray-900">{stock.volume ? (stock.volume / 1000000).toFixed(1) + 'M' : 'N/A'}</p>
+              
+              <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-4 border border-purple-200">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium text-purple-700">Volume</span>
+                  <BarChart3 className="h-4 w-4 text-purple-600" />
+                </div>
+                <p className="text-xl font-bold text-purple-900">
+                  {stock.volume ? (stock.volume / 1000000).toFixed(1) + 'M' : 'N/A'}
+                </p>
               </div>
-              <div className="text-center">
-                <p className="text-sm text-gray-500 mb-1">Avg Volume</p>
-                <p className="text-lg font-bold text-gray-900">{stock.volume ? ((stock.volume * 0.8) / 1000000).toFixed(1) + 'M' : 'N/A'}</p>
+              
+              <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4 border border-green-200">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium text-green-700">Avg Volume</span>
+                  <Activity className="h-4 w-4 text-green-600" />
+                </div>
+                <p className="text-xl font-bold text-green-900">
+                  {stock.volume ? ((stock.volume * 0.8) / 1000000).toFixed(1) + 'M' : 'N/A'}
+                </p>
               </div>
             </div>
           </div>

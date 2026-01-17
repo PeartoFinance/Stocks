@@ -11,8 +11,6 @@ import {
 } from 'lightweight-charts';
 import { HistoricalData } from '../types';
 
-// 'mountain' is technically an Area chart with a specific gradient, 
-// so we treat it as an Area series with different options.
 type ChartType = 'area' | 'candlestick' | 'line' | 'mountain';
 
 interface StockChartProps {
@@ -29,11 +27,12 @@ export default function StockChart({ data, isPositive, height = 400, chartType =
   useEffect(() => {
     if (!chartContainerRef.current || data.length === 0) return;
 
-    // Initialize Chart
     const chart = createChart(chartContainerRef.current, {
       layout: {
         background: { type: ColorType.Solid, color: 'transparent' },
         textColor: '#6b7280',
+        // REMOVE LOGO HERE
+        attributionLogo: false, 
       },
       width: chartContainerRef.current.clientWidth,
       height,
@@ -44,17 +43,18 @@ export default function StockChart({ data, isPositive, height = 400, chartType =
       timeScale: {
         borderColor: '#e5e7eb',
       },
+      // Ensure the price scale doesn't overlap content
+      rightPriceScale: {
+        borderVisible: false,
+      },
     });
 
     chartRef.current = chart;
 
-    // Define colors based on isPositive
-    // standard: Green (#10b981) for UP, Red (#ef4444) for DOWN
     const mainColor = isPositive ? '#10b981' : '#ef4444';
     const topGradient = isPositive ? 'rgba(16, 185, 129, 0.4)' : 'rgba(239, 68, 68, 0.4)';
     const bottomGradient = isPositive ? 'rgba(16, 185, 129, 0.05)' : 'rgba(239, 68, 68, 0.05)';
 
-    // Handle different series types using the modern addSeries method
     if (chartType === 'candlestick') {
       const series = chart.addSeries(CandlestickSeries, {
         upColor: '#10b981',
@@ -79,7 +79,6 @@ export default function StockChart({ data, isPositive, height = 400, chartType =
       series.setData(data.map(item => ({ time: item.date, value: item.close })));
     } 
     else {
-      // Handles both 'area' and 'mountain'
       const isMountain = chartType === 'mountain';
       const series = chart.addSeries(AreaSeries, {
         lineColor: mainColor,
@@ -92,7 +91,6 @@ export default function StockChart({ data, isPositive, height = 400, chartType =
 
     chart.timeScale().fitContent();
 
-    // Resize handling
     const handleResize = () => {
       if (chartContainerRef.current && chartRef.current) {
         chartRef.current.applyOptions({ width: chartContainerRef.current.clientWidth });
@@ -108,5 +106,10 @@ export default function StockChart({ data, isPositive, height = 400, chartType =
     };
   }, [data, isPositive, height, chartType]);
 
-  return <div ref={chartContainerRef} className="w-full" />;
+  // Use overflow-hidden on the parent to stop the "out of frame" bug
+  return (
+    <div className="w-full overflow-hidden relative">
+      <div ref={chartContainerRef} className="w-full" />
+    </div>
+  );
 }
