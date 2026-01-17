@@ -36,7 +36,7 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://api.pearto.com/api';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -74,9 +74,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!user?.email) return;
       try {
         const res = await fetch(`${API_BASE}/api/user/profile`, {
-          headers: { 
+          headers: {
             'x-user-email': user.email,
-            'x-user-country': 'NP' 
+            'x-user-country': 'NP'
           }
         });
         if (res.ok) {
@@ -113,9 +113,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       await fetch(`${API_BASE}/api/user/profile`, {
         method: 'PUT',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
-          'x-user-email': user.email 
+          'x-user-email': user.email
         },
         body: JSON.stringify(updates),
       });
@@ -133,8 +133,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     logout: handleLogout,
     updateProfile,
     refreshUser: async () => {
-        const userData = getCurrentUser();
-        if (userData) setUser(mapUserData(userData));
+      const userData = getCurrentUser();
+      if (userData) setUser(mapUserData(userData));
     }
   }), [user, isLoading, handleLogin, handleRegister, handleLogout, updateProfile, mapUserData]);
 

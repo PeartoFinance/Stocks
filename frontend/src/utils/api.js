@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://api.pearto.com/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -35,17 +35,17 @@ export const stockAPI = {
   // Market data
   getMarketOverview: () => api.get('/market-overview'),
   getTrendingStocks: () => api.get('/trending-stocks'),
-  
+
   // Stock data
   searchStocks: (query) => api.get(`/stocks/search?q=${query}`),
   getStockInfo: (symbol) => api.get(`/stocks/${symbol}`),
-  getStockHistory: (symbol, period = '1y', interval = '1d') => 
+  getStockHistory: (symbol, period = '1y', interval = '1d') =>
     api.get(`/stocks/${symbol}/history?period=${period}&interval=${interval}`),
   getStockScreener: (filters = {}) => {
     const params = new URLSearchParams(filters).toString();
     return api.get(`/stocks/screener?${params}`);
   },
-  
+
   // Analysis
   getTechnicalAnalysis: (symbol) => api.get(`/analysis/${symbol}/technical`),
   getFundamentalAnalysis: (symbol) => api.get(`/analysis/${symbol}/fundamentals`),

@@ -33,7 +33,7 @@ Start-Sleep -Seconds 3
 # Start frontend
 Write-Host ""
 Write-Host "🎉 Starting application..." -ForegroundColor Green
-Write-Host "🔗 Backend: http://localhost:5000" -ForegroundColor Cyan
+Write-Host "🔗 Backend: https://api.pearto.com/api" -ForegroundColor Cyan
 Write-Host "🔗 Frontend: http://localhost:3000" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "Press Ctrl+C to stop the frontend server" -ForegroundColor Yellow
