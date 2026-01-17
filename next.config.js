@@ -9,7 +9,7 @@ const nextConfig = {
     domains: ['logos.stockanalysis.com', 'finance.yahoo.com'],
   },
   env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'https://api.pearto.com/api',
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000',
   },
 }
 
