@@ -327,10 +327,10 @@ export default function StockComparePage({ params }: PageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50 p-4 lg:p-6">
       {/* Header */}
-      <div className="mb-8">
-        <div className="flex items-center gap-4 mb-6">
+      <div className="mb-6 lg:mb-8">
+        <div className="flex items-center gap-4 mb-4 lg:mb-6">
           <button
             onClick={() => window.history.back()}
             className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -338,29 +338,29 @@ export default function StockComparePage({ params }: PageProps) {
             <ArrowLeft className="h-5 w-5 text-gray-600" />
           </button>
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Stock Comparison</h1>
-            <p className="text-gray-600">Compare stock performance side by side</p>
+            <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">Stock Comparison</h1>
+            <p className="text-gray-600 text-sm lg:text-base">Compare stock performance side by side</p>
           </div>
         </div>
 
         {/* Stock Selection Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 mb-6 lg:mb-8">
           {/* Primary Stock Card */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-            <div className="flex items-center gap-3 mb-4">
+          <div className="bg-white rounded-xl p-4 lg:p-6 shadow-sm border border-gray-200">
+            <div className="flex items-center gap-3 mb-3 lg:mb-4">
               <div className="w-4 h-4 bg-blue-600 rounded-full"></div>
-              <span className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Primary Stock</span>
+              <span className="text-xs lg:text-sm font-semibold text-gray-600 uppercase tracking-wide">Primary Stock</span>
             </div>
             {primaryStock && (
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                <h3 className="text-lg lg:text-2xl font-bold text-gray-900 mb-2">
                   {primaryStock.name}
                 </h3>
-                <div className="text-lg font-medium text-gray-600 mb-3">{primaryStock.symbol}</div>
-                <div className="flex items-center gap-4">
-                  <span className="text-3xl font-bold text-gray-900">{formatPrice(primaryStock.price)}</span>
+                <div className="text-sm lg:text-lg font-medium text-gray-600 mb-3">{primaryStock.symbol}</div>
+                <div className="flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-4">
+                  <span className="text-xl lg:text-3xl font-bold text-gray-900">{formatPrice(primaryStock.price)}</span>
                   <span
-                    className={`flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium ${
+                    className={`flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium w-fit ${
                       primaryStock.change >= 0 
                         ? "bg-green-100 text-green-700" 
                         : "bg-red-100 text-red-700"
@@ -379,11 +379,11 @@ export default function StockComparePage({ params }: PageProps) {
           </div>
 
           {/* Compare Stock Card */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-            <div className="flex items-center justify-between mb-4">
+          <div className="bg-white rounded-xl p-4 lg:p-6 shadow-sm border border-gray-200">
+            <div className="flex items-center justify-between mb-3 lg:mb-4">
               <div className="flex items-center gap-3">
                 <div className="w-4 h-4 bg-orange-600 rounded-full"></div>
-                <span className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Compare With</span>
+                <span className="text-xs lg:text-sm font-semibold text-gray-600 uppercase tracking-wide">Compare With</span>
               </div>
               {compareStock && (
                 <button
@@ -397,14 +397,14 @@ export default function StockComparePage({ params }: PageProps) {
             
             {compareStock ? (
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                <h3 className="text-lg lg:text-2xl font-bold text-gray-900 mb-2">
                   {compareStock.name}
                 </h3>
-                <div className="text-lg font-medium text-gray-600 mb-3">{compareStock.symbol}</div>
-                <div className="flex items-center gap-4">
-                  <span className="text-3xl font-bold text-gray-900">{formatPrice(compareStock.price)}</span>
+                <div className="text-sm lg:text-lg font-medium text-gray-600 mb-3">{compareStock.symbol}</div>
+                <div className="flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-4">
+                  <span className="text-xl lg:text-3xl font-bold text-gray-900">{formatPrice(compareStock.price)}</span>
                   <span
-                    className={`flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium ${
+                    className={`flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium w-fit ${
                       compareStock.change >= 0 
                         ? "bg-green-100 text-green-700" 
                         : "bg-red-100 text-red-700"
@@ -421,17 +421,17 @@ export default function StockComparePage({ params }: PageProps) {
               </div>
             ) : (
               <div className="relative">
-                <div className="flex items-center gap-3 p-4 border-2 border-dashed border-gray-300 rounded-lg">
+                <div className="flex items-center gap-3 p-3 lg:p-4 border-2 border-dashed border-gray-300 rounded-lg">
                   <Search className="h-5 w-5 text-gray-400" />
                   <input
                     type="text"
-                    placeholder="Search stocks to compare (e.g., TSLA, MSFT)..."
+                    placeholder="Search stocks (e.g., TSLA, MSFT)..."
                     value={searchQuery}
                     onChange={(e) => {
                       setSearchQuery(e.target.value);
                       searchStocks(e.target.value);
                     }}
-                    className="flex-1 outline-none text-gray-700 placeholder-gray-500"
+                    className="flex-1 outline-none text-gray-700 placeholder-gray-500 text-sm lg:text-base"
                   />
                   {searching && <Activity className="h-5 w-5 text-blue-600 animate-spin" />}
                 </div>
@@ -442,7 +442,7 @@ export default function StockComparePage({ params }: PageProps) {
                       <button
                         key={stock.symbol}
                         onClick={() => selectCompareStock(stock)}
-                        className="w-full p-4 text-left hover:bg-gray-50 border-b border-gray-100 last:border-b-0 transition-colors"
+                        className="w-full p-3 lg:p-4 text-left hover:bg-gray-50 border-b border-gray-100 last:border-b-0 transition-colors"
                       >
                         <div className="flex justify-between items-center">
                           <div>
@@ -468,16 +468,16 @@ export default function StockComparePage({ params }: PageProps) {
         </div>
 
         {/* Period and Chart Type Selection */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-8">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-center gap-4 lg:gap-6 mb-6 lg:mb-8">
           {/* Period Selection */}
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col lg:flex-row lg:items-center gap-3 lg:gap-4">
             <span className="text-sm font-semibold text-gray-700">Period:</span>
-            <div className="flex bg-white rounded-lg p-1 border border-gray-200 shadow-sm">
+            <div className="flex bg-white rounded-lg p-1 border border-gray-200 shadow-sm overflow-x-auto">
               {periods.map((period) => (
                 <button
                   key={period}
                   onClick={() => handlePeriodChange(period)}
-                  className={`px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
+                  className={`px-3 lg:px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 whitespace-nowrap ${
                     chartPeriod === period
                       ? "bg-blue-600 text-white shadow-sm"
                       : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
@@ -490,9 +490,9 @@ export default function StockComparePage({ params }: PageProps) {
           </div>
 
           {/* Chart Type Selection */}
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col lg:flex-row lg:items-center gap-3 lg:gap-4">
             <span className="text-sm font-semibold text-gray-700">Chart:</span>
-            <div className="flex bg-white rounded-lg p-1 border border-gray-200 shadow-sm">
+            <div className="flex bg-white rounded-lg p-1 border border-gray-200 shadow-sm overflow-x-auto">
               {chartTypes.map((type) => {
                 const IconComponent = type.icon;
                 return (
@@ -506,7 +506,7 @@ export default function StockComparePage({ params }: PageProps) {
                     }`}
                   >
                     <IconComponent className="h-4 w-4" />
-                    <span>{type.label}</span>
+                    <span className="hidden lg:inline">{type.label}</span>
                   </button>
                 );
               })}
@@ -516,15 +516,15 @@ export default function StockComparePage({ params }: PageProps) {
       </div>
 
       {/* Main Chart */}
-      <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-200 mb-8">
-        <div className="flex items-center justify-between mb-6">
+      <div className="bg-white rounded-xl p-4 lg:p-8 shadow-sm border border-gray-200 mb-6 lg:mb-8">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
           <div className="flex items-center gap-4">
             <BarChart3 className="h-6 w-6 text-gray-600" />
-            <h2 className="text-2xl font-bold text-gray-900">Price Comparison Chart</h2>
+            <h2 className="text-xl lg:text-2xl font-bold text-gray-900">Price Comparison Chart</h2>
           </div>
           
           {/* Legend */}
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4 lg:gap-6">
             {primaryStock && (
               <div className="flex items-center gap-2">
                 <div className="w-4 h-1 bg-blue-600 rounded"></div>
@@ -540,7 +540,7 @@ export default function StockComparePage({ params }: PageProps) {
           </div>
         </div>
         
-        <div className="h-96 w-full">
+        <div className="h-80 lg:h-96 w-full">
           {primaryData.length > 0 ? (
             <div ref={chartRef} className="w-full h-full" />
           ) : (
@@ -556,10 +556,10 @@ export default function StockComparePage({ params }: PageProps) {
 
       {/* Comparison Metrics */}
       {primaryStock && compareStock && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
           {/* Key Metrics Comparison */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-            <h3 className="text-xl font-bold text-gray-900 mb-6">Key Metrics</h3>
+          <div className="bg-white rounded-xl p-4 lg:p-6 shadow-sm border border-gray-200">
+            <h3 className="text-lg lg:text-xl font-bold text-gray-900 mb-4 lg:mb-6">Key Metrics</h3>
             
             <div className="space-y-4">
               {[
@@ -574,11 +574,11 @@ export default function StockComparePage({ params }: PageProps) {
                   <div className="grid grid-cols-2 gap-4">
                     <div className="flex items-center gap-3">
                       <div className="w-3 h-3 bg-blue-600 rounded-full"></div>
-                      <span className="font-semibold text-gray-900">{metric.primary}</span>
+                      <span className="font-semibold text-gray-900 text-sm lg:text-base">{metric.primary}</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <div className="w-3 h-3 bg-orange-600 rounded-full"></div>
-                      <span className="font-semibold text-gray-900">{metric.compare}</span>
+                      <span className="font-semibold text-gray-900 text-sm lg:text-base">{metric.compare}</span>
                     </div>
                   </div>
                 </div>
@@ -587,13 +587,13 @@ export default function StockComparePage({ params }: PageProps) {
           </div>
 
           {/* Performance Summary */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-            <h3 className="text-xl font-bold text-gray-900 mb-6">Performance Summary</h3>
+          <div className="bg-white rounded-xl p-4 lg:p-6 shadow-sm border border-gray-200">
+            <h3 className="text-lg lg:text-xl font-bold text-gray-900 mb-4 lg:mb-6">Performance Summary</h3>
             
             <div className="space-y-4">
-              <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
-                <span className="font-medium text-gray-700">Better Performer Today</span>
-                <span className={`font-bold ${
+              <div className="flex justify-between items-center p-3 lg:p-4 bg-gray-50 rounded-lg">
+                <span className="font-medium text-gray-700 text-sm lg:text-base">Better Performer Today</span>
+                <span className={`font-bold text-sm lg:text-base ${
                   primaryStock.changePercent > compareStock.changePercent 
                     ? "text-blue-600" 
                     : "text-orange-600"
@@ -604,9 +604,9 @@ export default function StockComparePage({ params }: PageProps) {
                 </span>
               </div>
               
-              <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
-                <span className="font-medium text-gray-700">Higher Volume</span>
-                <span className={`font-bold ${
+              <div className="flex justify-between items-center p-3 lg:p-4 bg-gray-50 rounded-lg">
+                <span className="font-medium text-gray-700 text-sm lg:text-base">Higher Volume</span>
+                <span className={`font-bold text-sm lg:text-base ${
                   (primaryStock.volume || 0) > (compareStock.volume || 0)
                     ? "text-blue-600" 
                     : "text-orange-600"
@@ -617,9 +617,9 @@ export default function StockComparePage({ params }: PageProps) {
                 </span>
               </div>
               
-              <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
-                <span className="font-medium text-gray-700">Lower P/E Ratio</span>
-                <span className={`font-bold ${
+              <div className="flex justify-between items-center p-3 lg:p-4 bg-gray-50 rounded-lg">
+                <span className="font-medium text-gray-700 text-sm lg:text-base">Lower P/E Ratio</span>
+                <span className={`font-bold text-sm lg:text-base ${
                   (primaryStock.peRatio || 999) < (compareStock.peRatio || 999)
                     ? "text-blue-600" 
                     : "text-orange-600"
@@ -630,9 +630,9 @@ export default function StockComparePage({ params }: PageProps) {
                 </span>
               </div>
 
-              <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
-                <span className="font-medium text-gray-700">Larger Market Cap</span>
-                <span className={`font-bold ${
+              <div className="flex justify-between items-center p-3 lg:p-4 bg-gray-50 rounded-lg">
+                <span className="font-medium text-gray-700 text-sm lg:text-base">Larger Market Cap</span>
+                <span className={`font-bold text-sm lg:text-base ${
                   (primaryStock.marketCap || 0) > (compareStock.marketCap || 0)
                     ? "text-blue-600" 
                     : "text-orange-600"
