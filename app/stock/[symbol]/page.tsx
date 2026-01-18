@@ -25,6 +25,7 @@ export default function StockDetailPage({ params }: PageProps) {
   const { symbol } = params;
   const [stock, setStock] = useState<Stock | null>(null);
   const [historicalData, setHistoricalData] = useState<HistoricalData[]>([]);
+  const [todayData, setTodayData] = useState<HistoricalData | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Overview");
   const [chartPeriod, setChartPeriod] = useState("1 Day");
@@ -72,9 +73,10 @@ export default function StockDetailPage({ params }: PageProps) {
 
       try {
         setLoading(true);
-        const [stockResponse, historyResponse] = await Promise.all([
+        const [stockResponse, historyResponse, todayResponse] = await Promise.all([
           stockAPI.getStockQuote(symbol),
           stockAPI.getHistoricalData(symbol, "1d"),
+          stockAPI.getTodayData(symbol),
         ]);
 
         if (stockResponse.data) {
@@ -82,6 +84,9 @@ export default function StockDetailPage({ params }: PageProps) {
         }
         if (historyResponse.data) {
           setHistoricalData(historyResponse.data);
+        }
+        if (todayResponse.data) {
+          setTodayData(todayResponse.data);
         }
 
         const watchlist = JSON.parse(localStorage.getItem("watchlist") || "[]");
@@ -191,7 +196,10 @@ export default function StockDetailPage({ params }: PageProps) {
               <Plus className="h-4 w-4" />
               {isWatchlisted ? "Watchlist" : "Watchlist"}
             </button>
-            <button className="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center gap-2">
+            <button 
+              onClick={() => window.location.href = `/stock/${symbol}/compare`}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center gap-2"
+            >
               <BarChart3 className="h-4 w-4" />
               Compare
             </button>
@@ -582,7 +590,7 @@ export default function StockDetailPage({ params }: PageProps) {
                   <TrendingUp className="h-4 w-4 text-blue-600" />
                 </div>
                 <p className="text-xl font-bold text-blue-900">
-                  {formatPrice(stock.price * 1.02)}
+                  {todayData?.high ? formatPrice(todayData.high) : "N/A"}
                 </p>
               </div>
 
@@ -594,7 +602,7 @@ export default function StockDetailPage({ params }: PageProps) {
                   <TrendingDown className="h-4 w-4 text-red-600" />
                 </div>
                 <p className="text-xl font-bold text-red-900">
-                  {formatPrice(stock.price * 0.98)}
+                  {todayData?.low ? formatPrice(todayData.low) : "N/A"}
                 </p>
               </div>
 
@@ -606,9 +614,7 @@ export default function StockDetailPage({ params }: PageProps) {
                   <BarChart3 className="h-4 w-4 text-purple-600" />
                 </div>
                 <p className="text-xl font-bold text-purple-900">
-                  {stock.volume
-                    ? (stock.volume / 1000000).toFixed(1) + "M"
-                    : "N/A"}
+                  {todayData?.volume ? (todayData.volume / 1000000).toFixed(1) + "M" : "N/A"}
                 </p>
               </div>
 

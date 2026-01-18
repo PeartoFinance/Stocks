@@ -18,9 +18,10 @@ interface StockChartProps {
   isPositive: boolean;
   height?: number;
   chartType?: ChartType;
+  color?: string;
 }
 
-export default function StockChart({ data, isPositive, height = 400, chartType = 'area' }: StockChartProps) {
+export default function StockChart({ data, isPositive, height = 400, chartType = 'area', color }: StockChartProps) {
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
 
@@ -51,9 +52,17 @@ export default function StockChart({ data, isPositive, height = 400, chartType =
 
     chartRef.current = chart;
 
-    const mainColor = isPositive ? '#10b981' : '#ef4444';
-    const topGradient = isPositive ? 'rgba(16, 185, 129, 0.4)' : 'rgba(239, 68, 68, 0.4)';
-    const bottomGradient = isPositive ? 'rgba(16, 185, 129, 0.05)' : 'rgba(239, 68, 68, 0.05)';
+    // Helper function to convert hex to rgba
+    const hexToRgba = (hex: string, alpha: number) => {
+      const r = parseInt(hex.slice(1, 3), 16);
+      const g = parseInt(hex.slice(3, 5), 16);
+      const b = parseInt(hex.slice(5, 7), 16);
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    };
+
+    const mainColor = color || (isPositive ? '#10b981' : '#ef4444');
+    const topGradient = color ? hexToRgba(color, 0.4) : (isPositive ? 'rgba(16, 185, 129, 0.4)' : 'rgba(239, 68, 68, 0.4)');
+    const bottomGradient = color ? hexToRgba(color, 0.05) : (isPositive ? 'rgba(16, 185, 129, 0.05)' : 'rgba(239, 68, 68, 0.05)');
 
     if (chartType === 'candlestick') {
       const series = chart.addSeries(CandlestickSeries, {
