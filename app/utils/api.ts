@@ -214,6 +214,42 @@ export const stockAPI = {
     }
   },
 
+  async getTodayData(symbol: string): Promise<APIResponse<HistoricalData | null>> {
+    try {
+      const data = await apiFetch<{ symbol: string; period: string; interval: string; data: Array<{ date: string; open: number; high: number; low: number; close: number; volume: number }> }>(
+        `/api/stocks/history/${encodeURIComponent(symbol)}?period=1d&interval=1d`
+      );
+
+      const todayData = data.data && data.data.length > 0 ? data.data[data.data.length - 1] : null;
+      
+      if (!todayData) {
+        return {
+          data: null,
+          success: false,
+          timestamp: new Date().toISOString(),
+        };
+      }
+
+      const result: HistoricalData = {
+        date: todayData.date,
+        open: todayData.open || todayData.close,
+        high: todayData.high || todayData.close,
+        low: todayData.low || todayData.close,
+        close: todayData.close,
+        volume: todayData.volume || 0,
+      };
+
+      return {
+        data: result,
+        success: true,
+        timestamp: new Date().toISOString(),
+      };
+    } catch (error) {
+      console.error('[stockAPI] getTodayData error:', error);
+      return { data: null, success: false, timestamp: new Date().toISOString() };
+    }
+  },
+
   async getScreenerResults(filters: ScreenerFilters): Promise<APIResponse<Stock[]>> {
     try {
       const data = await apiFetch<unknown[]>('/api/stocks/quotes?symbols=AAPL,GOOGL,MSFT,TSLA,AMZN,META,NVDA,NFLX,AMD,INTC&limit=100');
@@ -484,6 +520,32 @@ export const stockAPI = {
     } catch (error) {
       console.error('[stockAPI] getETFs error:', error);
       return [];
+    }
+  },
+
+  // Stock comparison methods
+  async compareStocks(symbol1: string, symbol2: string, period: string = '1mo'): Promise<APIResponse<{ stock1: Stock; stock2: Stock; data1: HistoricalData[]; data2: HistoricalData[] }>> {
+    try {
+      const [stock1Response, stock2Response, data1Response, data2Response] = await Promise.all([
+        this.getStockQuote(symbol1),
+        this.getStockQuote(symbol2),
+        this.getHistoricalData(symbol1, period),
+        this.getHistoricalData(symbol2, period),
+      ]);
+
+      return {
+        data: {
+          stock1: stock1Response.data,
+          stock2: stock2Response.data,
+          data1: data1Response.data,
+          data2: data2Response.data,
+        },
+        success: true,
+        timestamp: new Date().toISOString(),
+      };
+    } catch (error) {
+      console.error('[stockAPI] compareStocks error:', error);
+      throw error;
     }
   },
 };
