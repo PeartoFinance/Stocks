@@ -37,6 +37,9 @@ export default function StockComparePage({ params }: PageProps) {
   const chartRef = React.useRef<HTMLDivElement>(null);
   const chartInstanceRef = React.useRef<IChartApi | null>(null);
 
+  const formatTime = (dateStr: string): string => {
+    return dateStr.split('T')[0];
+  };
   
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -122,7 +125,7 @@ export default function StockComparePage({ params }: PageProps) {
       });
       
       primarySeries.setData(primaryData.map(item => ({
-        time: item.date,
+        time: formatTime(item.date),
         open: item.open,
         high: item.high,
         low: item.low,
@@ -140,7 +143,7 @@ export default function StockComparePage({ params }: PageProps) {
         });
         
         compareSeries.setData(compareData.map(item => ({
-          time: item.date,
+          time: formatTime(item.date),
           open: item.open,
           high: item.high,
           low: item.low,
@@ -157,8 +160,8 @@ export default function StockComparePage({ params }: PageProps) {
       });
       
       primarySeries.setData(primaryData.map(item => ({ 
-        time: item.date, 
-        value: item.close 
+        time: formatTime(item.date),
+                value: item.close 
       })));
 
       // Compare stock area/mountain
@@ -171,8 +174,8 @@ export default function StockComparePage({ params }: PageProps) {
         });
         
         compareSeries.setData(compareData.map(item => ({ 
-          time: item.date, 
-          value: item.close 
+          time: formatTime(item.date),
+                    value: item.close 
         })));
       }
     } else {
@@ -184,8 +187,8 @@ export default function StockComparePage({ params }: PageProps) {
       });
       
       primarySeries.setData(primaryData.map(item => ({ 
-        time: item.date, 
-        value: item.close 
+        time: formatTime(item.date),
+                value: item.close 
       })));
 
       // Compare stock line
@@ -197,7 +200,7 @@ export default function StockComparePage({ params }: PageProps) {
         });
         
         compareSeries.setData(compareData.map(item => ({ 
-          time: item.date, 
+          time: formatTime(item.date),
           value: item.close 
         })));
       }
