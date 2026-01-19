@@ -7,7 +7,8 @@ import {
   AreaSeries, 
   CandlestickSeries, 
   LineSeries, 
-  IChartApi 
+  IChartApi,
+  Time
 } from 'lightweight-charts';
 import { HistoricalData } from '../types';
 
@@ -32,7 +33,6 @@ export default function StockChart({ data, isPositive, height = 400, chartType =
       layout: {
         background: { type: ColorType.Solid, color: 'transparent' },
         textColor: '#6b7280',
-        // REMOVE LOGO HERE
         attributionLogo: false, 
       },
       width: chartContainerRef.current.clientWidth,
@@ -44,7 +44,6 @@ export default function StockChart({ data, isPositive, height = 400, chartType =
       timeScale: {
         borderColor: '#e5e7eb',
       },
-      // Ensure the price scale doesn't overlap content
       rightPriceScale: {
         borderVisible: false,
       },
@@ -52,7 +51,6 @@ export default function StockChart({ data, isPositive, height = 400, chartType =
 
     chartRef.current = chart;
 
-    // Helper function to convert hex to rgba
     const hexToRgba = (hex: string, alpha: number) => {
       const r = parseInt(hex.slice(1, 3), 16);
       const g = parseInt(hex.slice(3, 5), 16);
@@ -64,6 +62,11 @@ export default function StockChart({ data, isPositive, height = 400, chartType =
     const topGradient = color ? hexToRgba(color, 0.4) : (isPositive ? 'rgba(16, 185, 129, 0.4)' : 'rgba(239, 68, 68, 0.4)');
     const bottomGradient = color ? hexToRgba(color, 0.05) : (isPositive ? 'rgba(16, 185, 129, 0.05)' : 'rgba(239, 68, 68, 0.05)');
 
+    // Helper to ensure dates are in YYYY-MM-DD format
+    const formatTime = (dateStr: string): Time => {
+      return dateStr.split('T')[0] as Time;
+    };
+
     if (chartType === 'candlestick') {
       const series = chart.addSeries(CandlestickSeries, {
         upColor: '#10b981',
@@ -73,7 +76,7 @@ export default function StockChart({ data, isPositive, height = 400, chartType =
         wickDownColor: '#ef4444',
       });
       series.setData(data.map(item => ({
-        time: item.date,
+        time: formatTime(item.date),
         open: item.open,
         high: item.high,
         low: item.low,
@@ -85,7 +88,10 @@ export default function StockChart({ data, isPositive, height = 400, chartType =
         color: mainColor,
         lineWidth: 2,
       });
-      series.setData(data.map(item => ({ time: item.date, value: item.close })));
+      series.setData(data.map(item => ({ 
+        time: formatTime(item.date), 
+        value: item.close 
+      })));
     } 
     else {
       const isMountain = chartType === 'mountain';
@@ -95,7 +101,10 @@ export default function StockChart({ data, isPositive, height = 400, chartType =
         bottomColor: isMountain ? 'rgba(255, 255, 255, 0)' : bottomGradient,
         lineWidth: isMountain ? 3 : 2,
       });
-      series.setData(data.map(item => ({ time: item.date, value: item.close })));
+      series.setData(data.map(item => ({ 
+        time: formatTime(item.date), 
+        value: item.close 
+      })));
     }
 
     chart.timeScale().fitContent();
@@ -113,9 +122,8 @@ export default function StockChart({ data, isPositive, height = 400, chartType =
       resizeObserver.disconnect();
       chart.remove();
     };
-  }, [data, isPositive, height, chartType]);
+  }, [data, isPositive, height, chartType, color]);
 
-  // Use overflow-hidden on the parent to stop the "out of frame" bug
   return (
     <div className="w-full overflow-hidden relative">
       <div ref={chartContainerRef} className="w-full" />

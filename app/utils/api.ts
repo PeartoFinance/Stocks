@@ -18,8 +18,8 @@ const COUNTRY_KEY = 'user_country_override';
 
 // Get current country code from localStorage
 function getCountryCode(): string {
-  if (typeof window === 'undefined') return 'US';
-  return localStorage.getItem(COUNTRY_KEY) || 'US';
+  if (typeof window === 'undefined') return 'GLOBAL';
+  return localStorage.getItem(COUNTRY_KEY) || 'GLOBAL';
 }
 
 // Build headers with country code (matching core app's implementation)
