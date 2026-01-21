@@ -18,6 +18,17 @@ export interface Stock {
   sector?: string;
   industry?: string;
   description?: string;
+  open?: number;
+  high?: number;
+  low?: number;
+  previousClose?: number;
+  avgVolume?: number;
+  dayLow?: number;
+  dayHigh?: number;
+  forwardPe?: number;
+  exchange?: string;
+  currency?: string;
+  lastUpdated?: string;
 }
 
 export interface MarketIndex {
