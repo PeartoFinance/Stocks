@@ -1,12 +1,22 @@
 import React from 'react';
-import { BarChart3, TrendingUp, Calendar, Building2, Newspaper, Clock, PieChart, Activity } from 'lucide-react';
+import { 
+  BarChart3, 
+  TrendingUp, 
+  Calendar, 
+  Building2, 
+  Newspaper, 
+  Clock, 
+  PieChart, 
+  Activity,
+  LucideIcon // 1. Import the correct type
+} from 'lucide-react';
 
 export type TabId = 'overview' | 'financials' | 'forecast' | 'statistics' | 'metrics' | 'dividends' | 'history' | 'profile' | 'news';
 
 interface Tab {
   id: TabId;
   label: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: LucideIcon; // 2. Use LucideIcon instead of custom ComponentType
 }
 
 const tabs: Tab[] = [
@@ -29,7 +39,7 @@ interface StockTabsProps {
 export default function StockTabs({ activeTab, onTabChange }: StockTabsProps) {
   return (
     <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-1">
-      <nav className="flex space-x-1 overflow-x-auto">
+      <nav className="flex space-x-1 overflow-x-auto scrollbar-hide">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;

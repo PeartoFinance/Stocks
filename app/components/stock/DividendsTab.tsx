@@ -30,10 +30,14 @@ export default function DividendsTab({ symbol }: DividendsTabProps) {
     const fetchDividendData = async () => {
       try {
         setLoading(true);
-        const data = await marketService.getStockDividends(symbol);
-        setDividends(data || []);
+        // Cast the response to the expected type to satisfy the compiler
+        const data = await marketService.getStockDividends(symbol) as DividendRecord[];
+        
+        // Safety check: Ensure data is an array before setting state
+        setDividends(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error('Failed to load dividend data:', error);
+        setDividends([]);
       } finally {
         setLoading(false);
       }
@@ -44,11 +48,15 @@ export default function DividendsTab({ symbol }: DividendsTabProps) {
 
   const formatDate = (dateStr: string | null): string => {
     if (!dateStr) return 'N/A';
-    return new Date(dateStr).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
+    try {
+      return new Date(dateStr).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    } catch {
+      return 'N/A';
+    }
   };
 
   const getStatusColor = (status: string) => {
@@ -70,7 +78,7 @@ export default function DividendsTab({ symbol }: DividendsTabProps) {
     );
   }
 
-  if (dividends.length === 0) {
+  if (!dividends || dividends.length === 0) {
     return (
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-8">
         <div className="text-center">
@@ -86,10 +94,14 @@ export default function DividendsTab({ symbol }: DividendsTabProps) {
     );
   }
 
-  // Calculate stats from dividend data
+  // Calculate stats from dividend data safely
   const totalDividendAmount = dividends.reduce((sum, div) => sum + (div.dividendAmount || 0), 0);
-  const avgCashPercent = dividends.reduce((sum, div) => sum + div.cashPercent, 0) / dividends.length;
-  const avgBonusPercent = dividends.reduce((sum, div) => sum + div.bonusPercent, 0) / dividends.length;
+  const avgCashPercent = dividends.length > 0 
+    ? dividends.reduce((sum, div) => sum + (div.cashPercent || 0), 0) / dividends.length 
+    : 0;
+  const avgBonusPercent = dividends.length > 0 
+    ? dividends.reduce((sum, div) => sum + (div.bonusPercent || 0), 0) / dividends.length 
+    : 0;
 
   return (
     <div className="space-y-6">
@@ -165,7 +177,7 @@ export default function DividendsTab({ symbol }: DividendsTabProps) {
             </thead>
             <tbody>
               {dividends.map((dividend, index) => (
-                <tr key={index} className="border-b border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800">
+                <tr key={`${dividend.id}-${index}`} className="border-b border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800">
                   <td className="py-3 px-4 text-sm text-slate-900 dark:text-white">
                     {dividend.fiscalYear}
                   </td>
@@ -246,7 +258,7 @@ export default function DividendsTab({ symbol }: DividendsTabProps) {
             <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-3">Recent Activity</h4>
             <div className="space-y-3 text-sm text-slate-600 dark:text-slate-400">
               <p>
-                • Latest dividend record from fiscal year {dividends[0]?.fiscalYear}
+                • Latest dividend record from fiscal year {dividends[0]?.fiscalYear || 'N/A'}
               </p>
               <p>
                 • {dividends.filter(d => d.status === 'paid').length} dividends have been paid
