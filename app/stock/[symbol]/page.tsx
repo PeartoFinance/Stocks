@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import StockChart from "../../components/StockChart";
 import StockHeader from "../../components/StockHeader";
 import StockOverview from "../../components/StockOverview";
+import AIAnalysisPanel from "../../components/ai/AIAnalysisPanel";
 
 interface PageProps {
   params: { symbol: string };
@@ -130,9 +131,38 @@ export default function StockDetailPage({ params }: PageProps) {
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Column: Key Metrics */}
+        {/* Left Column: Key Metrics & AI Insights */}
         <div className="space-y-4">
           <StockOverview stock={stock} />
+          
+          {/* AI Insights Panel */}
+          <AIAnalysisPanel
+            title="AI Stock Analysis"
+            pageType="stock-detail"
+            pageData={{
+              symbol: stock.symbol,
+              name: stock.name,
+              price: stock.price,
+              change: stock.changePercent,
+              volume: stock.volume,
+              marketCap: stock.marketCap,
+              pe: stock.peRatio,
+              sector: stock.sector,
+              high: todayData?.high,
+              low: todayData?.low,
+              beta: stock.beta,
+              dividendYield: stock.dividendYield
+            }}
+            autoAnalyze={true}
+            compact={true}
+            quickPrompts={[
+              "Is this a good buy?",
+              "What are the risks?",
+              "Compare to sector",
+              "Technical analysis"
+            ]}
+            maxHeight="350px"
+          />
         </div>
 
         {/* Center/Right Column: Chart & Summary */}

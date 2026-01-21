@@ -17,6 +17,7 @@ import { stockAPI } from "../../../utils/api";
 import { Stock, HistoricalData } from "../../../types";
 import toast from "react-hot-toast";
 import { createChart, ColorType, LineSeries, AreaSeries, CandlestickSeries, IChartApi } from 'lightweight-charts';
+import AIAnalysisPanel from "../../../components/ai/AIAnalysisPanel";
 
 interface PageProps {
   params: { symbol: string };
@@ -559,7 +560,7 @@ export default function StockComparePage({ params }: PageProps) {
 
       {/* Comparison Metrics */}
       {primaryStock && compareStock && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 lg:gap-8">
           {/* Key Metrics Comparison */}
           <div className="bg-white rounded-xl p-4 lg:p-6 shadow-sm border border-gray-200">
             <h3 className="text-lg lg:text-xl font-bold text-gray-900 mb-4 lg:mb-6">Key Metrics</h3>
@@ -646,6 +647,53 @@ export default function StockComparePage({ params }: PageProps) {
                 </span>
               </div>
             </div>
+          </div>
+
+          {/* AI Comparison Insights */}
+          <div className="xl:col-span-1">
+            <AIAnalysisPanel
+              title="AI Comparison Insights"
+              pageType="comparison"
+              pageData={{
+                stockCount: 2,
+                activeCategory: 'Comparison',
+                stocks: [
+                  {
+                    symbol: primaryStock.symbol,
+                    name: primaryStock.name,
+                    price: primaryStock.price,
+                    pe: primaryStock.peRatio,
+                    sector: primaryStock.sector,
+                    marketCap: primaryStock.marketCap,
+                    volume: primaryStock.volume,
+                    change: primaryStock.changePercent,
+                    beta: primaryStock.beta,
+                    dividendYield: primaryStock.dividendYield
+                  },
+                  {
+                    symbol: compareStock.symbol,
+                    name: compareStock.name,
+                    price: compareStock.price,
+                    pe: compareStock.peRatio,
+                    sector: compareStock.sector,
+                    marketCap: compareStock.marketCap,
+                    volume: compareStock.volume,
+                    change: compareStock.changePercent,
+                    beta: compareStock.beta,
+                    dividendYield: compareStock.dividendYield
+                  }
+                ]
+              }}
+              autoAnalyze={true}
+              compact={true}
+              quickPrompts={[
+                "Which is better?",
+                "Risk comparison",
+                "Value analysis",
+                "Growth potential"
+              ]}
+              maxHeight="400px"
+            />
           </div>
         </div>
       )}
