@@ -7,37 +7,16 @@ interface ProfileTabProps {
 }
 
 export default function ProfileTab({ stock }: ProfileTabProps) {
-  // Mock additional company data - in real app, this would come from API
-  const companyProfile = {
-    website: 'https://www.apple.com',
-    headquarters: 'Cupertino, California, United States',
-    employees: 164000,
-    founded: '1976',
-    ceo: 'Tim Cook',
-    fiscalYearEnd: 'September',
-    exchange: 'NASDAQ',
-    currency: 'USD',
-    country: 'United States',
-    phone: '+1 (408) 996-1010',
-    address: 'One Apple Park Way, Cupertino, CA 95014',
+  const formatNumber = (num: number): string => {
+    return num.toLocaleString();
   };
 
-  const keyExecutives = [
-    { name: 'Tim Cook', position: 'Chief Executive Officer', tenure: '2011 - Present' },
-    { name: 'Luca Maestri', position: 'Chief Financial Officer', tenure: '2014 - Present' },
-    { name: 'Katherine Adams', position: 'General Counsel', tenure: '2017 - Present' },
-    { name: 'Deirdre O\'Brien', position: 'Senior VP, Retail + People', tenure: '2019 - Present' },
-  ];
-
-  const businessSegments = [
-    { segment: 'iPhone', description: 'Smartphone products and related services' },
-    { segment: 'Mac', description: 'Desktop and laptop computers' },
-    { segment: 'iPad', description: 'Tablet computers and accessories' },
-    { segment: 'Wearables, Home and Accessories', description: 'Apple Watch, AirPods, HomePod, and accessories' },
-    { segment: 'Services', description: 'App Store, iCloud, Apple Music, and other digital services' },
-  ];
-
-  const formatNumber = (num: number): string => {
+  const formatLargeNumber = (num: number | undefined | null): string => {
+    if (num == null) return 'N/A';
+    if (num >= 1e12) return `${(num / 1e12).toFixed(2)}T`;
+    if (num >= 1e9) return `${(num / 1e9).toFixed(2)}B`;
+    if (num >= 1e6) return `${(num / 1e6).toFixed(2)}M`;
+    if (num >= 1e3) return `${(num / 1e3).toFixed(2)}K`;
     return num.toLocaleString();
   };
 
@@ -54,34 +33,42 @@ export default function ProfileTab({ stock }: ProfileTabProps) {
           <div>
             <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-3">About {stock.name}</h4>
             <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-              {stock.description || `${stock.name} is a leading company in the ${stock.sector || 'technology'} sector, operating in the ${stock.industry || 'consumer electronics'} industry. The company has established itself as a major player in its market segment with innovative products and services.`}
+              {stock.description || `${stock.name} is a leading company in the ${stock.sector || 'technology'} sector, operating in the ${stock.industry || 'consumer electronics'} industry.`}
             </p>
             
             <div className="space-y-2">
-              <div className="flex items-center gap-2 text-sm">
-                <Globe className="h-4 w-4 text-slate-400" />
-                <a 
-                  href={companyProfile.website} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:text-blue-500 flex items-center gap-1"
-                >
-                  {companyProfile.website}
-                  <ExternalLink className="h-3 w-3" />
-                </a>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                <MapPin className="h-4 w-4 text-slate-400" />
-                {companyProfile.headquarters}
-              </div>
-              <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                <Users className="h-4 w-4 text-slate-400" />
-                {formatNumber(companyProfile.employees)} employees
-              </div>
-              <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                <Calendar className="h-4 w-4 text-slate-400" />
-                Founded in {companyProfile.founded}
-              </div>
+              {stock.website && (
+                <div className="flex items-center gap-2 text-sm">
+                  <Globe className="h-4 w-4 text-slate-400" />
+                  <a 
+                    href={stock.website} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:text-blue-500 flex items-center gap-1"
+                  >
+                    {stock.website}
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
+                </div>
+              )}
+              {stock.sharesOutstanding && (
+                <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                  <Users className="h-4 w-4 text-slate-400" />
+                  {formatLargeNumber(stock.sharesOutstanding)} shares outstanding
+                </div>
+              )}
+              {stock.floatShares && (
+                <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                  <Users className="h-4 w-4 text-slate-400" />
+                  {formatLargeNumber(stock.floatShares)} float shares
+                </div>
+              )}
+              {stock.lastUpdated && (
+                <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                  <Calendar className="h-4 w-4 text-slate-400" />
+                  Last updated: {new Date(stock.lastUpdated).toLocaleDateString()}
+                </div>
+              )}
             </div>
           </div>
 
@@ -89,15 +76,16 @@ export default function ProfileTab({ stock }: ProfileTabProps) {
             <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-3">Company Details</h4>
             <div className="space-y-3">
               {[
-                { label: 'Sector', value: stock.sector || 'Technology' },
-                { label: 'Industry', value: stock.industry || 'Consumer Electronics' },
-                { label: 'Exchange', value: companyProfile.exchange },
-                { label: 'Currency', value: companyProfile.currency },
-                { label: 'Country', value: companyProfile.country },
-                { label: 'Fiscal Year End', value: companyProfile.fiscalYearEnd },
-                { label: 'CEO', value: companyProfile.ceo },
-                { label: 'Phone', value: companyProfile.phone },
-              ].map((item, i) => (
+                { label: 'Symbol', value: stock.symbol },
+                { label: 'Sector', value: stock.sector },
+                { label: 'Industry', value: stock.industry },
+                { label: 'Exchange', value: stock.exchange },
+                { label: 'Currency', value: stock.currency },
+                { label: 'Asset Type', value: stock.assetType },
+                { label: 'Country', value: stock.countryCode },
+                { label: '52W High', value: stock.high52w ? `$${stock.high52w.toFixed(2)}` : 'N/A' },
+                { label: '52W Low', value: stock.low52w ? `$${stock.low52w.toFixed(2)}` : 'N/A' },
+              ].filter(item => item.value).map((item, i) => (
                 <div key={i} className="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800">
                   <span className="text-sm text-slate-500 dark:text-slate-400">{item.label}</span>
                   <span className="text-sm font-medium text-slate-900 dark:text-white">{item.value}</span>
@@ -108,101 +96,98 @@ export default function ProfileTab({ stock }: ProfileTabProps) {
         </div>
       </div>
 
-      {/* Key Executives */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-          <Users className="h-5 w-5 text-purple-500" />
-          Key Executives
-        </h3>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {keyExecutives.map((exec, index) => (
-            <div key={index} className="bg-slate-50 dark:bg-slate-800 rounded-lg p-4">
-              <h4 className="font-medium text-slate-900 dark:text-white">{exec.name}</h4>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">{exec.position}</p>
-              <p className="text-xs text-slate-500 dark:text-slate-500 mt-1">{exec.tenure}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Business Segments */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-          <Building2 className="h-5 w-5 text-green-500" />
-          Business Segments
-        </h3>
-        
-        <div className="space-y-4">
-          {businessSegments.map((segment, index) => (
-            <div key={index} className="border border-slate-200 dark:border-slate-700 rounded-lg p-4">
-              <h4 className="font-medium text-slate-900 dark:text-white mb-2">{segment.segment}</h4>
-              <p className="text-sm text-slate-600 dark:text-slate-400">{segment.description}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Financial Highlights */}
+      {/* Trading Information */}
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
         <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
-          Financial Highlights
+          Trading Information
         </h3>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {[
-            { 
-              label: 'Market Cap', 
-              value: stock.marketCap ? `$${(stock.marketCap / 1e12).toFixed(2)}T` : 'N/A',
-              color: 'blue'
-            },
-            { 
-              label: 'P/E Ratio', 
-              value: stock.peRatio ? stock.peRatio.toFixed(2) : 'N/A',
-              color: 'green'
-            },
-            { 
-              label: 'EPS (TTM)', 
-              value: stock.eps ? `$${stock.eps.toFixed(2)}` : 'N/A',
-              color: 'purple'
-            },
-            { 
-              label: 'Dividend Yield', 
-              value: stock.dividendYield ? `${(stock.dividendYield * 100).toFixed(2)}%` : 'N/A',
-              color: 'orange'
-            },
-          ].map((item, index) => (
-            <div key={index} className={`bg-${item.color}-50 dark:bg-${item.color}-900/20 border border-${item.color}-200 dark:border-${item.color}-800 rounded-lg p-4 text-center`}>
-              <p className={`text-sm font-medium text-${item.color}-700 dark:text-${item.color}-300 mb-1`}>
-                {item.label}
-              </p>
-              <p className={`text-xl font-bold text-${item.color}-900 dark:text-${item.color}-100`}>
-                {item.value}
-              </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div>
+            <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-3">Price Data</h4>
+            <div className="space-y-2">
+              {[
+                { label: 'Current Price', value: `$${stock.price.toFixed(2)}` },
+                { label: 'Open', value: stock.open ? `$${stock.open.toFixed(2)}` : 'N/A' },
+                { label: 'Previous Close', value: stock.previousClose ? `$${stock.previousClose.toFixed(2)}` : 'N/A' },
+                { label: 'Day High', value: stock.dayHigh ? `$${stock.dayHigh.toFixed(2)}` : 'N/A' },
+                { label: 'Day Low', value: stock.dayLow ? `$${stock.dayLow.toFixed(2)}` : 'N/A' },
+              ].map((item, i) => (
+                <div key={i} className="flex justify-between py-1">
+                  <span className="text-sm text-slate-500 dark:text-slate-400">{item.label}</span>
+                  <span className="text-sm font-medium text-slate-900 dark:text-white">{item.value}</span>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
+          
+          <div>
+            <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-3">Volume & Shares</h4>
+            <div className="space-y-2">
+              {[
+                { label: 'Volume', value: formatLargeNumber(stock.volume) },
+                { label: 'Avg Volume', value: formatLargeNumber(stock.avgVolume) },
+                { label: 'Shares Outstanding', value: formatLargeNumber(stock.sharesOutstanding) },
+                { label: 'Float Shares', value: formatLargeNumber(stock.floatShares) },
+                { label: 'Short Ratio', value: stock.shortRatio ? stock.shortRatio.toFixed(2) : 'N/A' },
+              ].map((item, i) => (
+                <div key={i} className="flex justify-between py-1">
+                  <span className="text-sm text-slate-500 dark:text-slate-400">{item.label}</span>
+                  <span className="text-sm font-medium text-slate-900 dark:text-white">{item.value}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          <div>
+            <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-3">Risk Metrics</h4>
+            <div className="space-y-2">
+              {[
+                { label: 'Beta', value: stock.beta ? stock.beta.toFixed(3) : 'N/A' },
+                { label: '52W High', value: stock.high52w ? `$${stock.high52w.toFixed(2)}` : 'N/A' },
+                { label: '52W Low', value: stock.low52w ? `$${stock.low52w.toFixed(2)}` : 'N/A' },
+                { label: 'Change', value: `$${stock.change.toFixed(2)} (${stock.changePercent.toFixed(2)}%)` },
+              ].map((item, i) => (
+                <div key={i} className="flex justify-between py-1">
+                  <span className="text-sm text-slate-500 dark:text-slate-400">{item.label}</span>
+                  <span className="text-sm font-medium text-slate-900 dark:text-white">{item.value}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Contact Information */}
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
         <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
-          Contact Information
+          Additional Information
         </h3>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-3">Corporate Address</h4>
-            <p className="text-sm text-slate-600 dark:text-slate-400">
-              {companyProfile.address}
-            </p>
+            <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-3">Company Links</h4>
+            {stock.website ? (
+              <div className="space-y-2">
+                <a href={stock.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-500 flex items-center gap-2">
+                  <Globe className="h-4 w-4" />
+                  Company Website
+                  <ExternalLink className="h-3 w-3" />
+                </a>
+              </div>
+            ) : (
+              <p className="text-sm text-slate-500">No website information available</p>
+            )}
           </div>
           
           <div>
-            <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-3">Investor Relations</h4>
+            <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-3">Data Information</h4>
             <div className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
-              <p>Phone: {companyProfile.phone}</p>
-              <p>Website: <a href={companyProfile.website} className="text-blue-600 hover:text-blue-500">{companyProfile.website}</a></p>
+              <p>Asset Type: {stock.assetType || 'Stock'}</p>
+              <p>Country: {stock.countryCode || 'N/A'}</p>
+              {stock.lastUpdated && (
+                <p>Last Updated: {new Date(stock.lastUpdated).toLocaleString()}</p>
+              )}
             </div>
           </div>
         </div>

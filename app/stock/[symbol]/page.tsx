@@ -201,64 +201,40 @@ export default function StockDetailPage({ params }: PageProps) {
       case 'overview':
         return (
           <>
-            {/* AI Analysis Panel */}
-            <AIAnalysisPanel
-              title={`${stock.symbol} Analysis`}
-              pageType="stock-detail"
-              pageData={{
-                symbol: stock.symbol,
-                name: stock.name,
-                price: stock.price,
-                change: stock.changePercent,
-                volume: stock.volume,
-                marketCap: stock.marketCap,
-                pe: stock.peRatio,
-                sector: stock.sector,
-                high: todayData?.high,
-                low: todayData?.low,
-                beta: stock.beta,
-                dividendYield: stock.dividendYield
-              } as any}
-              autoAnalyze={true}
-              quickPrompts={[
-                `Is ${stock.symbol} undervalued?`,
-                'Technical analysis',
-                'Buy or sell recommendation'
-              ]}
-              className="mb-5"
-            />
-
             {/* Stats + Chart Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-              {/* Key Stats */}
-              <div className="lg:col-span-1 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-5">
-                <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-4">
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-5 mb-5">
+              {/* Key Stats - Smaller */}
+              <div className="lg:col-span-1 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4">
+                <h3 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-3">
                   Key Statistics
                 </h3>
-                <div className="space-y-3">
+                <div className="space-y-2">
                   {[
                     { label: 'Market Cap', value: formatLargeNumber(stock.marketCap) },
-                    { label: 'Volume', value: formatLargeNumber(stock.volume) },
-                    { label: 'P/E Ratio (TTM)', value: formatNumber(stock.peRatio) },
-                    { label: 'EPS (TTM)', value: stock.eps ? `$${formatNumber(stock.eps)}` : '-' },
+                    { label: 'P/E Ratio', value: formatNumber(stock.peRatio) },
+                    { label: 'Forward P/E', value: formatNumber(stock.forwardPe) },
+                    { label: 'EPS', value: stock.eps ? `$${formatNumber(stock.eps)}` : '-' },
                     { label: 'Beta', value: formatNumber(stock.beta) },
-                    { label: '52-Week Range', value: stock.week52Low && stock.week52High ? `$${formatNumber(stock.week52Low)} - $${formatNumber(stock.week52High)}` : '-' },
-                    { label: 'Dividend Yield', value: stock.dividendYield ? `${(stock.dividendYield * 100).toFixed(2)}%` : '-' },
+                    { label: 'Book Value', value: stock.bookValue ? `$${formatNumber(stock.bookValue)}` : '-' },
+                    { label: 'P/B Ratio', value: formatNumber(stock.priceToBook) },
+                    { label: 'Div Yield', value: stock.dividendYield ? `${(stock.dividendYield * 100).toFixed(2)}%` : '-' },
+                    { label: 'Div Rate', value: stock.dividendRate ? `$${formatNumber(stock.dividendRate)}` : '-' },
+                    { label: 'Short Ratio', value: formatNumber(stock.shortRatio) },
                   ].map((item, i) => (
-                    <div key={i} className="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800">
-                      <span className="text-sm text-slate-500 dark:text-slate-400">{item.label}</span>
-                      <span className="text-sm font-medium text-slate-900 dark:text-white">{item.value}</span>
+                    <div key={i} className="flex justify-between py-1.5 border-b border-slate-100 dark:border-slate-800 last:border-b-0">
+                      <span className="text-xs text-slate-500 dark:text-slate-400">{item.label}</span>
+                      <span className="text-xs font-medium text-slate-900 dark:text-white">{item.value}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
               {/* Chart */}
-              <div className="lg:col-span-2">
+              <div className="lg:col-span-3">
                 <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-5">
                   {/* Chart Controls */}
-                  <div className="mb-6 p-4 bg-slate-50/50 rounded-xl border border-slate-100">
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+                  <div className="mb-4 p-3 bg-slate-50/50 rounded-xl border border-slate-100">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
                       <div className="flex items-center gap-3">
                         <span className="text-sm font-semibold text-gray-700">Duration</span>
                         <div className="flex bg-white rounded-lg p-1 border border-slate-200 overflow-x-auto">
@@ -304,14 +280,14 @@ export default function StockDetailPage({ params }: PageProps) {
                   </div>
 
                   {/* Chart Container */}
-                  <div className="h-96 relative">
+                  <div className="h-80 relative">
                     {chartLoading ? (
                       <div className="absolute inset-0 flex items-center justify-center bg-white/50 z-10">
                         <Activity className="h-8 w-8 text-blue-600 animate-spin" />
                       </div>
                     ) : null}
                     {historicalData.length > 0 ? (
-                      <StockChart data={historicalData} isPositive={stock.change >= 0} height={384} chartType={chartType} />
+                      <StockChart data={historicalData} isPositive={stock.change >= 0} height={320} chartType={chartType} />
                     ) : (
                       <div className="flex items-center justify-center h-full bg-gray-50 rounded-lg text-gray-400">
                         No data available for this period.
@@ -322,49 +298,111 @@ export default function StockDetailPage({ params }: PageProps) {
               </div>
             </div>
 
-            {/* About & Quick Stats */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-5">
-              <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-5">
-                <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+            {/* Quick Stats Row - Below Chart */}
+            <div className="grid grid-cols-6 gap-3 mb-5">
+              {[
+                { label: "Open", val: stock.open, color: "blue", Icon: TrendingUp },
+                { label: "High", val: stock.dayHigh || todayData?.high, color: "green", Icon: TrendingUp },
+                { label: "Low", val: stock.dayLow || todayData?.low, color: "red", Icon: TrendingDown },
+                { label: "Prev Close", val: stock.previousClose, color: "gray", Icon: BarChart3 },
+                { label: "Volume", val: stock.volume ? `${(stock.volume / 1e6).toFixed(1)}M` : "N/A", color: "purple", Icon: BarChart3 },
+                { label: "Avg Vol", val: stock.avgVolume ? `${(stock.avgVolume / 1e6).toFixed(1)}M` : "N/A", color: "indigo", Icon: Activity },
+              ].map((item, i) => (
+                <div key={i} className={`bg-${item.color}-50 p-3 rounded-xl border border-${item.color}-100`}>
+                  <div className="flex justify-between items-center mb-1">
+                    <span className={`text-xs font-medium text-${item.color}-700`}>{item.label}</span>
+                    <item.Icon className={`h-3 w-3 text-${item.color}-600`} />
+                  </div>
+                  <p className={`text-sm font-bold text-${item.color}-900`}>
+                    {typeof item.val === 'number' ? formatPrice(item.val) : item.val}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            {/* About Section - Structured */}
+            <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 mb-5">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <BarChart3 className="h-4 w-4 text-blue-600" />
+                </div>
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
                   About {stock.name}
                 </h3>
-                {stock.description ? (
-                  <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                    {stock.description}
-                  </p>
-                ) : (
-                  <p className="text-sm text-slate-400">No description available.</p>
-                )}
-                <div className="flex flex-wrap gap-4 mt-4 pt-4 border-t border-slate-100 dark:border-slate-800">
-                  {stock.sector && (
-                    <span className="text-sm text-slate-500">{stock.sector}</span>
-                  )}
-                  {stock.industry && (
-                    <span className="text-sm text-slate-400">• {stock.industry}</span>
+              </div>
+              
+              {/* Company Info Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Description */}
+                <div className="lg:col-span-2">
+                  <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Company Overview</h4>
+                  {stock.description ? (
+                    <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                      {stock.description}
+                    </p>
+                  ) : (
+                    <p className="text-sm text-slate-400">No description available.</p>
                   )}
                 </div>
-              </div>
-
-              {/* Quick Stats Grid */}
-              <div className="grid grid-cols-2 gap-4">
-                {[
-                  { label: "High", val: todayData?.high, color: "blue", Icon: TrendingUp },
-                  { label: "Low", val: todayData?.low, color: "red", Icon: TrendingDown },
-                  { label: "Volume", val: todayData?.volume ? `${(todayData.volume / 1e6).toFixed(1)}M` : "N/A", color: "purple", Icon: BarChart3 },
-                  { label: "Avg Vol", val: stock.volume ? `${(stock.volume / 1e6).toFixed(1)}M` : "N/A", color: "green", Icon: Activity },
-                ].map((item, i) => (
-                  <div key={i} className={`bg-${item.color}-50 p-4 rounded-xl border border-${item.color}-100`}>
-                    <div className="flex justify-between items-center mb-1">
-                      <span className={`text-xs font-medium text-${item.color}-700`}>{item.label}</span>
-                      <item.Icon className={`h-4 w-4 text-${item.color}-600`} />
-                    </div>
-                    <p className={`text-lg font-bold text-${item.color}-900`}>
-                      {typeof item.val === 'number' ? formatPrice(item.val) : item.val}
-                    </p>
+                
+                {/* Company Details */}
+                <div>
+                  <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">Company Details</h4>
+                  <div className="space-y-2">
+                    {[
+                      { label: 'Sector', value: stock.sector },
+                      { label: 'Industry', value: stock.industry },
+                      { label: 'Exchange', value: stock.exchange },
+                      { label: 'Currency', value: stock.currency },
+                      { label: 'Asset Type', value: stock.assetType },
+                      { label: '52W Range', value: stock.low52w && stock.high52w ? `$${formatNumber(stock.low52w)} - $${formatNumber(stock.high52w)}` : '-' },
+                      { label: 'Shares Out', value: stock.sharesOutstanding ? formatLargeNumber(stock.sharesOutstanding) : '-' },
+                      { label: 'Float Shares', value: stock.floatShares ? formatLargeNumber(stock.floatShares) : '-' },
+                      { label: 'Website', value: stock.website ? 'Available' : '-' },
+                    ].map((item, i) => (
+                      item.value && (
+                        <div key={i} className="flex justify-between py-1">
+                          <span className="text-xs text-slate-500 dark:text-slate-400">{item.label}</span>
+                          {item.label === 'Website' && stock.website ? (
+                            <a href={stock.website} target="_blank" rel="noopener noreferrer" className="text-xs font-medium text-blue-600 hover:text-blue-500">
+                              Visit Site
+                            </a>
+                          ) : (
+                            <span className="text-xs font-medium text-slate-900 dark:text-white">{item.value}</span>
+                          )}
+                        </div>
+                      )
+                    ))}
                   </div>
-                ))}
+                </div>
               </div>
             </div>
+
+            {/* AI Analysis Panel - At Bottom */}
+            <AIAnalysisPanel
+              title={`${stock.symbol} Analysis`}
+              pageType="stock-detail"
+              pageData={{
+                symbol: stock.symbol,
+                name: stock.name,
+                price: stock.price,
+                change: stock.changePercent,
+                volume: stock.volume,
+                marketCap: stock.marketCap,
+                pe: stock.peRatio,
+                sector: stock.sector,
+                high: todayData?.high,
+                low: todayData?.low,
+                beta: stock.beta,
+                dividendYield: stock.dividendYield
+              } as any}
+              autoAnalyze={true}
+              quickPrompts={[
+                `Is ${stock.symbol} undervalued?`,
+                'Technical analysis',
+                'Buy or sell recommendation'
+              ]}
+            />
           </>
         );
 
