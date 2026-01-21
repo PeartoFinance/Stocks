@@ -503,10 +503,10 @@ export default function StockComparison() {
     
     if (stocksWithData.length === 0) {
       return (
-        <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 mb-8">
-          <div className="text-center py-8">
-            <LineChart className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">No Chart Data Available</h3>
+        <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-200 mb-10">
+          <div className="text-center py-12">
+            <LineChart className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">No Chart Data Available</h3>
             <p className="text-gray-600">Historical data is loading or unavailable for the selected period.</p>
           </div>
         </div>
@@ -517,30 +517,19 @@ export default function StockComparison() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.1 }}
-        className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 mb-8"
+        transition={{ duration: 0.6, delay: 0.2 }}
+        className="bg-white rounded-2xl p-8 shadow-sm border border-gray-200 mb-10"
       >
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-semibold text-gray-900">Price Comparison Chart</h3>
-          <div className="flex items-center gap-4">
-            {/* Export Button */}
-            {comparedStocks.length > 0 && (
-              <button
-                onClick={exportToCSV}
-                className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-600 hover:text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-50"
-              >
-                <ArrowUpDown className="h-4 w-4" />
-                Export CSV
-              </button>
-            )}
-            
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-8 gap-4">
+          <h3 className="text-2xl font-semibold text-gray-900">Price Comparison Chart</h3>
+          <div className="flex flex-wrap items-center gap-4">
             {/* Period Selector */}
-            <div className="flex bg-gray-100 rounded-lg p-1">
+            <div className="flex bg-gray-100 rounded-xl p-1">
               {periods.map((period) => (
                 <button
                   key={period}
                   onClick={() => handlePeriodChange(period)}
-                  className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
+                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${
                     chartPeriod === period ? "bg-white text-gray-900 shadow-sm" : "text-gray-600 hover:text-gray-900"
                   }`}
                 >
@@ -552,7 +541,7 @@ export default function StockComparison() {
             {/* Toggle Chart */}
             <button
               onClick={() => setShowChart(!showChart)}
-              className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-600 hover:text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-50"
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-50"
             >
               <LineChart className="h-4 w-4" />
               Hide Chart
@@ -561,26 +550,26 @@ export default function StockComparison() {
         </div>
 
         {/* Stock Legend with Performance Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-8">
           {stocksWithData.map((stock) => {
             const isPositive = stock.change >= 0;
             return (
-              <div key={stock.symbol} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                <div className="flex items-center gap-2 mb-2">
+              <div key={stock.symbol} className="bg-gray-50 rounded-xl p-5 border border-gray-200">
+                <div className="flex items-center gap-3 mb-4">
                   <div 
-                    className="w-3 h-3 rounded-full" 
+                    className="w-4 h-4 rounded-full" 
                     style={{ backgroundColor: stock.color }}
                   />
-                  <span className="font-semibold text-gray-900">{stock.symbol}</span>
+                  <span className="text-lg font-semibold text-gray-900">{stock.symbol}</span>
                 </div>
-                <div className="space-y-1">
+                <div className="space-y-3">
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600">Price</span>
-                    <span className="font-medium">{formatPrice(stock.price)}</span>
+                    <span className="text-lg font-semibold">{formatPrice(stock.price)}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600">Change</span>
-                    <span className={`font-medium text-sm ${
+                    <span className={`text-lg font-semibold ${
                       isPositive ? 'text-green-600' : 'text-red-600'
                     }`}>
                       {isPositive ? '+' : ''}{stock.changePercent.toFixed(2)}%
@@ -601,9 +590,9 @@ export default function StockComparison() {
         </div>
 
         {/* Chart Container */}
-        <div className="h-80 relative">
+        <div className="h-96 relative bg-gray-50 rounded-xl p-4">
           {chartLoading ? (
-            <div className="absolute inset-0 flex items-center justify-center bg-white/50 z-10">
+            <div className="absolute inset-0 flex items-center justify-center bg-white/50 z-10 rounded-xl">
               <Activity className="h-8 w-8 text-blue-600 animate-spin" />
             </div>
           ) : null}
@@ -618,7 +607,7 @@ export default function StockComparison() {
               change: stock.change,
               changePercent: stock.changePercent
             }))}
-            height={320}
+            height={360}
             period={chartPeriod}
           />
         </div>
@@ -628,276 +617,275 @@ export default function StockComparison() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <main className="p-8">
-        <div className="max-w-7xl mx-auto">
+      <main className="p-6 lg:p-8">
+        <div className="max-w-[1400px] mx-auto">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="mb-8"
+            className="mb-10"
           >
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Stock Comparison</h1>
-            <p className="text-gray-600">Compare up to 5 stocks side by side with real-time data and charts</p>
+            <h1 className="text-4xl font-bold text-gray-900 mb-3">Stock Comparison</h1>
+            <p className="text-lg text-gray-600">Compare up to 5 stocks side by side with real-time data and charts</p>
           </motion.div>
 
-          <div className="flex flex-col xl:flex-row gap-8">
-            {/* Main Content */}
-            <div className="flex-1">
-              {/* Search Section */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 mb-8"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-semibold text-gray-900">Add Stocks to Compare</h2>
-                  <span className="text-sm text-gray-500">{comparedStocks.length}/5 stocks selected</span>
-                </div>
-
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="Search by symbol or company name..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                  {loading && (
-                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                      <Activity className="h-5 w-5 text-blue-600 animate-spin" />
-                    </div>
-                  )}
-                </div>
-
-                {searchResults.length > 0 && (
-                  <div className="mt-4 border border-gray-200 rounded-lg max-h-60 overflow-y-auto">
-                    {searchResults.map((stock) => (
-                      <div
-                        key={stock.symbol}
-                        className="flex items-center justify-between p-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0"
-                      >
-                        <div>
-                          <h4 className="font-medium text-gray-900">{stock.symbol}</h4>
-                          <p className="text-sm text-gray-600">{stock.name}</p>
-                          <p className="text-xs text-gray-500">{stock.sector} • {stock.exchange}</p>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <div className="text-right">
-                            <p className="font-medium text-gray-900">{formatPrice(stock.price)}</p>
-                            <p className={`text-sm ${stock.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                              {stock.change >= 0 ? '+' : ''}{stock.changePercent.toFixed(2)}%
-                            </p>
-                          </div>
-                          <button
-                            onClick={() => addToComparison(stock)}
-                            disabled={loading}
-                            className="flex items-center space-x-1 px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
-                          >
-                            <Plus className="h-4 w-4" />
-                            <span>Add</span>
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+          {/* Search Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="bg-white rounded-2xl p-8 shadow-sm border border-gray-200 mb-10"
+          >
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-semibold text-gray-900">Add Stocks to Compare</h2>
+              <div className="flex items-center gap-3">
+                <span className="text-sm text-gray-500">{comparedStocks.length}/5 stocks selected</span>
+                {comparedStocks.length > 0 && (
+                  <button
+                    onClick={exportToCSV}
+                    className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                  >
+                    <ArrowUpDown className="h-4 w-4" />
+                    Export CSV
+                  </button>
                 )}
-
-                {/* Quick Add Popular Stocks */}
-                {searchTerm === '' && comparedStocks.length < 5 && (
-                  <div className="mt-4">
-                    <h4 className="text-sm font-medium text-gray-700 mb-2">Popular Stocks</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA', 'NVDA', 'META', 'NFLX'].map((symbol) => (
-                        <button
-                          key={symbol}
-                          onClick={() => {
-                            setSearchTerm(symbol);
-                            // Auto-search for the symbol
-                            setTimeout(() => {
-                              const mockStock = {
-                                symbol,
-                                name: `${symbol} Inc.`,
-                                price: 0,
-                                change: 0,
-                                changePercent: 0,
-                                volume: 0,
-                                marketCap: 0,
-                                sector: 'Technology',
-                                exchange: 'NASDAQ'
-                              };
-                              // This will trigger the search effect
-                            }, 100);
-                          }}
-                          disabled={comparedStocks.some(s => s.symbol === symbol)}
-                          className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 disabled:bg-gray-50 disabled:text-gray-400 text-gray-700 rounded-md transition-colors"
-                        >
-                          {symbol}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </motion.div>
-
-              {/* Performance Summary */}
-              {comparedStocks.length >= 2 && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.15 }}
-                  className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 mb-8"
-                >
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Performance Summary</h3>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {/* Best Performer */}
-                    {(() => {
-                      const bestPerformer = comparedStocks.reduce((best, current) => 
-                        current.changePercent > best.changePercent ? current : best
-                      );
-                      return (
-                        <div className="text-center p-3 bg-green-50 rounded-lg border border-green-200">
-                          <div className="flex items-center justify-center gap-1 mb-1">
-                            <TrendingUp className="h-4 w-4 text-green-600" />
-                            <span className="text-sm font-medium text-green-700">Best Performer</span>
-                          </div>
-                          <div className="font-bold text-green-900">{bestPerformer.symbol}</div>
-                          <div className="text-sm text-green-700">+{bestPerformer.changePercent.toFixed(2)}%</div>
-                        </div>
-                      );
-                    })()}
-                    
-                    {/* Worst Performer */}
-                    {(() => {
-                      const worstPerformer = comparedStocks.reduce((worst, current) => 
-                        current.changePercent < worst.changePercent ? current : worst
-                      );
-                      return (
-                        <div className="text-center p-3 bg-red-50 rounded-lg border border-red-200">
-                          <div className="flex items-center justify-center gap-1 mb-1">
-                            <TrendingDown className="h-4 w-4 text-red-600" />
-                            <span className="text-sm font-medium text-red-700">Worst Performer</span>
-                          </div>
-                          <div className="font-bold text-red-900">{worstPerformer.symbol}</div>
-                          <div className="text-sm text-red-700">{worstPerformer.changePercent.toFixed(2)}%</div>
-                        </div>
-                      );
-                    })()}
-                    
-                    {/* Highest Volume */}
-                    {(() => {
-                      const highestVolume = comparedStocks.reduce((highest, current) => 
-                        (current.volume || 0) > (highest.volume || 0) ? current : highest
-                      );
-                      return (
-                        <div className="text-center p-3 bg-blue-50 rounded-lg border border-blue-200">
-                          <div className="flex items-center justify-center gap-1 mb-1">
-                            <Activity className="h-4 w-4 text-blue-600" />
-                            <span className="text-sm font-medium text-blue-700">Highest Volume</span>
-                          </div>
-                          <div className="font-bold text-blue-900">{highestVolume.symbol}</div>
-                          <div className="text-sm text-blue-700">{formatLargeNumber(highestVolume.volume)}</div>
-                        </div>
-                      );
-                    })()}
-                    
-                    {/* Largest Market Cap */}
-                    {(() => {
-                      const largestCap = comparedStocks.reduce((largest, current) => 
-                        (current.marketCap || 0) > (largest.marketCap || 0) ? current : largest
-                      );
-                      return (
-                        <div className="text-center p-3 bg-purple-50 rounded-lg border border-purple-200">
-                          <div className="flex items-center justify-center gap-1 mb-1">
-                            <DollarSign className="h-4 w-4 text-purple-600" />
-                            <span className="text-sm font-medium text-purple-700">Largest Cap</span>
-                          </div>
-                          <div className="font-bold text-purple-900">{largestCap.symbol}</div>
-                          <div className="text-sm text-purple-700">{formatLargeNumber(largestCap.marketCap)}</div>
-                        </div>
-                      );
-                    })()}
-                  </div>
-                </motion.div>
-              )}
-
-              {/* Comparison Chart */}
-              {renderComparisonChart()}
-
-              {/* Category Tabs */}
-              {comparedStocks.length > 0 && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.1 }}
-                  className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 mb-8"
-                >
-                  <div className="flex flex-wrap gap-2">
-                    {categories.map((category) => {
-                      const Icon = category.icon;
-                      return (
-                        <button
-                          key={category.key}
-                          onClick={() => setActiveCategory(category.key)}
-                          className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${activeCategory === category.key
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                            }`}
-                        >
-                          <Icon className="h-4 w-4" />
-                          <span>{category.label}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </motion.div>
-              )}
-
-              {/* Comparison Table */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="bg-white rounded-xl shadow-lg border border-gray-100"
-              >
-                {renderComparisonTable()}
-              </motion.div>
-            </div>
-
-            {/* AI Analysis Sidebar */}
-            <div className="w-full xl:w-80 flex-shrink-0">
-              <div className="xl:sticky xl:top-4">
-                <AIAnalysisPanel
-                  title="Comparison Insights"
-                  pageType="comparison"
-                  pageData={{
-                    stockCount: comparedStocks.length,
-                    stocks: comparedStocks.map(s => ({
-                      symbol: s.symbol,
-                      name: s.name,
-                      price: s.price,
-                      change: s.changePercent,
-                      pe: s.peRatio,
-                      sector: s.sector,
-                      marketCap: s.marketCap
-                    })),
-                    activeCategory,
-                    period: chartPeriod
-                  }}
-                  autoAnalyze={comparedStocks.length >= 2}
-                  quickPrompts={[
-                    'Compare performance',
-                    'Best value pick',
-                    'Risk comparison',
-                    'Sector analysis'
-                  ]}
-                  maxHeight="600px"
-                />
               </div>
             </div>
-          </div>
+
+            <div className="relative mb-6">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search by symbol or company name..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-12 pr-4 py-4 text-lg border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+              {loading && (
+                <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+                  <Activity className="h-5 w-5 text-blue-600 animate-spin" />
+                </div>
+              )}
+            </div>
+
+            {searchResults.length > 0 && (
+              <div className="border border-gray-200 rounded-xl max-h-80 overflow-y-auto mb-6">
+                {searchResults.map((stock) => (
+                  <div
+                    key={stock.symbol}
+                    className="flex items-center justify-between p-5 hover:bg-gray-50 border-b border-gray-100 last:border-b-0"
+                  >
+                    <div className="flex-1">
+                      <h4 className="text-lg font-semibold text-gray-900">{stock.symbol}</h4>
+                      <p className="text-gray-600 mb-1">{stock.name}</p>
+                      <p className="text-sm text-gray-500">{stock.sector} • {stock.exchange}</p>
+                    </div>
+                    <div className="flex items-center space-x-6">
+                      <div className="text-right">
+                        <p className="text-lg font-semibold text-gray-900">{formatPrice(stock.price)}</p>
+                        <p className={`text-sm font-medium ${
+                          stock.change >= 0 ? 'text-green-600' : 'text-red-600'
+                        }`}>
+                          {stock.change >= 0 ? '+' : ''}{stock.changePercent.toFixed(2)}%
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => addToComparison(stock)}
+                        disabled={loading}
+                        className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+                      >
+                        <Plus className="h-4 w-4" />
+                        <span>Add</span>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Quick Add Popular Stocks */}
+            {searchTerm === '' && comparedStocks.length < 5 && (
+              <div>
+                <h4 className="text-lg font-medium text-gray-700 mb-4">Popular Stocks</h4>
+                <div className="flex flex-wrap gap-3">
+                  {['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA', 'NVDA', 'META', 'NFLX'].map((symbol) => (
+                    <button
+                      key={symbol}
+                      onClick={() => setSearchTerm(symbol)}
+                      disabled={comparedStocks.some(s => s.symbol === symbol)}
+                      className="px-4 py-2 text-sm font-medium bg-gray-100 hover:bg-gray-200 disabled:bg-gray-50 disabled:text-gray-400 text-gray-700 rounded-lg transition-colors"
+                    >
+                      {symbol}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </motion.div>
+
+          {/* Comparison Chart */}
+          {renderComparisonChart()}
+
+          {/* Performance Summary */}
+          {comparedStocks.length >= 2 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="bg-white rounded-2xl p-8 shadow-sm border border-gray-200 mb-10"
+            >
+              <h3 className="text-2xl font-semibold text-gray-900 mb-6">Performance Summary</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {/* Best Performer */}
+                {(() => {
+                  const bestPerformer = comparedStocks.reduce((best, current) => 
+                    current.changePercent > best.changePercent ? current : best
+                  );
+                  return (
+                    <div className="text-center p-6 bg-green-50 rounded-xl border border-green-200">
+                      <div className="flex items-center justify-center gap-2 mb-3">
+                        <TrendingUp className="h-5 w-5 text-green-600" />
+                        <span className="text-sm font-semibold text-green-700 uppercase tracking-wide">Best Performer</span>
+                      </div>
+                      <div className="text-xl font-bold text-green-900 mb-1">{bestPerformer.symbol}</div>
+                      <div className="text-lg font-semibold text-green-700">+{bestPerformer.changePercent.toFixed(2)}%</div>
+                    </div>
+                  );
+                })()}
+                
+                {/* Worst Performer */}
+                {(() => {
+                  const worstPerformer = comparedStocks.reduce((worst, current) => 
+                    current.changePercent < worst.changePercent ? current : worst
+                  );
+                  return (
+                    <div className="text-center p-6 bg-red-50 rounded-xl border border-red-200">
+                      <div className="flex items-center justify-center gap-2 mb-3">
+                        <TrendingDown className="h-5 w-5 text-red-600" />
+                        <span className="text-sm font-semibold text-red-700 uppercase tracking-wide">Worst Performer</span>
+                      </div>
+                      <div className="text-xl font-bold text-red-900 mb-1">{worstPerformer.symbol}</div>
+                      <div className="text-lg font-semibold text-red-700">{worstPerformer.changePercent.toFixed(2)}%</div>
+                    </div>
+                  );
+                })()}
+                
+                {/* Highest Volume */}
+                {(() => {
+                  const highestVolume = comparedStocks.reduce((highest, current) => 
+                    (current.volume || 0) > (highest.volume || 0) ? current : highest
+                  );
+                  return (
+                    <div className="text-center p-6 bg-blue-50 rounded-xl border border-blue-200">
+                      <div className="flex items-center justify-center gap-2 mb-3">
+                        <Activity className="h-5 w-5 text-blue-600" />
+                        <span className="text-sm font-semibold text-blue-700 uppercase tracking-wide">Highest Volume</span>
+                      </div>
+                      <div className="text-xl font-bold text-blue-900 mb-1">{highestVolume.symbol}</div>
+                      <div className="text-lg font-semibold text-blue-700">{formatLargeNumber(highestVolume.volume)}</div>
+                    </div>
+                  );
+                })()}
+                
+                {/* Largest Market Cap */}
+                {(() => {
+                  const largestCap = comparedStocks.reduce((largest, current) => 
+                    (current.marketCap || 0) > (largest.marketCap || 0) ? current : largest
+                  );
+                  return (
+                    <div className="text-center p-6 bg-purple-50 rounded-xl border border-purple-200">
+                      <div className="flex items-center justify-center gap-2 mb-3">
+                        <DollarSign className="h-5 w-5 text-purple-600" />
+                        <span className="text-sm font-semibold text-purple-700 uppercase tracking-wide">Largest Cap</span>
+                      </div>
+                      <div className="text-xl font-bold text-purple-900 mb-1">{largestCap.symbol}</div>
+                      <div className="text-lg font-semibold text-purple-700">{formatLargeNumber(largestCap.marketCap)}</div>
+                    </div>
+                  );
+                })()}
+              </div>
+            </motion.div>
+          )}
+
+          {/* Category Tabs */}
+          {comparedStocks.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="bg-white rounded-2xl p-8 shadow-sm border border-gray-200 mb-10"
+            >
+              <h3 className="text-2xl font-semibold text-gray-900 mb-6">Analysis Categories</h3>
+              <div className="flex flex-wrap gap-3">
+                {categories.map((category) => {
+                  const Icon = category.icon;
+                  return (
+                    <button
+                      key={category.key}
+                      onClick={() => setActiveCategory(category.key)}
+                      className={`flex items-center space-x-3 px-6 py-3 rounded-xl text-sm font-medium transition-all ${
+                        activeCategory === category.key
+                          ? 'bg-blue-600 text-white shadow-lg'
+                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
+                    >
+                      <Icon className="h-5 w-5" />
+                      <span>{category.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </motion.div>
+          )}
+
+          {/* Comparison Table */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden"
+          >
+            <div className="p-8">
+              <h3 className="text-2xl font-semibold text-gray-900 mb-6">Detailed Comparison</h3>
+              {renderComparisonTable()}
+            </div>
+          </motion.div>
+
+          {/* AI Analysis */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+            className="mt-10"
+          >
+            <AIAnalysisPanel
+              title="Comparison Insights"
+              pageType="comparison"
+              pageData={{
+                stockCount: comparedStocks.length,
+                stocks: comparedStocks.map(s => ({
+                  symbol: s.symbol,
+                  name: s.name,
+                  price: s.price,
+                  change: s.changePercent,
+                  pe: s.peRatio,
+                  sector: s.sector,
+                  marketCap: s.marketCap
+                })),
+                activeCategory,
+                period: chartPeriod
+              }}
+              autoAnalyze={comparedStocks.length >= 2}
+              quickPrompts={[
+                'Compare performance',
+                'Best value pick',
+                'Risk comparison',
+                'Sector analysis'
+              ]}
+              maxHeight="600px"
+            />
+          </motion.div>
         </div>
       </main>
     </div>
