@@ -45,6 +45,8 @@ export default function StockChart({ data, compareData, isPositive, height = 400
       },
       timeScale: {
         borderColor: '#e5e7eb',
+        timeVisible: data.length > 0 && data[0].date.includes('T'), // Show time for minute data
+        secondsVisible: false,
       },
       rightPriceScale: {
         borderVisible: false,
@@ -64,9 +66,13 @@ export default function StockChart({ data, compareData, isPositive, height = 400
     const topGradient = color ? hexToRgba(color, 0.4) : (isPositive ? 'rgba(16, 185, 129, 0.4)' : 'rgba(239, 68, 68, 0.4)');
     const bottomGradient = color ? hexToRgba(color, 0.05) : (isPositive ? 'rgba(16, 185, 129, 0.05)' : 'rgba(239, 68, 68, 0.05)');
 
-    // Helper to ensure dates are in YYYY-MM-DD format
     const formatTime = (dateStr: string): Time => {
-      return dateStr.split('T')[0] as Time;
+      if (dateStr.includes('T')) {
+        const date = new Date(dateStr);
+        return Math.floor(date.getTime() / 1000) as Time;
+      } else {
+        return dateStr.split('T')[0] as Time;
+      }
     };
 
     if (chartType === 'candlestick') {

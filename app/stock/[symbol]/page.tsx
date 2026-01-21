@@ -51,6 +51,10 @@ export default function StockDetailPage({ params }: PageProps) {
     { key: "mountain", label: "Mountain", icon: AreaChart },
   ] as const;
 
+  // Minute intervals for 1D period
+  const minuteIntervals = ["1m", "5m", "15m", "30m", "1h"];
+  const [selectedInterval, setSelectedInterval] = useState("5m");
+
   const formatPrice = (price: number) => `$${price.toFixed(2)}`;
   const formatChange = (change: number, percent: number) =>
     `${change >= 0 ? "+" : ""}${change.toFixed(2)} (${percent >= 0 ? "+" : ""}${percent.toFixed(2)}%)`;
@@ -73,14 +77,18 @@ export default function StockDetailPage({ params }: PageProps) {
   };
 
   // Actions
-  const loadChartData = async (period: string) => {
+  const loadChartData = async (period: string, interval?: string) => {
     try {
       setChartLoading(true);
       const periodMap: Record<string, string> = {
         "1D": "1d", "5D": "5d", "1M": "1mo", "YTD": "1y", "1Y": "1y", "5Y": "5y", "Max": "5y",
       };
       const mappedPeriod = periodMap[period] || "1d";
-      const historyResponse = await marketService.getStockHistory(symbol, mappedPeriod);
+      
+      // Use minute interval for 1D period, otherwise use daily
+      const dataInterval = period === "1D" && interval ? interval : "1d";
+      
+      const historyResponse = await marketService.getStockHistory(symbol, mappedPeriod, dataInterval);
       if ((historyResponse as any)?.data) {
         const transformedData: HistoricalData[] = (historyResponse as any).data.map((item: any) => ({
           date: item.date,
@@ -101,7 +109,20 @@ export default function StockDetailPage({ params }: PageProps) {
 
   const handlePeriodChange = (period: string) => {
     setChartPeriod(period);
-    loadChartData(period);
+    if (period === "1D") {
+      // For 1D, use the selected minute interval
+      loadChartData(period, selectedInterval);
+    } else {
+      // For other periods, use daily interval
+      loadChartData(period);
+    }
+  };
+
+  const handleIntervalChange = (interval: string) => {
+    setSelectedInterval(interval);
+    if (chartPeriod === "1D") {
+      loadChartData(chartPeriod, interval);
+    }
   };
 
   const toggleWatchlist = () => {
@@ -128,7 +149,7 @@ export default function StockDetailPage({ params }: PageProps) {
         setLoading(true);
         const [stockResponse, historyResponse] = await Promise.all([
           marketService.getStockProfile(symbol),
-          marketService.getStockHistory(symbol, "1d"),
+          marketService.getStockHistory(symbol, "1d", "5m"), // Default to 5-minute intervals for 1D
         ]);
 
         if (stockResponse) {
@@ -259,6 +280,26 @@ export default function StockDetailPage({ params }: PageProps) {
                         {formatChange(stock.change, stock.changePercent)}
                       </div>
                     </div>
+
+                    {/* Minute Intervals for 1D */}
+                    {chartPeriod === "1D" && (
+                      <div className="flex items-center gap-3 mb-3">
+                        <span className="text-sm font-semibold text-gray-700">Interval</span>
+                        <div className="flex bg-white rounded-lg p-1 border border-slate-200">
+                          {minuteIntervals.map((interval) => (
+                            <button
+                              key={interval}
+                              onClick={() => handleIntervalChange(interval)}
+                              className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+                                selectedInterval === interval ? "bg-blue-600 text-white shadow-sm" : "text-gray-600 hover:bg-gray-100"
+                              }`}
+                            >
+                              {interval}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
 
                     <div className="flex items-center gap-3">
                       <span className="text-sm font-semibold text-gray-700">Type</span>
