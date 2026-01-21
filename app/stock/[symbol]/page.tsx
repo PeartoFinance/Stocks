@@ -53,7 +53,7 @@ export default function StockDetailPage({ params }: PageProps) {
 
   // Minute intervals for 1D period
   const minuteIntervals = ["1m", "5m", "15m", "30m", "1h"];
-  const [selectedInterval, setSelectedInterval] = useState("5m");
+  const [selectedInterval, setSelectedInterval] = useState("1m");
 
   const formatPrice = (price: number) => `$${price.toFixed(2)}`;
   const formatChange = (change: number, percent: number) =>
@@ -110,8 +110,8 @@ export default function StockDetailPage({ params }: PageProps) {
   const handlePeriodChange = (period: string) => {
     setChartPeriod(period);
     if (period === "1D") {
-      // For 1D, use the selected minute interval
-      loadChartData(period, selectedInterval);
+      // For 1D, always use 1m interval
+      loadChartData(period, "1m");
     } else {
       // For other periods, use daily interval
       loadChartData(period);
@@ -149,7 +149,7 @@ export default function StockDetailPage({ params }: PageProps) {
         setLoading(true);
         const [stockResponse, historyResponse] = await Promise.all([
           marketService.getStockProfile(symbol),
-          marketService.getStockHistory(symbol, "1d", "5m"), // Default to 5-minute intervals for 1D
+          marketService.getStockHistory(symbol, "1d", "1m"), // Default to 1-minute intervals for 1D
         ]);
 
         if (stockResponse) {
@@ -281,8 +281,8 @@ export default function StockDetailPage({ params }: PageProps) {
                       </div>
                     </div>
 
-                    {/* Minute Intervals for 1D */}
-                    {chartPeriod === "1D" && (
+                    {/* Minute Intervals for 1D - Hidden by default, shows 1m data */}
+                    {chartPeriod === "1D" && false && (
                       <div className="flex items-center gap-3 mb-3">
                         <span className="text-sm font-semibold text-gray-700">Interval</span>
                         <div className="flex bg-white rounded-lg p-1 border border-slate-200">
