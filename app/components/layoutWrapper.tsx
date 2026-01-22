@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import Footer from './Footer';
+import TickerTape from './TickerTape';
 
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const [isOpenMobile, setIsOpenMobile] = useState(false);
@@ -18,6 +19,9 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
 
   return (
     <div className="flex flex-col min-h-screen">
+      {/* Ticker Tape - Market data marquee */}
+      <TickerTape />
+      
       {/* Header - Full width at top */}
       <Header onOpenSidebar={() => setIsOpenMobile(true)} />
 
