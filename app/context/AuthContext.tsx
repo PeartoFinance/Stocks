@@ -73,7 +73,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const syncProfile = async () => {
       if (!user?.email) return;
       try {
-        const res = await fetch(`${API_BASE}/api/user/profile`, {
+        const res = await fetch(`${API_BASE}/user/profile`, {
           headers: {
             'x-user-email': user.email,
             'x-user-country': 'NP'
@@ -98,7 +98,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const handleRegister = useCallback(async (name: string, email: string, password: string) => {
     const firstName = name.split(' ')[0];
     const lastName = name.split(' ').slice(1).join(' ');
-    const response = await apiRegister({ email, password, firstName, lastName });
+    const response = await apiRegister({name, email, password });
     setUser(mapUserData(response.user));
   }, [mapUserData]);
 
@@ -111,7 +111,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!user) return;
     setUser(prev => prev ? { ...prev, ...updates } : null);
     try {
-      await fetch(`${API_BASE}/api/user/profile`, {
+      await fetch(`${API_BASE}/user/profile`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
