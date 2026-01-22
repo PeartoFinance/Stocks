@@ -10,14 +10,38 @@ export interface Stock {
   peRatio?: number;
   eps?: number;
   dividendYield?: number;
+  dividendRate?: number;
   week52High?: number;
   week52Low?: number;
   high52Week?: number;
   low52Week?: number;
+  high52w?: number;
+  low52w?: number;
   beta?: number;
   sector?: string;
   industry?: string;
   description?: string;
+  open?: number;
+  high?: number;
+  low?: number;
+  previousClose?: number;
+  avgVolume?: number;
+  dayLow?: number;
+  dayHigh?: number;
+  forwardPe?: number;
+  trailingPe?: number;
+  bookValue?: number;
+  priceToBook?: number;
+  sharesOutstanding?: number;
+  floatShares?: number;
+  shortRatio?: number;
+  exchange?: string;
+  currency?: string;
+  assetType?: string;
+  countryCode?: string;
+  website?: string;
+  logoUrl?: string;
+  lastUpdated?: string;
 }
 
 export interface MarketIndex {
