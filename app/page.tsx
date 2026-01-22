@@ -178,7 +178,7 @@ export default function HomePage() {
       {/* Advanced Market Indices Dashboard - Full Width */}
       <div className="bg-gradient-to-r from-emerald-600 to-teal-700 border-b border-emerald-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-4 mt-10">
             <div>
               <h2 className="text-lg font-semibold text-emerald-100">
                 Market Indices - {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}

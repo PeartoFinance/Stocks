@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { BookOpen, Bookmark, Clock, User, Search, Tag, Heart, Share2 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { stockAPI } from '../utils/api';
 
 interface Article {
   id: string;
@@ -24,53 +25,62 @@ export default function ArticlesPage() {
   const [category, setCategory] = useState('All');
   const [loading, setLoading] = useState(true);
 
-  const categories = ['All', 'Basics', 'Technical', 'Fundamental', 'Macro', 'Quant'];
-
-  const mockArticles: Article[] = [
-    {
-      id: 'a1',
-      title: 'How to Read a Candlestick Chart (Complete Guide)',
-      summary: 'Master candlestick patterns and learn how to identify market trends, reversals, and momentum with practical examples.',
-      category: 'Technical',
-      author: 'A. Patel',
-      readTime: 8,
-      publishedAt: '2025-11-15T09:00:00Z',
-      tags: ['Charts', 'Patterns', 'Trading'],
-      likes: 1240
-    },
-    {
-      id: 'a2',
-      title: 'Valuation 101: P/E, P/B, EV/EBITDA Explained',
-      summary: 'A concise, practical look at the most used valuation multiples and when each matters most.',
-      category: 'Fundamental',
-      author: 'S. Kim',
-      readTime: 6,
-      publishedAt: '2025-11-12T12:30:00Z',
-      tags: ['Valuation', 'Earnings', 'Multiples'],
-      likes: 980
-    },
-    {
-      id: 'a3',
-      title: 'A Simple Macro Framework for Equity Investors',
-      summary: 'Understand rates, inflation, growth, and liquidity—four forces that shape asset prices and sector leadership.',
-      category: 'Macro',
-      author: 'R. Singh',
-      readTime: 7,
-      publishedAt: '2025-11-10T08:10:00Z',
-      tags: ['Macro', 'Rates', 'Inflation'],
-      likes: 730
-    }
-  ];
+  const categories = ['All', 'Market', 'Analysis', 'Education', 'Technology', 'Finance'];
 
   useEffect(() => {
     const fetchArticles = async () => {
       try {
         setLoading(true);
-        await new Promise(r => setTimeout(r, 600));
-        setArticles(mockArticles);
-      } catch (e) {
-        console.error(e);
+        
+        // Fetch articles from backend API
+        const newsRes = await stockAPI.getPublishedNews();
+        if (newsRes && newsRes.items && newsRes.items.length > 0) {
+          const articlesData: Article[] = newsRes.items.map((item: any) => ({
+            id: item.id?.toString() || Math.random().toString(),
+            title: item.title || 'Untitled Article',
+            summary: item.summary || item.excerpt || 'No summary available.',
+            category: item.category || 'General',
+            author: item.author || 'Pearto Team',
+            readTime: Math.ceil((item.content?.length || 500) / 200) || 5, // Estimate read time
+            publishedAt: item.published_at || item.created_at || new Date().toISOString(),
+            tags: item.tags ? (Array.isArray(item.tags) ? item.tags : item.tags.split(',').map((t: string) => t.trim())) : ['Article'],
+            likes: item.likes || Math.floor(Math.random() * 1000) + 100,
+            bookmarked: false
+          }));
+          setArticles(articlesData);
+        } else {
+          // Fallback articles if API returns no data
+          setArticles([
+            {
+              id: '1',
+              title: 'Getting Started with Stock Analysis',
+              summary: 'Learn the fundamentals of analyzing stocks and making informed investment decisions.',
+              category: 'Education',
+              author: 'Pearto Team',
+              readTime: 5,
+              publishedAt: new Date().toISOString(),
+              tags: ['Stocks', 'Analysis', 'Beginner'],
+              likes: 245
+            }
+          ]);
+        }
+      } catch (error) {
+        console.error('Failed to fetch articles:', error);
         toast.error('Failed to load articles');
+        // Set fallback articles on error
+        setArticles([
+          {
+            id: '1',
+            title: 'Market Analysis Fundamentals',
+            summary: 'Understanding market trends and analysis techniques for better investment decisions.',
+            category: 'Analysis',
+            author: 'Pearto Team',
+            readTime: 6,
+            publishedAt: new Date().toISOString(),
+            tags: ['Market', 'Analysis'],
+            likes: 180
+          }
+        ]);
       } finally {
         setLoading(false);
       }
@@ -89,7 +99,34 @@ export default function ArticlesPage() {
   if (loading) {
     return (
       <main className="p-8">
-        <div className="h-96 flex items-center justify-center text-gray-600">Loading articles…</div>
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">Articles</h1>
+          <p className="text-gray-600">Learn investing with concise, practical guides and frameworks.</p>
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {[1,2,3,4].map(i => (
+            <div key={i} className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 animate-pulse">
+              <div className="flex items-center justify-between mb-3">
+                <div className="h-4 w-20 bg-gray-200 rounded"></div>
+                <div className="h-4 w-16 bg-gray-200 rounded"></div>
+              </div>
+              <div className="h-6 w-full bg-gray-200 rounded mb-2"></div>
+              <div className="h-4 w-3/4 bg-gray-200 rounded mb-4"></div>
+              <div className="flex gap-2 mb-4">
+                <div className="h-6 w-16 bg-gray-200 rounded"></div>
+                <div className="h-6 w-20 bg-gray-200 rounded"></div>
+              </div>
+              <div className="flex items-center justify-between pt-4 border-t">
+                <div className="h-4 w-24 bg-gray-200 rounded"></div>
+                <div className="flex gap-3">
+                  <div className="h-4 w-8 bg-gray-200 rounded"></div>
+                  <div className="h-4 w-4 bg-gray-200 rounded"></div>
+                  <div className="h-4 w-4 bg-gray-200 rounded"></div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </main>
     );
   }
@@ -128,11 +165,21 @@ export default function ArticlesPage() {
               {a.tags.map(t => <span key={t} className="px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-md"><Tag className="h-3 w-3 inline mr-1" />{t}</span>)}
             </div>
             <div className="flex items-center justify-between pt-4 border-t">
-              <span className="text-sm text-gray-500 flex items-center gap-2"><User className="h-4 w-4" />{a.author}</span>
+              <span className="text-sm text-gray-500 flex items-center gap-2">
+                <User className="h-4 w-4" />
+                {a.author} • {new Date(a.publishedAt).toLocaleDateString()}
+              </span>
               <div className="flex items-center gap-3 text-gray-500">
-                <button className="hover:text-red-600 flex items-center gap-1"><Heart className="h-4 w-4" />{a.likes}</button>
-                <button className="hover:text-blue-600"><Share2 className="h-4 w-4" /></button>
-                <button className={`hover:text-blue-600 ${a.bookmarked?'text-blue-600':''}`}><Bookmark className="h-4 w-4" /></button>
+                <button className="hover:text-red-600 flex items-center gap-1">
+                  <Heart className="h-4 w-4" />
+                  {a.likes}
+                </button>
+                <button className="hover:text-blue-600">
+                  <Share2 className="h-4 w-4" />
+                </button>
+                <button className={`hover:text-blue-600 ${a.bookmarked?'text-blue-600':''}`}>
+                  <Bookmark className="h-4 w-4" />
+                </button>
               </div>
             </div>
           </motion.article>
