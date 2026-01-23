@@ -47,8 +47,8 @@ Start-Sleep -Seconds 5
 Write-Host "🌐 Starting React development server..." -ForegroundColor Green
 Write-Host ""
 Write-Host "🎉 Setup complete!" -ForegroundColor Green
-Write-Host "✅ Backend running on https://api.pearto.com/api" -ForegroundColor Cyan
-Write-Host "✅ Frontend will start on http://localhost:3000" -ForegroundColor Cyan
+Write-Host "✅ Backend running on http://192.168.1.71:5000/api" -ForegroundColor Cyan
+Write-Host "✅ Frontend will start on https://test.pearto.com" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "📖 Check the README.md for more information" -ForegroundColor Yellow
 
