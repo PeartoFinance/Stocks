@@ -28,7 +28,7 @@ interface CountryContextType {
 const CountryContext = createContext<CountryContextType | null>(null);
 
 const STORAGE_KEY = 'user_country_override';
-const DEFAULT_COUNTRY = 'US';
+const DEFAULT_COUNTRY = 'GLOBAL';
 
 export function getCountryHeader(country?: string): Record<string, string> {
     if (typeof window === 'undefined') return {};
@@ -50,7 +50,7 @@ export function CountryProvider({ children }: { children: ReactNode }) {
 
     const refreshCountries = useCallback(async (): Promise<Country[]> => {
         try {
-            const res = await fetch(`${API_BASE}/api/countries`);
+            const res = await fetch(`${API_BASE}/countries`);
             if (res.ok) {
                 const data = await res.json();
                 const list = Array.isArray(data.countries) ? data.countries : [];
@@ -65,7 +65,7 @@ export function CountryProvider({ children }: { children: ReactNode }) {
 
     const detectCountry = useCallback(async () => {
         try {
-            const res = await fetch(`${API_BASE}/api/geo`);
+            const res = await fetch(`${API_BASE}/geo`);
             if (res.ok) {
                 const data = await res.json();
                 return data.countryCode || DEFAULT_COUNTRY;

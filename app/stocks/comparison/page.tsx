@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import {
   Search, Plus, X, TrendingUp, TrendingDown, BarChart3,
-  DollarSign, Users, Activity, Zap, Star, ArrowUpDown, LineChart
+  DollarSign, Users, Activity, Zap, Star, ArrowUpDown, LineChart, Download
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { marketService } from '../../utils/marketService';
@@ -34,8 +34,8 @@ export default function StockComparison() {
   const [loading, setLoading] = useState(false);
   const [chartLoading, setChartLoading] = useState(false);
   const [activeCategory, setActiveCategory] = useState('overview');
-  const [chartPeriod, setChartPeriod] = useState('1M');
-  const [showChart, setShowChart] = useState(true);
+  const [chartPeriod, setChartPeriod] = useState('1Y'); // Changed default to 1Y for full data
+  const [chartType, setChartType] = useState<'line' | 'area' | 'candle'>('line');
   const [sortBy, setSortBy] = useState<string | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
 
@@ -108,6 +108,8 @@ export default function StockComparison() {
   }, [searchTerm]);
 
   // Load historical data for comparison chart
+  // For 1D period, uses minute-wise data (1m interval) from backend
+  // For other periods, uses daily data (1d interval)
   const loadHistoricalData = async (stocks: ComparisonStock[], period: string) => {
     if (stocks.length === 0) return;
     
@@ -117,25 +119,38 @@ export default function StockComparison() {
         '1D': '1d', '5D': '5d', '1M': '1mo', '3M': '3mo', '6M': '6mo', '1Y': '1y'
       };
       const mappedPeriod = periodMap[period] || '1mo';
+      
+      // Use minute interval for 1D period, daily interval for others
+      const interval = period === '1D' ? '1m' : '1d';
 
       const updatedStocks = await Promise.all(
         stocks.map(async (stock) => {
           try {
-            const historyResponse = await marketService.getStockHistory(stock.symbol, mappedPeriod);
-            if ((historyResponse as any)?.data) {
-              const transformedData: HistoricalData[] = (historyResponse as any).data.map((item: any) => ({
-                date: item.date,
-                open: item.open || item.close,
-                high: item.high || item.close,
-                low: item.low || item.close,
-                close: item.close,
-                volume: item.volume || 0,
-              }));
+            // Fetch data from backend API with appropriate interval
+            const historyResponse = await marketService.getStockHistory(stock.symbol, mappedPeriod, interval);
+            
+            if ((historyResponse as any)?.data && Array.isArray((historyResponse as any).data)) {
+              // Transform data and ensure proper date formatting for minute-wise data
+              const transformedData: HistoricalData[] = (historyResponse as any).data
+                .map((item: any) => ({
+                  date: item.date, // Backend returns ISO format with time for minute data
+                  open: item.open || item.close || 0,
+                  high: item.high || item.close || 0,
+                  low: item.low || item.close || 0,
+                  close: item.close || 0,
+                  volume: item.volume || 0,
+                }))
+                .sort((a: HistoricalData, b: HistoricalData) => {
+                  // Sort by date to ensure chronological order (important for minute data)
+                  return new Date(a.date).getTime() - new Date(b.date).getTime();
+                });
+              
               return { ...stock, historicalData: transformedData };
             }
             return stock;
           } catch (error) {
             console.error(`Error loading data for ${stock.symbol}:`, error);
+            toast.error(`Failed to load data for ${stock.symbol}`);
             return stock;
           }
         })
@@ -144,6 +159,7 @@ export default function StockComparison() {
       setComparedStocks(updatedStocks);
     } catch (error) {
       console.error('Error loading historical data:', error);
+      toast.error('Failed to load historical data');
     } finally {
       setChartLoading(false);
     }
@@ -303,10 +319,10 @@ export default function StockComparison() {
   const renderComparisonTable = () => {
     if (comparedStocks.length === 0) {
       return (
-        <div className="text-center py-16">
-          <Search className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">No stocks to compare</h3>
-          <p className="text-gray-600">Search and add stocks to start comparing</p>
+        <div className="text-center py-12">
+          <Search className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">No stocks to compare</h3>
+          <p className="text-sm text-gray-600">Search and add stocks to start comparing</p>
         </div>
       );
     }
@@ -387,7 +403,7 @@ export default function StockComparison() {
         <table className="min-w-full">
           <thead>
             <tr className="border-b border-gray-200">
-              <th className="text-left py-4 px-6 font-medium text-gray-900">
+              <th className="text-left py-3 px-4 font-medium text-gray-900">
                 <button
                   onClick={() => handleSort('metric')}
                   className="flex items-center gap-1 hover:text-blue-600"
@@ -399,28 +415,28 @@ export default function StockComparison() {
                 </button>
               </th>
               {comparedStocks.map((stock) => (
-                <th key={stock.symbol} className="text-center py-4 px-6">
+                <th key={stock.symbol} className="text-center py-3 px-4">
                   <div className="flex flex-col items-center">
                     <div className="flex items-center gap-2 mb-1">
                       <div 
-                        className="w-3 h-3 rounded-full" 
+                        className="w-2.5 h-2.5 rounded-full" 
                         style={{ backgroundColor: stock.color }}
                       />
-                      <Link href={`/stock/${stock.symbol.toLowerCase()}`} className="text-lg font-bold text-gray-900 hover:text-blue-600 hover:underline">
+                      <Link href={`/stock/${stock.symbol.toLowerCase()}`} className="text-sm font-bold text-gray-900 hover:text-blue-600 hover:underline">
                         {stock.symbol}
                       </Link>
                     </div>
-                    <span className="text-sm text-gray-600 text-center">{stock.name}</span>
-                    <div className={`text-xs px-2 py-1 rounded-full mt-1 ${
+                    <span className="text-xs text-gray-600 text-center truncate max-w-20">{stock.name}</span>
+                    <div className={`text-xs px-2 py-0.5 rounded-full mt-1 ${
                       stock.changePercent >= 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
                     }`}>
                       {stock.changePercent >= 0 ? '+' : ''}{stock.changePercent.toFixed(2)}%
                     </div>
                     <button
                       onClick={() => removeFromComparison(stock.symbol)}
-                      className="mt-2 text-red-600 hover:text-red-800 transition-colors"
+                      className="mt-1 text-red-600 hover:text-red-800 transition-colors"
                     >
-                      <X className="h-4 w-4" />
+                      <X className="h-3 w-3" />
                     </button>
                   </div>
                 </th>
@@ -447,10 +463,10 @@ export default function StockComparison() {
               
               return (
                 <tr key={metric.key} className="hover:bg-gray-50">
-                  <td className="py-3 px-6 font-medium text-gray-900">
+                  <td className="py-2 px-4 font-medium text-gray-900">
                     <button
                       onClick={() => handleSort(metric.key)}
-                      className="flex items-center gap-1 hover:text-blue-600"
+                      className="flex items-center gap-1 hover:text-blue-600 text-sm"
                     >
                       {metric.label}
                       {sortBy === metric.key && (
@@ -465,7 +481,7 @@ export default function StockComparison() {
                     const isBest = shouldHighlight && numValue === maxValue && numValue > 0;
                     const isWorst = shouldHighlight && numValue === minValue && numValue > 0;
                     
-                    let cellClass = 'font-medium ';
+                    let cellClass = 'font-medium text-sm ';
                     if (metric.key === 'change' || metric.key === 'changePercent') {
                       cellClass += isNegative ? 'text-red-600' : 'text-green-600';
                     } else if (isBest && (metric.key === 'price' || metric.key === 'marketCap' || metric.key === 'eps')) {
@@ -477,11 +493,11 @@ export default function StockComparison() {
                     }
                     
                     return (
-                      <td key={`${stock.symbol}-${metric.key}`} className="py-3 px-6 text-center">
+                      <td key={`${stock.symbol}-${metric.key}`} className="py-2 px-4 text-center">
                         <span className={cellClass + ' px-2 py-1 rounded'}>
                           {formatValue(value, metric.format)}
                           {isBest && shouldHighlight && (
-                            <Star className="inline h-3 w-3 ml-1 text-yellow-500" />
+                            <Star className="inline h-2.5 w-2.5 ml-1 text-yellow-500" />
                           )}
                         </span>
                       </td>
@@ -497,39 +513,49 @@ export default function StockComparison() {
   };
 
   const renderComparisonChart = () => {
-    if (comparedStocks.length === 0 || !showChart) return null;
+    if (comparedStocks.length === 0) return null;
 
     const stocksWithData = comparedStocks.filter(stock => stock.historicalData && stock.historicalData.length > 0);
     
     if (stocksWithData.length === 0) {
       return (
-        <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-200 mb-10">
-          <div className="text-center py-12">
-            <LineChart className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">No Chart Data Available</h3>
-            <p className="text-gray-600">Historical data is loading or unavailable for the selected period.</p>
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+          <div className="text-center py-8">
+            <LineChart className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">No Chart Data Available</h3>
+            <p className="text-sm text-gray-600">Historical data is loading or unavailable for the selected period.</p>
           </div>
         </div>
       );
     }
 
     return (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-        className="bg-white rounded-2xl p-8 shadow-sm border border-gray-200 mb-10"
-      >
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-8 gap-4">
-          <h3 className="text-2xl font-semibold text-gray-900">Price Comparison Chart</h3>
-          <div className="flex flex-wrap items-center gap-4">
+      <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
+          <h3 className="text-lg font-semibold text-gray-900">Price Comparison</h3>
+          <div className="flex flex-wrap items-center gap-3">
+            {/* Chart Type Selector */}
+            <div className="flex bg-gray-100 rounded-lg p-0.5">
+              {[{ key: 'line', label: 'Line' }, { key: 'area', label: 'Area' }, { key: 'candle', label: 'Candle' }].map((type) => (
+                <button
+                  key={type.key}
+                  onClick={() => setChartType(type.key as 'line' | 'area' | 'candle')}
+                  className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+                    chartType === type.key ? "bg-white text-gray-900 shadow-sm" : "text-gray-600 hover:text-gray-900"
+                  }`}
+                >
+                  {type.label}
+                </button>
+              ))}
+            </div>
+            
             {/* Period Selector */}
-            <div className="flex bg-gray-100 rounded-xl p-1">
+            <div className="flex bg-gray-100 rounded-lg p-0.5">
               {periods.map((period) => (
                 <button
                   key={period}
                   onClick={() => handlePeriodChange(period)}
-                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${
+                  className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
                     chartPeriod === period ? "bg-white text-gray-900 shadow-sm" : "text-gray-600 hover:text-gray-900"
                   }`}
                 >
@@ -537,51 +563,41 @@ export default function StockComparison() {
                 </button>
               ))}
             </div>
-            
-            {/* Toggle Chart */}
-            <button
-              onClick={() => setShowChart(!showChart)}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-50"
-            >
-              <LineChart className="h-4 w-4" />
-              Hide Chart
-            </button>
           </div>
         </div>
 
-        {/* Stock Legend with Performance Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-8">
-          {stocksWithData.map((stock) => {
+        {/* Compact Stock Legend */}
+        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 mb-4">
+          {stocksWithData.map((stock, index) => {
             const isPositive = stock.change >= 0;
+            const color = index === 0 ? '#16a34a' : stock.color;
             return (
-              <div key={stock.symbol} className="bg-gray-50 rounded-xl p-5 border border-gray-200">
-                <div className="flex items-center gap-3 mb-4">
+              <div key={stock.symbol} className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                <div className="flex items-center gap-2 mb-2">
                   <div 
-                    className="w-4 h-4 rounded-full" 
-                    style={{ backgroundColor: stock.color }}
+                    className="w-3 h-3 rounded-full" 
+                    style={{ backgroundColor: color }}
                   />
-                  <span className="text-lg font-semibold text-gray-900">{stock.symbol}</span>
+                  <span className="text-sm font-semibold text-gray-900">{stock.symbol}</span>
+                  <button
+                    onClick={() => removeFromComparison(stock.symbol)}
+                    className="ml-auto text-gray-400 hover:text-red-600 transition-colors"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
                 </div>
-                <div className="space-y-3">
+                <div className="space-y-1">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Price</span>
-                    <span className="text-lg font-semibold">{formatPrice(stock.price)}</span>
+                    <span className="text-xs text-gray-600">Price</span>
+                    <span className="text-sm font-semibold">{formatPrice(stock.price)}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Change</span>
-                    <span className={`text-lg font-semibold ${
+                    <span className="text-xs text-gray-600">Change</span>
+                    <span className={`text-sm font-semibold ${
                       isPositive ? 'text-green-600' : 'text-red-600'
                     }`}>
                       {isPositive ? '+' : ''}{stock.changePercent.toFixed(2)}%
                     </span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Volume</span>
-                    <span className="text-sm font-medium">{formatLargeNumber(stock.volume)}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Market Cap</span>
-                    <span className="text-sm font-medium">{formatLargeNumber(stock.marketCap)}</span>
                   </div>
                 </div>
               </div>
@@ -590,10 +606,10 @@ export default function StockComparison() {
         </div>
 
         {/* Chart Container */}
-        <div className="h-96 relative bg-gray-50 rounded-xl p-4">
+        <div className="h-80 relative bg-gray-50 rounded-lg p-3">
           {chartLoading ? (
-            <div className="absolute inset-0 flex items-center justify-center bg-white/50 z-10 rounded-xl">
-              <Activity className="h-8 w-8 text-blue-600 animate-spin" />
+            <div className="absolute inset-0 flex items-center justify-center bg-white/50 z-10 rounded-lg">
+              <Activity className="h-6 w-6 text-blue-600 animate-spin" />
             </div>
           ) : null}
           
@@ -607,84 +623,85 @@ export default function StockComparison() {
               change: stock.change,
               changePercent: stock.changePercent
             }))}
-            height={360}
+            height={300}
             period={chartPeriod}
+            chartType={chartType}
           />
         </div>
-      </motion.div>
+      </div>
     );
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <main className="p-6 lg:p-8">
-        <div className="max-w-[1400px] mx-auto">
-          {/* Header */}
+      <main className="p-4 lg:p-6">
+        <div className="max-w-[1600px] mx-auto">
+          {/* Compact Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="mb-10"
+            className="mb-6"
           >
-            <h1 className="text-4xl font-bold text-gray-900 mb-3">Stock Comparison</h1>
-            <p className="text-lg text-gray-600">Compare up to 5 stocks side by side with real-time data and charts</p>
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">Stock Comparison</h1>
+            <p className="text-sm text-gray-600">Compare up to 5 stocks side by side with real-time data and charts</p>
           </motion.div>
 
-          {/* Search Section */}
+          {/* Compact Search Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="bg-white rounded-2xl p-8 shadow-sm border border-gray-200 mb-10"
+            className="bg-white rounded-lg p-4 shadow-sm border border-gray-200 mb-6"
           >
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-semibold text-gray-900">Add Stocks to Compare</h2>
-              <div className="flex items-center gap-3">
-                <span className="text-sm text-gray-500">{comparedStocks.length}/5 stocks selected</span>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-gray-900">Add Stocks</h2>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-gray-500">{comparedStocks.length}/5</span>
                 {comparedStocks.length > 0 && (
                   <button
                     onClick={exportToCSV}
-                    className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                    className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
                   >
-                    <ArrowUpDown className="h-4 w-4" />
-                    Export CSV
+                    <Download className="h-3 w-3" />
+                    Export
                   </button>
                 )}
               </div>
             </div>
 
-            <div className="relative mb-6">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <div className="relative mb-4">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search by symbol or company name..."
+                placeholder="Search stocks..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 text-lg border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
               {loading && (
-                <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                  <Activity className="h-5 w-5 text-blue-600 animate-spin" />
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                  <Activity className="h-4 w-4 text-blue-600 animate-spin" />
                 </div>
               )}
             </div>
 
             {searchResults.length > 0 && (
-              <div className="border border-gray-200 rounded-xl max-h-80 overflow-y-auto mb-6">
+              <div className="border border-gray-200 rounded-lg max-h-60 overflow-y-auto mb-4">
                 {searchResults.map((stock) => (
                   <div
                     key={stock.symbol}
-                    className="flex items-center justify-between p-5 hover:bg-gray-50 border-b border-gray-100 last:border-b-0"
+                    className="flex items-center justify-between p-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0"
                   >
-                    <div className="flex-1">
-                      <h4 className="text-lg font-semibold text-gray-900">{stock.symbol}</h4>
-                      <p className="text-gray-600 mb-1">{stock.name}</p>
-                      <p className="text-sm text-gray-500">{stock.sector} • {stock.exchange}</p>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-sm font-semibold text-gray-900 truncate">{stock.symbol}</h4>
+                      <p className="text-xs text-gray-600 truncate">{stock.name}</p>
+                      <p className="text-xs text-gray-500">{stock.sector}</p>
                     </div>
-                    <div className="flex items-center space-x-6">
+                    <div className="flex items-center space-x-3">
                       <div className="text-right">
-                        <p className="text-lg font-semibold text-gray-900">{formatPrice(stock.price)}</p>
-                        <p className={`text-sm font-medium ${
+                        <p className="text-sm font-semibold text-gray-900">{formatPrice(stock.price)}</p>
+                        <p className={`text-xs font-medium ${
                           stock.change >= 0 ? 'text-green-600' : 'text-red-600'
                         }`}>
                           {stock.change >= 0 ? '+' : ''}{stock.changePercent.toFixed(2)}%
@@ -693,9 +710,9 @@ export default function StockComparison() {
                       <button
                         onClick={() => addToComparison(stock)}
                         disabled={loading}
-                        className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+                        className="flex items-center space-x-1 px-3 py-1.5 bg-blue-600 text-white text-xs rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50"
                       >
-                        <Plus className="h-4 w-4" />
+                        <Plus className="h-3 w-3" />
                         <span>Add</span>
                       </button>
                     </div>
@@ -707,14 +724,14 @@ export default function StockComparison() {
             {/* Quick Add Popular Stocks */}
             {searchTerm === '' && comparedStocks.length < 5 && (
               <div>
-                <h4 className="text-lg font-medium text-gray-700 mb-4">Popular Stocks</h4>
-                <div className="flex flex-wrap gap-3">
+                <h4 className="text-sm font-medium text-gray-700 mb-2">Popular Stocks</h4>
+                <div className="flex flex-wrap gap-2">
                   {['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA', 'NVDA', 'META', 'NFLX'].map((symbol) => (
                     <button
                       key={symbol}
                       onClick={() => setSearchTerm(symbol)}
                       disabled={comparedStocks.some(s => s.symbol === symbol)}
-                      className="px-4 py-2 text-sm font-medium bg-gray-100 hover:bg-gray-200 disabled:bg-gray-50 disabled:text-gray-400 text-gray-700 rounded-lg transition-colors"
+                      className="px-3 py-1.5 text-xs font-medium bg-gray-100 hover:bg-gray-200 disabled:bg-gray-50 disabled:text-gray-400 text-gray-700 rounded-md transition-colors"
                     >
                       {symbol}
                     </button>
@@ -724,32 +741,76 @@ export default function StockComparison() {
             )}
           </motion.div>
 
-          {/* Comparison Chart */}
-          {renderComparisonChart()}
+          {/* Chart and AI Analysis Side by Side */}
+          {comparedStocks.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6"
+            >
+              {/* Chart Section - Takes 2/3 of the width */}
+              <div className="lg:col-span-2">
+                {renderComparisonChart()}
+              </div>
+              
+              {/* AI Analysis - Takes 1/3 of the width */}
+              <div className="lg:col-span-1">
+                <AIAnalysisPanel
+                  title="AI Insights"
+                  pageType="comparison"
+                  pageData={{
+                    stockCount: comparedStocks.length,
+                    stocks: comparedStocks.map(s => ({
+                      symbol: s.symbol,
+                      name: s.name,
+                      price: s.price,
+                      change: s.changePercent,
+                      pe: s.peRatio,
+                      sector: s.sector,
+                      marketCap: s.marketCap
+                    })),
+                    activeCategory,
+                    period: chartPeriod,
+                chartType
+                  }}
+                  autoAnalyze={comparedStocks.length >= 2}
+                  quickPrompts={[
+                    'Compare performance',
+                    'Best value pick',
+                    'Risk analysis',
+                    'Sector insights'
+                  ]}
+                  maxHeight="500px"
+                  compact={true}
+                />
+              </div>
+            </motion.div>
+          )}
 
-          {/* Performance Summary */}
+          {/* Performance Summary - More Compact */}
           {comparedStocks.length >= 2 && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="bg-white rounded-2xl p-8 shadow-sm border border-gray-200 mb-10"
+              className="bg-white rounded-lg p-4 shadow-sm border border-gray-200 mb-6"
             >
-              <h3 className="text-2xl font-semibold text-gray-900 mb-6">Performance Summary</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Performance Summary</h3>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 {/* Best Performer */}
                 {(() => {
                   const bestPerformer = comparedStocks.reduce((best, current) => 
                     current.changePercent > best.changePercent ? current : best
                   );
                   return (
-                    <div className="text-center p-6 bg-green-50 rounded-xl border border-green-200">
-                      <div className="flex items-center justify-center gap-2 mb-3">
-                        <TrendingUp className="h-5 w-5 text-green-600" />
-                        <span className="text-sm font-semibold text-green-700 uppercase tracking-wide">Best Performer</span>
+                    <div className="text-center p-3 bg-green-50 rounded-lg border border-green-200">
+                      <div className="flex items-center justify-center gap-1 mb-2">
+                        <TrendingUp className="h-4 w-4 text-green-600" />
+                        <span className="text-xs font-semibold text-green-700 uppercase tracking-wide">Best</span>
                       </div>
-                      <div className="text-xl font-bold text-green-900 mb-1">{bestPerformer.symbol}</div>
-                      <div className="text-lg font-semibold text-green-700">+{bestPerformer.changePercent.toFixed(2)}%</div>
+                      <div className="text-lg font-bold text-green-900 mb-1">{bestPerformer.symbol}</div>
+                      <div className="text-sm font-semibold text-green-700">+{bestPerformer.changePercent.toFixed(2)}%</div>
                     </div>
                   );
                 })()}
@@ -760,13 +821,13 @@ export default function StockComparison() {
                     current.changePercent < worst.changePercent ? current : worst
                   );
                   return (
-                    <div className="text-center p-6 bg-red-50 rounded-xl border border-red-200">
-                      <div className="flex items-center justify-center gap-2 mb-3">
-                        <TrendingDown className="h-5 w-5 text-red-600" />
-                        <span className="text-sm font-semibold text-red-700 uppercase tracking-wide">Worst Performer</span>
+                    <div className="text-center p-3 bg-red-50 rounded-lg border border-red-200">
+                      <div className="flex items-center justify-center gap-1 mb-2">
+                        <TrendingDown className="h-4 w-4 text-red-600" />
+                        <span className="text-xs font-semibold text-red-700 uppercase tracking-wide">Worst</span>
                       </div>
-                      <div className="text-xl font-bold text-red-900 mb-1">{worstPerformer.symbol}</div>
-                      <div className="text-lg font-semibold text-red-700">{worstPerformer.changePercent.toFixed(2)}%</div>
+                      <div className="text-lg font-bold text-red-900 mb-1">{worstPerformer.symbol}</div>
+                      <div className="text-sm font-semibold text-red-700">{worstPerformer.changePercent.toFixed(2)}%</div>
                     </div>
                   );
                 })()}
@@ -777,13 +838,13 @@ export default function StockComparison() {
                     (current.volume || 0) > (highest.volume || 0) ? current : highest
                   );
                   return (
-                    <div className="text-center p-6 bg-blue-50 rounded-xl border border-blue-200">
-                      <div className="flex items-center justify-center gap-2 mb-3">
-                        <Activity className="h-5 w-5 text-blue-600" />
-                        <span className="text-sm font-semibold text-blue-700 uppercase tracking-wide">Highest Volume</span>
+                    <div className="text-center p-3 bg-blue-50 rounded-lg border border-blue-200">
+                      <div className="flex items-center justify-center gap-1 mb-2">
+                        <Activity className="h-4 w-4 text-blue-600" />
+                        <span className="text-xs font-semibold text-blue-700 uppercase tracking-wide">Volume</span>
                       </div>
-                      <div className="text-xl font-bold text-blue-900 mb-1">{highestVolume.symbol}</div>
-                      <div className="text-lg font-semibold text-blue-700">{formatLargeNumber(highestVolume.volume)}</div>
+                      <div className="text-lg font-bold text-blue-900 mb-1">{highestVolume.symbol}</div>
+                      <div className="text-sm font-semibold text-blue-700">{formatLargeNumber(highestVolume.volume)}</div>
                     </div>
                   );
                 })()}
@@ -794,13 +855,13 @@ export default function StockComparison() {
                     (current.marketCap || 0) > (largest.marketCap || 0) ? current : largest
                   );
                   return (
-                    <div className="text-center p-6 bg-purple-50 rounded-xl border border-purple-200">
-                      <div className="flex items-center justify-center gap-2 mb-3">
-                        <DollarSign className="h-5 w-5 text-purple-600" />
-                        <span className="text-sm font-semibold text-purple-700 uppercase tracking-wide">Largest Cap</span>
+                    <div className="text-center p-3 bg-purple-50 rounded-lg border border-purple-200">
+                      <div className="flex items-center justify-center gap-1 mb-2">
+                        <DollarSign className="h-4 w-4 text-purple-600" />
+                        <span className="text-xs font-semibold text-purple-700 uppercase tracking-wide">Cap</span>
                       </div>
-                      <div className="text-xl font-bold text-purple-900 mb-1">{largestCap.symbol}</div>
-                      <div className="text-lg font-semibold text-purple-700">{formatLargeNumber(largestCap.marketCap)}</div>
+                      <div className="text-lg font-bold text-purple-900 mb-1">{largestCap.symbol}</div>
+                      <div className="text-sm font-semibold text-purple-700">{formatLargeNumber(largestCap.marketCap)}</div>
                     </div>
                   );
                 })()}
@@ -808,29 +869,29 @@ export default function StockComparison() {
             </motion.div>
           )}
 
-          {/* Category Tabs */}
+          {/* Category Tabs - More Compact */}
           {comparedStocks.length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="bg-white rounded-2xl p-8 shadow-sm border border-gray-200 mb-10"
+              className="bg-white rounded-lg p-4 shadow-sm border border-gray-200 mb-6"
             >
-              <h3 className="text-2xl font-semibold text-gray-900 mb-6">Analysis Categories</h3>
-              <div className="flex flex-wrap gap-3">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Analysis Categories</h3>
+              <div className="flex flex-wrap gap-2">
                 {categories.map((category) => {
                   const Icon = category.icon;
                   return (
                     <button
                       key={category.key}
                       onClick={() => setActiveCategory(category.key)}
-                      className={`flex items-center space-x-3 px-6 py-3 rounded-xl text-sm font-medium transition-all ${
+                      className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                         activeCategory === category.key
                           ? 'bg-blue-600 text-white shadow-lg'
                           : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                       }`}
                     >
-                      <Icon className="h-5 w-5" />
+                      <Icon className="h-4 w-4" />
                       <span>{category.label}</span>
                     </button>
                   );
@@ -839,52 +900,17 @@ export default function StockComparison() {
             </motion.div>
           )}
 
-          {/* Comparison Table */}
+          {/* Comparison Table - More Compact */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden"
+            className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden"
           >
-            <div className="p-8">
-              <h3 className="text-2xl font-semibold text-gray-900 mb-6">Detailed Comparison</h3>
+            <div className="p-4">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Detailed Comparison</h3>
               {renderComparisonTable()}
             </div>
-          </motion.div>
-
-          {/* AI Analysis */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="mt-10"
-          >
-            <AIAnalysisPanel
-              title="Comparison Insights"
-              pageType="comparison"
-              pageData={{
-                stockCount: comparedStocks.length,
-                stocks: comparedStocks.map(s => ({
-                  symbol: s.symbol,
-                  name: s.name,
-                  price: s.price,
-                  change: s.changePercent,
-                  pe: s.peRatio,
-                  sector: s.sector,
-                  marketCap: s.marketCap
-                })),
-                activeCategory,
-                period: chartPeriod
-              }}
-              autoAnalyze={comparedStocks.length >= 2}
-              quickPrompts={[
-                'Compare performance',
-                'Best value pick',
-                'Risk comparison',
-                'Sector analysis'
-              ]}
-              maxHeight="600px"
-            />
           </motion.div>
         </div>
       </main>

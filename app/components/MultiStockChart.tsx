@@ -5,9 +5,10 @@ import {
   createChart, 
   ColorType, 
   LineSeries, 
+  AreaSeries,
+  CandlestickSeries,
   IChartApi,
-  Time,
-  SeriesMarker
+  Time
 } from 'lightweight-charts';
 import { HistoricalData } from '../types';
 
@@ -25,16 +26,17 @@ interface MultiStockChartProps {
   stocks: StockChartData[];
   height?: number;
   period: string;
+  chartType?: 'line' | 'area' | 'candle';
 }
 
-export default function MultiStockChart({ stocks, height = 400, period }: MultiStockChartProps) {
+export default function MultiStockChart({ stocks, height = 300, period, chartType = 'line' }: MultiStockChartProps) {
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
 
   useEffect(() => {
     if (!chartContainerRef.current || stocks.length === 0) return;
 
-    // 1. Initialize Chart
+    // 1. Initialize Chart with improved styling
     const chart = createChart(chartContainerRef.current, {
       layout: {
         background: { type: ColorType.Solid, color: 'transparent' },
@@ -44,29 +46,46 @@ export default function MultiStockChart({ stocks, height = 400, period }: MultiS
       width: chartContainerRef.current.clientWidth,
       height,
       grid: {
-        vertLines: { color: 'rgba(243, 244, 246, 0.5)' },
-        horzLines: { color: 'rgba(243, 244, 246, 0.5)' },
+        vertLines: { color: 'rgba(243, 244, 246, 0.3)' },
+        horzLines: { color: 'rgba(243, 244, 246, 0.3)' },
       },
       timeScale: {
         borderColor: '#e5e7eb',
-        timeVisible: period === '1D',
-        secondsVisible: false,
+        timeVisible: period === '1D', // Show time labels for 1D period (minute data)
+        secondsVisible: period === '1D', // Show seconds for minute-wise data
+        rightOffset: 12,
+        barSpacing: period === '1D' ? 1 : 3, // Tighter spacing for minute data
+        fixLeftEdge: true,
+        lockVisibleTimeRangeOnResize: true,
       },
       rightPriceScale: {
         borderVisible: false,
+        scaleMargins: {
+          top: 0.1,
+          bottom: 0.1,
+        },
       },
       crosshair: {
         mode: 1, 
         vertLine: {
           width: 1,
-          color: 'rgba(107, 114, 128, 0.5)',
+          color: 'rgba(107, 114, 128, 0.4)',
           style: 2, 
         },
         horzLine: {
           width: 1,
-          color: 'rgba(107, 114, 128, 0.5)',
+          color: 'rgba(107, 114, 128, 0.4)',
           style: 2, 
         },
+      },
+      handleScroll: {
+        mouseWheel: true,
+        pressedMouseMove: true,
+      },
+      handleScale: {
+        axisPressedMouseMove: true,
+        mouseWheel: true,
+        pinch: true,
       },
     });
 
@@ -81,86 +100,104 @@ export default function MultiStockChart({ stocks, height = 400, period }: MultiS
       return dateStr.split('T')[0] as Time;
     };
 
-    const normalizeToPercentage = (data: HistoricalData[]) => {
+    const normalizeToActualPrice = (data: HistoricalData[]) => {
       if (data.length === 0) return [];
-      const basePrice = data[0].close;
       return data.map(item => ({
         time: formatTime(item.date),
-        value: ((item.close - basePrice) / basePrice) * 100
+        value: item.close,
+        open: item.open,
+        high: item.high,
+        low: item.low,
+        close: item.close
       }));
     };
 
-    // 3. Add Series and Markers
-    stocks.forEach((stock) => {
+    // 3. Add Series with chart type selection
+    stocks.forEach((stock, index) => {
       if (stock.data && stock.data.length > 0) {
-        // v5 API: Use chart.addSeries with the Series Class
-        const series = chart.addSeries(LineSeries, {
-          color: stock.color,
-          lineWidth: 2,
-          title: stock.symbol,
-          priceFormat: {
-            type: 'custom',
-            formatter: (price: number) => `${price.toFixed(2)}%`,
-          },
-        });
-
-        const normalizedData = normalizeToPercentage(stock.data);
-        series.setData(normalizedData);
-
-        // Generate markers for significant moves
-        const markers: SeriesMarker<Time>[] = [];
-        for (let i = 1; i < normalizedData.length; i++) {
-          const current = normalizedData[i];
-          const previous = normalizedData[i - 1];
-          const change = Math.abs(current.value - previous.value);
-          
-          if (change > 5) {
-            markers.push({
-              time: current.time,
-              position: current.value > previous.value ? 'aboveBar' : 'belowBar',
-              color: current.value > previous.value ? '#16a34a' : '#dc2626',
-              shape: 'circle',
-              text: `${stock.symbol}: ${change.toFixed(1)}%`,
-            });
-          }
-        }
+        const color = index === 0 ? '#16a34a' : stock.color; // Use green for first stock
         
-        if (markers.length > 0) {
-          // Casting to any to resolve the TypeScript interface limitation in v5
-          (series as any).setMarkers(markers);
+        let series;
+        const normalizedData = normalizeToActualPrice(stock.data);
+        
+        if (chartType === 'area') {
+          series = chart.addSeries(AreaSeries, {
+            topColor: `${color}20`,
+            bottomColor: `${color}05`,
+            lineColor: color,
+            lineWidth: 2,
+            crosshairMarkerVisible: true,
+            priceFormat: {
+              type: 'price',
+              precision: 2,
+              minMove: 0.01,
+            },
+          });
+          series.setData(normalizedData.map(d => ({ time: d.time, value: d.value })));
+        } else if (chartType === 'candle') {
+          series = chart.addSeries(CandlestickSeries, {
+            upColor: '#16a34a',
+            downColor: '#dc2626',
+            borderVisible: false,
+            wickUpColor: '#16a34a',
+            wickDownColor: '#dc2626',
+            priceFormat: {
+              type: 'price',
+              precision: 2,
+              minMove: 0.01,
+            },
+          });
+          series.setData(normalizedData.map(d => ({ 
+            time: d.time, 
+            open: d.open, 
+            high: d.high, 
+            low: d.low, 
+            close: d.close 
+          })));
+        } else {
+          series = chart.addSeries(LineSeries, {
+            color: color,
+            lineWidth: 2,
+            crosshairMarkerVisible: true,
+            priceFormat: {
+              type: 'price',
+              precision: 2,
+              minMove: 0.01,
+            },
+          });
+          series.setData(normalizedData.map(d => ({ time: d.time, value: d.value })));
         }
       }
     });
 
-    // 4. Manual Legend Construction
+    // 4. Compact Legend
     const legend = document.createElement('div');
     Object.assign(legend.style, {
       position: 'absolute',
-      top: '12px',
-      left: '12px',
+      top: '6px',
+      left: '6px',
       zIndex: '10',
-      backgroundColor: 'rgba(255, 255, 255, 0.9)',
-      padding: '8px 12px',
-      borderRadius: '6px',
-      fontSize: '12px',
-      fontFamily: 'sans-serif',
-      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-      pointerEvents: 'none'
+      backgroundColor: 'rgba(255, 255, 255, 0.95)',
+      padding: '4px 8px',
+      borderRadius: '4px',
+      fontSize: '10px',
+      fontFamily: 'Inter, system-ui, sans-serif',
+      boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
+      pointerEvents: 'none',
+      border: '1px solid rgba(229, 231, 235, 0.5)'
     });
     
-    const legendContent = stocks.map(stock => 
-      `<div style="display: flex; align-items: center; margin-bottom: 4px;">
-        <div style="width: 12px; height: 2px; background-color: ${stock.color}; margin-right: 8px;"></div>
-        <span style="color: #374151; font-weight: 500;">
-          ${stock.symbol}: ${stock.changePercent >= 0 ? '+' : ''}${stock.changePercent.toFixed(2)}%
+    const legendContent = stocks.map((stock, index) => {
+      const color = index === 0 ? '#16a34a' : stock.color;
+      return `<div style="display: flex; align-items: center; margin-bottom: 2px; gap: 4px;">
+        <div style="width: 8px; height: 2px; background-color: ${color}; border-radius: 1px;"></div>
+        <span style="color: #374151; font-weight: 500; font-size: 9px; line-height: 1.2;">
+          ${stock.symbol}: $${stock.currentPrice.toFixed(2)}
         </span>
-      </div>`
-    ).join('');
+      </div>`;
+    }).join('');
     
-    legend.innerHTML = `
-      <div style="font-weight: 600; margin-bottom: 6px; color: #111827;">Performance Comparison</div>
-      ${legendContent}
-    `;
+    legend.innerHTML = legendContent;
     
     chartContainerRef.current.appendChild(legend);
 
@@ -187,7 +224,7 @@ export default function MultiStockChart({ stocks, height = 400, period }: MultiS
   }, [stocks, height, period]);
 
   return (
-    <div className="w-full overflow-hidden relative border border-gray-200 rounded-xl bg-white">
+    <div className="w-full overflow-hidden relative border border-gray-200 rounded-lg bg-white">
       <div ref={chartContainerRef} className="w-full" />
     </div>
   );
