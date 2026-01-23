@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import Footer from './Footer';
+import TickerTape from './TickerTape';
 
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const [isOpenMobile, setIsOpenMobile] = useState(false);
@@ -21,12 +22,12 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
       {/* Header - Full width at top */}
       <Header onOpenSidebar={() => setIsOpenMobile(true)} />
 
-      {/* Middle section: Sidebar + Content */}
-      <div className="flex flex-1">
+      {/* Middle section: Sidebar + Content with top padding for fixed header */}
+      <div className="flex flex-1 pt-32">
         {/* Sidebar - sticky within content area */}
         <Sidebar isOpenMobile={isOpenMobile} setIsOpenMobile={setIsOpenMobile} />
 
-        {/* Main content - no margin needed since sidebar is in the flow */}
+        {/* Main content */}
         <main className="flex-1">
           {children}
         </main>

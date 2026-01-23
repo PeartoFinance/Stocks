@@ -22,10 +22,14 @@ import {
   Layers,
   Wrench,
   BookOpen,
-  Globe
+  Globe,
+  Bell,
+  Sparkles,
+  Wallet
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
+import TickerTape from './TickerTape';
 
 interface SearchResult {
   symbol: string;
@@ -152,26 +156,31 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
 
   return (
     <>
-      {/* PRIMARY NAVBAR - Always visible */}
-    <nav className="sticky top-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-200/50 dark:border-gray-800/50">
-      <div className="container mx-auto px-2 sm:px-4 md:px-6">
-        <div className="flex items-center justify-between h-12 sm:h-14 md:h-16 gap-2 sm:gap-4">
-          
-          {/* Mobile Menu Trigger - ONLY visible on sm/md screens */}
-          <button 
-            onClick={onOpenSidebar}
-            className="lg:hidden p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-          >
-            <Menu className="h-5 w-5 sm:h-6 sm:w-6 text-gray-600 dark:text-gray-300" />
-          </button>
+      {/* TickerTape - Fixed at very top */}
+      <div className="fixed top-0 left-0 right-0 z-50">
+        <TickerTape />
+      </div>
 
-          {/* Left: Logo */}
-          <Link href="/" className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0 mr-auto lg:mr-0">
-            <img src="/logo.svg" alt="Pearto Logo" className="h-6 sm:h-7 md:h-8 w-auto" />
-            <span className="text-base sm:text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 via-emerald-500 to-cyan-500 truncate">
-              Pearto
-            </span>
-          </Link>
+      {/* PRIMARY NAVBAR - Fixed below TickerTape */}
+      <nav className="fixed top-8 left-0 right-0 z-40 bg-white dark:bg-gray-900 border-b border-gray-200/50 dark:border-gray-800/50">
+        <div className="container mx-auto px-2 sm:px-4 md:px-6">
+          <div className="flex items-center justify-between h-12 sm:h-14 md:h-16 gap-2 sm:gap-4">
+            
+            {/* Mobile Menu Trigger - ONLY visible on sm/md screens */}
+            <button 
+              onClick={onOpenSidebar}
+              className="lg:hidden p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+            >
+              <Menu className="h-5 w-5 sm:h-6 sm:w-6 text-gray-600 dark:text-gray-300" />
+            </button>
+
+            {/* Left: Logo */}
+            <Link href="/" className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0 mr-auto lg:mr-0">
+              <img src="/logo.svg" alt="Pearto Logo" className="h-6 sm:h-7 md:h-8 w-auto" />
+              <span className="text-base sm:text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 via-emerald-500 to-cyan-500 truncate">
+                Pearto
+              </span>
+            </Link>
 
             {/* Center: Search Bar */}
             <div ref={searchRef} className="hidden md:flex flex-1 max-w-xl mx-4 relative">
@@ -348,12 +357,8 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
         </div>
       </nav>
 
-      {/* SECONDARY NAVBAR - Hides on scroll (desktop only) */}
-      <div
-        className={`hidden md:block sticky bg-white/95 dark:bg-gray-900/95 backdrop-blur border-b border-gray-200/30 dark:border-gray-800/30 transition-all duration-300 z-40 ${scrolled ? '-translate-y-full opacity-0 pointer-events-none' : 'translate-y-0 opacity-100'
-          }`}
-        style={{ top: '64px' }}
-      >
+      {/* SECONDARY NAVBAR - Fixed below primary navbar, always visible */}
+      <div className="fixed top-24 left-0 right-0 z-30 bg-white/95 dark:bg-gray-900/95 backdrop-blur border-b border-gray-200/30 dark:border-gray-800/30 hidden md:block">
         <div className="container mx-auto px-4 md:px-6">
           <div className="flex items-center justify-center gap-2 py-2.5">
             {/* Pillars Dropdown */}

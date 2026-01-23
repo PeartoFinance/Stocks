@@ -13,8 +13,7 @@ interface LoginCredentials {
 interface RegisterData {
   email: string;
   password: string;
-  firstName: string;
-  lastName: string;
+  name: string;
 }
 
 interface AuthResponse {
@@ -71,7 +70,7 @@ export function getAuthHeaders(): Record<string, string> {
 
 // Login user
 export async function login(credentials: LoginCredentials): Promise<AuthResponse> {
-  const response = await fetch(`${API_BASE}/api/auth/login`, {
+  const response = await fetch(`${API_BASE}/auth/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -91,7 +90,7 @@ export async function login(credentials: LoginCredentials): Promise<AuthResponse
 
 // Register user
 export async function register(userData: RegisterData): Promise<AuthResponse> {
-  const response = await fetch(`${API_BASE}/api/auth/register`, {
+  const response = await fetch(`${API_BASE}/auth/signup`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -137,7 +136,7 @@ export async function refreshToken(): Promise<string | null> {
   if (!token) return null;
 
   try {
-    const response = await fetch(`${API_BASE}/api/auth/refresh`, {
+    const response = await fetch(`${API_BASE}/auth/refresh`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,

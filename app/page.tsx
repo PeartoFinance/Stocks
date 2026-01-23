@@ -56,69 +56,105 @@ export default function HomePage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
+        
         // Fetch market overview (indices)
         const overviewRes = await stockAPI.getMarketOverview();
-        if (overviewRes.success && overviewRes.data) {
+        if (overviewRes.success && overviewRes.data && overviewRes.data.length > 0) {
           const indices: MarketIndex[] = overviewRes.data.map((item: any) => ({
-            name: item.name || '',
+            name: item.name || item.symbol || 'Unknown',
             symbol: item.symbol || '',
-            value: (item.price || 0).toLocaleString(),
-            change: (item.change || 0).toFixed(2),
-            changePercent: `${(item.changePercent || 0).toFixed(2)}%`,
+            value: item.price ? item.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '—',
+            change: item.change ? item.change.toFixed(2) : '0.00',
+            changePercent: `${item.changePercent ? item.changePercent.toFixed(2) : '0.00'}%`,
             isPositive: (item.change || 0) >= 0,
-            volume: formatVolume(item.volume || 0),
-            high: (item.price || 0).toLocaleString(),
-            low: (item.price || 0).toLocaleString(),
+            volume: item.volume ? formatVolume(item.volume) : '—',
+            high: item.dayHigh ? item.dayHigh.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 
+                  item.price ? item.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '—',
+            low: item.dayLow ? item.dayLow.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 
+                 item.price ? item.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '—',
           }));
-          setMarketData(indices.length > 0 ? indices : getDefaultIndices());
+          setMarketData(indices);
         } else {
           setMarketData(getDefaultIndices());
         }
 
         // Fetch gainers
         const gainersRes = await stockAPI.getMarketMovers('gainers');
-        if (gainersRes.success && gainersRes.data) {
+        if (gainersRes.success && gainersRes.data && gainersRes.data.length > 0) {
           setTopGainers(gainersRes.data.slice(0, 5).map(s => ({ ...s, isGainer: true })));
         }
 
         // Fetch losers
         const losersRes = await stockAPI.getMarketMovers('losers');
-        if (losersRes.success && losersRes.data) {
+        if (losersRes.success && losersRes.data && losersRes.data.length > 0) {
           setTopLosers(losersRes.data.slice(0, 5).map(s => ({ ...s, isGainer: false })));
         }
 
-        // Fetch trending (use gainers with high volume as proxy)
+        // Fetch trending
         const trendingRes = await stockAPI.getTrendingStocks();
-        if (trendingRes.success && trendingRes.data) {
+        if (trendingRes.success && trendingRes.data && trendingRes.data.length > 0) {
           setTrendingStocks(trendingRes.data.slice(0, 5));
         }
 
-        // Market news - would need a news API endpoint
-        setMarketNews([
-          { id: 1, title: 'Markets Update', summary: 'Live market data from global exchanges.', time: 'Just now', source: 'Pearto', impact: 'medium' },
-        ]);
+        // Fetch market news from API
+        const newsRes = await stockAPI.getPublishedNews('Market');
+        if (newsRes && newsRes.items && newsRes.items.length > 0) {
+          const news: NewsItem[] = newsRes.items.slice(0, 5).map((item: any, index: number) => ({
+            id: item.id || index,
+            title: item.title || 'Market Update',
+            summary: item.summary || item.excerpt || 'Latest market developments and analysis.',
+            time: item.published_at ? new Date(item.published_at).toLocaleString() : 
+                  item.created_at ? new Date(item.created_at).toLocaleString() : 'Recent',
+            source: item.source || 'Pearto Finance',
+            impact: item.category === 'Breaking' ? 'high' as const : 
+                   item.category === 'Analysis' ? 'medium' as const : 'low' as const
+          }));
+          setMarketNews(news);
+        } else {
+          setMarketNews([
+            { id: 1, title: 'Market Data Available', summary: 'Real-time market data from global exchanges. Check admin panel to import more news.', time: 'Just now', source: 'Pearto', impact: 'medium' },
+          ]);
+        }
+
+        // Set market status based on current time
+        const now = new Date();
+        const hour = now.getHours();
+        const isWeekend = now.getDay() === 0 || now.getDay() === 6;
+        
+        if (isWeekend) {
+          setMarketStatus('Closed - Weekend');
+        } else if (hour >= 9 && hour < 16) {
+          setMarketStatus('Open');
+        } else if (hour >= 4 && hour < 9) {
+          setMarketStatus('Pre-Market');
+        } else if (hour >= 16 && hour < 20) {
+          setMarketStatus('After Hours');
+        } else {
+          setMarketStatus('Closed');
+        }
 
         setLastUpdate(new Date().toLocaleTimeString());
-        setLoading(false);
       } catch (error) {
         console.error('[HomePage] Error fetching data:', error);
         setMarketData(getDefaultIndices());
+      } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-    const interval = setInterval(fetchData, 30000); // Refresh every 30 seconds
-
+    const interval = setInterval(fetchData, 30000);
     return () => clearInterval(interval);
   }, []);
 
-  // Helper to format volume
+  // Helper to format volume with proper units
   function formatVolume(vol: number): string {
+    if (!vol || vol === 0) return 'N/A';
     if (vol >= 1e9) return `${(vol / 1e9).toFixed(1)}B`;
     if (vol >= 1e6) return `${(vol / 1e6).toFixed(1)}M`;
     if (vol >= 1e3) return `${(vol / 1e3).toFixed(1)}K`;
-    return vol.toString();
+    return vol.toLocaleString();
   }
 
   // Default indices fallback
@@ -142,53 +178,91 @@ export default function HomePage() {
       {/* Advanced Market Indices Dashboard - Full Width */}
       <div className="bg-gradient-to-r from-emerald-600 to-teal-700 border-b border-emerald-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-emerald-100">
-              Market Indices - {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-            </h2>
+          <div className="flex items-center justify-between mb-4 mt-10">
+            <div>
+              <h2 className="text-lg font-semibold text-emerald-100">
+                Market Indices - {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+              </h2>
+              <div className="flex items-center space-x-4 mt-1">
+                <span className={`px-2 py-1 rounded text-xs font-medium ${
+                  marketStatus.includes('Open') ? 'bg-green-500/20 text-green-200' :
+                  marketStatus.includes('Pre-Market') || marketStatus.includes('After Hours') ? 'bg-yellow-500/20 text-yellow-200' :
+                  'bg-red-500/20 text-red-200'
+                }`}>
+                  {marketStatus}
+                </span>
+                {lastUpdate && (
+                  <span className="text-emerald-200 text-xs">
+                    Last updated: {lastUpdate}
+                  </span>
+                )}
+              </div>
+            </div>
             <div className="flex items-center space-x-4">
-              <button className="flex items-center space-x-2 text-emerald-100 hover:text-white text-sm">
-                <RefreshCw className="h-4 w-4" />
-                <span>Auto-refresh: 30s</span>
+              <button 
+                onClick={() => window.location.reload()} 
+                className="flex items-center space-x-2 text-emerald-100 hover:text-white text-sm transition-colors"
+              >
+                <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+                <span>Refresh</span>
               </button>
-              <button className="flex items-center space-x-2 text-emerald-100 hover:text-white text-sm">
+              <Link href="/watchlist" className="flex items-center space-x-2 text-emerald-100 hover:text-white text-sm transition-colors">
                 <Eye className="h-4 w-4" />
                 <span>Watch All</span>
-              </button>
+              </Link>
             </div>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {marketData.map((index, i) => (
-              <div key={i} className="bg-white/10 backdrop-blur-sm rounded-xl p-4 hover:bg-white/20 transition-all cursor-pointer border border-white/20">
-                <div className="flex items-center justify-between mb-3">
-                  <div>
-                    <div className="text-white font-semibold text-lg">{index.name}</div>
-                    <div className="text-emerald-200 text-sm">{index.symbol}</div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-white font-bold text-xl">{index.value}</div>
-                    <div className={`text-sm font-medium flex items-center justify-end ${index.isPositive ? 'text-green-300' : 'text-red-300'
+          
+          {loading && marketData.length === 0 ? (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {[1,2,3,4].map(i => (
+                <div key={i} className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20 animate-pulse">
+                  <div className="h-4 bg-white/20 rounded mb-2"></div>
+                  <div className="h-6 bg-white/20 rounded mb-2"></div>
+                  <div className="h-3 bg-white/20 rounded"></div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {marketData.map((index, i) => (
+                <Link key={i} href={`/stock/${index.symbol.toLowerCase()}`} className="bg-white/10 backdrop-blur-sm rounded-xl p-4 hover:bg-white/20 transition-all cursor-pointer border border-white/20 group">
+                  <div className="flex items-center justify-between mb-3">
+                    <div>
+                      <div className="text-white font-semibold text-lg group-hover:text-emerald-100 transition-colors">{index.name}</div>
+                      <div className="text-emerald-200 text-sm">{index.symbol}</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-white font-bold text-xl">{index.value}</div>
+                      <div className={`text-sm font-medium flex items-center justify-end ${
+                        index.isPositive ? 'text-green-300' : 'text-red-300'
                       }`}>
-                      {index.isPositive ? (
-                        <TrendingUp className="h-3 w-3 mr-1" />
-                      ) : (
-                        <TrendingDown className="h-3 w-3 mr-1" />
-                      )}
-                      {index.change} ({index.changePercent})
+                        {index.isPositive ? (
+                          <TrendingUp className="h-3 w-3 mr-1" />
+                        ) : (
+                          <TrendingDown className="h-3 w-3 mr-1" />
+                        )}
+                        {index.change} ({index.changePercent})
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="flex justify-between text-xs text-emerald-200">
-                  <span>Vol: {index.volume}</span>
-                  <span>H: {index.high}</span>
-                  <span>L: {index.low}</span>
-                </div>
-                <div className="mt-2 h-1 bg-white/20 rounded-full overflow-hidden">
-                  <div className={`h-full rounded-full ${index.isPositive ? 'bg-green-400' : 'bg-red-400'} animate-pulse`} style={{ width: '60%' }}></div>
-                </div>
-              </div>
-            ))}
-          </div>
+                  <div className="flex justify-between text-xs text-emerald-200">
+                    <span>Vol: {index.volume}</span>
+                    <span>H: {index.high}</span>
+                    <span>L: {index.low}</span>
+                  </div>
+                  <div className="mt-2 h-1 bg-white/20 rounded-full overflow-hidden">
+                    <div 
+                      className={`h-full rounded-full transition-all duration-1000 ${
+                        index.isPositive ? 'bg-green-400' : 'bg-red-400'
+                      }`} 
+                      style={{ width: `${Math.min(Math.abs(parseFloat(index.change)) * 10, 100)}%` }}
+                    ></div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
@@ -316,7 +390,7 @@ export default function HomePage() {
                                     {changeData.value}
                                   </div>
                                   <div className="text-xs text-gray-500 mt-1">
-                                    Vol: {((stock.volume || 0) / 1000000).toFixed(1)}M
+                                    Vol: {stock.volume ? formatVolume(stock.volume) : 'N/A'}
                                   </div>
                                 </div>
                               </div>
@@ -342,22 +416,42 @@ export default function HomePage() {
                   </div>
                   <div className="p-6 max-h-96 overflow-y-auto">
                     <div className="space-y-4">
-                      {marketNews.map((news, i) => (
-                        <div key={news.id} className="p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer border border-gray-100">
-                          <div className="flex items-start justify-between mb-2">
-                            <div className={`px-2 py-1 rounded text-xs font-medium ${news.impact === 'high' ? 'bg-red-100 text-red-700' :
-                              news.impact === 'medium' ? 'bg-yellow-100 text-yellow-700' :
+                      {loading ? (
+                        [1,2,3].map(i => (
+                          <div key={i} className="p-4 bg-gray-50 rounded-xl border border-gray-100 animate-pulse">
+                            <div className="flex items-start justify-between mb-2">
+                              <div className="h-4 w-16 bg-gray-200 rounded"></div>
+                              <div className="h-3 w-12 bg-gray-200 rounded"></div>
+                            </div>
+                            <div className="h-4 w-full bg-gray-200 rounded mb-2"></div>
+                            <div className="h-3 w-3/4 bg-gray-200 rounded"></div>
+                          </div>
+                        ))
+                      ) : marketNews.length > 0 ? (
+                        marketNews.map((news, i) => (
+                          <div key={news.id} className="p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer border border-gray-100">
+                            <div className="flex items-start justify-between mb-2">
+                              <div className={`px-2 py-1 rounded text-xs font-medium ${
+                                news.impact === 'high' ? 'bg-red-100 text-red-700' :
+                                news.impact === 'medium' ? 'bg-yellow-100 text-yellow-700' :
                                 'bg-green-100 text-green-700'
                               }`}>
-                              {news.impact.toUpperCase()}
+                                {news.impact.toUpperCase()}
+                              </div>
+                              <span className="text-xs text-gray-500">{news.time}</span>
                             </div>
-                            <span className="text-xs text-gray-500">{news.time}</span>
+                            <h3 className="font-semibold text-gray-900 mb-2 text-sm leading-tight">{news.title}</h3>
+                            <p className="text-xs text-gray-600 line-clamp-2">{news.summary}</p>
+                            <div className="mt-2 text-xs text-gray-500 font-medium">{news.source}</div>
                           </div>
-                          <h3 className="font-semibold text-gray-900 mb-2 text-sm leading-tight">{news.title}</h3>
-                          <p className="text-xs text-gray-600 line-clamp-2">{news.summary}</p>
-                          <div className="mt-2 text-xs text-gray-500 font-medium">{news.source}</div>
+                        ))
+                      ) : (
+                        <div className="text-center py-8 text-gray-500">
+                          <Zap className="h-8 w-8 mx-auto mb-2 text-gray-300" />
+                          <p className="text-sm">No market news available</p>
+                          <p className="text-xs mt-1">Import news from admin panel</p>
                         </div>
-                      ))}
+                      )}
                     </div>
                   </div>
                 </div>
