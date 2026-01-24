@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/app/context/AuthContext';
-import { stockAPI } from '@/app/utils/api';
+import { getWatchlist, addToWatchlist, removeFromWatchlist, type WatchlistItem } from '@/app/utils/portfolioWatchlistAPI';
 import {
     ArrowLeft,
     Star,
@@ -13,216 +13,215 @@ import {
     TrendingUp,
     TrendingDown,
     RefreshCw,
-    Search
+    Search,
 } from 'lucide-react';
-
-interface WatchlistItem {
-    symbol: string;
-    name: string;
-    price: number;
-    change: number;
-    changePercent: number;
-}
+import toast from 'react-hot-toast';
 
 export default function WatchlistPage() {
     const { isAuthenticated, isLoading: authLoading } = useAuth();
     const router = useRouter();
-    const [loading, setLoading] = useState(false);
-    const [searchQuery, setSearchQuery] = useState('');
-    const [searchResults, setSearchResults] = useState<Array<{ symbol: string; name: string }>>([]);
-    const [showSearch, setShowSearch] = useState(false);
-
-    // Mock watchlist - would be fetched from API in real implementation
     const [watchlist, setWatchlist] = useState<WatchlistItem[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [showSearch, setShowSearch] = useState(false);
+    const [adding, setAdding] = useState<string | null>(null);
+    const [removing, setRemoving] = useState<string | null>(null);
+    const [symbolToAdd, setSymbolToAdd] = useState('');
 
     useEffect(() => {
-        if (!authLoading && !isAuthenticated) {
-            router.push('/login');
-        }
+        if (!authLoading && !isAuthenticated) router.push('/login');
     }, [authLoading, isAuthenticated, router]);
 
-    const handleSearch = async () => {
-        if (!searchQuery.trim()) return;
-        setLoading(true);
+    const load = useCallback(async () => {
         try {
-            const result = await stockAPI.searchStocks(searchQuery);
-            setSearchResults(result.data || []);
-        } catch (error) {
-            console.error('Search error:', error);
+            const list = await getWatchlist();
+            setWatchlist(list);
+        } catch (e) {
+            console.error(e);
+            toast.error('Failed to load watchlist');
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
-    const addToWatchlist = async (symbol: string, name: string) => {
-        // Check if already in watchlist
-        if (watchlist.some(item => item.symbol === symbol)) {
+    useEffect(() => {
+        if (!isAuthenticated) return;
+        load();
+    }, [isAuthenticated, load]);
+
+    const handleAdd = async () => {
+        const symbol = symbolToAdd.trim().toUpperCase();
+        if (!symbol) return;
+
+        if (watchlist.some((w) => w.symbol === symbol)) {
+            toast.error(`${symbol} is already in your watchlist`);
             return;
         }
-
+        setAdding(symbol);
         try {
-            const quote = await stockAPI.getStockQuote(symbol);
-            if (quote.success && quote.data) {
-                setWatchlist(prev => [...prev, {
-                    symbol: quote.data.symbol,
-                    name: quote.data.name || name,
-                    price: quote.data.price,
-                    change: quote.data.change,
-                    changePercent: quote.data.changePercent,
-                }]);
-            }
-        } catch (error) {
-            console.error('Failed to add to watchlist:', error);
+            await addToWatchlist(symbol);
+            toast.success(`${symbol} added to watchlist`);
+            setShowSearch(false);
+            setSymbolToAdd('');
+            load();
+        } catch (e: any) {
+            const msg = e?.message || 'Failed to add';
+            if (String(msg).includes('already')) toast.success(`${symbol} is already in watchlist`);
+            else toast.error(msg);
+        } finally {
+            setAdding(null);
         }
-
-        setShowSearch(false);
-        setSearchQuery('');
-        setSearchResults([]);
     };
 
-    const removeFromWatchlist = (symbol: string) => {
-        setWatchlist(prev => prev.filter(item => item.symbol !== symbol));
+    const handleRemove = async (symbol: string) => {
+        setRemoving(symbol);
+        try {
+            await removeFromWatchlist(symbol);
+            setWatchlist((prev) => prev.filter((w) => w.symbol !== symbol));
+            toast.success(`${symbol} removed`);
+        } catch {
+            toast.error('Failed to remove');
+        } finally {
+            setRemoving(null);
+        }
     };
 
     if (authLoading) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-500"></div>
+            <div className="min-h-screen flex items-center justify-center bg-slate-50">
+                <div className="animate-spin rounded-full h-12 w-12 border-2 border-green-500 border-t-transparent" />
             </div>
         );
     }
-
-    if (!isAuthenticated) {
-        return null;
-    }
+    if (!isAuthenticated) return null;
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            {/* Header */}
-            <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
-                <div className="container mx-auto px-4 py-4">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4">
+        <div className="min-h-screen bg-slate-50">
+            <div className="bg-gradient-to-br from-green-600 to-emerald-600 pb-8">
+                <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div className="flex items-center gap-3">
                             <Link
                                 href="/profile"
-                                className="p-2 hover:bg-gray-100 rounded-lg transition"
+                                className="p-2 rounded-lg bg-white/20 hover:bg-white/30 text-white transition"
                             >
-                                <ArrowLeft className="h-5 w-5 text-gray-600" />
+                                <ArrowLeft className="h-5 w-5" />
                             </Link>
-                            <h1 className="text-xl font-bold text-gray-900">Watchlist</h1>
+                            <div className="flex items-center gap-2">
+                                <Star className="h-6 w-6 sm:h-7 sm:w-7 text-white" />
+                                <h1 className="text-xl sm:text-2xl font-bold text-white">Watchlist</h1>
+                            </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                            <button
-                                onClick={() => setShowSearch(!showSearch)}
-                                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white font-medium transition"
-                            >
-                                <Plus className="h-4 w-4" />
-                                Add Stock
-                            </button>
-                        </div>
+                        <button
+                            onClick={() => {
+                                setShowSearch(!showSearch);
+                                setSymbolToAdd('');
+                            }}
+                            className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white text-green-600 font-medium hover:bg-green-50 transition shadow-sm"
+                        >
+                            <Plus className="h-5 w-5" />
+                            Add Stock
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <div className="container mx-auto px-4 py-8 max-w-4xl">
-                {/* Search Panel */}
+            <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 max-w-4xl">
                 {showSearch && (
-                    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-                        <h3 className="font-semibold text-gray-900 mb-4">Search Stocks</h3>
-                        <div className="flex gap-2 mb-4">
+                    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-6 mb-6">
+                        <h3 className="font-semibold text-slate-900 mb-4">Add stock to watchlist</h3>
+                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                             <div className="flex-1 relative">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
                                 <input
                                     type="text"
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                                    placeholder="Search by symbol or name..."
-                                    className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition"
+                                    value={symbolToAdd}
+                                    onChange={(e) => setSymbolToAdd(e.target.value)}
+                                    onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
+                                    placeholder="Enter stock symbol..."
+                                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 outline-none"
                                 />
                             </div>
                             <button
-                                onClick={handleSearch}
-                                disabled={loading}
-                                className="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium transition"
+                                onClick={handleAdd}
+                                disabled={adding !== null}
+                                className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium transition disabled:opacity-50 flex items-center justify-center gap-2"
                             >
-                                {loading ? <RefreshCw className="h-5 w-5 animate-spin" /> : 'Search'}
+                                {adding ? <RefreshCw className="h-5 w-5 animate-spin" /> : 'Add'}
                             </button>
                         </div>
-
-                        {searchResults.length > 0 && (
-                            <div className="space-y-2 max-h-60 overflow-y-auto">
-                                {searchResults.map((result) => (
-                                    <div
-                                        key={result.symbol}
-                                        onClick={() => addToWatchlist(result.symbol, result.name)}
-                                        className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition"
-                                    >
-                                        <div>
-                                            <div className="font-medium text-gray-900">{result.symbol}</div>
-                                            <div className="text-sm text-gray-500">{result.name}</div>
-                                        </div>
-                                        <Plus className="h-5 w-5 text-emerald-500" />
-                                    </div>
-                                ))}
-                            </div>
-                        )}
                     </div>
                 )}
 
-                {/* Watchlist */}
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div className="px-6 py-4 border-b border-gray-100">
-                        <h2 className="font-semibold text-gray-900">
-                            Your Watchlist ({watchlist.length})
-                        </h2>
+                <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div className="px-4 sm:px-6 py-4 border-b border-slate-100">
+                        <h2 className="font-semibold text-slate-900">Your watchlist ({watchlist.length})</h2>
                     </div>
-
-                    {watchlist.length === 0 ? (
-                        <div className="p-12 text-center">
-                            <div className="h-16 w-16 rounded-full bg-yellow-100 flex items-center justify-center mx-auto mb-4">
-                                <Star className="h-8 w-8 text-yellow-500" />
+                    {loading ? (
+                        <div className="p-12 flex justify-center">
+                            <RefreshCw className="h-8 w-8 text-green-500 animate-spin" />
+                        </div>
+                    ) : watchlist.length === 0 ? (
+                        <div className="p-8 sm:p-12 text-center">
+                            <div className="h-14 w-14 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-4">
+                                <Star className="h-7 w-7 text-amber-500" />
                             </div>
-                            <h3 className="text-lg font-semibold text-gray-900 mb-2">No stocks in your watchlist</h3>
-                            <p className="text-gray-500 mb-6 max-w-sm mx-auto">
-                                Add stocks to your watchlist to track their prices and performance.
+                            <h3 className="text-lg font-semibold text-slate-900 mb-2">No stocks yet</h3>
+                            <p className="text-slate-500 mb-6 max-w-sm mx-auto">
+                                Add stocks to track prices and performance.
                             </p>
                             <button
                                 onClick={() => setShowSearch(true)}
-                                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white font-medium transition"
+                                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-green-600 hover:bg-green-700 text-white font-medium transition"
                             >
                                 <Plus className="h-5 w-5" />
-                                Add Your First Stock
+                                Add your first stock
                             </button>
                         </div>
                     ) : (
-                        <div className="divide-y divide-gray-100">
+                        <div className="divide-y divide-slate-100">
                             {watchlist.map((item) => (
                                 <div
                                     key={item.symbol}
-                                    className="flex items-center justify-between p-4 hover:bg-gray-50 transition"
+                                    className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 sm:px-6 hover:bg-slate-50 transition"
                                 >
-                                    <Link href={`/stock/${item.symbol}`} className="flex-1">
-                                        <div className="font-medium text-gray-900">{item.symbol}</div>
-                                        <div className="text-sm text-gray-500">{item.name}</div>
+                                    <Link href={`/stock/${item.symbol}`} className="flex-1 min-w-0">
+                                        <div className="font-medium text-slate-900">{item.symbol}</div>
+                                        <div className="text-sm text-slate-500 truncate">{item.name || '—'}</div>
                                     </Link>
-                                    <div className="text-right mr-4">
-                                        <div className="font-medium text-gray-900">${item.price.toFixed(2)}</div>
-                                        <div className={`text-sm flex items-center gap-1 ${item.change >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
-                                            {item.change >= 0 ? (
-                                                <TrendingUp className="h-3 w-3" />
-                                            ) : (
-                                                <TrendingDown className="h-3 w-3" />
-                                            )}
-                                            {item.change >= 0 ? '+' : ''}{item.changePercent.toFixed(2)}%
+                                    <div className="flex items-center gap-4 flex-shrink-0">
+                                        <div className="text-right">
+                                            <div className="font-medium text-slate-900">
+                                                ${typeof item.price === 'number' && !isNaN(item.price) ? item.price.toFixed(2) : '—'}
+                                            </div>
+                                            <div
+                                                className={`text-sm flex items-center justify-end gap-1 ${
+                                                    (item.changePercent ?? 0) >= 0 ? 'text-green-600' : 'text-red-600'
+                                                }`}
+                                            >
+                                                {(item.changePercent ?? 0) >= 0 ? (
+                                                    <TrendingUp className="h-3 w-3" />
+                                                ) : (
+                                                    <TrendingDown className="h-3 w-3" />
+                                                )}
+                                                {(item.changePercent ?? 0) >= 0 ? '+' : ''}
+                                                {typeof item.changePercent === 'number' && !isNaN(item.changePercent)
+                                                    ? item.changePercent.toFixed(2)
+                                                    : '—'}
+                                                %
+                                            </div>
                                         </div>
-                                    </div>
-                                    <button
-                                        onClick={() => removeFromWatchlist(item.symbol)}
-                                        className="p-2 hover:bg-red-100 rounded-lg text-gray-400 hover:text-red-600 transition"
-                                    >
-                                        <Trash2 className="h-4 w-4" />
-                                    </button>
+                                        <button
+                                            onClick={() => handleRemove(item.symbol)}
+                                            disabled={removing === item.symbol}
+                                            className="p-2 rounded-lg hover:bg-red-50 text-slate-400 hover:text-red-600 transition disabled:opacity-50"
+                                        >
+                                            {removing === item.symbol ? (
+                                                <RefreshCw className="h-4 w-4 animate-spin" />
+                                            ) : (
+                                                <Trash2 className="h-4 w-4" />
+                                            )}
+                                        </button>
+.                                   </div>
                                 </div>
                             ))}
                         </div>
