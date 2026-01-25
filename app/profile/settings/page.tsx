@@ -15,10 +15,9 @@ import {
     Shield,
     Loader2,
     CheckCircle,
-    ChevronRight
+    ChevronRight,
 } from 'lucide-react';
-
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || '';
+import toast from 'react-hot-toast';
 
 export default function SettingsPage() {
     const { user, isAuthenticated, isLoading: authLoading, updateProfile } = useAuth();
@@ -31,9 +30,7 @@ export default function SettingsPage() {
     const [saved, setSaved] = useState(false);
 
     useEffect(() => {
-        if (!authLoading && !isAuthenticated) {
-            router.push('/login');
-        }
+        if (!authLoading && !isAuthenticated) router.push('/login');
     }, [authLoading, isAuthenticated, router]);
 
     useEffect(() => {
@@ -45,18 +42,17 @@ export default function SettingsPage() {
 
     if (authLoading) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-500"></div>
+            <div className="min-h-screen flex items-center justify-center bg-slate-50">
+                <div className="animate-spin rounded-full h-12 w-12 border-2 border-green-500 border-t-transparent" />
             </div>
         );
     }
 
-    if (!isAuthenticated || !user) {
-        return null;
-    }
+    if (!isAuthenticated || !user) return null;
 
     const handleSaveProfile = async () => {
         setSaving(true);
+        setSaved(false);
         try {
             await updateProfile({
                 firstName,
@@ -64,78 +60,80 @@ export default function SettingsPage() {
                 name: `${firstName} ${lastName}`.trim(),
             });
             setSaved(true);
+            toast.success('Profile updated');
             setTimeout(() => setSaved(false), 3000);
-        } catch (error) {
-            console.error('Failed to save profile:', error);
+        } catch (e) {
+            console.error('Failed to save profile', e);
+            toast.error('Failed to save profile');
         } finally {
             setSaving(false);
         }
     };
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            {/* Header */}
-            <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
-                <div className="container mx-auto px-4 py-4">
-                    <div className="flex items-center gap-4">
+        <div className="min-h-screen bg-slate-50">
+            <div className="bg-gradient-to-br from-green-600 to-emerald-600 pb-8">
+                <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
+                    <div className="flex items-center gap-3">
                         <Link
                             href="/profile"
-                            className="p-2 hover:bg-gray-100 rounded-lg transition"
+                            className="p-2 rounded-lg bg-white/20 hover:bg-white/30 text-white transition"
                         >
-                            <ArrowLeft className="h-5 w-5 text-gray-600" />
+                            <ArrowLeft className="h-5 w-5" />
                         </Link>
-                        <h1 className="text-xl font-bold text-gray-900">Settings</h1>
+                        <h1 className="text-xl sm:text-2xl font-bold text-white">Settings</h1>
                     </div>
                 </div>
             </div>
 
-            <div className="container mx-auto px-4 py-8 max-w-2xl">
-                {/* Profile Section */}
-                <section className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6">
-                    <div className="px-6 py-4 border-b border-gray-100">
+            <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 max-w-2xl">
+                <section className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+                    <div className="px-4 sm:px-6 py-4 border-b border-slate-100">
                         <div className="flex items-center gap-3">
-                            <User className="h-5 w-5 text-gray-400" />
-                            <h2 className="font-semibold text-gray-900">Profile Information</h2>
+                            <User className="h-5 w-5 text-slate-400" />
+                            <h2 className="font-semibold text-slate-900">Profile</h2>
                         </div>
                     </div>
-                    <div className="p-6 space-y-4">
-                        <div className="grid grid-cols-2 gap-4">
+                    <div className="p-4 sm:p-6 space-y-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1.5">First name</label>
+                                <label className="block text-sm font-medium text-slate-700 mb-1.5">First name</label>
                                 <input
                                     type="text"
                                     value={firstName}
                                     onChange={(e) => setFirstName(e.target.value)}
-                                    className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition"
+                                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 outline-none transition"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1.5">Last name</label>
+                                <label className="block text-sm font-medium text-slate-700 mb-1.5">Last name</label>
                                 <input
                                     type="text"
                                     value={lastName}
                                     onChange={(e) => setLastName(e.target.value)}
-                                    className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition"
+                                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 outline-none transition"
                                 />
                             </div>
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1.5">Email address</label>
+                            <label className="block text-sm font-medium text-slate-700 mb-1.5">Email</label>
                             <div className="flex items-center gap-2">
-                                <Mail className="h-5 w-5 text-gray-400" />
-                                <span className="text-gray-600">{user.email}</span>
-                                <span className="px-2 py-0.5 rounded text-xs bg-emerald-100 text-emerald-700">Verified</span>
+                                <Mail className="h-5 w-5 text-slate-400" />
+                                <span className="text-slate-600">{user.email}</span>
+                                <span className="px-2 py-0.5 rounded-lg text-xs bg-green-100 text-green-700 font-medium">
+                                    Verified
+                                </span>
                             </div>
                         </div>
                         <button
                             onClick={handleSaveProfile}
                             disabled={saving}
-                            className="px-6 py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white font-medium transition flex items-center gap-2 disabled:opacity-50"
+                            className="px-6 py-2.5 rounded-xl bg-green-600 hover:bg-green-700 text-white font-medium transition flex items-center gap-2 disabled:opacity-50"
                         >
                             {saving ? (
                                 <>
                                     <Loader2 className="h-4 w-4 animate-spin" />
-                                    Saving...
+                                    Saving…
                                 </>
                             ) : saved ? (
                                 <>
@@ -149,23 +147,22 @@ export default function SettingsPage() {
                     </div>
                 </section>
 
-                {/* Country/Region */}
-                <section className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6">
-                    <div className="px-6 py-4 border-b border-gray-100">
+                <section className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+                    <div className="px-4 sm:px-6 py-4 border-b border-slate-100">
                         <div className="flex items-center gap-3">
-                            <Globe className="h-5 w-5 text-gray-400" />
-                            <h2 className="font-semibold text-gray-900">Country & Region</h2>
+                            <Globe className="h-5 w-5 text-slate-400" />
+                            <h2 className="font-semibold text-slate-900">Country & Region</h2>
                         </div>
                     </div>
-                    <div className="p-6">
-                        <p className="text-sm text-gray-500 mb-4">
-                            Select your country to see country-specific market data, currencies, and localized content.
+                    <div className="p-4 sm:p-6">
+                        <p className="text-sm text-slate-500 mb-4">
+                            Your country is used for market data and localization.
                         </p>
-                        <div className="flex items-center gap-4">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
                             <select
                                 value={country}
                                 onChange={(e) => setCountry(e.target.value)}
-                                className="flex-1 px-4 py-2.5 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition"
+                                className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 outline-none transition"
                             >
                                 {countries.length > 0 ? (
                                     countries.map((c) => (
@@ -182,76 +179,73 @@ export default function SettingsPage() {
                                     </>
                                 )}
                             </select>
-                            <span className="text-xs text-gray-400">
+                            <span className="text-xs text-slate-400 sm:flex-shrink-0">
                                 {source === 'auto' ? 'Auto-detected' : 'Manual'}
                             </span>
                         </div>
                     </div>
                 </section>
 
-                {/* Security */}
-                <section className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6">
-                    <div className="px-6 py-4 border-b border-gray-100">
+                <section className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+                    <div className="px-4 sm:px-6 py-4 border-b border-slate-100">
                         <div className="flex items-center gap-3">
-                            <Shield className="h-5 w-5 text-gray-400" />
-                            <h2 className="font-semibold text-gray-900">Security</h2>
+                            <Shield className="h-5 w-5 text-slate-400" />
+                            <h2 className="font-semibold text-slate-900">Security</h2>
                         </div>
                     </div>
-                    <div className="divide-y divide-gray-100">
+                    <div className="divide-y divide-slate-100">
                         <Link
                             href="/forgot-password"
-                            className="flex items-center justify-between p-6 hover:bg-gray-50 transition"
+                            className="flex items-center justify-between p-4 sm:p-6 hover:bg-slate-50 transition"
                         >
                             <div className="flex items-center gap-4">
-                                <Lock className="h-5 w-5 text-gray-400" />
+                                <Lock className="h-5 w-5 text-slate-400 flex-shrink-0" />
                                 <div>
-                                    <div className="font-medium text-gray-900">Change password</div>
-                                    <div className="text-sm text-gray-500">Update your password regularly for security</div>
+                                    <div className="font-medium text-slate-900">Change password</div>
+                                    <div className="text-sm text-slate-500">Update your password</div>
                                 </div>
                             </div>
-                            <ChevronRight className="h-5 w-5 text-gray-300" />
+                            <ChevronRight className="h-5 w-5 text-slate-300 flex-shrink-0" />
                         </Link>
                     </div>
                 </section>
 
-                {/* Notifications */}
-                <section className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6">
-                    <div className="px-6 py-4 border-b border-gray-100">
+                <section className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+                    <div className="px-4 sm:px-6 py-4 border-b border-slate-100">
                         <div className="flex items-center gap-3">
-                            <Bell className="h-5 w-5 text-gray-400" />
-                            <h2 className="font-semibold text-gray-900">Notifications</h2>
+                            <Bell className="h-5 w-5 text-slate-400" />
+                            <h2 className="font-semibold text-slate-900">Notifications</h2>
                         </div>
                     </div>
-                    <div className="p-6 space-y-4">
-                        <label className="flex items-center justify-between">
-                            <span className="text-gray-700">Email notifications</span>
-                            <input type="checkbox" defaultChecked className="h-5 w-5 rounded text-emerald-500 focus:ring-emerald-500" />
+                    <div className="p-4 sm:p-6 space-y-4">
+                        <label className="flex items-center justify-between gap-4">
+                            <span className="text-slate-700">Email notifications</span>
+                            <input type="checkbox" defaultChecked className="h-5 w-5 rounded text-green-500 focus:ring-green-500" />
                         </label>
-                        <label className="flex items-center justify-between">
-                            <span className="text-gray-700">Price alerts</span>
-                            <input type="checkbox" defaultChecked className="h-5 w-5 rounded text-emerald-500 focus:ring-emerald-500" />
+                        <label className="flex items-center justify-between gap-4">
+                            <span className="text-slate-700">Price alerts</span>
+                            <input type="checkbox" defaultChecked className="h-5 w-5 rounded text-green-500 focus:ring-green-500" />
                         </label>
-                        <label className="flex items-center justify-between">
-                            <span className="text-gray-700">Market news updates</span>
-                            <input type="checkbox" className="h-5 w-5 rounded text-emerald-500 focus:ring-emerald-500" />
+                        <label className="flex items-center justify-between gap-4">
+                            <span className="text-slate-700">Market news</span>
+                            <input type="checkbox" className="h-5 w-5 rounded text-green-500 focus:ring-green-500" />
                         </label>
-                        <label className="flex items-center justify-between">
-                            <span className="text-gray-700">Weekly portfolio summary</span>
-                            <input type="checkbox" defaultChecked className="h-5 w-5 rounded text-emerald-500 focus:ring-emerald-500" />
+                        <label className="flex items-center justify-between gap-4">
+                            <span className="text-slate-700">Weekly portfolio summary</span>
+                            <input type="checkbox" defaultChecked className="h-5 w-5 rounded text-green-500 focus:ring-green-500" />
                         </label>
                     </div>
                 </section>
 
-                {/* Danger Zone */}
-                <section className="bg-white rounded-xl shadow-sm border border-red-100 overflow-hidden">
-                    <div className="px-6 py-4 border-b border-red-100 bg-red-50">
-                        <h2 className="font-semibold text-red-900">Danger Zone</h2>
+                <section className="bg-white rounded-2xl shadow-sm border border-red-200 overflow-hidden">
+                    <div className="px-4 sm:px-6 py-4 border-b border-red-100 bg-red-50">
+                        <h2 className="font-semibold text-red-900">Danger zone</h2>
                     </div>
-                    <div className="p-6">
-                        <p className="text-sm text-gray-500 mb-4">
-                            Once you delete your account, there is no going back. Please be certain.
+                    <div className="p-4 sm:p-6">
+                        <p className="text-sm text-slate-500 mb-4">
+                            Deleting your account is permanent. This cannot be undone.
                         </p>
-                        <button className="px-4 py-2 rounded-lg border border-red-300 text-red-600 hover:bg-red-50 font-medium transition">
+                        <button className="px-4 py-2.5 rounded-xl border border-red-300 text-red-600 hover:bg-red-50 font-medium transition">
                             Delete account
                         </button>
                     </div>

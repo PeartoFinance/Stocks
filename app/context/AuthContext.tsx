@@ -7,7 +7,7 @@
 
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, ReactNode } from 'react';
 // Importing from your new utility pattern
-import { login as apiLogin, register as apiRegister, logout as apiLogout, isAuthenticated as checkAuth, getCurrentUser } from '../utils/auth';
+import { login as apiLogin, register as apiRegister, logout as apiLogout, isAuthenticated as checkAuth, getCurrentUser, getAuthHeaders } from '../utils/auth';
 
 export type Role = 'user' | 'admin' | 'author' | 'reporter' | 'employee' | 'vendor' | string;
 
@@ -111,16 +111,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!user) return;
     setUser(prev => prev ? { ...prev, ...updates } : null);
     try {
-      await fetch(`${API_BASE}/user/profile`, {
+      const res = await fetch(`${API_BASE}/user/profile`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'x-user-email': user.email
+          ...getAuthHeaders(),
         },
         body: JSON.stringify(updates),
       });
-    } catch (err) { console.error("Update failed", err); }
-  }, [user]);
+      if (!res.ok) throw new Error('Update failed');
+      const data = await res.json();
+      if (data?.user) setUser(mapUserData(data.user));
+    } catch (err) { console.error('Profile update failed', err); throw err; }
+  }, [user, mapUserData]);
 
   const value = useMemo(() => ({
     user,
