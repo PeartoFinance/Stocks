@@ -59,6 +59,7 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
   const countryMenuRef = useRef<HTMLDivElement>(null);
 
   const mainAppUrl = process.env.NEXT_PUBLIC_MAIN_APP_URL || 'http://localhost:5173';
+  const authRedirectBase = process.env.NEXT_PUBLIC_AUTH_REDIRECT || 'http://test.pearto.com';
 
   // Handle scroll for secondary navbar hiding
   useEffect(() => {
@@ -291,12 +292,12 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
               {/* Auth buttons */}
               {!isAuthenticated ? (
                 <div className="hidden md:flex items-center gap-2">
-                  <Link href="/login" className="px-3 py-2 text-sm font-medium hover:text-emerald-600 transition">
+                  <a href={`${authRedirectBase}/login?redirect=true`} className="px-3 py-2 text-sm font-medium hover:text-emerald-600 transition">
                     Sign In
-                  </Link>
-                  <Link href="/signup" className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-emerald-600 via-emerald-500 to-cyan-500 rounded-lg shadow hover:shadow-md transition">
+                  </a>
+                  <a href={`${authRedirectBase}/signup?redirect=true`} className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-emerald-600 via-emerald-500 to-cyan-500 rounded-lg shadow hover:shadow-md transition">
                     Sign Up
-                  </Link>
+                  </a>
                 </div>
               ) : (
                 <div className="hidden md:block relative" ref={userMenuRef}>
@@ -573,12 +574,12 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
               <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
                 {!isAuthenticated ? (
                   <div className="flex gap-3">
-                    <Link href="/login" className="flex-1 py-3 text-center rounded-xl border border-gray-200 dark:border-gray-700 font-medium" onClick={() => setMobileMenuOpen(false)}>
+                    <a href={`${authRedirectBase}/login?redirect=true`} className="flex-1 py-3 text-center rounded-xl border border-gray-200 dark:border-gray-700 font-medium" onClick={() => setMobileMenuOpen(false)}>
                       Sign In
-                    </Link>
-                    <Link href="/signup" className="flex-1 py-3 text-center rounded-xl text-white bg-gradient-to-r from-emerald-600 via-emerald-500 to-cyan-500 font-medium" onClick={() => setMobileMenuOpen(false)}>
+                    </a>
+                    <a href={`${authRedirectBase}/signup?redirect=true`} className="flex-1 py-3 text-center rounded-xl text-white bg-gradient-to-r from-emerald-600 via-emerald-500 to-cyan-500 font-medium" onClick={() => setMobileMenuOpen(false)}>
                       Sign Up
-                    </Link>
+                    </a>
                   </div>
                 ) : (
                   <div className="space-y-2">
