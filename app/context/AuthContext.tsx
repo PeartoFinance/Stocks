@@ -98,7 +98,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const handleRegister = useCallback(async (name: string, email: string, password: string) => {
     const firstName = name.split(' ')[0];
     const lastName = name.split(' ').slice(1).join(' ');
-    const response = await apiRegister({name, email, password });
+    const response = await apiRegister({ name, email, password });
     setUser(mapUserData(response.user));
   }, [mapUserData]);
 
