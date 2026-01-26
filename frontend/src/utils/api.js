@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://192.168.1.71:5000/api';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://api.pearto.com/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
