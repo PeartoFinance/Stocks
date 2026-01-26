@@ -138,8 +138,8 @@ export default function ScreenerPage() {
 
   return (
     <div className="min-h-screen">
-      <main className="p-8">
-        <div className="flex flex-col xl:flex-row gap-8">
+      <main className="p-3 sm:p-4 md:p-6 lg:p-8">
+        <div className="flex flex-col xl:flex-row gap-4 sm:gap-6 lg:gap-8">
           {/* Main Content */}
           <div className="flex-1">
             {/* Header */}
@@ -147,12 +147,12 @@ export default function ScreenerPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="mb-8"
+              className="mb-6 sm:mb-8"
             >
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3 sm:mb-4">
                 Stock Screener
               </h1>
-              <p className="text-xl text-gray-600">
+              <p className="text-sm sm:text-base lg:text-xl text-gray-600">
                 Find the best investment opportunities with advanced filtering
               </p>
             </motion.div>
@@ -162,19 +162,19 @@ export default function ScreenerPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 mb-8"
+              className="bg-white rounded-xl p-4 sm:p-6 shadow-lg border border-gray-100 mb-6 sm:mb-8"
             >
-              <div className="flex flex-col lg:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 {/* Search Bar */}
                 <div className="flex-1">
                   <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
                     <input
                       type="text"
-                      placeholder="Search by symbol or company name..."
+                      placeholder="Search by symbol or company..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full pl-10 pr-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                   </div>
                 </div>
@@ -182,19 +182,19 @@ export default function ScreenerPage() {
                 {/* Filter Toggle */}
                 <button
                   onClick={() => setShowFilters(!showFilters)}
-                  className={`px-6 py-3 rounded-lg font-semibold transition-all flex items-center ${showFilters
+                  className={`px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold transition-all flex items-center justify-center text-sm sm:text-base whitespace-nowrap ${showFilters
                     ? 'bg-blue-600 text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                 >
-                  <Filter className="h-5 w-5 mr-2" />
+                  <Filter className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
                   Filters
                 </button>
 
                 {/* Reset Button */}
                 <button
                   onClick={resetFilters}
-                  className="px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all font-semibold"
+                  className="px-4 sm:px-6 py-2.5 sm:py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all font-semibold text-sm sm:text-base whitespace-nowrap"
                 >
                   Reset
                 </button>
@@ -207,9 +207,9 @@ export default function ScreenerPage() {
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="mt-6 pt-6 border-t border-gray-200"
+                  className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-gray-200"
                 >
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                     {/* Price Range */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -314,20 +314,20 @@ export default function ScreenerPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="mb-6"
+              className="mb-4 sm:mb-6"
             >
-              <p className="text-gray-600">
+              <p className="text-sm sm:text-base text-gray-600 px-1">
                 Showing <span className="font-semibold text-gray-900">{filteredStocks.length}</span> of{' '}
                 <span className="font-semibold text-gray-900">{stocks.length}</span> stocks
               </p>
             </motion.div>
 
-            {/* Stock Table */}
+            {/* Stock Table - Desktop */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden"
+              className="hidden lg:block bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden"
             >
               <div className="overflow-x-auto">
                 <table className="w-full">
@@ -466,10 +466,77 @@ export default function ScreenerPage() {
                 </div>
               )}
             </motion.div>
+
+            {/* Stock Cards - Mobile/Tablet */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="lg:hidden space-y-3 sm:space-y-4"
+            >
+              {filteredStocks.length > 0 ? (
+                filteredStocks.map((stock, index) => {
+                  const changeData = formatChange(stock.change, stock.changePercent);
+                  return (
+                    <Link key={stock.symbol} href={`/stock/${stock.symbol}`}>
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3, delay: index * 0.02 }}
+                        className="bg-white rounded-xl p-4 shadow-lg border border-gray-100 hover:shadow-xl transition-all"
+                      >
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-semibold text-blue-600 text-base mb-1">{stock.symbol}</h3>
+                            <p className="text-sm text-gray-900 font-medium line-clamp-1">{stock.name}</p>
+                            <span className="inline-flex px-2 py-1 mt-2 text-xs font-medium bg-gray-100 text-gray-800 rounded-full">
+                              {stock.sector || 'Other'}
+                            </span>
+                          </div>
+                          <div className="text-right ml-3">
+                            <div className="text-lg font-bold text-gray-900">{formatPrice(stock.price)}</div>
+                            <div className={`text-sm font-medium flex items-center justify-end mt-1 ${changeData.isPositive ? 'text-green-600' : 'text-red-600'}`}>
+                              {changeData.isPositive ? (
+                                <TrendingUp className="h-4 w-4 mr-1" />
+                              ) : (
+                                <TrendingDown className="h-4 w-4 mr-1" />
+                              )}
+                              <span>{changeData.value}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-3 gap-3 pt-3 border-t border-gray-100">
+                          <div>
+                            <div className="text-xs text-gray-500">Market Cap</div>
+                            <div className="text-sm font-semibold text-gray-900">{formatNumber(stock.marketCap)}</div>
+                          </div>
+                          <div>
+                            <div className="text-xs text-gray-500">Volume</div>
+                            <div className="text-sm font-semibold text-gray-900">{formatVolume(stock.volume)}</div>
+                          </div>
+                          <div>
+                            <div className="text-xs text-gray-500">P/E Ratio</div>
+                            <div className="text-sm font-semibold text-gray-900">
+                              {stock.peRatio ? stock.peRatio.toFixed(2) : 'N/A'}
+                            </div>
+                          </div>
+                        </div>
+                      </motion.div>
+                    </Link>
+                  );
+                })
+              ) : (
+                <div className="bg-white rounded-xl p-8 text-center shadow-lg border border-gray-100">
+                  <BarChart3 className="h-12 w-12 text-gray-400 mx-auto mb-3" />
+                  <h3 className="text-base font-semibold text-gray-900 mb-2">No stocks found</h3>
+                  <p className="text-sm text-gray-600">Try adjusting your filters or search terms</p>
+                </div>
+              )}
+            </motion.div>
           </div>
 
           {/* AI Analysis Sidebar */}
-          <div className="w-full xl:w-80 flex-shrink-0">
+          <div className="w-full xl:w-80 flex-shrink-0 mt-6 xl:mt-0">
             <div className="xl:sticky xl:top-4">
               <AIAnalysisPanel
                 title="Screener Insights"
