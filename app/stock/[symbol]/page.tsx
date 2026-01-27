@@ -18,7 +18,8 @@ import {
   ChevronDown,
   ChevronUp,
   ExternalLink,
-  Info
+  Info,
+  GitCompare
 } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -156,23 +157,6 @@ export default function StockDetailPage({ params }: PageProps) {
       localStorage.setItem("watchlist", JSON.stringify(watchlist));
       setIsWatchlisted(true);
       toast.success("Added to watchlist");
-    }
-  };
-
-  const handleShare = async () => {
-    if (navigator.share && stock) {
-      try {
-        await navigator.share({
-          title: `${stock.name} (${stock.symbol})`,
-          text: `Check out ${stock.name} stock price: $${stock.price}`,
-          url: window.location.href,
-        });
-      } catch (error) {
-        console.log('Share cancelled');
-      }
-    } else {
-      navigator.clipboard.writeText(window.location.href);
-      toast.success('Link copied to clipboard!');
     }
   };
 
@@ -764,12 +748,13 @@ export default function StockDetailPage({ params }: PageProps) {
               >
                 <Star className="h-5 w-5" fill={isWatchlisted ? 'currentColor' : 'none'} />
               </button>
-              <button
-                onClick={handleShare}
-                className="p-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition"
-              >
-                <Share2 className="h-5 w-5" />
-              </button>
+            <button 
+                onClick={() => window.location.href = `/stock/${stock.symbol}/compare`}
+  className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg transition text-sm font-medium"
+>
+  <GitCompare size={16} />
+  Compare
+</button>
             </div>
           </div>
 
@@ -852,13 +837,13 @@ export default function StockDetailPage({ params }: PageProps) {
                 <Star size={16} fill={isWatchlisted ? 'currentColor' : 'none'} />
                 Watchlist
               </button>
-              <button 
-                onClick={handleShare}
-                className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg transition text-sm font-medium"
-              >
-                <Share2 size={16} />
-                Share
-              </button>
+             <button 
+                onClick={() => window.location.href = `/stock/${stock.symbol}/compare`}
+  className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg transition text-sm font-medium"
+>
+  <GitCompare size={16} />
+  Compare
+</button>
             </div>
           </div>
         </div>
