@@ -8,7 +8,7 @@ import {
   Clock, 
   PieChart, 
   Activity,
-  LucideIcon // 1. Import the correct type
+  LucideIcon
 } from 'lucide-react';
 
 export type TabId = 'overview' | 'financials' | 'forecast' | 'statistics' | 'metrics' | 'dividends' | 'history' | 'profile' | 'news';
@@ -16,7 +16,7 @@ export type TabId = 'overview' | 'financials' | 'forecast' | 'statistics' | 'met
 interface Tab {
   id: TabId;
   label: string;
-  icon: LucideIcon; // 2. Use LucideIcon instead of custom ComponentType
+  icon: LucideIcon;
 }
 
 const tabs: Tab[] = [
@@ -38,28 +38,38 @@ interface StockTabsProps {
 
 export default function StockTabs({ activeTab, onTabChange }: StockTabsProps) {
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-1">
-      <nav className="flex space-x-1 overflow-x-auto scrollbar-hide">
-        {tabs.map((tab) => {
-          const Icon = tab.icon;
-          const isActive = activeTab === tab.id;
-          
-          return (
-            <button
-              key={tab.id}
-              onClick={() => onTabChange(tab.id)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium text-sm whitespace-nowrap transition-all ${
-                isActive
-                  ? 'bg-blue-600 text-white shadow-sm'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
-              }`}
-            >
-              <Icon size={16} />
-              <span>{tab.label}</span>
-            </button>
-          );
-        })}
-      </nav>
+  
+    <div className="sticky top-0 z-20 -mx-4 px-4 sm:mx-0 sm:px-0 bg-gray-50 dark:bg-slate-950 lg:bg-transparent">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-1 shadow-sm">
+        <nav 
+          className="flex space-x-1 overflow-x-auto no-scrollbar scroll-smooth snap-x"
+          style={{ WebkitOverflowScrolling: 'touch' }} // Smooth momentum scroll for iOS
+        >
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            
+            return (
+              <button
+                key={tab.id}
+                onClick={() => onTabChange(tab.id)}
+                // snap-center makes the tab align to middle when scrolled to on mobile
+                className={`flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg font-bold text-xs sm:text-sm whitespace-nowrap transition-all snap-center ${
+                  isActive
+                    ? 'bg-blue-600 text-white shadow-md'
+                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
+                }`}
+              >
+                <Icon size={16} className={isActive ? "animate-pulse" : ""} />
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
+        </nav>
+      </div>
+      
+      {/* Visual Fade Indicator: Shows only on mobile to suggest there is more content to the right */}
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-gray-50 dark:from-slate-950 to-transparent sm:hidden" />
     </div>
   );
 }

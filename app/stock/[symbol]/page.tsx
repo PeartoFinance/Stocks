@@ -50,7 +50,7 @@ export default function StockDetailPage({ params }: PageProps) {
     { key: "line", label: "Line", icon: LineChart },
     { key: "mountain", label: "Mountain", icon: AreaChart },
   ] as const;
-
+  
   // Minute intervals for 1D period
   const minuteIntervals = ["1m", "5m", "15m", "30m", "1h"];
   const [selectedInterval, setSelectedInterval] = useState("1m");
@@ -243,8 +243,8 @@ export default function StockDetailPage({ params }: PageProps) {
                     { label: 'Short Ratio', value: formatNumber(stock.shortRatio) },
                   ].map((item, i) => (
                     <div key={i} className="flex justify-between py-1.5 border-b border-slate-100 dark:border-slate-800 last:border-b-0">
-                      <span className="text-xs text-slate-500 dark:text-slate-400">{item.label}</span>
-                      <span className="text-xs font-medium text-slate-900 dark:text-white">{item.value}</span>
+                      <span className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">{item.label}</span>
+                      <span className="text-xs sm:text-sm font-medium text-slate-900 dark:text-white">{item.value}</span>
                     </div>
                   ))}
                 </div>
@@ -340,7 +340,7 @@ export default function StockDetailPage({ params }: PageProps) {
             </div>
 
             {/* Quick Stats Row - Below Chart */}
-            <div className="grid grid-cols-6 gap-3 mb-5">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 mb-5">
               {[
                 { label: "Open", val: stock.open, color: "blue", Icon: TrendingUp },
                 { label: "High", val: stock.dayHigh || todayData?.high, color: "green", Icon: TrendingUp },
@@ -577,14 +577,14 @@ export default function StockDetailPage({ params }: PageProps) {
               </p>
 
               {/* Price Row */}
-              <div className="flex items-baseline gap-4 mt-3">
-                <span className="text-4xl font-bold text-slate-900 dark:text-white">
+              <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4 mt-3">
+                <span className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">
                   ${formatNumber(stock.price)}
                 </span>
-                <div className={`flex items-center gap-1 text-lg font-semibold ${
+                <div className={`flex items-center gap-1 text-base sm:text-lg font-semibold ${
                   isPositive ? 'text-emerald-600' : 'text-red-500'
                 }`}>
-                  {isPositive ? <TrendingUp size={20} /> : <TrendingDown size={20} />}
+                  {isPositive ? <TrendingUp size={18} className="sm:w-5 sm:h-5" /> : <TrendingDown size={18} className="sm:w-5 sm:h-5" />}
                   <span>
                     {isPositive ? '+' : ''}{formatNumber(stock.change)} ({isPositive ? '+' : ''}{formatNumber(stock.changePercent)}%)
                   </span>

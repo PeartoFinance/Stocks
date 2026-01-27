@@ -64,30 +64,32 @@ export default function DashboardPage() {
         <div className="min-h-screen bg-gray-100">
             {/* Header */}
             <div className="bg-gradient-to-r from-slate-800 to-slate-900">
-                <div className="container mx-auto px-4 py-6">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4">
+                <div className="container mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+                        <div className="flex items-center gap-3 sm:gap-4">
                             <Link
                                 href="/"
-                                className="text-white/60 hover:text-white text-sm flex items-center gap-1"
+                                className="text-white/60 hover:text-white text-xs sm:text-sm flex items-center gap-1"
                             >
-                                <ArrowLeft className="h-4 w-4" />
-                                Back to App
+                                <ArrowLeft className="h-3 w-3 sm:h-4 sm:w-4" />
+                                <span className="hidden sm:inline">Back to App</span>
+                                <span className="sm:hidden">Back</span>
                             </Link>
                         </div>
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-2 sm:gap-4 w-full sm:w-auto">
                             {isAdmin && (
                                 <Link
                                     href="/admin"
-                                    className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white text-sm transition"
+                                    className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white text-xs sm:text-sm transition"
                                 >
-                                    <Shield className="h-4 w-4" />
-                                    Admin Panel
+                                    <Shield className="h-3 w-3 sm:h-4 sm:w-4" />
+                                    <span className="hidden sm:inline">Admin Panel</span>
+                                    <span className="sm:hidden">Admin</span>
                                 </Link>
                             )}
                             <Link
                                 href="/profile"
-                                className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white text-sm transition"
+                                className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white text-xs sm:text-sm transition"
                             >
                                 Profile
                             </Link>
@@ -97,57 +99,57 @@ export default function DashboardPage() {
             </div>
 
             {/* Welcome */}
-            <div className="bg-gradient-to-r from-slate-800 to-slate-900 pb-32">
-                <div className="container mx-auto px-4">
-                    <h1 className="text-3xl font-bold text-white mb-2">Welcome back, {firstName}!</h1>
-                    <p className="text-white/60">Here's what's happening with your business today.</p>
+            <div className="bg-gradient-to-r from-slate-800 to-slate-900 pb-20 sm:pb-24 lg:pb-32">
+                <div className="container mx-auto px-3 sm:px-4 md:px-6">
+                    <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Welcome back, {firstName}!</h1>
+                    <p className="text-sm sm:text-base text-white/60">Here's what's happening with your business today.</p>
                 </div>
             </div>
 
             {/* Content */}
-            <div className="container mx-auto px-4 -mt-24">
+            <div className="container mx-auto px-3 sm:px-4 md:px-6 -mt-16 sm:-mt-20 lg:-mt-24">
                 {/* Stats Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
                     {stats.map((stat) => (
-                        <div key={stat.label} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                            <div className="flex items-center justify-between mb-4">
-                                <div className={`p-3 rounded-xl ${stat.color}`}>
-                                    <stat.icon className="h-6 w-6" />
+                        <div key={stat.label} className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-100">
+                            <div className="flex items-center justify-between mb-3 sm:mb-4">
+                                <div className={`p-2 sm:p-3 rounded-lg sm:rounded-xl ${stat.color}`}>
+                                    <stat.icon className="h-5 w-5 sm:h-6 sm:w-6" />
                                 </div>
-                                <span className="text-sm text-gray-500">{stat.change}</span>
+                                <span className="text-xs sm:text-sm text-gray-500">{stat.change}</span>
                             </div>
-                            <div className="text-2xl font-bold text-gray-900 mb-1">{stat.value}</div>
-                            <div className="text-sm text-gray-500">{stat.label}</div>
+                            <div className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">{stat.value}</div>
+                            <div className="text-xs sm:text-sm text-gray-500">{stat.label}</div>
                         </div>
                     ))}
                 </div>
 
                 {/* Quick Actions */}
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-8">
-                    <div className="px-6 py-4 border-b border-gray-100">
-                        <h2 className="font-semibold text-gray-900">Quick Actions</h2>
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6 sm:mb-8">
+                    <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-100">
+                        <h2 className="font-semibold text-sm sm:text-base text-gray-900">Quick Actions</h2>
                     </div>
-                    <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-gray-100">
+                    <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-y lg:divide-y-0 divide-gray-100">
                         {quickActions.map((action) => (
                             <Link
                                 key={action.href}
                                 href={action.href}
-                                className="flex flex-col items-center justify-center p-8 hover:bg-gray-50 transition"
+                                className="flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8 hover:bg-gray-50 transition min-h-[120px]"
                             >
-                                <action.icon className="h-8 w-8 text-gray-400 mb-3" />
-                                <span className="text-sm font-medium text-gray-700">{action.label}</span>
+                                <action.icon className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-gray-400 mb-2 sm:mb-3" />
+                                <span className="text-xs sm:text-sm font-medium text-gray-700 text-center">{action.label}</span>
                             </Link>
                         ))}
                     </div>
                 </div>
 
                 {/* Notice */}
-                <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 mb-8">
-                    <div className="flex items-start gap-4">
-                        <AlertCircle className="h-6 w-6 text-amber-500 flex-shrink-0 mt-0.5" />
+                <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
+                    <div className="flex items-start gap-3 sm:gap-4">
+                        <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6 text-amber-500 flex-shrink-0 mt-0.5" />
                         <div>
-                            <h3 className="font-semibold text-amber-800 mb-1">Dashboard Setup Required</h3>
-                            <p className="text-sm text-amber-700">
+                            <h3 className="font-semibold text-sm sm:text-base text-amber-800 mb-1">Dashboard Setup Required</h3>
+                            <p className="text-xs sm:text-sm text-amber-700">
                                 Complete your vendor profile and add your first product to start receiving orders.
                                 Visit the Settings page to complete your setup.
                             </p>
@@ -157,15 +159,15 @@ export default function DashboardPage() {
 
                 {/* Recent Activity */}
                 <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div className="px-6 py-4 border-b border-gray-100">
-                        <h2 className="font-semibold text-gray-900">Recent Activity</h2>
+                    <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-100">
+                        <h2 className="font-semibold text-sm sm:text-base text-gray-900">Recent Activity</h2>
                     </div>
-                    <div className="p-12 text-center">
-                        <div className="h-16 w-16 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4">
-                            <BarChart3 className="h-8 w-8 text-gray-400" />
+                    <div className="p-8 sm:p-12 text-center">
+                        <div className="h-12 w-12 sm:h-16 sm:w-16 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                            <BarChart3 className="h-6 w-6 sm:h-8 sm:w-8 text-gray-400" />
                         </div>
-                        <h3 className="text-lg font-semibold text-gray-900 mb-2">No activity yet</h3>
-                        <p className="text-gray-500 max-w-sm mx-auto">
+                        <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">No activity yet</h3>
+                        <p className="text-xs sm:text-sm text-gray-500 max-w-sm mx-auto px-4">
                             Once you start receiving orders and user interactions, they'll appear here.
                         </p>
                     </div>
