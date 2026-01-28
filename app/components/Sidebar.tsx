@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import {
   Home, Star, BarChart3, Calendar, Briefcase,
-  ChevronLeft, ChevronRight, X, Gem, TrendingUp
+  ChevronLeft, ChevronRight, X, Gem, TrendingUp, Bitcoin
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -35,6 +35,7 @@ export default function Sidebar({ isOpenMobile, setIsOpenMobile }: SidebarProps)
     { icon: Home, label: 'Home', href: '/' },
     { icon: Star, label: 'Watchlist', href: '/watchlist' },
     { icon: BarChart3, label: 'Stocks', href: '/stocks' },
+    { icon: Bitcoin, label: 'Crypto', href: '/crypto' },
     { icon: TrendingUp, label: 'Trending', href: '/trending' },
     { icon: Calendar, label: 'IPOs', href: '/ipos' },
     { icon: Briefcase, label: 'ETFs', href: '/etfs' },
