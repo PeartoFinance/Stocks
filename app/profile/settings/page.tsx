@@ -167,7 +167,7 @@ export default function SettingsPage() {
                                 {countries.length > 0 ? (
                                     countries.map((c) => (
                                         <option key={c.code} value={c.code}>
-                                            {c.flag_emoji} {c.name} ({c.code})
+                                            {c.flagEmoji} {c.name} ({c.code})
                                         </option>
                                     ))
                                 ) : (

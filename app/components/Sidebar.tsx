@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import {
   Home, Star, BarChart3, Calendar, Briefcase,
-  ChevronLeft, ChevronRight, X, Gem
+  ChevronLeft, ChevronRight, X, Gem, TrendingUp, Bitcoin
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -35,6 +35,8 @@ export default function Sidebar({ isOpenMobile, setIsOpenMobile }: SidebarProps)
     { icon: Home, label: 'Home', href: '/' },
     { icon: Star, label: 'Watchlist', href: '/watchlist' },
     { icon: BarChart3, label: 'Stocks', href: '/stocks' },
+    { icon: Bitcoin, label: 'Crypto', href: '/crypto' },
+    { icon: TrendingUp, label: 'Trending', href: '/trending' },
     { icon: Calendar, label: 'IPOs', href: '/ipos' },
     { icon: Briefcase, label: 'ETFs', href: '/etfs' },
   ];
@@ -44,7 +46,7 @@ export default function Sidebar({ isOpenMobile, setIsOpenMobile }: SidebarProps)
       {/* Mobile close button */}
       {isMobile && (
         <div className="h-16 flex items-center justify-end px-6 border-b border-gray-100 dark:border-gray-800">
-          <X className="cursor-pointer text-gray-500" onClick={() => setIsOpenMobile(false)} />
+          <X className="w-5 h-5 text-gray-500 hover:text-gray-700 transition-colors duration-200" onClick={() => setIsOpenMobile(false)} />
         </div>
       )}
 
@@ -56,10 +58,10 @@ export default function Sidebar({ isOpenMobile, setIsOpenMobile }: SidebarProps)
               key={item.label}
               href={item.href}
               onClick={() => isMobile && setIsOpenMobile(false)}
-              className={`flex items-center gap-4 p-3 rounded-xl transition-all ${isActive ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-gray-500 hover:bg-gray-50'
+              className={`group flex items-center gap-4 p-3 rounded-xl transition-all duration-200 hover:scale-105 ${isActive ? 'bg-emerald-50 text-emerald-700 font-bold shadow-sm' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700 hover:shadow-md'
                 } ${isCollapsed && !isMobile ? 'justify-center' : ''}`}
             >
-              <item.icon size={22} />
+              <item.icon size={22} className="transition-transform duration-200 group-hover:scale-110" />
               {(!isCollapsed || isMobile) && <span className="text-sm">{item.label}</span>}
             </Link>
           );
@@ -97,7 +99,7 @@ export default function Sidebar({ isOpenMobile, setIsOpenMobile }: SidebarProps)
       >
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="absolute -right-3 top-20 bg-white border border-gray-200 rounded-full p-1 shadow-md z-50 hover:text-emerald-500"
+          className="absolute -right-3 top-20 bg-white border border-gray-200 rounded-full p-1 shadow-md z-50 hover:text-emerald-500 hover:scale-110 transition-all duration-200"
         >
           {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
         </button>
