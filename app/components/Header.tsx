@@ -250,8 +250,7 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                   onClick={() => setCountryMenuOpen(!countryMenuOpen)}
                   className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-sm transition"
                 >
-                  <span className="text-lg">🇳🇵</span>
-                  <span className="text-gray-700 dark:text-gray-300">{country}</span>
+{countries.find(c => c.code === country)?.flagEmoji || '🌐'}                  <span className="text-gray-700 dark:text-gray-300">{country}</span>
                   <ChevronDown size={14} className="text-gray-400" />
                 </button>
 
@@ -264,7 +263,7 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                           onClick={() => { setCountry(c.code); setCountryMenuOpen(false); }}
                           className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition ${country === c.code ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20' : 'text-gray-700 dark:text-gray-300'}`}
                         >
-                          {c.flag_emoji} {c.name}
+                          {c.flagEmoji} {c.name}
                         </button>
                       ))
                     ) : (

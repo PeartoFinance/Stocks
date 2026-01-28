@@ -4,14 +4,15 @@ import React, { createContext, useContext, useState, useEffect, useCallback, Rea
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || '';
 
-interface Country {
+// FIXED: Interface now matches your JSON structure exactly
+export interface Country {
     code: string;
     name: string;
-    native_name?: string;
-    currency_code?: string;
-    currency_symbol?: string;
-    flag_emoji?: string;
-    default_market_index?: string;
+    nativeName?: string | null;
+    currencyCode?: string;
+    currencySymbol?: string;
+    flagEmoji?: string;
+    defaultMarketIndex?: string | null;
 }
 
 interface CountryContextType {
@@ -25,6 +26,7 @@ interface CountryContextType {
     refreshCountries: () => Promise<Country[]>;
 }
 
+// FIXED: Initialized with null and correct Type
 const CountryContext = createContext<CountryContextType | null>(null);
 
 const STORAGE_KEY = 'user_country_override';
@@ -53,12 +55,13 @@ export function CountryProvider({ children }: { children: ReactNode }) {
             const res = await fetch(`${API_BASE}/countries`);
             if (res.ok) {
                 const data = await res.json();
-                const list = Array.isArray(data.countries) ? data.countries : [];
+                // Check if the data is the array itself or inside a 'countries' key
+                const list = Array.isArray(data) ? data : (data.countries || []);
                 setCountries(list);
                 return list;
             }
         } catch (e) {
-            console.error(e);
+            console.error("Failed to fetch countries:", e);
         }
         return [];
     }, []);
@@ -71,7 +74,7 @@ export function CountryProvider({ children }: { children: ReactNode }) {
                 return data.countryCode || DEFAULT_COUNTRY;
             }
         } catch (e) {
-            console.error(e);
+            console.error("Geo-detection failed:", e);
         }
         return DEFAULT_COUNTRY;
     }, []);
@@ -106,7 +109,8 @@ export function CountryProvider({ children }: { children: ReactNode }) {
             localStorage.setItem(STORAGE_KEY, upperCode);
         }
         setSource('manual');
-        const found = countries.find(c => c.code === upperCode);
+        // FIXED: Explicit type for 'c'
+        const found = countries.find((c: Country) => c.code === upperCode);
         setCountryData(found || null);
     }, [countries]);
 
@@ -117,7 +121,8 @@ export function CountryProvider({ children }: { children: ReactNode }) {
         setSource('auto');
         const detected = await detectCountry();
         setCountryState(detected);
-        const found = countries.find(c => c.code === detected);
+        // FIXED: Explicit type for 'c'
+        const found = countries.find((c: Country) => c.code === detected);
         setCountryData(found || null);
     }, [detectCountry, countries]);
 
@@ -139,9 +144,12 @@ export function CountryProvider({ children }: { children: ReactNode }) {
     );
 }
 
+// Named exports for hooks
 export function useCountry() {
     const context = useContext(CountryContext);
-    if (!context) throw new Error('useCountry must be used within a CountryProvider');
+    if (!context) {
+        throw new Error('useCountry must be used within a CountryProvider');
+    }
     return context;
 }
 
@@ -149,5 +157,3 @@ export function useCountryHeader() {
     const { country } = useCountry();
     return { 'X-User-Country': country };
 }
-
-export default CountryContext;
