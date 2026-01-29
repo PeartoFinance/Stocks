@@ -32,6 +32,7 @@ import StockChart from "../../components/StockChart";
 import StockHeader from "../../components/StockHeader";
 import StockOverview from "../../components/StockOverview";
 import AIAnalysisPanel from "../../components/ai/AIAnalysisPanel";
+import VendorsList from "../../components/VendorsList";
 import {
   StockTabs,
   FinancialsTab,
@@ -318,7 +319,7 @@ export default function StockDetailPage({ params }: PageProps) {
               </div>
             </div>
 
-            {/* Desktop Stats + Chart Grid */}
+            {/* Desktop Stats + Chart + Vendors Grid */}
             <div className="hidden lg:grid lg:grid-cols-4 gap-5 mb-5">
               {/* Key Stats - Smaller */}
               <div className="lg:col-span-1 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4">
@@ -346,8 +347,8 @@ export default function StockDetailPage({ params }: PageProps) {
                 </div>
               </div>
 
-              {/* Chart - Desktop */}
-              <div className="lg:col-span-3">
+              {/* Chart - Desktop (Reduced width) */}
+              <div className="lg:col-span-2">
                 <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-5">
                   {/* Chart Controls */}
                   <div className="mb-4 p-3 bg-slate-50/50 rounded-xl border border-slate-100">
@@ -412,6 +413,11 @@ export default function StockDetailPage({ params }: PageProps) {
                     )}
                   </div>
                 </div>
+              </div>
+
+              {/* Vendors List Column */}
+              <div className="lg:col-span-1">
+                <VendorsList limit={8} />
               </div>
             </div>
 
