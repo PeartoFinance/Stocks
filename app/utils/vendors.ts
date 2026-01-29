@@ -168,6 +168,30 @@ export const vendorAPI = {
   },
 
   /**
+   * Get vendor by ID (alias for getVendorDetails)
+   */
+  async getVendorById(vendorId: string): Promise<APIResponse<Vendor>> {
+    return this.getVendorDetails(vendorId);
+  },
+
+  /**
+   * Get vendor reviews (alias for getReviews)
+   */
+  async getVendorReviews(vendorId: string, page: number = 1, limit: number = 50): Promise<APIResponse<VendorReview[]>> {
+    try {
+      const response = await this.getReviews(vendorId, page, limit);
+      return {
+        data: response.data?.reviews || [],
+        success: response.success,
+        timestamp: response.timestamp,
+      };
+    } catch (error) {
+      console.error('[vendorAPI] getVendorReviews error:', error);
+      return { data: [], success: false, timestamp: new Date().toISOString() };
+    }
+  },
+
+  /**
    * Get historical performance metrics for a vendor
    */
   async getHistory(vendorId: string, metric?: string, days: number = 365): Promise<APIResponse<any[]>> {
