@@ -109,23 +109,51 @@ export default function VendorsList({ className = '', limit = 10, category }: Ve
             className="border border-slate-100 dark:border-slate-800 rounded-lg p-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
           >
             {/* Vendor Header */}
-            <div className="flex items-start justify-between mb-2">
-              <div className="flex-1 min-w-0">
-                <h4 className="text-sm font-semibold text-slate-900 dark:text-white truncate">
-                  {vendor.name}
-                </h4>
-                {vendor.category && (
-                  <span className="inline-block px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 rounded-full mt-1">
-                    {vendor.category}
+            <div className="flex items-start gap-3 mb-2">
+              {/* Vendor Logo */}
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+                {vendor.logoUrl ? (
+                  <img 
+                    src={vendor.logoUrl} 
+                    alt={`${vendor.name} logo`}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      // Fallback to initials if image fails to load
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                      const parent = target.parentElement;
+                      if (parent) {
+                        parent.innerHTML = `<span class="text-white text-sm font-bold">${vendor.name.charAt(0).toUpperCase()}</span>`;
+                      }
+                    }}
+                  />
+                ) : (
+                  <span className="text-white text-sm font-bold">
+                    {vendor.name.charAt(0).toUpperCase()}
                   </span>
                 )}
               </div>
-              {vendor.isFeatured && (
-                <div className="flex items-center gap-1 text-xs text-amber-600 dark:text-amber-400">
-                  <TrendingUp className="h-3 w-3" />
-                  <span className="font-medium">Featured</span>
+              
+              <div className="flex-1 min-w-0">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-sm font-semibold text-slate-900 dark:text-white truncate">
+                      {vendor.name}
+                    </h4>
+                    {vendor.category && (
+                      <span className="inline-block px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 rounded-full mt-1">
+                        {vendor.category}
+                      </span>
+                    )}
+                  </div>
+                  {vendor.isFeatured && (
+                    <div className="flex items-center gap-1 text-xs text-amber-600 dark:text-amber-400">
+                      <TrendingUp className="h-3 w-3" />
+                      <span className="font-medium">Featured</span>
+                    </div>
+                  )}
                 </div>
-              )}
+              </div>
             </div>
 
             {/* Rating */}
