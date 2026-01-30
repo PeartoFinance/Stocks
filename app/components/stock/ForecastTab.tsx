@@ -42,7 +42,6 @@ export default function ForecastTab({ symbol, currentPrice }: ForecastTabProps) 
         const data = await marketService.getStockForecast(symbol);
         setForecast(data as AnalystForecast);
       } catch (error) {
-        toast.error("Failed to Fetch data")
         console.error('Failed to load forecast data:', error);
       } finally {
         setLoading(false);

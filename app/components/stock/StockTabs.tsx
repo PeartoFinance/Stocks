@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import React, { useRef, useEffect } from 'react';
 import { 
   BarChart3, 
   TrendingUp, 
@@ -11,7 +13,7 @@ import {
   LucideIcon
 } from 'lucide-react';
 
-export type TabId = 'overview' | 'financials' | 'forecast' | 'statistics' | 'metrics' | 'dividends' | 'history' | 'profile' | 'news';
+export type TabId = 'overview' | 'financials' | 'forecast' | 'statistics' | 'metrics' | 'dividends' | 'chart' | 'history' | 'profile' | 'news';
 
 interface Tab {
   id: TabId;
@@ -26,7 +28,8 @@ const tabs: Tab[] = [
   { id: 'statistics', label: 'Statistics', icon: PieChart },
   { id: 'metrics', label: 'Metrics', icon: Activity },
   { id: 'dividends', label: 'Dividends', icon: TrendingUp },
-  { id: 'history', label: 'History', icon: Clock },
+  { id: 'chart', label: 'Chart', icon: Clock },
+  { id: 'history', label: 'History', icon: Calendar },
   { id: 'profile', label: 'Profile', icon: Building2 },
   { id: 'news', label: 'News', icon: Newspaper },
 ];
@@ -37,36 +40,26 @@ interface StockTabsProps {
 }
 
 export default function StockTabs({ activeTab, onTabChange }: StockTabsProps) {
-  return (
-    <div className="sticky top-0 z-20 -mx-4 px-4 sm:mx-0 sm:px-0 bg-gray-50 dark:bg-slate-950 lg:bg-transparent">
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-2 lg:p-1 shadow-sm">
-        {/* Mobile Grid Layout - 3x3 grid */}
-        <nav className="grid grid-cols-3 gap-2 lg:hidden">
-          {tabs.map((tab) => {
-            const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
-            
-            return (
-              <button
-                key={tab.id}
-                onClick={() => onTabChange(tab.id)}
-                className={`flex flex-col items-center justify-center gap-1 px-2 py-3 rounded-lg font-bold text-xs transition-all ${
-                  isActive
-                    ? 'bg-blue-600 text-white shadow-md'
-                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
-                }`}
-              >
-                <Icon size={16} className={isActive ? "animate-pulse" : ""} />
-                <span className="text-center leading-tight">{tab.label}</span>
-              </button>
-            );
-          })}
-        </nav>
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-        {/* Desktop Horizontal Layout */}
+  // Auto-scroll the active tab into view on mobile
+  useEffect(() => {
+    const activeElement = scrollRef.current?.querySelector(`[data-active="true"]`);
+    if (activeElement) {
+      activeElement.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    }
+  }, [activeTab]);
+
+  return (
+    <div className="sticky top-24 z-30 mb-6">
+      {/* Container with shadow and rounded corners */}
+      <div className="relative bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+        
+        {/* Navigation Wrapper */}
         <nav 
-          className="hidden lg:flex space-x-1 overflow-x-auto no-scrollbar scroll-smooth snap-x"
-          style={{ WebkitOverflowScrolling: 'touch' }} // Smooth momentum scroll for iOS
+          ref={scrollRef}
+          className="flex flex-nowrap items-center gap-1 p-1 overflow-x-auto no-scrollbar scroll-smooth snap-x"
+          style={{ WebkitOverflowScrolling: 'touch' }}
         >
           {tabs.map((tab) => {
             const Icon = tab.icon;
@@ -75,13 +68,15 @@ export default function StockTabs({ activeTab, onTabChange }: StockTabsProps) {
             return (
               <button
                 key={tab.id}
+                data-active={isActive}
                 onClick={() => onTabChange(tab.id)}
-                // snap-center makes the tab align to middle when scrolled to on mobile
-                className={`flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg font-bold text-xs sm:text-sm whitespace-nowrap transition-all snap-center ${
-                  isActive
+                className={`
+                  flex items-center gap-2 px-4 py-2.5 rounded-lg font-bold text-sm whitespace-nowrap transition-all snap-center flex-shrink-0
+                  ${isActive
                     ? 'bg-blue-600 text-white shadow-md'
                     : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
-                }`}
+                  }
+                `}
               >
                 <Icon size={16} className={isActive ? "animate-pulse" : ""} />
                 <span>{tab.label}</span>
@@ -89,10 +84,12 @@ export default function StockTabs({ activeTab, onTabChange }: StockTabsProps) {
             );
           })}
         </nav>
+
+        {/* Notice: No Absolute Gradient Overlays here. 
+            They block pointer-events. Use CSS mask-image if you really want fades, 
+            but for trading apps, clear visibility is better.
+        */}
       </div>
-      
-      {/* Visual Fade Indicator - Only for desktop horizontal scroll */}
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-gray-50 dark:from-slate-950 to-transparent hidden sm:block lg:hidden" />
     </div>
   );
 }

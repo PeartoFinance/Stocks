@@ -34,6 +34,7 @@ import StockOverview from "../../components/StockOverview";
 import AIAnalysisPanel from "../../components/ai/AIAnalysisPanel";
 import VendorsList from "../../components/VendorsList";
 import VendorsListSimple from "../../components/VendorsListSimple";
+import HistoricalDataTable from "../../components/stock/HistoricalDataTable";
 import {
   StockTabs,
   FinancialsTab,
@@ -642,7 +643,7 @@ export default function StockDetailPage({ params }: PageProps) {
       case 'dividends':
         return <DividendsTab symbol={symbol} />;
 
-      case 'history':
+      case 'chart':
         return (
           <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-5">
             <div className="mb-4 lg:mb-6 p-3 lg:p-4 bg-slate-50/50 rounded-xl border border-slate-100">
@@ -695,6 +696,16 @@ export default function StockDetailPage({ params }: PageProps) {
               )}
             </div>
           </div>
+        );
+
+      case 'history':
+        return (
+          <HistoricalDataTable 
+            data={historicalData} 
+            symbol={symbol}
+            onDataUpdate={(newData) => setHistoricalData(newData)}
+            onLoadingChange={(loading) => setChartLoading(loading)}
+          />
         );
 
       case 'profile':
