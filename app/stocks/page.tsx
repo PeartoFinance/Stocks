@@ -152,7 +152,7 @@ export default function StockScreener() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-[1920px] mx-auto px-3 sm:px-4 lg:px-6 xl:px-8 py-4 sm:py-6 lg:py-8">
+      <div className="max-w-[2560px] mx-auto px-3 sm:px-4 lg:px-6 xl:px-8 2xl:px-12 py-4 sm:py-6 lg:py-8">
         
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 mb-4 sm:mb-6 lg:mb-8">
@@ -164,7 +164,7 @@ export default function StockScreener() {
           <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
             <button
               onClick={() => setShowAIPanel(!showAIPanel)}
-              className="lg:hidden flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all shadow-sm flex-1 sm:flex-none text-sm"
+              className="xl:hidden flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all shadow-sm flex-1 sm:flex-none text-sm"
             >
               <Star className="h-4 w-4" />
               <span>AI Insights</span>
@@ -185,61 +185,42 @@ export default function StockScreener() {
           </div>
         </div>
 
-        {/* Main Content */}
-        <div className="w-full">
-          {/* Search Bar */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-3 sm:p-4 mb-4 sm:mb-6">
-            <div className="flex gap-2">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search by symbol or company..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 sm:py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
-                />
+        {/* Main Content - Desktop Flex Layout */}
+        <div className="flex flex-col xl:flex-row gap-6 xl:gap-8">
+          {/* Main Content Area */}
+          <div className="flex-1 min-w-0 xl:max-w-[calc(100%-416px)]">
+            {/* Search Bar */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-3 sm:p-4 mb-4 sm:mb-6">
+              <div className="flex gap-2">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Search by symbol or company..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 sm:py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
+                  />
+                </div>
+                <button
+                  onClick={() => setShowFilters(!showFilters)}
+                  className={`flex items-center gap-2 px-3 sm:px-4 py-2 border rounded-lg transition-colors text-sm sm:text-base whitespace-nowrap ${
+                    showFilters || hasActiveFilters
+                      ? 'bg-blue-50 border-blue-300 text-blue-700'
+                      : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  <Filter className="h-4 w-4" />
+                  <span className="hidden sm:inline">Filters</span>
+                  {hasActiveFilters && (
+                    <span className="bg-blue-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                      {[filters.sector !== 'all', filters.exchange !== 'all', filters.minPrice, filters.maxPrice, filters.minVolume].filter(Boolean).length}
+                    </span>
+                  )}
+                </button>
               </div>
-              <button
-                onClick={() => setShowFilters(!showFilters)}
-                className={`flex items-center gap-2 px-3 sm:px-4 py-2 border rounded-lg transition-colors text-sm sm:text-base whitespace-nowrap ${
-                  showFilters || hasActiveFilters
-                    ? 'bg-blue-50 border-blue-300 text-blue-700'
-                    : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
-                }`}
-              >
-                <Filter className="h-4 w-4" />
-                <span className="hidden sm:inline">Filters</span>
-                {hasActiveFilters && (
-                  <span className="bg-blue-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                    {[filters.sector !== 'all', filters.exchange !== 'all', filters.minPrice, filters.maxPrice, filters.minVolume].filter(Boolean).length}
-                  </span>
-                )}
-              </button>
             </div>
-          </div>
 
-          {/* AI Analysis Panel - Desktop */}
-          <div className="hidden lg:block mb-4 sm:mb-6">
-            <AIAnalysisPanel
-              title="AI Screener Insights"
-              pageType="stock-screener"
-              pageData={{
-                count: filteredStocks.length,
-                filters: {
-                  sector: filters.sector !== 'all' ? filters.sector : null,
-                  exchange: filters.exchange !== 'all' ? filters.exchange : null,
-                  priceRange: filters.minPrice || filters.maxPrice ? `$${filters.minPrice || '0'} - $${filters.maxPrice || '∞'}` : null
-                },
-                topStocks: filteredStocks.slice(0, 5).map(s => ({
-                  symbol: s.symbol, price: s.price, change: s.changePercent
-                }))
-              }}
-              autoAnalyze={!isLoading && filteredStocks.length > 0}
-              quickPrompts={['Best value stocks here', 'High dividend picks', 'Growth opportunities']}
-              maxHeight="400px"
-            />
-          </div>
 
           {/* Collapsible Filters */}
           <AnimatePresence>
@@ -390,13 +371,38 @@ export default function StockScreener() {
               </>
             )}
           </div>
+          </div>
+
+          {/* AI Analysis Panel - Desktop Sidebar */}
+          <div className="hidden xl:block w-96 flex-shrink-0">
+            <div className="sticky top-8">
+              <AIAnalysisPanel
+                title="AI Screener Insights"
+                pageType="stock-screener"
+                pageData={{
+                  count: filteredStocks.length,
+                  filters: {
+                    sector: filters.sector !== 'all' ? filters.sector : null,
+                    exchange: filters.exchange !== 'all' ? filters.exchange : null,
+                    priceRange: filters.minPrice || filters.maxPrice ? `$${filters.minPrice || '0'} - $${filters.maxPrice || '∞'}` : null
+                  },
+                  topStocks: filteredStocks.slice(0, 5).map(s => ({
+                    symbol: s.symbol, price: s.price, change: s.changePercent
+                  }))
+                }}
+                autoAnalyze={!isLoading && filteredStocks.length > 0}
+                quickPrompts={['Best value stocks here', 'High dividend picks', 'Growth opportunities']}
+                maxHeight="calc(100vh - 180px)"
+              />
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Mobile AI Panel */}
       <AnimatePresence>
         {showAIPanel && (
-          <div className="lg:hidden fixed inset-0 z-50 bg-black bg-opacity-50" onClick={() => setShowAIPanel(false)}>
+          <div className="xl:hidden fixed inset-0 z-50 bg-black bg-opacity-50" onClick={() => setShowAIPanel(false)}>
             <motion.div
               initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }}
               className="absolute bottom-0 left-0 right-0 bg-white rounded-t-2xl max-h-[85vh] overflow-hidden"

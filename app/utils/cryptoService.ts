@@ -74,6 +74,23 @@ export const cryptoService = {
   async getTopLosers(limit = 10) {
     return apiRequest(`/crypto/losers?limit=${limit}`);
   },
+
+  async getHistory(symbol: string, period = '1mo', interval = '1d') {
+    const params = new URLSearchParams({ period, interval });
+    return apiRequest<{
+      symbol: string;
+      period: string;
+      interval: string;
+      data: Array<{ 
+        date: string; 
+        open: number; 
+        high: number; 
+        low: number; 
+        close: number; 
+        volume: number 
+      }>;
+    }>(`/crypto/history/${symbol.toUpperCase()}?${params.toString()}`);
+  },
 };
 
 export default cryptoService;

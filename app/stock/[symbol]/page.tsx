@@ -32,6 +32,8 @@ import StockChart from "../../components/StockChart";
 import StockHeader from "../../components/StockHeader";
 import StockOverview from "../../components/StockOverview";
 import AIAnalysisPanel from "../../components/ai/AIAnalysisPanel";
+import VendorsList from "../../components/VendorsList";
+import VendorsListSimple from "../../components/VendorsListSimple";
 import {
   StockTabs,
   FinancialsTab,
@@ -318,14 +320,14 @@ export default function StockDetailPage({ params }: PageProps) {
               </div>
             </div>
 
-            {/* Desktop Stats + Chart Grid */}
-            <div className="hidden lg:grid lg:grid-cols-4 gap-5 mb-5">
+            {/* Desktop Stats + Chart + Vendors Grid */}
+            <div className="hidden lg:grid lg:grid-cols-5 gap-4 mb-5">
               {/* Key Stats - Smaller */}
-              <div className="lg:col-span-1 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4">
-                <h3 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-3">
+              <div className="lg:col-span-1 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-3">
+                <h3 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">
                   Key Statistics
                 </h3>
-                <div className="space-y-2">
+                <div className="space-y-1">
                   {[
                     { label: 'Market Cap', value: formatLargeNumber(stock.marketCap) },
                     { label: 'P/E Ratio', value: formatNumber(stock.peRatio) },
@@ -338,15 +340,15 @@ export default function StockDetailPage({ params }: PageProps) {
                     { label: 'Div Rate', value: stock.dividendRate ? `$${formatNumber(stock.dividendRate)}` : '-' },
                     { label: 'Short Ratio', value: formatNumber(stock.shortRatio) },
                   ].map((item, i) => (
-                    <div key={i} className="flex justify-between py-1.5 border-b border-slate-100 dark:border-slate-800 last:border-b-0">
-                      <span className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">{item.label}</span>
-                      <span className="text-xs sm:text-sm font-medium text-slate-900 dark:text-white">{item.value}</span>
+                    <div key={i} className="flex justify-between py-1 border-b border-slate-100 dark:border-slate-800 last:border-b-0">
+                      <span className="text-xs text-slate-500 dark:text-slate-400">{item.label}</span>
+                      <span className="text-xs font-medium text-slate-900 dark:text-white">{item.value}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Chart - Desktop */}
+              {/* Chart - Desktop (Wider) */}
               <div className="lg:col-span-3">
                 <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-5">
                   {/* Chart Controls */}
@@ -412,6 +414,11 @@ export default function StockDetailPage({ params }: PageProps) {
                     )}
                   </div>
                 </div>
+              </div>
+
+              {/* Vendors List Column */}
+              <div className="lg:col-span-1">
+                <VendorsListSimple limit={8} />
               </div>
             </div>
 
