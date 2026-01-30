@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Search, TrendingUp, TrendingDown, BarChart, List, Activity, Tag, Globe, Users, Clock, DollarSign, Zap, ArrowRight, Star, Bell, Filter, RefreshCw, Eye, Calendar, PieChart, LineChart, Target, Briefcase } from 'lucide-react';
 import Link from 'next/link';
 import { stockAPI } from './utils/api';
+import { marketService, MarketOverviewResponse } from './utils/marketService';
 import AIAnalysisPanel from './components/ai/AIAnalysisPanel';
 
 interface MarketIndex {
@@ -52,11 +53,39 @@ export default function HomePage() {
   const [lastUpdate, setLastUpdate] = useState<string>('');
   const [selectedTab, setSelectedTab] = useState<'gainers' | 'losers' | 'trending'>('gainers');
   const [loading, setLoading] = useState(true);
+  const [marketStats, setMarketStats] = useState<{
+    totalVolume: number;
+    advancers: number;
+    decliners: number;
+    unchanged: number;
+  }>({
+    totalVolume: 0,
+    advancers: 0,
+    decliners: 0,
+    unchanged: 0
+  });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
+        
+        // Fetch market overview with real statistics
+        try {
+          const overviewData: MarketOverviewResponse = await marketService.getMarketOverview();
+          
+          // Set market statistics
+          if (overviewData) {
+            setMarketStats({
+              totalVolume: overviewData.totalVolume || 0,
+              advancers: overviewData.advancers || 0,
+              decliners: overviewData.decliners || 0,
+              unchanged: overviewData.unchanged || 0
+            });
+          }
+        } catch (marketError) {
+          console.error('Error fetching market overview:', marketError);
+        }
         
         // Fetch market overview (indices)
         const overviewRes = await stockAPI.getMarketOverview();
@@ -569,9 +598,13 @@ export default function HomePage() {
                   </div>
                   <span className="text-xs sm:text-sm text-gray-500">24h</span>
                 </div>
-                <div className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">$2.4T</div>
+                <div className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">
+                  {marketStats.totalVolume > 0 ? formatVolume(marketStats.totalVolume) : '—'}
+                </div>
                 <div className="text-xs sm:text-sm text-gray-600 mb-2">Total Market Volume</div>
-                <div className="text-xs sm:text-sm text-green-600 font-medium">+12.3% vs yesterday</div>
+                <div className="text-xs sm:text-sm text-emerald-600 font-medium">
+                  {marketStats.totalVolume > 0 ? 'Live data' : 'Loading...'}
+                </div>
               </div>
 
               <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl border border-gray-200 p-4 sm:p-6">
@@ -581,9 +614,16 @@ export default function HomePage() {
                   </div>
                   <span className="text-xs sm:text-sm text-gray-500">Today</span>
                 </div>
-                <div className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">2,847</div>
+                <div className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">
+                  {marketStats.advancers.toLocaleString()}
+                </div>
                 <div className="text-xs sm:text-sm text-gray-600 mb-2">Advancing Stocks</div>
-                <div className="text-xs sm:text-sm text-green-600 font-medium">68% of all stocks</div>
+                <div className="text-xs sm:text-sm text-green-600 font-medium">
+                  {marketStats.advancers + marketStats.decliners + marketStats.unchanged > 0 
+                    ? `${Math.round((marketStats.advancers / (marketStats.advancers + marketStats.decliners + marketStats.unchanged)) * 100)}% of all stocks`
+                    : 'Loading...'
+                  }
+                </div>
               </div>
 
               <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl border border-gray-200 p-4 sm:p-6">
@@ -593,9 +633,16 @@ export default function HomePage() {
                   </div>
                   <span className="text-xs sm:text-sm text-gray-500">Today</span>
                 </div>
-                <div className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">1,342</div>
+                <div className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">
+                  {marketStats.decliners.toLocaleString()}
+                </div>
                 <div className="text-xs sm:text-sm text-gray-600 mb-2">Declining Stocks</div>
-                <div className="text-xs sm:text-sm text-red-600 font-medium">32% of all stocks</div>
+                <div className="text-xs sm:text-sm text-red-600 font-medium">
+                  {marketStats.advancers + marketStats.decliners + marketStats.unchanged > 0 
+                    ? `${Math.round((marketStats.decliners / (marketStats.advancers + marketStats.decliners + marketStats.unchanged)) * 100)}% of all stocks`
+                    : 'Loading...'
+                  }
+                </div>
               </div>
 
               <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl border border-gray-200 p-4 sm:p-6">
@@ -603,11 +650,18 @@ export default function HomePage() {
                   <div className="w-8 h-8 sm:w-10 sm:h-10 bg-purple-100 rounded-lg sm:rounded-xl flex items-center justify-center">
                     <Activity className="h-4 w-4 sm:h-5 sm:w-5 text-purple-600" />
                   </div>
-                  <span className="text-xs sm:text-sm text-gray-500">VIX</span>
+                  <span className="text-xs sm:text-sm text-gray-500">Today</span>
                 </div>
-                <div className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">18.42</div>
-                <div className="text-xs sm:text-sm text-gray-600 mb-2">Market Volatility</div>
-                <div className="text-xs sm:text-sm text-green-600 font-medium">Low volatility</div>
+                <div className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">
+                  {marketStats.unchanged.toLocaleString()}
+                </div>
+                <div className="text-xs sm:text-sm text-gray-600 mb-2">Unchanged Stocks</div>
+                <div className="text-xs sm:text-sm text-purple-600 font-medium">
+                  {marketStats.advancers + marketStats.decliners + marketStats.unchanged > 0 
+                    ? `${Math.round((marketStats.unchanged / (marketStats.advancers + marketStats.decliners + marketStats.unchanged)) * 100)}% of all stocks`
+                    : 'Loading...'
+                  }
+                </div>
               </div>
             </div>
 

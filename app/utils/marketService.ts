@@ -26,6 +26,57 @@ async function apiRequest<T>(endpoint: string, options?: RequestInit): Promise<T
   return response.json();
 }
 
+// Types for market overview response
+export interface MarketOverviewResponse {
+  indices: Array<{
+    name: string;
+    symbol: string;
+    price: number;
+    change: number;
+    changePercent: number;
+    volume: number;
+    dayHigh?: number;
+    dayLow?: number;
+  }>;
+  topGainers: Array<{
+    symbol: string;
+    name: string;
+    price: number;
+    change: number;
+    changePercent: number;
+    volume?: number;
+    marketCap?: number;
+    peRatio?: number;
+    sector?: string;
+  }>;
+  topLosers: Array<{
+    symbol: string;
+    name: string;
+    price: number;
+    change: number;
+    changePercent: number;
+    volume?: number;
+    marketCap?: number;
+    peRatio?: number;
+    sector?: string;
+  }>;
+  mostActive: Array<{
+    symbol: string;
+    name: string;
+    price: number;
+    change: number;
+    changePercent: number;
+    volume?: number;
+    marketCap?: number;
+    peRatio?: number;
+    sector?: string;
+  }>;
+  advancers: number;
+  decliners: number;
+  unchanged: number;
+  totalVolume: number;
+}
+
 // Market Service
 export const marketService = {
   // --- Core Profile & Search ---
@@ -67,6 +118,10 @@ export const marketService = {
   },
 
   // --- Market Overview (Movers/Active) ---
+  async getMarketOverview(): Promise<MarketOverviewResponse> {
+    return apiRequest('/market/overview');
+  },
+
   async getMovers(type: 'gainers' | 'losers' | 'both' = 'both', limit = 10) {
     return apiRequest(`/stocks/movers?type=${type}&limit=${limit}`);
   },
