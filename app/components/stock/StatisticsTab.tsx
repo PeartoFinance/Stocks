@@ -1,12 +1,73 @@
-import React from 'react';
-import { TrendingUp, TrendingDown, BarChart3, PieChart, Activity } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { TrendingUp, TrendingDown, BarChart3, PieChart, Activity, Loader2 } from 'lucide-react';
 import { Stock } from '../../types';
+import { marketService } from '../../utils/marketService';
+
+interface StatisticsData {
+  symbol: string;
+  marketCap: number | null;
+  peRatio: number | null;
+  forwardPe: number | null;
+  eps: number | null;
+  beta: number | null;
+  dividendYield: number | null;
+  dividendRate: number | null;
+  sharesOutstanding: number | null;
+  floatShares: number | null;
+  bookValue: number | null;
+  priceToBook: number | null;
+  shortRatio: number | null;
+  high52w: number | null;
+  low52w: number | null;
+  avgVolume: number | null;
+}
 
 interface StatisticsTabProps {
   stock: Stock;
 }
 
 export default function StatisticsTab({ stock }: StatisticsTabProps) {
+  const [statistics, setStatistics] = useState<StatisticsData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchStatistics = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await marketService.getStockStatistics(stock.symbol);
+        setStatistics(data as StatisticsData);
+      } catch (err) {
+        console.error('Failed to load statistics:', err);
+        setError('Failed to load statistics data');
+        // Fallback to stock data if API fails
+        setStatistics({
+          symbol: stock.symbol,
+          marketCap: stock.marketCap || null,
+          peRatio: stock.peRatio || null,
+          forwardPe: stock.forwardPe || null,
+          eps: stock.eps || null,
+          beta: stock.beta || null,
+          dividendYield: stock.dividendYield || null,
+          dividendRate: stock.dividendRate || null,
+          sharesOutstanding: stock.sharesOutstanding || null,
+          floatShares: stock.floatShares || null,
+          bookValue: stock.bookValue || null,
+          priceToBook: stock.priceToBook || null,
+          shortRatio: stock.shortRatio || null,
+          high52w: stock.week52High || null,
+          low52w: stock.week52Low || null,
+          avgVolume: stock.avgVolume || null,
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStatistics();
+  }, [stock]);
+
   const formatNumber = (num: number | undefined | null, decimals = 2): string => {
     if (num == null) return '-';
     return num.toLocaleString(undefined, {
@@ -29,18 +90,48 @@ export default function StatisticsTab({ stock }: StatisticsTabProps) {
     return `${(num * 100).toFixed(2)}%`;
   };
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="flex items-center gap-3 text-slate-500">
+          <Loader2 className="h-6 w-6 animate-spin" />
+          <span>Loading statistics...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (error && !statistics) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="text-center text-slate-500">
+          <p className="mb-2">{error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="text-blue-600 hover:text-blue-500 text-sm"
+          >
+            Try again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Use statistics data if available, otherwise fallback to stock data
+  const data = statistics || stock;
+
   const valuationMetrics = [
-    { label: 'Market Cap', value: formatLargeNumber(stock.marketCap), icon: PieChart, color: 'blue' },
-    { label: 'P/E Ratio (TTM)', value: formatNumber(stock.peRatio), icon: BarChart3, color: 'green' },
-    { label: 'EPS (TTM)', value: stock.eps ? `$${formatNumber(stock.eps)}` : '-', icon: TrendingUp, color: 'purple' },
-    { label: 'Beta', value: formatNumber(stock.beta), icon: Activity, color: 'orange' },
+    { label: 'Market Cap', value: formatLargeNumber(data.marketCap), icon: PieChart, color: 'blue' },
+    { label: 'P/E Ratio (TTM)', value: formatNumber(data.peRatio), icon: BarChart3, color: 'green' },
+    { label: 'EPS (TTM)', value: data.eps ? `$${formatNumber(data.eps)}` : '-', icon: TrendingUp, color: 'purple' },
+    { label: 'Beta', value: formatNumber(data.beta), icon: Activity, color: 'orange' },
   ];
 
   const tradingMetrics = [
     { label: 'Volume', value: formatLargeNumber(stock.volume), icon: BarChart3, color: 'blue' },
-    { label: '52W High', value: stock.week52High ? `$${formatNumber(stock.week52High)}` : '-', icon: TrendingUp, color: 'green' },
-    { label: '52W Low', value: stock.week52Low ? `$${formatNumber(stock.week52Low)}` : '-', icon: TrendingDown, color: 'red' },
-    { label: 'Dividend Yield', value: stock.dividendYield ? formatPercent(stock.dividendYield) : '-', icon: PieChart, color: 'purple' },
+    { label: '52W High', value: data.high52w ? `$${formatNumber(data.high52w)}` : '-', icon: TrendingUp, color: 'green' },
+    { label: '52W Low', value: data.low52w ? `$${formatNumber(data.low52w)}` : '-', icon: TrendingDown, color: 'red' },
+    { label: 'Dividend Yield', value: data.dividendYield ? formatPercent(data.dividendYield) : '-', icon: PieChart, color: 'purple' },
   ];
 
   const performanceMetrics = [
@@ -52,13 +143,13 @@ export default function StatisticsTab({ stock }: StatisticsTabProps) {
     },
     { 
       label: 'Distance from 52W High', 
-      value: stock.week52High ? `${(((stock.price - stock.week52High) / stock.week52High) * 100).toFixed(1)}%` : '-',
+      value: data.high52w && stock.price ? `${(((stock.price - data.high52w) / data.high52w) * 100).toFixed(1)}%` : '-',
       icon: TrendingDown,
       color: 'orange'
     },
     { 
       label: 'Distance from 52W Low', 
-      value: stock.week52Low ? `${(((stock.price - stock.week52Low) / stock.week52Low) * 100).toFixed(1)}%` : '-',
+      value: data.low52w && stock.price ? `${(((stock.price - data.low52w) / data.low52w) * 100).toFixed(1)}%` : '-',
       icon: TrendingUp,
       color: 'green'
     },
@@ -126,7 +217,7 @@ export default function StatisticsTab({ stock }: StatisticsTabProps) {
             {[
               { label: 'Sector', value: stock.sector || '-' },
               { label: 'Industry', value: stock.industry || '-' },
-              { label: 'Symbol', value: stock.symbol },
+              { label: 'Symbol', value: data.symbol },
               { label: 'Current Price', value: `$${formatNumber(stock.price)}` },
             ].map((item, i) => (
               <div key={i} className="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800">
@@ -139,10 +230,10 @@ export default function StatisticsTab({ stock }: StatisticsTabProps) {
           <div className="space-y-3">
             <h4 className="font-medium text-slate-700 dark:text-slate-300">Risk Metrics</h4>
             {[
-              { label: 'Beta (5Y Monthly)', value: formatNumber(stock.beta) },
-              { label: 'Volatility', value: stock.beta ? `${(stock.beta * 15).toFixed(1)}%` : '-' },
-              { label: 'Risk Level', value: stock.beta ? (stock.beta > 1.5 ? 'High' : stock.beta > 1 ? 'Medium' : 'Low') : '-' },
-              { label: 'Market Correlation', value: stock.beta ? (stock.beta > 1 ? 'High' : 'Moderate') : '-' },
+              { label: 'Beta (5Y Monthly)', value: formatNumber(data.beta) },
+              { label: 'Volatility', value: data.beta ? `${(data.beta * 15).toFixed(1)}%` : '-' },
+              { label: 'Risk Level', value: data.beta ? (data.beta > 1.5 ? 'High' : data.beta > 1 ? 'Medium' : 'Low') : '-' },
+              { label: 'Market Correlation', value: data.beta ? (data.beta > 1 ? 'High' : 'Moderate') : '-' },
             ].map((item, i) => (
               <div key={i} className="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800">
                 <span className="text-sm text-slate-500 dark:text-slate-400">{item.label}</span>
