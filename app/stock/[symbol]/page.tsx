@@ -866,27 +866,30 @@ export default function StockDetailPage({ params }: PageProps) {
       <div className="lg:hidden px-4 py-4 space-y-4">
         {/* Mobile Tab Navigation */}
         <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-2">
-          <div className="overflow-x-auto scrollbar-hide">
-            <div className="flex gap-2">
-              {[
-                { id: 'overview', label: 'Overview' },
-                { id: 'statistics', label: 'Stats' },
-                { id: 'financials', label: 'Financials' },
-                { id: 'news', label: 'News' },
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id as TabId)}
-                  className={`px-4 py-2 text-sm font-medium rounded-lg whitespace-nowrap transition ${
-                    activeTab === tab.id
-                      ? 'bg-blue-600 text-white'
-                      : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
+          <div className="grid grid-cols-3 gap-2">
+            {[
+              { id: 'overview', label: 'Overview' },
+              { id: 'financials', label: 'Financials' },
+              { id: 'forecast', label: 'Forecast' },
+              { id: 'statistics', label: 'Stats' },
+              { id: 'metrics', label: 'Metrics' },
+              { id: 'dividends', label: 'Dividends' },
+              { id: 'history', label: 'History' },
+              { id: 'profile', label: 'Profile' },
+              { id: 'news', label: 'News' },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id as TabId)}
+                className={`flex flex-col items-center justify-center gap-1 px-2 py-3 rounded-lg font-bold text-xs transition-all ${
+                  activeTab === tab.id
+                    ? 'bg-blue-600 text-white shadow-md'
+                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+                }`}
+              >
+                <span className="text-center leading-tight">{tab.label}</span>
+              </button>
+            ))}
           </div>
         </div>
 

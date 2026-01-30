@@ -1,13 +1,95 @@
-import React from 'react';
-import { Building2, Globe, Users, MapPin, Calendar, ExternalLink } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Building2, Globe, Users, MapPin, Calendar, ExternalLink, Loader2 } from 'lucide-react';
 import { Stock } from '../../types';
+import { marketService } from '../../utils/marketService';
+
+interface ProfileData {
+  symbol: string;
+  name: string;
+  description: string;
+  website: string;
+  sector: string;
+  industry: string;
+  exchange: string;
+  currency: string;
+  assetType: string;
+  countryCode: string;
+  high52w: number | null;
+  low52w: number | null;
+  price: number | null;
+  open: number | null;
+  previousClose: number | null;
+  dayHigh: number | null;
+  dayLow: number | null;
+  volume: number | null;
+  avgVolume: number | null;
+  sharesOutstanding: number | null;
+  floatShares: number | null;
+  shortRatio: number | null;
+  beta: number | null;
+  change: number | null;
+  changePercent: number | null;
+  lastUpdated: string;
+}
 
 interface ProfileTabProps {
   stock: Stock;
 }
 
 export default function ProfileTab({ stock }: ProfileTabProps) {
-  const formatNumber = (num: number): string => {
+  const [profile, setProfile] = useState<ProfileData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await marketService.getStockProfile(stock.symbol);
+        setProfile(data as ProfileData);
+      } catch (err) {
+        console.error('Failed to load profile:', err);
+        setError('Failed to load profile data');
+        // Fallback to stock data if API fails
+        setProfile({
+          symbol: stock.symbol,
+          name: stock.name,
+          description: stock.description || '',
+          website: stock.website || '',
+          sector: stock.sector || '',
+          industry: stock.industry || '',
+          exchange: stock.exchange || '',
+          currency: stock.currency || '',
+          assetType: stock.assetType || 'Stock',
+          countryCode: stock.countryCode || '',
+          high52w: stock.week52High || null,
+          low52w: stock.week52Low || null,
+          price: stock.price || null,
+          open: stock.open || null,
+          previousClose: stock.previousClose || null,
+          dayHigh: stock.dayHigh || null,
+          dayLow: stock.dayLow || null,
+          volume: stock.volume || null,
+          avgVolume: stock.avgVolume || null,
+          sharesOutstanding: stock.sharesOutstanding || null,
+          floatShares: stock.floatShares || null,
+          shortRatio: stock.shortRatio || null,
+          beta: stock.beta || null,
+          change: stock.change || null,
+          changePercent: stock.changePercent || null,
+          lastUpdated: stock.lastUpdated || new Date().toISOString(),
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, [stock]);
+
+  const formatNumber = (num: number | null | undefined): string => {
+    if (num == null) return 'N/A';
     return num.toLocaleString();
   };
 
@@ -20,6 +102,36 @@ export default function ProfileTab({ stock }: ProfileTabProps) {
     return num.toLocaleString();
   };
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="flex items-center gap-3 text-slate-500">
+          <Loader2 className="h-6 w-6 animate-spin" />
+          <span>Loading profile...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (error && !profile) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="text-center text-slate-500">
+          <p className="mb-2">{error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="text-blue-600 hover:text-blue-500 text-sm"
+          >
+            Try again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Use profile data if available, otherwise fallback to stock data
+  const data = profile || stock;
+
   return (
     <div className="space-y-6">
       {/* Company Overview */}
@@ -31,42 +143,42 @@ export default function ProfileTab({ stock }: ProfileTabProps) {
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div>
-            <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-3">About {stock.name}</h4>
+            <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-3">About {data.name}</h4>
             <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-              {stock.description || `${stock.name} is a leading company in the ${stock.sector || 'technology'} sector, operating in the ${stock.industry || 'consumer electronics'} industry.`}
+              {data.description || `${data.name} is a leading company in the ${data.sector || 'technology'} sector, operating in the ${data.industry || 'consumer electronics'} industry.`}
             </p>
             
             <div className="space-y-2">
-              {stock.website && (
+              {data.website && (
                 <div className="flex items-center gap-2 text-sm">
                   <Globe className="h-4 w-4 text-slate-400" />
                   <a 
-                    href={stock.website} 
+                    href={data.website} 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-blue-600 hover:text-blue-500 flex items-center gap-1"
                   >
-                    {stock.website}
+                    {data.website}
                     <ExternalLink className="h-3 w-3" />
                   </a>
                 </div>
               )}
-              {stock.sharesOutstanding && (
+              {data.sharesOutstanding && (
                 <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
                   <Users className="h-4 w-4 text-slate-400" />
-                  {formatLargeNumber(stock.sharesOutstanding)} shares outstanding
+                  {formatLargeNumber(data.sharesOutstanding)} shares outstanding
                 </div>
               )}
-              {stock.floatShares && (
+              {data.floatShares && (
                 <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
                   <Users className="h-4 w-4 text-slate-400" />
-                  {formatLargeNumber(stock.floatShares)} float shares
+                  {formatLargeNumber(data.floatShares)} float shares
                 </div>
               )}
-              {stock.lastUpdated && (
+              {data.lastUpdated && (
                 <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
                   <Calendar className="h-4 w-4 text-slate-400" />
-                  Last updated: {new Date(stock.lastUpdated).toLocaleDateString()}
+                  Last updated: {new Date(data.lastUpdated).toLocaleDateString()}
                 </div>
               )}
             </div>
@@ -76,15 +188,15 @@ export default function ProfileTab({ stock }: ProfileTabProps) {
             <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-3">Company Details</h4>
             <div className="space-y-3">
               {[
-                { label: 'Symbol', value: stock.symbol },
-                { label: 'Sector', value: stock.sector },
-                { label: 'Industry', value: stock.industry },
-                { label: 'Exchange', value: stock.exchange },
-                { label: 'Currency', value: stock.currency },
-                { label: 'Asset Type', value: stock.assetType },
-                { label: 'Country', value: stock.countryCode },
-                { label: '52W High', value: stock.high52w ? `$${stock.high52w.toFixed(2)}` : 'N/A' },
-                { label: '52W Low', value: stock.low52w ? `$${stock.low52w.toFixed(2)}` : 'N/A' },
+                { label: 'Symbol', value: data.symbol },
+                { label: 'Sector', value: data.sector },
+                { label: 'Industry', value: data.industry },
+                { label: 'Exchange', value: data.exchange },
+                { label: 'Currency', value: data.currency },
+                { label: 'Asset Type', value: data.assetType },
+                { label: 'Country', value: data.countryCode },
+                { label: '52W High', value: data.high52w ? `$${data.high52w.toFixed(2)}` : 'N/A' },
+                { label: '52W Low', value: data.low52w ? `$${data.low52w.toFixed(2)}` : 'N/A' },
               ].filter(item => item.value).map((item, i) => (
                 <div key={i} className="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800">
                   <span className="text-sm text-slate-500 dark:text-slate-400">{item.label}</span>
@@ -107,11 +219,11 @@ export default function ProfileTab({ stock }: ProfileTabProps) {
             <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-3">Price Data</h4>
             <div className="space-y-2">
               {[
-                { label: 'Current Price', value: `$${stock.price.toFixed(2)}` },
-                { label: 'Open', value: stock.open ? `$${stock.open.toFixed(2)}` : 'N/A' },
-                { label: 'Previous Close', value: stock.previousClose ? `$${stock.previousClose.toFixed(2)}` : 'N/A' },
-                { label: 'Day High', value: stock.dayHigh ? `$${stock.dayHigh.toFixed(2)}` : 'N/A' },
-                { label: 'Day Low', value: stock.dayLow ? `$${stock.dayLow.toFixed(2)}` : 'N/A' },
+                { label: 'Current Price', value: data.price ? `$${data.price.toFixed(2)}` : 'N/A' },
+                { label: 'Open', value: data.open ? `$${data.open.toFixed(2)}` : 'N/A' },
+                { label: 'Previous Close', value: data.previousClose ? `$${data.previousClose.toFixed(2)}` : 'N/A' },
+                { label: 'Day High', value: data.dayHigh ? `$${data.dayHigh.toFixed(2)}` : 'N/A' },
+                { label: 'Day Low', value: data.dayLow ? `$${data.dayLow.toFixed(2)}` : 'N/A' },
               ].map((item, i) => (
                 <div key={i} className="flex justify-between py-1">
                   <span className="text-sm text-slate-500 dark:text-slate-400">{item.label}</span>
@@ -125,11 +237,11 @@ export default function ProfileTab({ stock }: ProfileTabProps) {
             <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-3">Volume & Shares</h4>
             <div className="space-y-2">
               {[
-                { label: 'Volume', value: formatLargeNumber(stock.volume) },
-                { label: 'Avg Volume', value: formatLargeNumber(stock.avgVolume) },
-                { label: 'Shares Outstanding', value: formatLargeNumber(stock.sharesOutstanding) },
-                { label: 'Float Shares', value: formatLargeNumber(stock.floatShares) },
-                { label: 'Short Ratio', value: stock.shortRatio ? stock.shortRatio.toFixed(2) : 'N/A' },
+                { label: 'Volume', value: formatLargeNumber(data.volume) },
+                { label: 'Avg Volume', value: formatLargeNumber(data.avgVolume) },
+                { label: 'Shares Outstanding', value: formatLargeNumber(data.sharesOutstanding) },
+                { label: 'Float Shares', value: formatLargeNumber(data.floatShares) },
+                { label: 'Short Ratio', value: data.shortRatio ? data.shortRatio.toFixed(2) : 'N/A' },
               ].map((item, i) => (
                 <div key={i} className="flex justify-between py-1">
                   <span className="text-sm text-slate-500 dark:text-slate-400">{item.label}</span>
@@ -143,10 +255,10 @@ export default function ProfileTab({ stock }: ProfileTabProps) {
             <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-3">Risk Metrics</h4>
             <div className="space-y-2">
               {[
-                { label: 'Beta', value: stock.beta ? stock.beta.toFixed(3) : 'N/A' },
-                { label: '52W High', value: stock.high52w ? `$${stock.high52w.toFixed(2)}` : 'N/A' },
-                { label: '52W Low', value: stock.low52w ? `$${stock.low52w.toFixed(2)}` : 'N/A' },
-                { label: 'Change', value: `$${stock.change.toFixed(2)} (${stock.changePercent.toFixed(2)}%)` },
+                { label: 'Beta', value: data.beta ? data.beta.toFixed(3) : 'N/A' },
+                { label: '52W High', value: data.high52w ? `$${data.high52w.toFixed(2)}` : 'N/A' },
+                { label: '52W Low', value: data.low52w ? `$${data.low52w.toFixed(2)}` : 'N/A' },
+                { label: 'Change', value: data.change != null && data.changePercent != null ? `$${data.change.toFixed(2)} (${data.changePercent.toFixed(2)}%)` : 'N/A' },
               ].map((item, i) => (
                 <div key={i} className="flex justify-between py-1">
                   <span className="text-sm text-slate-500 dark:text-slate-400">{item.label}</span>
@@ -167,9 +279,9 @@ export default function ProfileTab({ stock }: ProfileTabProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-3">Company Links</h4>
-            {stock.website ? (
+            {data.website ? (
               <div className="space-y-2">
-                <a href={stock.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-500 flex items-center gap-2">
+                <a href={data.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-500 flex items-center gap-2">
                   <Globe className="h-4 w-4" />
                   Company Website
                   <ExternalLink className="h-3 w-3" />
@@ -183,10 +295,10 @@ export default function ProfileTab({ stock }: ProfileTabProps) {
           <div>
             <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-3">Data Information</h4>
             <div className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
-              <p>Asset Type: {stock.assetType || 'Stock'}</p>
-              <p>Country: {stock.countryCode || 'N/A'}</p>
-              {stock.lastUpdated && (
-                <p>Last Updated: {new Date(stock.lastUpdated).toLocaleString()}</p>
+              <p>Asset Type: {data.assetType || 'Stock'}</p>
+              <p>Country: {data.countryCode || 'N/A'}</p>
+              {data.lastUpdated && (
+                <p>Last Updated: {new Date(data.lastUpdated).toLocaleString()}</p>
               )}
             </div>
           </div>

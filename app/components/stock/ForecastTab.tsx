@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TrendingUp, TrendingDown, Target, Users, Calendar, Loader2 } from 'lucide-react';
 import { marketService } from '../../utils/marketService';
+import toast from 'react-hot-toast';
 
 interface AnalystRecommendation {
   firm: string;
@@ -41,6 +42,7 @@ export default function ForecastTab({ symbol, currentPrice }: ForecastTabProps) 
         const data = await marketService.getStockForecast(symbol);
         setForecast(data as AnalystForecast);
       } catch (error) {
+        toast.error("Failed to Fetch data")
         console.error('Failed to load forecast data:', error);
       } finally {
         setLoading(false);
