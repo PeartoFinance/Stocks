@@ -3,12 +3,12 @@
  * Matches frontend-Pearto-new API structure
  */
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://api.pearto.com/api';
 
 // Helper to make API requests
 async function apiRequest<T>(endpoint: string, options?: RequestInit): Promise<T> {
   const url = `${API_BASE}${endpoint}`;
-  
+
   const response = await fetch(url, {
     ...options,
     headers: {
@@ -144,7 +144,7 @@ export const newsService = {
     if (options?.limit) params.set('limit', String(options.limit));
     if (options?.offset) params.set('offset', String(options.offset));
     if (options?.category) params.set('category', options.category);
-    
+
     return apiRequest(`/news/published?${params.toString()}`);
   },
 };

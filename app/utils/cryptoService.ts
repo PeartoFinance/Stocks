@@ -3,12 +3,12 @@
  * Matches frontend-Pearto-new API structure for Cryptocurrency
  */
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://api.pearto.com/api';
 
 // Helper to make API requests (Matches your existing utility)
 async function apiRequest<T>(endpoint: string, options?: RequestInit): Promise<T> {
   const url = `${API_BASE}${endpoint}`;
-  
+
   const response = await fetch(url, {
     ...options,
     headers: {
@@ -35,7 +35,7 @@ export const cryptoService = {
     if (options?.limit) params.set('limit', String(options.limit));
     if (options?.page) params.set('page', String(options.page));
     if (options?.sort) params.set('sort', options.sort);
-    
+
     return apiRequest(`/crypto/markets?${params.toString()}`);
   },
 
@@ -81,13 +81,13 @@ export const cryptoService = {
       symbol: string;
       period: string;
       interval: string;
-      data: Array<{ 
-        date: string; 
-        open: number; 
-        high: number; 
-        low: number; 
-        close: number; 
-        volume: number 
+      data: Array<{
+        date: string;
+        open: number;
+        high: number;
+        low: number;
+        close: number;
+        volume: number
       }>;
     }>(`/crypto/history/${symbol.toUpperCase()}?${params.toString()}`);
   },

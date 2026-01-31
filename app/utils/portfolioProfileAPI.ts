@@ -2,7 +2,7 @@
 
 import { authenticatedFetch } from './auth';
 
-const RAW = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const RAW = process.env.NEXT_PUBLIC_API_URL || 'https://api.pearto.com/api';
 const API_BASE = RAW.replace(/\/$/, '');
 
 export interface Holding {
