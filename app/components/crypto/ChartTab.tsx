@@ -45,7 +45,12 @@ export default function ChartTab({
 }: ChartTabProps) {
   const [showVolume, setShowVolume] = useState(true);
 
-  const formatPrice = (price: number) => {
+  const formatPrice = (price: number | null | undefined) => {
+    // Check if price is a valid number
+    if (price === null || price === undefined || isNaN(price)) {
+      return '---';
+    }
+    
     if (price >= 1) {
       return `$${price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     } else {
@@ -53,7 +58,10 @@ export default function ChartTab({
     }
   };
 
-  const formatNumber = (num: number, decimals = 2): string => {
+  const formatNumber = (num: number | null | undefined, decimals = 2): string => {
+    if (num === null || num === undefined || isNaN(num)) {
+      return '0.00';
+    }
     return num.toLocaleString(undefined, {
       minimumFractionDigits: decimals,
       maximumFractionDigits: decimals
