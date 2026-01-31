@@ -4,16 +4,14 @@ import React, { useRef, useEffect } from 'react';
 import { 
   BarChart3, 
   TrendingUp, 
+  PieChart, 
+  Clock, 
   Calendar, 
   Building2, 
-  Newspaper, 
-  Clock, 
-  PieChart, 
-  Activity,
   LucideIcon
 } from 'lucide-react';
 
-export type TabId = 'overview' | 'financials' | 'forecast' | 'statistics' | 'metrics' | 'dividends' | 'chart' | 'history' | 'profile' | 'news';
+export type TabId = 'overview' | 'statistics' | 'chart' | 'history' | 'profile';
 
 interface Tab {
   id: TabId;
@@ -23,23 +21,18 @@ interface Tab {
 
 const tabs: Tab[] = [
   { id: 'overview', label: 'Overview', icon: BarChart3 },
-  { id: 'financials', label: 'Financials', icon: TrendingUp },
-  { id: 'forecast', label: 'Forecast', icon: Calendar },
   { id: 'statistics', label: 'Statistics', icon: PieChart },
-  { id: 'metrics', label: 'Metrics', icon: Activity },
-  { id: 'dividends', label: 'Dividends', icon: TrendingUp },
   { id: 'chart', label: 'Chart', icon: Clock },
   { id: 'history', label: 'History', icon: Calendar },
   { id: 'profile', label: 'Profile', icon: Building2 },
-  { id: 'news', label: 'News', icon: Newspaper },
 ];
 
-interface StockTabsProps {
+interface CryptoTabsProps {
   activeTab: TabId;
   onTabChange: (tab: TabId) => void;
 }
 
-export default function StockTabs({ activeTab, onTabChange }: StockTabsProps) {
+export default function CryptoTabs({ activeTab, onTabChange }: CryptoTabsProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -75,7 +68,7 @@ export default function StockTabs({ activeTab, onTabChange }: StockTabsProps) {
                   /* DESKTOP (lg): natural width, horizontal row */
                   lg:w-auto lg:flex-row lg:px-4 lg:py-2.5 lg:gap-2
                   ${isActive
-                    ? 'bg-blue-600 text-white shadow-md'
+                    ? 'bg-emerald-600 text-white shadow-md'
                     : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
                   }
                   rounded-lg font-bold

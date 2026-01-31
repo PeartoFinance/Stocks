@@ -2,35 +2,32 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   TrendingUp,
   TrendingDown,
-  DollarSign,
-  Activity,
-  Globe,
-  BarChart3,
-  ArrowUpRight,
-  ArrowDownRight,
   ArrowLeft,
   Star,
-  Share2,
-  RefreshCw,
-  Clock,
-  Volume2,
-  Hash,
-  Target,
-  Zap,
-  Shield,
-  Eye,
-  Heart,
-  ExternalLink
+  Activity,
+  BarChart3,
+  X
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import cryptoService from '@/app/utils/cryptoService';
 import AIAnalysisPanel from '@/app/components/ai/AIAnalysisPanel';
 import StockChart from '@/app/components/StockChart';
 import { HistoricalData as StockHistoricalData } from '@/app/types';
+
+// Import crypto tab components
+import {
+  CryptoTabs,
+  OverviewTab,
+  StatisticsTab,
+  ChartTab,
+  HistoryTab,
+  ProfileTab,
+  type TabId
+} from '@/app/components/crypto';
 
 type ChartType = 'area' | 'candlestick' | 'line' | 'mountain';
 
@@ -59,6 +56,8 @@ interface CryptoDetails {
   countryCode: string;
   isFeatured: boolean;
   isListed: boolean;
+  circulatingSupply?: number;
+  maxSupply?: number;
 }
 
 interface HistoricalData {
@@ -77,11 +76,12 @@ export default function CryptoDetailPage() {
   const [historicalData, setHistoricalData] = useState<StockHistoricalData[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [activeTab, setActiveTab] = useState<'overview' | 'markets' | 'analytics'>('overview');
+  const [activeTab, setActiveTab] = useState<TabId>('overview');
   const [isFavorited, setIsFavorited] = useState(false);
   const [chartPeriod, setChartPeriod] = useState('1M');
   const [chartType, setChartType] = useState<ChartType>('area');
   const [chartLoading, setChartLoading] = useState(false);
+  const [showAIPanel, setShowAIPanel] = useState(false);
 
   useEffect(() => {
     const fetchCryptoDetails = async () => {
@@ -207,582 +207,306 @@ export default function CryptoDetailPage() {
     }
   };
 
-  const formatMarketCap = (marketCap: number | undefined | null) => {
-    if (!marketCap || isNaN(marketCap)) return '$0';
-    if (marketCap >= 1e12) return `$${(marketCap / 1e12).toFixed(2)}T`;
-    if (marketCap >= 1e9) return `$${(marketCap / 1e9).toFixed(2)}B`;
-    if (marketCap >= 1e6) return `$${(marketCap / 1e6).toFixed(2)}M`;
-    return `$${marketCap.toLocaleString()}`;
+  const formatNumber = (num: number | undefined | null, decimals = 2): string => {
+    if (num == null) return '-';
+    return num.toLocaleString(undefined, {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals
+    });
   };
 
-  const formatVolume = (volume: number | undefined | null) => {
-    if (!volume || isNaN(volume)) return '$0';
-    if (volume >= 1e9) return `$${(volume / 1e9).toFixed(2)}B`;
-    if (volume >= 1e6) return `$${(volume / 1e6).toFixed(2)}M`;
-    return `$${volume.toLocaleString()}`;
+  const formatChange = (change: number, percent: number) =>
+    `${change >= 0 ? "+" : ""}${change.toFixed(2)} (${percent >= 0 ? "+" : ""}${percent.toFixed(2)}%)`;
+
+  const toggleWatchlist = () => {
+    if (!crypto) return;
+    const watchlist = JSON.parse(localStorage.getItem("cryptoWatchlist") || "[]");
+    if (isFavorited) {
+      const newWatchlist = watchlist.filter((item: CryptoDetails) => item.symbol !== crypto.symbol);
+      localStorage.setItem("cryptoWatchlist", JSON.stringify(newWatchlist));
+      setIsFavorited(false);
+      toast.success("Removed from watchlist");
+    } else {
+      watchlist.push(crypto);
+      localStorage.setItem("cryptoWatchlist", JSON.stringify(watchlist));
+      setIsFavorited(true);
+      toast.success("Added to watchlist");
+    }
   };
 
-  const formatSupply = (supply: number | undefined | null) => {
-    if (!supply || isNaN(supply)) return '0';
-    if (supply >= 1e9) return `${(supply / 1e9).toFixed(2)}B`;
-    if (supply >= 1e6) return `${(supply / 1e6).toFixed(2)}M`;
-    if (supply >= 1e3) return `${(supply / 1e3).toFixed(2)}K`;
-    return supply.toLocaleString();
+  // Render tab content
+  const renderTabContent = () => {
+    if (!crypto) return null;
+
+    switch (activeTab) {
+      case 'overview':
+        return (
+          <OverviewTab
+            crypto={crypto}
+            historicalData={historicalData.map(item => ({
+              time: item.date,
+              price: item.close,
+              volume: item.volume,
+              marketCap: crypto.marketCap
+            }))}
+            chartPeriod={chartPeriod}
+            chartType={chartType}
+            onPeriodChange={handlePeriodChange}
+            onChartTypeChange={setChartType}
+            chartLoading={chartLoading}
+          />
+        );
+
+      case 'statistics':
+        return <StatisticsTab crypto={crypto} />;
+
+      case 'chart':
+        return (
+          <ChartTab
+            crypto={crypto}
+            historicalData={historicalData.map(item => ({
+              time: item.date,
+              price: item.close,
+              volume: item.volume,
+              marketCap: crypto.marketCap
+            }))}
+            chartPeriod={chartPeriod}
+            chartType={chartType}
+            onPeriodChange={handlePeriodChange}
+            onChartTypeChange={setChartType}
+            chartLoading={chartLoading}
+          />
+        );
+
+      case 'history':
+        return (
+          <HistoryTab
+            crypto={crypto}
+            historicalData={historicalData.map(item => ({
+              time: item.date,
+              price: item.close,
+              volume: item.volume,
+              marketCap: crypto.marketCap
+            }))}
+          />
+        );
+
+      case 'profile':
+        return <ProfileTab crypto={crypto} />;
+
+      default:
+        return null;
+    }
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-emerald-600"></div>
+      <div className="min-h-screen p-4 lg:p-8 flex items-center justify-center bg-gray-50 dark:bg-slate-900">
+        <div className="text-center">
+          <Activity className="h-12 w-12 text-emerald-600 animate-spin mx-auto mb-4" />
+          <p className="text-slate-500">Loading cryptocurrency data...</p>
+        </div>
       </div>
     );
   }
 
   if (!crypto) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 flex items-center justify-center">
+      <div className="min-h-screen p-4 lg:p-8 flex items-center justify-center bg-gray-50 dark:bg-slate-900">
         <div className="text-center">
-          <div className="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-            <TrendingUp className="h-8 w-8 text-gray-400" />
-          </div>
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Cryptocurrency Not Found</h2>
-          <p className="text-gray-600 mb-4">The cryptocurrency you're looking for doesn't exist.</p>
+          <h1 className="text-xl lg:text-2xl font-bold text-slate-900 dark:text-white mb-2">Cryptocurrency Not Found</h1>
+          <p className="text-slate-500 dark:text-slate-400 mb-4">The symbol "{symbol}" could not be found.</p>
           <button
             onClick={() => router.push('/crypto')}
-            className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
+            className="text-emerald-600 hover:text-emerald-500"
           >
-            Back to Crypto Markets
+            ← Back to Cryptocurrencies
           </button>
         </div>
       </div>
     );
   }
 
+  const isPositive = crypto.change >= 0;
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        
-        {/* Header */}
-        <div className="mb-6 sm:mb-8">
-          <button
-            onClick={() => router.back()}
-            className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4 transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back
-          </button>
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
+      {/* Mobile Header - Sticky */}
+      <div className="lg:hidden sticky top-0 z-30 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700">
+        <div className="px-4 py-3">
+          <div className="flex items-center justify-between mb-3">
+            <button onClick={() => router.push('/crypto')} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition">
+              <ArrowLeft className="h-5 w-5 text-slate-600 dark:text-slate-400" />
+            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={toggleWatchlist}
+                className={`p-2 rounded-lg transition ${
+                  isFavorited 
+                    ? 'bg-emerald-600 text-white' 
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                }`}
+              >
+                <Star className="h-5 w-5" fill={isFavorited ? 'currentColor' : 'none'} />
+              </button>
+            </div>
+          </div>
 
-          <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 p-6 sm:p-8">
-            <div className="flex flex-col lg:flex-row gap-6">
-              {/* Crypto Logo and Basic Info */}
-              <div className="flex items-center gap-4">
-                <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center">
-                  <span className="text-white text-2xl font-bold">
-                    {crypto.symbol.substring(0, 2).toUpperCase()}
-                  </span>
-                </div>
-                
-                <div className="flex-1">
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-                        {crypto.name}
-                      </h1>
-                      <div className="flex items-center gap-4 flex-wrap">
-                        <span className="text-lg font-medium text-gray-600 uppercase">
-                          {crypto.symbol}
-                        </span>
-                        <span className="px-3 py-1 text-sm font-medium bg-emerald-100 text-emerald-800 rounded-full">
-                          {crypto.assetType === 'crypto' ? 'Cryptocurrency' : 'Asset'}
-                        </span>
-                        {crypto.isFeatured && (
-                          <span className="px-3 py-1 text-sm font-medium bg-amber-100 text-amber-800 rounded-full">
-                            Featured
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => setIsFavorited(!isFavorited)}
-                        className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-                      >
-                        <Heart className={`h-5 w-5 ${isFavorited ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
-                      </button>
-                      <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors">
-                        <Share2 className="h-5 w-5 text-gray-400" />
-                      </button>
-                      <button
-                        onClick={handleRefresh}
-                        className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-                        disabled={refreshing}
-                      >
-                        <RefreshCw className={`h-5 w-5 ${refreshing ? 'animate-spin' : ''} text-gray-400`} />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Price and Market Data */}
-              <div className="flex flex-col sm:flex-row gap-4 lg:ml-auto">
-                <div className="text-center sm:text-right">
-                  <p className="text-sm text-gray-600 mb-1">Current Price</p>
-                  <p className="text-2xl sm:text-3xl font-bold text-gray-900">{formatPrice(crypto.price)}</p>
-                  <div className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium mt-2 ${(crypto.changePercent || 0) >= 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                    {(crypto.changePercent || 0) >= 0 ? (
-                      <ArrowUpRight className="h-3 w-3 mr-1" />
-                    ) : (
-                      <ArrowDownRight className="h-3 w-3 mr-1" />
-                    )}
-                    {Math.abs(crypto.changePercent || 0).toFixed(2)}%
-                  </div>
-                </div>
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <h1 className="text-lg font-bold text-slate-900 dark:text-white">{crypto.symbol}</h1>
+              <span className="text-sm text-slate-500 dark:text-slate-400">{crypto.assetType}</span>
+            </div>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">{crypto.name}</p>
+            
+            <div className="flex items-baseline gap-3">
+              <span className="text-2xl font-bold text-slate-900 dark:text-white">
+                {formatPrice(crypto.price)}
+              </span>
+              <div className={`flex items-center gap-1 text-sm font-semibold ${
+                isPositive ? 'text-emerald-600' : 'text-red-500'
+              }`}>
+                {isPositive ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
+                <span>
+                  {isPositive ? '+' : ''}{formatNumber(crypto.change)} ({isPositive ? '+' : ''}{formatNumber(crypto.changePercent)}%)
+                </span>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Tabs */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 mb-6">
-          <div className="flex border-b border-gray-200 overflow-x-auto">
-            {[
-              { id: 'overview', label: 'Overview', icon: BarChart3 },
-              { id: 'markets', label: 'Markets', icon: Activity },
-              { id: 'analytics', label: 'Analytics', icon: TrendingUp },
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-2 px-4 sm:px-6 py-3 font-medium transition-colors whitespace-nowrap ${
-                  activeTab === tab.id
-                    ? 'text-emerald-600 border-b-2 border-emerald-600 bg-emerald-50'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+      {/* Desktop Layout */}
+      <div className="hidden lg:block p-4 lg:p-6 space-y-5 w-full max-w-7xl mx-auto">
+        {/* Back Button */}
+        <button
+          onClick={() => router.push('/crypto')}
+          className="inline-flex items-center gap-2 text-slate-500 hover:text-emerald-600 transition-colors text-sm"
+        >
+          <ArrowLeft size={16} />
+          <span>Back to Cryptocurrencies</span>
+        </button>
+
+        {/* Company Header */}
+        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-5">
+          <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+            {/* Left: Company Info */}
+            <div>
+              <h1 className="text-2xl lg:text-3xl font-bold text-slate-900 dark:text-white">
+                {crypto.name} ({crypto.symbol})
+              </h1>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                {crypto.assetType} · Real-Time Price · {crypto.currency}
+              </p>
+
+              {/* Price Row */}
+              <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4 mt-3">
+                <span className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">
+                  {formatPrice(crypto.price)}
+                </span>
+                <div className={`flex items-center gap-1 text-base sm:text-lg font-semibold ${
+                  isPositive ? 'text-emerald-600' : 'text-red-500'
+                }`}>
+                  {isPositive ? <TrendingUp size={18} className="sm:w-5 sm:h-5" /> : <TrendingDown size={18} className="sm:w-5 sm:h-5" />}
+                  <span>
+                    {isPositive ? '+' : ''}{formatNumber(crypto.change)} ({isPositive ? '+' : ''}{formatNumber(crypto.changePercent)}%)
+                  </span>
+                </div>
+              </div>
+              <p className="text-xs text-slate-400 mt-1">
+                Last updated: Just now
+              </p>
+            </div>
+
+            {/* Right: Action Buttons */}
+            <div className="flex gap-2">
+              <button 
+                onClick={toggleWatchlist}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition text-sm font-medium ${
+                  isFavorited 
+                    ? 'bg-emerald-600 hover:bg-emerald-700 text-white' 
+                    : 'bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300'
                 }`}
               >
-                <tab.icon className="h-4 w-4" />
-                <span className="hidden sm:inline">{tab.label}</span>
-                <span className="sm:hidden">{tab.label.charAt(0)}</span>
+                <Star size={16} fill={isFavorited ? 'currentColor' : 'none'} />
+                Watchlist
               </button>
-            ))}
+            </div>
           </div>
         </div>
 
+        {/* Tab Navigation */}
+        <CryptoTabs activeTab={activeTab} onTabChange={setActiveTab} />
+
         {/* Tab Content */}
-        <div className="space-y-6">
-          {activeTab === 'overview' && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
-              {/* Mobile Key Stats */}
-              <div className="lg:hidden mb-6">
-                <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 p-4">
-                  <h3 className="text-sm font-semibold text-gray-900 mb-4">Key Statistics</h3>
-                  <div className="grid grid-cols-2 gap-3">
-                    {[
-                      { label: 'Market Cap', value: formatMarketCap(crypto.marketCap) },
-                      { label: '24h Volume', value: formatVolume(crypto.volume) },
-                      { label: 'Change %', value: `${(crypto.changePercent || 0).toFixed(2)}%` },
-                      { label: 'Day High', value: crypto.dayHigh ? formatPrice(crypto.dayHigh) : '-' },
-                      { label: 'Day Low', value: crypto.dayLow ? formatPrice(crypto.dayLow) : '-' },
-                      { label: '52W High', value: crypto.high52w ? formatPrice(crypto.high52w) : '-' },
-                      { label: '52W Low', value: crypto.low52w ? formatPrice(crypto.low52w) : '-' },
-                      { label: 'Currency', value: crypto.currency },
-                    ].map((item, i) => (
-                      <div key={i} className="bg-gray-50 rounded-lg p-3">
-                        <p className="text-xs text-gray-600 mb-1">{item.label}</p>
-                        <p className="text-sm font-semibold text-gray-900 truncate">{item.value}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Desktop Stats + Chart Grid */}
-              <div className="hidden lg:grid lg:grid-cols-5 gap-4 mb-5">
-                {/* Key Stats - Smaller */}
-                <div className="lg:col-span-1 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-3">
-                  <h3 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">
-                    Key Statistics
-                  </h3>
-                  <div className="space-y-1">
-                    {[
-                      { label: 'Market Cap', value: formatMarketCap(crypto.marketCap) },
-                      { label: '24h Volume', value: formatVolume(crypto.volume) },
-                      { label: 'Change %', value: `${(crypto.changePercent || 0).toFixed(2)}%` },
-                      { label: 'Day High', value: crypto.dayHigh ? formatPrice(crypto.dayHigh) : '-' },
-                      { label: 'Day Low', value: crypto.dayLow ? formatPrice(crypto.dayLow) : '-' },
-                      { label: '52W High', value: crypto.high52w ? formatPrice(crypto.high52w) : '-' },
-                      { label: '52W Low', value: crypto.low52w ? formatPrice(crypto.low52w) : '-' },
-                      { label: 'Currency', value: crypto.currency },
-                      { label: 'Country', value: crypto.countryCode },
-                      { label: 'Asset Type', value: crypto.assetType },
-                    ].map((item, i) => (
-                      <div key={i} className="flex justify-between py-1 border-b border-slate-100 dark:border-slate-800 last:border-b-0">
-                        <span className="text-xs text-slate-500 dark:text-slate-400">{item.label}</span>
-                        <span className="text-xs font-medium text-slate-900 dark:text-white">{item.value}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Chart - Desktop (Wider) */}
-                <div className="lg:col-span-3">
-                  <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-5">
-                    {/* Chart Controls */}
-                    <div className="mb-4 p-3 bg-slate-50/50 rounded-xl border border-slate-100">
-                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
-                        <div className="flex items-center gap-3">
-                          <span className="text-sm font-semibold text-gray-700">Duration</span>
-                          <div className="flex bg-white rounded-lg p-1 border border-slate-200 overflow-x-auto">
-                            {['1D', '1W', '1M', '3M', '1Y', '5Y'].map((p) => (
-                              <button
-                                key={p}
-                                onClick={() => handlePeriodChange(p)}
-                                className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
-                                  chartPeriod === p ? "bg-gray-900 text-white shadow-sm" : "text-gray-600 hover:bg-gray-100"
-                                }`}
-                              >
-                                {p}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-
-                        <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-bold ${
-                          (crypto.changePercent || 0) >= 0 ? "text-green-700 bg-green-50" : "text-red-700 bg-red-50"
-                        }`}>
-                          {(crypto.changePercent || 0) >= 0 ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
-                          {(crypto.changePercent || 0) >= 0 ? '+' : ''}{(crypto.changePercent || 0).toFixed(2)}%
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-3">
-                        <span className="text-sm font-semibold text-gray-700">Type</span>
-                        <div className="flex bg-white rounded-lg p-1 border border-slate-200">
-                          {[
-                            { key: 'area' as ChartType, label: 'Area', icon: Activity },
-                            { key: 'line' as ChartType, label: 'Line', icon: BarChart3 },
-                            { key: 'candlestick' as ChartType, label: 'Candle', icon: BarChart3 },
-                          ].map((type) => (
-                            <button
-                              key={type.key}
-                              onClick={() => setChartType(type.key)}
-                              className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
-                                chartType === type.key ? "bg-blue-600 text-white shadow-sm" : "text-gray-600 hover:bg-gray-100"
-                              }`}
-                            >
-                              <type.icon className="h-3.5 w-3.5" />
-                              <span className="hidden sm:inline">{type.label}</span>
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Chart Container */}
-                    <div className="h-80 relative">
-                      {chartLoading ? (
-                        <div className="absolute inset-0 flex items-center justify-center bg-white/50 z-10">
-                          <Activity className="h-8 w-8 text-blue-600 animate-spin" />
-                        </div>
-                      ) : null}
-                      {historicalData.length > 0 && historicalData[0]?.date ? (
-                        <StockChart data={historicalData} isPositive={(crypto.changePercent || 0) >= 0} height={320} chartType={chartType} />
-                      ) : (
-                        <div className="flex items-center justify-center h-full bg-gray-50 rounded-lg text-gray-400">
-                          <div className="text-center">
-                            <BarChart3 className="h-12 w-12 text-gray-400 mx-auto mb-2" />
-                            <p>No historical data available</p>
-                            <p className="text-sm mt-1">Try refreshing or selecting a different time period</p>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* AI Analysis Panel Column */}
-                <div className="lg:col-span-1">
-                  <AIAnalysisPanel
-                    title={`${crypto.name} Analysis`}
-                    pageType="crypto-detail"
-                    pageData={{
-                      symbol: crypto.symbol,
-                      name: crypto.name,
-                      price: crypto.price,
-                      marketCap: crypto.marketCap,
-                      volume: crypto.volume,
-                      changePercent: crypto.changePercent,
-                      change: crypto.change,
-                      currency: crypto.currency,
-                      countryCode: crypto.countryCode,
-                      assetType: crypto.assetType,
-                      dayHigh: crypto.dayHigh,
-                      dayLow: crypto.dayLow,
-                      high52w: crypto.high52w,
-                      low52w: crypto.low52w
-                    }}
-                    autoAnalyze={true}
-                    compact={true}
-                    quickPrompts={[
-                      "Price prediction",
-                      "Market sentiment",
-                      "Risk analysis",
-                      "Investment potential"
-                    ]}
-                    maxHeight="400px"
-                  />
-                </div>
-              </div>
-
-              {/* Mobile Chart */}
-              <div className="lg:hidden mb-6">
-                <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4">
-                  {/* Mobile Chart Header */}
-                  <div className="flex items-center justify-between mb-3">
-                    <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-bold ${
-                      (crypto.changePercent || 0) >= 0 ? "text-green-700 bg-green-50" : "text-red-700 bg-red-50"
-                    }`}>
-                      {(crypto.changePercent || 0) >= 0 ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
-                      {(crypto.changePercent || 0) >= 0 ? '+' : ''}{(crypto.changePercent || 0).toFixed(2)}%
-                    </div>
-                    <button className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition">
-                      <BarChart3 className="h-5 w-5 text-slate-600" />
-                    </button>
-                  </div>
-
-                  {/* Period Selector - Always Visible on Mobile */}
-                  <div className="mb-3 overflow-x-auto scrollbar-hide">
-                    <div className="flex gap-2 pb-2">
-                      {['1D', '1W', '1M', '3M', '1Y', '5Y'].map((p) => (
-                        <button
-                          key={p}
-                          onClick={() => handlePeriodChange(p)}
-                          className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all whitespace-nowrap ${
-                            chartPeriod === p ? "bg-gray-900 text-white shadow-sm" : "text-gray-600 hover:bg-gray-100"
-                          }`}
-                        >
-                          {p}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Mobile Chart Type Selector */}
-                  <div className="mb-3">
-                    <div className="flex gap-2 overflow-x-auto scrollbar-hide">
-                      {[
-                        { key: 'area' as ChartType, label: 'Area', icon: Activity },
-                        { key: 'line' as ChartType, label: 'Line', icon: BarChart3 },
-                        { key: 'candlestick' as ChartType, label: 'Candle', icon: BarChart3 },
-                      ].map((type) => (
-                        <button
-                          key={type.key}
-                          onClick={() => setChartType(type.key)}
-                          className={`flex items-center gap-1 px-2 py-1 text-xs font-medium rounded-md transition-all whitespace-nowrap ${
-                            chartType === type.key ? "bg-blue-600 text-white shadow-sm" : "text-gray-600 hover:bg-gray-100"
-                          }`}
-                        >
-                          <type.icon className="h-3 w-3" />
-                          <span>{type.label}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Mobile Chart */}
-                  <div className="h-64 relative">
-                    {chartLoading ? (
-                      <div className="absolute inset-0 flex items-center justify-center bg-white/50 z-10">
-                        <Activity className="h-6 w-6 text-blue-600 animate-spin" />
-                      </div>
-                    ) : null}
-                    {historicalData.length > 0 && historicalData[0]?.date ? (
-                      <StockChart data={historicalData} isPositive={(crypto.changePercent || 0) >= 0} height={256} chartType={chartType} />
-                    ) : (
-                      <div className="flex items-center justify-center h-full bg-gray-50 rounded-lg text-gray-400">
-                        <div className="text-center">
-                          <BarChart3 className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-                          <p className="text-sm">No historical data available</p>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Mobile AI Analysis */}
-              <div className="lg:hidden mb-6">
-                <AIAnalysisPanel
-                  title={`${crypto.name} Analysis`}
-                  pageType="crypto-detail"
-                  pageData={{
-                    symbol: crypto.symbol,
-                    name: crypto.name,
-                    price: crypto.price,
-                    marketCap: crypto.marketCap,
-                    volume: crypto.volume,
-                    changePercent: crypto.changePercent,
-                    change: crypto.change,
-                    currency: crypto.currency,
-                    countryCode: crypto.countryCode,
-                    assetType: crypto.assetType,
-                    dayHigh: crypto.dayHigh,
-                    dayLow: crypto.dayLow,
-                    high52w: crypto.high52w,
-                    low52w: crypto.low52w
-                  }}
-                  autoAnalyze={true}
-                  compact={true}
-                  quickPrompts={[
-                    "Price prediction",
-                    "Market sentiment",
-                    "Risk analysis",
-                    "Investment potential"
-                  ]}
-                  maxHeight="300px"
-                />
-              </div>
-
-              {/* Additional Info Grid */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Market Statistics */}
-                <div className="lg:col-span-2">
-                  <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 p-6">
-                    <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                      <Activity className="h-5 w-5 text-emerald-600" />
-                      Market Statistics
-                    </h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="p-4 bg-gray-50 rounded-lg">
-                        <div className="flex items-center gap-2 mb-2">
-                          <DollarSign className="h-4 w-4 text-emerald-600" />
-                          <span className="text-sm text-gray-600">Market Cap</span>
-                        </div>
-                        <p className="text-xl font-bold text-gray-900">{formatMarketCap(crypto.marketCap)}</p>
-                      </div>
-                      <div className="p-4 bg-gray-50 rounded-lg">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Volume2 className="h-4 w-4 text-emerald-600" />
-                          <span className="text-sm text-gray-600">24h Volume</span>
-                        </div>
-                        <p className="text-xl font-bold text-gray-900">{formatVolume(crypto.volume)}</p>
-                      </div>
-                      {crypto.dayHigh && (
-                        <div className="p-4 bg-gray-50 rounded-lg">
-                          <div className="flex items-center gap-2 mb-2">
-                            <TrendingUp className="h-4 w-4 text-emerald-600" />
-                            <span className="text-sm text-gray-600">Day High</span>
-                          </div>
-                          <p className="text-xl font-bold text-gray-900">{formatPrice(crypto.dayHigh)}</p>
-                        </div>
-                      )}
-                      {crypto.dayLow && (
-                        <div className="p-4 bg-gray-50 rounded-lg">
-                          <div className="flex items-center gap-2 mb-2">
-                            <TrendingDown className="h-4 w-4 text-emerald-600" />
-                            <span className="text-sm text-gray-600">Day Low</span>
-                          </div>
-                          <p className="text-xl font-bold text-gray-900">{formatPrice(crypto.dayLow)}</p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Links */}
-                <div className="lg:col-span-1">
-                  <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 p-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Links</h3>
-                    <div className="space-y-2">
-                      {crypto.website && (
-                        <a
-                          href={crypto.website}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 transition-colors"
-                        >
-                          <Globe className="h-4 w-4 text-emerald-600" />
-                          <span className="text-sm text-gray-700">Official Website</span>
-                          <ExternalLink className="h-3 w-3 text-gray-400 ml-auto" />
-                        </a>
-                      )}
-                      {!crypto.website && (
-                        <div className="text-center py-4">
-                          <Globe className="h-8 w-8 text-gray-300 mx-auto mb-2" />
-                          <p className="text-sm text-gray-500">No official website available</p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          )}
-
-          {activeTab === 'markets' && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 p-6"
-            >
-              <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <Activity className="h-5 w-5 text-emerald-600" />
-                Market Data
-              </h2>
-              <div className="text-center py-12">
-                <Activity className="h-12 w-12 text-emerald-600 mx-auto mb-4" />
-                <p className="text-gray-600">Detailed market analysis coming soon</p>
-                <p className="text-sm text-gray-500 mt-2">Advanced market metrics and trading data</p>
-              </div>
-            </motion.div>
-          )}
-
-          {activeTab === 'analytics' && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="grid grid-cols-1 lg:grid-cols-2 gap-6"
-            >
-              {/* AI Analysis */}
-              <div className="lg:col-span-2">
-                <AIAnalysisPanel
-                  title={`${crypto.name} Analysis`}
-                  pageType="crypto-detail"
-                  pageData={{
-                    symbol: crypto.symbol,
-                    name: crypto.name,
-                    price: crypto.price,
-                    marketCap: crypto.marketCap,
-                    volume: crypto.volume,
-                    changePercent: crypto.changePercent,
-                    change: crypto.change,
-                    currency: crypto.currency,
-                    countryCode: crypto.countryCode,
-                    assetType: crypto.assetType,
-                    dayHigh: crypto.dayHigh,
-                    dayLow: crypto.dayLow,
-                    high52w: crypto.high52w,
-                    low52w: crypto.low52w
-                  }}
-                  autoAnalyze={true}
-                  compact={false}
-                  quickPrompts={[
-                    "Price prediction",
-                    "Market sentiment",
-                    "Risk analysis",
-                    "Investment potential"
-                  ]}
-                  maxHeight="600px"
-                />
-              </div>
-            </motion.div>
-          )}
-        </div>
+        {renderTabContent()}
       </div>
+
+      {/* Mobile Content */}
+      <div className="lg:hidden px-4 py-4 space-y-4">
+        {/* Mobile Tab Navigation */}
+        <CryptoTabs activeTab={activeTab} onTabChange={setActiveTab} />
+
+        {/* Tab Content */}
+        {renderTabContent()}
+      </div>
+
+      {/* Mobile AI Panel Modal */}
+      <AnimatePresence>
+        {showAIPanel && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end"
+            onClick={() => setShowAIPanel(false)}
+          >
+            <motion.div
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              className="bg-white dark:bg-slate-900 rounded-t-2xl w-full max-h-[85vh] overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="p-4 border-b border-gray-200 dark:border-slate-700 flex items-center justify-between sticky top-0 bg-white dark:bg-slate-900 z-10">
+                <h3 className="font-semibold text-lg text-slate-900 dark:text-white">AI Analysis</h3>
+                <button
+                  onClick={() => setShowAIPanel(false)}
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-full"
+                >
+                  <X className="h-5 w-5 text-slate-600 dark:text-slate-400" />
+                </button>
+              </div>
+              <div className="overflow-y-auto" style={{ maxHeight: 'calc(85vh - 64px)' }}>
+                <AIAnalysisPanel
+                  title=""
+                  pageType="crypto-detail"
+                  pageData={{
+                    symbol: crypto.symbol,
+                    name: crypto.name,
+                    price: crypto.price,
+                    change: crypto.changePercent,
+                    volume: crypto.volume,
+                    marketCap: crypto.marketCap,
+                    assetType: crypto.assetType,
+                    high: crypto.dayHigh,
+                    low: crypto.dayLow,
+                    isFeatured: crypto.isFeatured
+                  } as any}
+                  autoAnalyze={true}
+                  quickPrompts={[
+                    `Is ${crypto.symbol} a good investment?`,
+                    'Technical analysis',
+                    'Price prediction'
+                  ]}
+                />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
+
