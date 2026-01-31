@@ -42,7 +42,6 @@ interface StockTabsProps {
 export default function StockTabs({ activeTab, onTabChange }: StockTabsProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll the active tab into view on mobile
   useEffect(() => {
     const activeElement = scrollRef.current?.querySelector(`[data-active="true"]`);
     if (activeElement) {
@@ -51,14 +50,13 @@ export default function StockTabs({ activeTab, onTabChange }: StockTabsProps) {
   }, [activeTab]);
 
   return (
-    <div className="sticky top-24 z-30 mb-6">
-      {/* Container with shadow and rounded corners */}
-      <div className="relative bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+    // min-w-0 ensures this component doesn't force the parent width to expand
+    <div className="sticky top-24 z-30 mb-6 w-full min-w-0">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
         
-        {/* Navigation Wrapper */}
         <nav 
           ref={scrollRef}
-          className="flex flex-nowrap items-center gap-1 p-1 overflow-x-auto no-scrollbar scroll-smooth snap-x"
+          className="flex flex-nowrap items-center p-1 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory"
           style={{ WebkitOverflowScrolling: 'touch' }}
         >
           {tabs.map((tab) => {
@@ -71,24 +69,26 @@ export default function StockTabs({ activeTab, onTabChange }: StockTabsProps) {
                 data-active={isActive}
                 onClick={() => onTabChange(tab.id)}
                 className={`
-                  flex items-center gap-2 px-4 py-2.5 rounded-lg font-bold text-sm whitespace-nowrap transition-all snap-center flex-shrink-0
+                  flex-shrink-0 snap-center transition-all flex
+                  /* MOBILE: 20% width (5 tabs visible), vertical stack */
+                  w-1/5 flex-col items-center justify-center gap-1 py-3 px-1
+                  /* DESKTOP (lg): natural width, horizontal row */
+                  lg:w-auto lg:flex-row lg:px-4 lg:py-2.5 lg:gap-2
                   ${isActive
                     ? 'bg-blue-600 text-white shadow-md'
-                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
+                    : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
                   }
+                  rounded-lg font-bold
                 `}
               >
                 <Icon size={16} className={isActive ? "animate-pulse" : ""} />
-                <span>{tab.label}</span>
+                <span className="text-[9px] lg:text-sm whitespace-nowrap uppercase lg:capitalize tracking-tighter lg:tracking-normal">
+                  {tab.label}
+                </span>
               </button>
             );
           })}
         </nav>
-
-        {/* Notice: No Absolute Gradient Overlays here. 
-            They block pointer-events. Use CSS mask-image if you really want fades, 
-            but for trading apps, clear visibility is better.
-        */}
       </div>
     </div>
   );
