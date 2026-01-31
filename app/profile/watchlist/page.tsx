@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/app/context/AuthContext';
 import { getWatchlist, addToWatchlist, removeFromWatchlist, type WatchlistItem } from '@/app/utils/portfolioWatchlistAPI';
+import { stockAPI } from '@/app/utils/api';
 import {
     ArrowLeft,
     Star,
@@ -21,8 +22,12 @@ export default function WatchlistPage() {
     const { isAuthenticated, isLoading: authLoading } = useAuth();
     const router = useRouter();
     const [watchlist, setWatchlist] = useState<WatchlistItem[]>([]);
+    const [availableStocks, setAvailableStocks] = useState<any[]>([]);
+    const [filteredStocks, setFilteredStocks] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [stocksLoading, setStocksLoading] = useState(false);
     const [showSearch, setShowSearch] = useState(false);
+    const [showSuggestions, setShowSuggestions] = useState(false);
     const [adding, setAdding] = useState<string | null>(null);
     const [removing, setRemoving] = useState<string | null>(null);
     const [symbolToAdd, setSymbolToAdd] = useState('');
@@ -43,40 +48,81 @@ export default function WatchlistPage() {
         }
     }, []);
 
+    const loadAvailableStocks = useCallback(async () => {
+        try {
+            setStocksLoading(true);
+            const response = await stockAPI.getAllStocks();
+            if (response.success && response.data) {
+                setAvailableStocks(response.data);
+            }
+        } catch (e) {
+            console.error(e);
+            toast.error('Failed to load available stocks');
+        } finally {
+            setStocksLoading(false);
+        }
+    }, []);
+
+    // Filter stocks based on search input
+    useEffect(() => {
+        if (!symbolToAdd.trim()) {
+            setFilteredStocks([]);
+            setShowSuggestions(false);
+            return;
+        }
+
+        const filtered = availableStocks.filter(stock => 
+            stock.symbol.toLowerCase().includes(symbolToAdd.toLowerCase()) ||
+            stock.name.toLowerCase().includes(symbolToAdd.toLowerCase())
+        ).slice(0, 8); // Limit to 8 suggestions
+
+        setFilteredStocks(filtered);
+        setShowSuggestions(filtered.length > 0);
+    }, [symbolToAdd, availableStocks]);
+
     useEffect(() => {
         if (!isAuthenticated) return;
         load();
-    }, [isAuthenticated, load]);
+        loadAvailableStocks();
+    }, [isAuthenticated, load, loadAvailableStocks]);
 
-    const handleAdd = async () => {
-        const symbol = symbolToAdd.trim().toUpperCase();
-        if (!symbol) return;
+    const handleAdd = async (symbol?: string) => {
+        const stockSymbol = (symbol || symbolToAdd.trim()).toUpperCase();
+        if (!stockSymbol) return;
 
-        if (watchlist.some((w) => w.symbol === symbol)) {
-            toast.error(`${symbol} is already in your watchlist`);
+        if (watchlist.some((w) => w.symbol === stockSymbol)) {
+            toast.error('Stock already in watchlist');
             return;
         }
-        setAdding(symbol);
+
         try {
-            await addToWatchlist(symbol);
-            toast.success(`${symbol} added to watchlist`);
-            setShowSearch(false);
+            setAdding(stockSymbol);
+            await addToWatchlist(stockSymbol);
+            await load();
+            toast.success(`${stockSymbol} added to watchlist`);
             setSymbolToAdd('');
-            load();
-        } catch (e: any) {
-            const msg = e?.message || 'Failed to add';
-            if (String(msg).includes('already')) toast.success(`${symbol} is already in watchlist`);
-            else toast.error(msg);
+            setShowSuggestions(false);
+            setFilteredStocks([]);
+        } catch (e) {
+            console.error(e);
+            toast.error('Failed to add stock');
         } finally {
             setAdding(null);
         }
+    };
+
+    const handleSuggestionClick = (stock: any) => {
+        setSymbolToAdd(stock.symbol);
+        setShowSuggestions(false);
+        setFilteredStocks([]);
+        handleAdd(stock.symbol);
     };
 
     const handleRemove = async (symbol: string) => {
         setRemoving(symbol);
         try {
             await removeFromWatchlist(symbol);
-            setWatchlist((prev) => prev.filter((w) => w.symbol !== symbol));
+            setWatchlist((prev: any[]) => prev.filter((w: any) => w.symbol !== symbol));
             toast.success(`${symbol} removed`);
         } catch {
             toast.error('Failed to remove');
@@ -96,7 +142,7 @@ export default function WatchlistPage() {
 
     return (
         <div className="min-h-screen bg-slate-50">
-            <div className="bg-gradient-to-br from-green-600 to-emerald-600 pb-8">
+            <div className="bg-gradient-to-r from-green-600 to-emerald-600 mt-8">
                 <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <div className="flex items-center gap-3">
@@ -129,25 +175,66 @@ export default function WatchlistPage() {
                 {showSearch && (
                     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-6 mb-6">
                         <h3 className="font-semibold text-slate-900 mb-4">Add stock to watchlist</h3>
-                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-                            <div className="flex-1 relative">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
-                                <input
-                                    type="text"
-                                    value={symbolToAdd}
-                                    onChange={(e) => setSymbolToAdd(e.target.value)}
-                                    onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
-                                    placeholder="Enter stock symbol..."
-                                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 outline-none"
-                                />
+                        <div className="relative">
+                            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                                <div className="flex-1 relative">
+                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+                                    <input
+                                        type="text"
+                                        value={symbolToAdd}
+                                        onChange={(e) => setSymbolToAdd(e.target.value)}
+                                        onFocus={() => setShowSuggestions(true)}
+                                        onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                                        onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
+                                        placeholder="Enter stock symbol or name..."
+                                        className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 outline-none"
+                                    />
+                                </div>
+                                <button
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        handleAdd();
+                                    }}
+                                    disabled={adding !== null}
+                                    className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium transition disabled:opacity-50 flex items-center justify-center gap-2"
+                                >
+                                    {adding ? <RefreshCw className="h-5 w-5 animate-spin" /> : 'Add'}
+                                </button>
                             </div>
-                            <button
-                                onClick={handleAdd}
-                                disabled={adding !== null}
-                                className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium transition disabled:opacity-50 flex items-center justify-center gap-2"
-                            >
-                                {adding ? <RefreshCw className="h-5 w-5 animate-spin" /> : 'Add'}
-                            </button>
+                            
+                            {/* Stock Suggestions Dropdown */}
+                            {showSuggestions && filteredStocks.length > 0 && (
+                                <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-xl shadow-lg z-10 max-h-64 overflow-y-auto">
+                                    {filteredStocks.map((stock, index) => (
+                                        <button
+                                            key={index}
+                                            onClick={() => handleSuggestionClick(stock)}
+                                            className="w-full px-4 py-3 text-left hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-b-0"
+                                        >
+                                            <div className="flex items-center justify-between">
+                                                <div>
+                                                    <div className="font-semibold text-slate-900">
+                                                        {stock.symbol}
+                                                    </div>
+                                                    <div className="text-sm text-slate-500 truncate">
+                                                        {stock.name}
+                                                    </div>
+                                                </div>
+                                                <div className="text-right">
+                                                    <div className="font-semibold text-slate-900">
+                                                        ${stock.price?.toFixed(2) || '0.00'}
+                                                    </div>
+                                                    <div className={`text-sm font-medium ${
+                                                        stock.change >= 0 ? 'text-emerald-600' : 'text-red-600'
+                                                    }`}>
+                                                        {stock.change >= 0 ? '+' : ''}{stock.changePercent?.toFixed(2) || '0.00'}%
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     </div>
                 )}

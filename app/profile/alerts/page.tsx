@@ -35,11 +35,15 @@ export default function AlertsPage() {
     const { isAuthenticated, isLoading: authLoading } = useAuth();
     const router = useRouter();
     const [alerts, setAlerts] = useState<UserAlert[]>([]);
+    const [availableStocks, setAvailableStocks] = useState<any[]>([]);
+    const [filteredStocks, setFilteredStocks] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [stocksLoading, setStocksLoading] = useState(false);
     const [showCreateAlert, setShowCreateAlert] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState<Array<{ symbol: string; name: string }>>([]);
     const [searching, setSearching] = useState(false);
+    const [showSuggestions, setShowSuggestions] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     
     // Form state
@@ -66,29 +70,49 @@ export default function AlertsPage() {
         }
     }, []);
 
+    const loadAvailableStocks = useCallback(async () => {
+        try {
+            setStocksLoading(true);
+            const response = await stockAPI.getAllStocks();
+            if (response.success && response.data) {
+                setAvailableStocks(response.data);
+            }
+        } catch (e) {
+            console.error(e);
+            toast.error('Failed to load available stocks');
+        } finally {
+            setStocksLoading(false);
+        }
+    }, []);
+
+    // Filter stocks based on search input
+    useEffect(() => {
+        if (!searchQuery.trim()) {
+            setFilteredStocks([]);
+            setShowSuggestions(false);
+            return;
+        }
+
+        const filtered = availableStocks.filter(stock => 
+            stock.symbol.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            stock.name.toLowerCase().includes(searchQuery.toLowerCase())
+        ).slice(0, 8); // Limit to 8 suggestions
+
+        setFilteredStocks(filtered);
+        setShowSuggestions(filtered.length > 0);
+    }, [searchQuery, availableStocks]);
+
     useEffect(() => {
         if (!isAuthenticated) return;
         loadAlerts();
-    }, [isAuthenticated, loadAlerts]);
+        loadAvailableStocks();
+    }, [isAuthenticated, loadAlerts, loadAvailableStocks]);
 
-    const handleSearch = async () => {
-        if (!searchQuery.trim()) return;
-        setSearching(true);
-        try {
-            const res = await stockAPI.searchStocks(searchQuery);
-            const results = Array.isArray(res) ? res : res.data || [];
-            setSearchResults(results);
-            
-            if (results.length === 0) {
-                toast.error('No stocks found');
-            }
-        } catch (err) {
-            setSearchResults([]);
-            toast.error('Search failed');
-            console.error(err);
-        } finally {
-            setSearching(false);
-        }
+    const handleSuggestionClick = (stock: any) => {
+        setSelectedSymbol({ symbol: stock.symbol, name: stock.name });
+        setSearchQuery(stock.symbol);
+        setShowSuggestions(false);
+        setFilteredStocks([]);
     };
 
     const handleCreateAlert = async () => {
@@ -364,44 +388,54 @@ export default function AlertsPage() {
                                     </div>
                                 ) : (
                                     <>
-                                        <div className="flex gap-2">
+                                        <div className="relative">
                                             <div className="flex-1 relative">
                                                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                                                 <input
                                                     type="text"
                                                     value={searchQuery}
                                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                                    onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                                                    placeholder="Search stocks..."
+                                                    onFocus={() => setShowSuggestions(true)}
+                                                    onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                                                    placeholder="Search stocks by symbol or name..."
                                                     className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
                                                 />
                                             </div>
-                                            <button
-                                                onClick={handleSearch}
-                                                disabled={searching}
-                                                className="px-6 py-3 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 disabled:opacity-50 transition"
-                                            >
-                                                {searching ? <Loader2 className="h-5 w-5 animate-spin" /> : 'Search'}
-                                            </button>
+                                            
+                                            {/* Stock Suggestions Dropdown */}
+                                            {showSuggestions && filteredStocks.length > 0 && (
+                                                <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg z-10 max-h-64 overflow-y-auto">
+                                                    {filteredStocks.map((stock, index) => (
+                                                        <button
+                                                            key={index}
+                                                            onClick={() => handleSuggestionClick(stock)}
+                                                            className="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0"
+                                                        >
+                                                            <div className="flex items-center justify-between">
+                                                                <div>
+                                                                    <div className="font-semibold text-gray-900">
+                                                                        {stock.symbol}
+                                                                    </div>
+                                                                    <div className="text-sm text-gray-600 truncate">
+                                                                        {stock.name}
+                                                                    </div>
+                                                                </div>
+                                                                <div className="text-right">
+                                                                    <div className="font-semibold text-gray-900">
+                                                                        ${stock.price?.toFixed(2) || '0.00'}
+                                                                    </div>
+                                                                    <div className={`text-sm font-medium ${
+                                                                        stock.change >= 0 ? 'text-emerald-600' : 'text-red-600'
+                                                                    }`}>
+                                                                        {stock.change >= 0 ? '+' : ''}{stock.changePercent?.toFixed(2) || '0.00'}%
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            )}
                                         </div>
-                                        {searchResults.length > 0 && (
-                                            <div className="mt-2 border border-gray-200 rounded-xl overflow-hidden max-h-64 overflow-y-auto">
-                                                {searchResults.map((stock) => (
-                                                    <button
-                                                        key={stock.symbol}
-                                                        onClick={() => {
-                                                            setSelectedSymbol(stock);
-                                                            setSearchQuery('');
-                                                            setSearchResults([]);
-                                                        }}
-                                                        className="w-full p-4 hover:bg-gray-50 text-left border-b border-gray-100 last:border-b-0"
-                                                    >
-                                                        <p className="font-semibold text-gray-900">{stock.symbol}</p>
-                                                        <p className="text-sm text-gray-600">{stock.name}</p>
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        )}
                                     </>
                                 )}
                             </div>
