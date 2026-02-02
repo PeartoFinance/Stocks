@@ -30,7 +30,7 @@ interface CountryContextType {
 const CountryContext = createContext<CountryContextType | null>(null);
 
 const STORAGE_KEY = 'user_country_override';
-const DEFAULT_COUNTRY = 'GLOBAL';
+const DEFAULT_COUNTRY = 'US';
 
 export function getCountryHeader(country?: string): Record<string, string> {
     if (typeof window === 'undefined') return {};

@@ -13,7 +13,7 @@ async function apiRequest<T>(endpoint: string, options?: RequestInit): Promise<T
     ...options,
     headers: {
       'Content-Type': 'application/json',
-      'X-User-Country': 'GLOBAL', // Default, can be overridden by options.headers
+      'X-User-Country': 'US', // Default, can be overridden by options.headers
       ...options?.headers,
     },
   });

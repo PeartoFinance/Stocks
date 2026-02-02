@@ -39,8 +39,8 @@ const API_INCLUDES_PATH = API_BASE.endsWith('/api');
 const COUNTRY_KEY = 'user_country_override';
 
 function getCountryCode(): string {
-  if (typeof window === 'undefined') return 'GLOBAL';
-  return localStorage.getItem(COUNTRY_KEY) || 'GLOBAL';
+  if (typeof window === 'undefined') return 'US';
+  return localStorage.getItem(COUNTRY_KEY) || 'US';
 }
 
 function buildHeaders(): Record<string, string> {

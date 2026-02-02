@@ -18,8 +18,8 @@ const COUNTRY_KEY = 'user_country_override';
 
 // Get current country code from localStorage
 function getCountryCode(): string {
-  if (typeof window === 'undefined') return 'GLOBAL';
-  return localStorage.getItem(COUNTRY_KEY) || 'GLOBAL';
+  if (typeof window === 'undefined') return 'US';
+  return localStorage.getItem(COUNTRY_KEY) || 'US';
 }
 
 // Build headers with country code (matching core app's implementation)
@@ -221,7 +221,7 @@ export const stockAPI = {
       );
 
       const todayData = data.data && data.data.length > 0 ? data.data[data.data.length - 1] : null;
-      
+
       if (!todayData) {
         return {
           data: null,
@@ -474,10 +474,10 @@ export const stockAPI = {
   // News endpoints
   async getPublishedNews(category?: string): Promise<{ items: any[]; total: number }> {
     try {
-      const endpoint = category && category !== 'All' 
+      const endpoint = category && category !== 'All'
         ? `/api/news/published?category=${encodeURIComponent(category)}`
         : '/api/news/published';
-      
+
       const data = await apiFetch<{ items: any[]; total: number }>(endpoint);
       return data;
     } catch (error) {
@@ -494,7 +494,7 @@ export const stockAPI = {
       if (status) params.push(`status=${encodeURIComponent(status)}`);
       if (type) params.push(`type=${encodeURIComponent(type)}`);
       if (params.length > 0) endpoint += `?${params.join('&')}`;
-      
+
       const data = await apiFetch<any[]>(endpoint);
       return data;
     } catch (error) {
@@ -514,7 +514,7 @@ export const stockAPI = {
       if (filters?.minYield) params.push(`minYield=${encodeURIComponent(filters.minYield)}`);
       if (filters?.limit) params.push(`limit=${filters.limit}`);
       if (params.length > 0) endpoint += `?${params.join('&')}`;
-      
+
       const data = await apiFetch<any[]>(endpoint);
       return data;
     } catch (error) {

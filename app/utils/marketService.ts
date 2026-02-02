@@ -13,7 +13,7 @@ async function apiRequest<T>(endpoint: string, options?: RequestInit): Promise<T
     ...options,
     headers: {
       'Content-Type': 'application/json',
-      'X-User-Country': 'GLOBAL', // Defaulting to GLOBAL for broad discovery
+      'X-User-Country': 'US', // Defaulting to US for broad discovery
       ...options?.headers,
     },
   });
