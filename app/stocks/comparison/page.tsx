@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import {
   Search, 
   TrendingUp, 
@@ -125,6 +126,84 @@ export default function StockComparison() {
       document.removeEventListener('msfullscreenchange', handleFullscreenChange);
     };
   }, []);
+
+  // Handle query parameters for stock comparison
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    const loadStocksFromQuery = async () => {
+      const stocksParam = searchParams.get('stocks');
+      if (stocksParam) {
+        const stockSymbols = stocksParam.split('.').filter(symbol => symbol.trim());
+        
+        if (stockSymbols.length > 0 && stockSymbols.length <= 5) {
+          try {
+            setLoading(true);
+            const stockPromises = stockSymbols.map(async (symbol) => {
+              const profileResponse = await marketService.getStockProfile(symbol.trim().toUpperCase());
+              if (profileResponse) {
+                const apiResponse = profileResponse as any;
+                return {
+                  symbol: apiResponse.symbol || symbol.trim().toUpperCase(),
+                  name: apiResponse.name || symbol.trim().toUpperCase(),
+                  price: apiResponse.price || 0,
+                  change: apiResponse.change || 0,
+                  changePercent: apiResponse.changePercent || 0,
+                  volume: apiResponse.volume,
+                  marketCap: apiResponse.marketCap,
+                  peRatio: apiResponse.peRatio,
+                  eps: apiResponse.eps,
+                  dividendYield: apiResponse.dividendYield,
+                  week52High: apiResponse.high52w,
+                  week52Low: apiResponse.low52w,
+                  beta: apiResponse.beta,
+                  sector: apiResponse.sector,
+                  industry: apiResponse.industry,
+                  description: apiResponse.description,
+                  open: apiResponse.open,
+                  high: apiResponse.dayHigh,
+                  low: apiResponse.dayLow,
+                  previousClose: apiResponse.previousClose,
+                  avgVolume: apiResponse.avgVolume,
+                  forwardPe: apiResponse.forwardPe,
+                  exchange: apiResponse.exchange,
+                  currency: apiResponse.currency || 'USD',
+                  color: STOCK_COLORS[0], // Will be reassigned
+                  lastUpdated: apiResponse.lastUpdated,
+                };
+              }
+              return null;
+            });
+
+            const validStocks = (await Promise.all(stockPromises)).filter(stock => stock !== null);
+            
+            if (validStocks.length > 0) {
+              // Assign colors to stocks
+              const stocksWithColors = validStocks.map((stock, index) => ({
+                ...stock,
+                color: STOCK_COLORS[index]
+              }));
+              
+              setComparedStocks(stocksWithColors);
+              
+              // Load historical data for all stocks
+              await loadHistoricalData(stocksWithColors, chartPeriod);
+              
+              toast.success(`Loaded ${stocksWithColors.length} stocks for comparison`);
+            }
+          } catch (error) {
+            console.error('Error loading stocks from query:', error);
+            toast.error('Failed to load stocks from URL');
+          } finally {
+            setLoading(false);
+          }
+        } else if (stockSymbols.length > 5) {
+          toast.error('Maximum 5 stocks can be compared at once');
+        }
+      }
+    };
+
+    loadStocksFromQuery();
+  }, [searchParams]);
 
   // Search stocks using backend API
   useEffect(() => {
@@ -568,9 +647,9 @@ export default function StockComparison() {
       return (
         <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
           <div className="text-center py-8">
-            <LineChart className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">No Chart Data Available</h3>
-            <p className="text-sm text-gray-600">Historical data is loading or unavailable for the selected period.</p>
+            <Activity className="h-12 w-12 text-blue-600 animate-spin mx-auto mb-3" />
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Loading Chart Data</h3>
+            <p className="text-sm text-gray-600">Fetching historical data for the selected stocks...</p>
           </div>
         </div>
       );
