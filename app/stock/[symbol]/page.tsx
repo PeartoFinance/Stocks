@@ -22,6 +22,7 @@ import {
   GitCompare
 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { marketService } from "../../utils/marketService";
 import { Stock, HistoricalData } from "../../types";
@@ -53,6 +54,7 @@ interface PageProps {
 
 export default function StockDetailPage({ params }: PageProps) {
   const { symbol } = params;
+  const router = useRouter();
   
   // State
   const [stock, setStock] = useState<Stock | null>(null);
@@ -767,7 +769,7 @@ export default function StockDetailPage({ params }: PageProps) {
                 <Star className="h-5 w-5" fill={isWatchlisted ? 'currentColor' : 'none'} />
               </button>
             <button 
-                onClick={() => window.location.href = `/stock/${stock.symbol}/compare`}
+                onClick={() => router.push(`/stocks/comparison?stocks=${stock.symbol}`)}
   className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg transition text-sm font-medium"
 >
   <GitCompare size={16} />
@@ -856,7 +858,7 @@ export default function StockDetailPage({ params }: PageProps) {
                 Watchlist
               </button>
              <button 
-                onClick={() => window.location.href = `/stock/${stock.symbol}/compare`}
+                onClick={() => router.push(`/stocks/comparison?stocks=${stock.symbol}`)}
   className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg transition text-sm font-medium"
 >
   <GitCompare size={16} />
