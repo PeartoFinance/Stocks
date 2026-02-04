@@ -15,6 +15,7 @@ import {
   ExternalLink
 } from 'lucide-react';
 import StockChart from '../StockChart';
+import RiskAnalysisChart from './RiskAnalysisChart';
 import AIAnalysisPanel from '../ai/AIAnalysisPanel';
 
 interface CryptoDetails {
@@ -277,30 +278,9 @@ export default function OverviewTab({
           </div>
         </div>
 
-        {/* AI Analysis Panel */}
+        {/* Risk Analysis Chart */}
         <div className="lg:col-span-1">
-          <AIAnalysisPanel
-            title={`${crypto.symbol} Analysis`}
-            pageType="crypto-detail"
-            pageData={{
-              symbol: crypto.symbol,
-              name: crypto.name,
-              price: crypto.price,
-              change: crypto.changePercent,
-              volume: crypto.volume,
-              marketCap: crypto.marketCap,
-              assetType: crypto.assetType,
-              high: crypto.dayHigh,
-              low: crypto.dayLow,
-              isFeatured: crypto.isFeatured
-            } as any}
-            autoAnalyze={true}
-            quickPrompts={[
-              `Is ${crypto.symbol} undervalued?`,
-              'Technical analysis',
-              'Buy or sell recommendation'
-            ]}
-          />
+          <RiskAnalysisChart symbol={crypto.symbol} />
         </div>
       </div>
 
@@ -364,6 +344,11 @@ export default function OverviewTab({
             )}
           </div>
         </div>
+      </div>
+
+      {/* Mobile Risk Analysis */}
+      <div className="lg:hidden mt-4">
+        <RiskAnalysisChart symbol={crypto.symbol} />
       </div>
 
       {/* About Section */}

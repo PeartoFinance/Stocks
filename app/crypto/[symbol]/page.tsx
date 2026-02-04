@@ -10,7 +10,8 @@ import {
   Star,
   Activity,
   BarChart3,
-  X
+  X,
+  Brain
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import cryptoService from '@/app/utils/cryptoService';
@@ -349,6 +350,12 @@ export default function CryptoDetailPage() {
               >
                 <Star className="h-5 w-5" fill={isFavorited ? 'currentColor' : 'none'} />
               </button>
+              <button
+                onClick={() => setShowAIPanel(true)}
+                className="p-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg"
+              >
+                <Brain className="h-5 w-5" />
+              </button>
             </div>
           </div>
 
@@ -431,6 +438,13 @@ export default function CryptoDetailPage() {
                 <Star size={16} fill={isFavorited ? 'currentColor' : 'none'} />
                 Watchlist
               </button>
+              <button 
+                onClick={() => setShowAIPanel(true)}
+                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition text-sm font-medium"
+              >
+                <Brain size={16} />
+                AI Analysis
+              </button>
             </div>
           </div>
         </div>
@@ -504,6 +518,76 @@ export default function CryptoDetailPage() {
               </div>
             </motion.div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Desktop AI Panel - Sliding from Right */}
+      <AnimatePresence>
+        {showAIPanel && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="hidden lg:block fixed inset-0 bg-black bg-opacity-50 z-40"
+              onClick={() => setShowAIPanel(false)}
+            />
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              className="hidden lg:block fixed top-0 right-0 h-full w-96 bg-white dark:bg-slate-900 shadow-2xl z-50"
+            >
+              <div className="h-full flex flex-col">
+                {/* AI Panel Header */}
+                <div className="px-4 py-3 border-b border-gray-200 dark:border-slate-700 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Brain className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                      <h3 className="text-sm font-semibold text-gray-900 dark:text-white">AI Crypto Analysis</h3>
+                    </div>
+                    <button
+                      onClick={() => setShowAIPanel(false)}
+                      className="p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-200 dark:hover:bg-slate-700 rounded-lg transition-colors"
+                    >
+                      <X className="h-5 w-5" />
+                    </button>
+                  </div>
+                </div>
+                
+                {/* AI Panel Content */}
+                <div className="flex-1 overflow-y-auto">
+                  <AIAnalysisPanel
+                    title=""
+                    pageType="crypto-detail"
+                    pageData={{
+                      symbol: crypto.symbol,
+                      name: crypto.name,
+                      price: crypto.price,
+                      change: crypto.changePercent,
+                      volume: crypto.volume,
+                      marketCap: crypto.marketCap,
+                      assetType: crypto.assetType,
+                      high: crypto.dayHigh,
+                      low: crypto.dayLow,
+                      isFeatured: crypto.isFeatured
+                    } as any}
+                    autoAnalyze={true}
+                    quickPrompts={[
+                      `Is ${crypto.symbol} a good investment?`,
+                      'Technical analysis',
+                      'Price prediction',
+                      'Risk assessment',
+                      'Market sentiment'
+                    ]}
+                    compact={false}
+                    className="w-full h-full"
+                  />
+                </div>
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </div>
