@@ -32,6 +32,7 @@ import toast from "react-hot-toast";
 import StockChart from "../../components/StockChart";
 import StockHeader from "../../components/StockHeader";
 import StockOverview from "../../components/StockOverview";
+import StockRiskAnalysisChart from "../../components/stock/StockRiskAnalysisChart";
 import AIAnalysisPanel from "../../components/ai/AIAnalysisPanel";
 import VendorsList from "../../components/VendorsList";
 import VendorsListSimple from "../../components/VendorsListSimple";
@@ -419,9 +420,17 @@ export default function StockDetailPage({ params }: PageProps) {
                 </div>
               </div>
 
-              {/* Vendors List Column */}
-              <div className="lg:col-span-1">
-                <VendorsListSimple limit={8} />
+              {/* Right Side Column - Risk Analysis + Vendors */}
+              <div className="lg:col-span-1 flex flex-col">
+                {/* Risk Analysis Chart */}
+                <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 flex-1">
+                  <StockRiskAnalysisChart stock={stock} />
+                </div>
+
+                {/* Vendors List */}
+                <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 flex-1">
+                  <VendorsListSimple limit={8} />
+                </div>
               </div>
             </div>
 
@@ -508,6 +517,16 @@ export default function StockDetailPage({ params }: PageProps) {
                   )}
                 </div>
               </div>
+            </div>
+
+            {/* Mobile Risk Analysis */}
+            <div className="lg:hidden mt-4">
+              <StockRiskAnalysisChart stock={stock} />
+            </div>
+
+            {/* Mobile Vendors */}
+            <div className="lg:hidden mt-4">
+              <VendorsListSimple limit={8} />
             </div>
 
             {/* Quick Stats Row - Desktop Only */}
@@ -768,13 +787,13 @@ export default function StockDetailPage({ params }: PageProps) {
               >
                 <Star className="h-5 w-5" fill={isWatchlisted ? 'currentColor' : 'none'} />
               </button>
-            <button 
+              <button 
                 onClick={() => router.push(`/stocks/comparison?stocks=${stock.symbol}`)}
-  className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg transition text-sm font-medium"
->
-  <GitCompare size={16} />
-  Compare
-</button>
+                className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg transition text-sm font-medium"
+              >
+                <GitCompare size={16} />
+                Compare
+              </button>
             </div>
           </div>
 
@@ -857,13 +876,13 @@ export default function StockDetailPage({ params }: PageProps) {
                 <Star size={16} fill={isWatchlisted ? 'currentColor' : 'none'} />
                 Watchlist
               </button>
-             <button 
+              <button 
                 onClick={() => router.push(`/stocks/comparison?stocks=${stock.symbol}`)}
-  className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg transition text-sm font-medium"
->
-  <GitCompare size={16} />
-  Compare
-</button>
+                className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg transition text-sm font-medium"
+              >
+                <GitCompare size={16} />
+                Compare
+              </button>
             </div>
           </div>
         </div>

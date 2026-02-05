@@ -280,7 +280,7 @@ export default function OverviewTab({
 
         {/* Risk Analysis Chart */}
         <div className="lg:col-span-1">
-          <RiskAnalysisChart symbol={crypto.symbol} />
+          <RiskAnalysisChart crypto={crypto} />
         </div>
       </div>
 
@@ -348,7 +348,7 @@ export default function OverviewTab({
 
       {/* Mobile Risk Analysis */}
       <div className="lg:hidden mt-4">
-        <RiskAnalysisChart symbol={crypto.symbol} />
+        <RiskAnalysisChart crypto={crypto} />
       </div>
 
       {/* About Section */}

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -8,82 +8,28 @@ import {
   Tooltip,
   Legend
 } from 'chart.js';
-import cryptoService from '../../utils/cryptoService';
 
 // Register Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface RiskAnalysisChartProps {
   className?: string;
-  symbol?: string;
+  crypto: {
+    symbol: string;
+    price: number;
+    marketCap: number;
+    volume: number;
+    change: number;
+    changePercent: number;
+    dayHigh?: number;
+    dayLow?: number;
+    high52w?: number;
+    low52w?: number;
+  };
 }
 
-interface CryptoDetails {
-  symbol: string;
-  price: number;
-  marketCap: number;
-  volume: number;
-  change: number;
-  changePercent: number;
-  dayHigh?: number;
-  dayLow?: number;
-  high52w?: number;
-  low52w?: number;
-}
-
-export default function RiskAnalysisChart({ className = '', symbol }: RiskAnalysisChartProps) {
-  const [cryptoData, setCryptoData] = useState<CryptoDetails | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [riskData, setRiskData] = useState({
-    labels: ['Low Risk', 'Medium Risk', 'High Risk', 'Very High Risk'],
-    datasets: [{
-      data: [25, 35, 30, 10],
-      backgroundColor: [
-        '#10b981', // Green - Low Risk
-        '#f59e0b', // Amber - Medium Risk
-        '#ef4444', // Red - High Risk
-        '#7c3aed', // Purple - Very High Risk
-      ],
-      borderWidth: 2,
-      borderColor: '#ffffff',
-      hoverOffset: 4
-    }]
-  });
-
-  useEffect(() => {
-    const fetchCryptoData = async () => {
-      if (!symbol) return;
-
-      try {
-        setLoading(true);
-        const data = await cryptoService.getCoinDetails(symbol);
-        if (data) {
-          const cryptoDetails: CryptoDetails = {
-            symbol: (data as any).symbol || symbol,
-            price: (data as any).price || 0,
-            marketCap: (data as any).marketCap || 0,
-            volume: (data as any).volume || 0,
-            change: (data as any).change || 0,
-            changePercent: (data as any).changePercent || 0,
-            dayHigh: (data as any).dayHigh,
-            dayLow: (data as any).dayLow,
-            high52w: (data as any).high52w,
-            low52w: (data as any).low52w
-          };
-          setCryptoData(cryptoDetails);
-          calculateRiskAnalysis(cryptoDetails);
-        }
-      } catch (error) {
-        console.error('Error fetching crypto data for risk analysis:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCryptoData();
-  }, [symbol]);
-
-  const calculateRiskAnalysis = (crypto: CryptoDetails) => {
+export default function RiskAnalysisChart({ className = '', crypto }: RiskAnalysisChartProps) {
+  const riskData = useMemo(() => {
     // Calculate risk based on real crypto metrics
     let lowRisk = 0;
     let mediumRisk = 0;
@@ -132,7 +78,7 @@ export default function RiskAnalysisChart({ className = '', symbol }: RiskAnalys
       Math.round((veryHighRisk / total) * 100)
     ];
 
-    setRiskData({
+    return {
       labels: ['Low Risk', 'Medium Risk', 'High Risk', 'Very High Risk'],
       datasets: [{
         data: normalizedData,
@@ -146,8 +92,8 @@ export default function RiskAnalysisChart({ className = '', symbol }: RiskAnalys
         borderColor: '#ffffff',
         hoverOffset: 4
       }]
-    });
-  };
+    };
+  }, [crypto]);
 
   const getOverallRiskLevel = () => {
     const data = riskData.datasets[0].data;
@@ -211,22 +157,6 @@ export default function RiskAnalysisChart({ className = '', symbol }: RiskAnalys
     }
   };
 
-  if (loading) {
-    return (
-      <div className={`bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 ${className}`}>
-        <div className="mb-3">
-          <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-1">Risk Analysis</h3>
-          <p className="text-xs text-gray-600 dark:text-gray-400">
-            Analyzing risk factors...
-          </p>
-        </div>
-        <div className="h-40 flex items-center justify-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-        </div>
-      </div>
-    );
-  }
-
   const overallRisk = getOverallRiskLevel();
 
   return (
@@ -234,7 +164,7 @@ export default function RiskAnalysisChart({ className = '', symbol }: RiskAnalys
       <div className="mb-3">
         <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-1">Risk Analysis</h3>
         <p className="text-xs text-gray-600 dark:text-gray-400">
-          Based on {symbol} market metrics
+          Based on {crypto.symbol} market metrics
         </p>
       </div>
       
@@ -257,34 +187,34 @@ export default function RiskAnalysisChart({ className = '', symbol }: RiskAnalys
         <div className="flex items-center justify-between text-xs">
           <span className="text-gray-600 dark:text-gray-400">Volatility</span>
           <span className={`font-medium ${
-            Math.abs(cryptoData?.changePercent || 0) < 2 ? 'text-green-600' :
-            Math.abs(cryptoData?.changePercent || 0) < 5 ? 'text-yellow-600' :
-            Math.abs(cryptoData?.changePercent || 0) < 10 ? 'text-red-600' : 'text-purple-600'
+            Math.abs(crypto.changePercent || 0) < 2 ? 'text-green-600' :
+            Math.abs(crypto.changePercent || 0) < 5 ? 'text-yellow-600' :
+            Math.abs(crypto.changePercent || 0) < 10 ? 'text-red-600' : 'text-purple-600'
           }`}>
-            {Math.abs(cryptoData?.changePercent || 0).toFixed(2)}%
+            {Math.abs(crypto.changePercent || 0).toFixed(2)}%
           </span>
         </div>
         <div className="flex items-center justify-between text-xs">
           <span className="text-gray-600 dark:text-gray-400">Market Cap</span>
           <span className={`font-medium ${
-            (cryptoData?.marketCap || 0) > 10000000000 ? 'text-green-600' :
-            (cryptoData?.marketCap || 0) > 1000000000 ? 'text-yellow-600' :
-            (cryptoData?.marketCap || 0) > 100000000 ? 'text-red-600' : 'text-purple-600'
+            (crypto.marketCap || 0) > 10000000000 ? 'text-green-600' :
+            (crypto.marketCap || 0) > 1000000000 ? 'text-yellow-600' :
+            (crypto.marketCap || 0) > 100000000 ? 'text-red-600' : 'text-purple-600'
           }`}>
-            ${(cryptoData?.marketCap || 0) > 1000000000 
-              ? `$${((cryptoData?.marketCap || 0) / 1000000000).toFixed(1)}B`
-              : `$${((cryptoData?.marketCap || 0) / 1000000).toFixed(1)}M`
+            {(crypto.marketCap || 0) > 1000000000 
+              ? `$${((crypto.marketCap || 0) / 1000000000).toFixed(1)}B`
+              : `$${((crypto.marketCap || 0) / 1000000).toFixed(1)}M`
             }
           </span>
         </div>
         <div className="flex items-center justify-between text-xs">
           <span className="text-gray-600 dark:text-gray-400">Volume/Cap</span>
           <span className={`font-medium ${
-            ((cryptoData?.volume || 0) / (cryptoData?.marketCap || 1)) > 0.1 ? 'text-green-600' :
-            ((cryptoData?.volume || 0) / (cryptoData?.marketCap || 1)) > 0.05 ? 'text-yellow-600' :
-            ((cryptoData?.volume || 0) / (cryptoData?.marketCap || 1)) > 0.01 ? 'text-red-600' : 'text-purple-600'
+            ((crypto.volume || 0) / (crypto.marketCap || 1)) > 0.1 ? 'text-green-600' :
+            ((crypto.volume || 0) / (crypto.marketCap || 1)) > 0.05 ? 'text-yellow-600' :
+            ((crypto.volume || 0) / (crypto.marketCap || 1)) > 0.01 ? 'text-red-600' : 'text-purple-600'
           }`}>
-            {(((cryptoData?.volume || 0) / (cryptoData?.marketCap || 1)) * 100).toFixed(2)}%
+            {(((crypto.volume || 0) / (crypto.marketCap || 1)) * 100).toFixed(2)}%
           </span>
         </div>
       </div>
