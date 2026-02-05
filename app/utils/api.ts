@@ -379,7 +379,7 @@ export const stockAPI = {
 
   async getAllStocks(): Promise<APIResponse<Stock[]>> {
     try {
-      const data = await apiFetch<unknown[]>('/api/stocks/most-active?limit=100');
+      const data = await apiFetch<unknown[]>('/api/market/stocks?limit=100');
 
       const stocks: Stock[] = (data || []).map((item: unknown) =>
         transformQuote(item as Record<string, unknown>)
@@ -424,7 +424,7 @@ export const stockAPI = {
   async getMarketMovers(type: 'gainers' | 'losers'): Promise<APIResponse<Stock[]>> {
     try {
       const data = await apiFetch<{ gainers?: unknown[]; losers?: unknown[] }>(
-        `/api/stocks/movers?type=${type}&limit=20`
+        `/api/stocks/movers?type=${type}&limit=50`
       );
 
       const stocks: Stock[] = (data[type] || []).map((item: unknown) =>
@@ -440,6 +440,16 @@ export const stockAPI = {
       console.error('[stockAPI] getMarketMovers error:', error);
       return { data: [], success: false, timestamp: new Date().toISOString() };
     }
+  },
+
+  // Get gainers specifically
+  async getGainers(): Promise<APIResponse<Stock[]>> {
+    return this.getMarketMovers('gainers');
+  },
+
+  // Get losers specifically
+  async getLosers(): Promise<APIResponse<Stock[]>> {
+    return this.getMarketMovers('losers');
   },
 
   // Crypto data
