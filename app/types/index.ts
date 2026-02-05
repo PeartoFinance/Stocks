@@ -42,6 +42,9 @@ export interface Stock {
   website?: string;
   logoUrl?: string;
   lastUpdated?: string;
+  id?: number;
+  isFeatured?: boolean;
+  isListed?: boolean;
 }
 
 export interface MarketIndex {

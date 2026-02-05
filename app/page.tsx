@@ -5,7 +5,7 @@ import { Search, TrendingUp, TrendingDown, BarChart, List, Activity, Tag, Globe,
 import Link from 'next/link';
 import { stockAPI } from './utils/api';
 import { marketService, MarketOverviewResponse } from './utils/marketService';
-import AIAnalysisPanel from './components/ai/AIAnalysisPanel';
+import MarketMovers from './components/mainpage/MarketMovers';
 
 interface MarketIndex {
   name: string;
@@ -51,7 +51,7 @@ export default function HomePage() {
   const [marketNews, setMarketNews] = useState<NewsItem[]>([]);
   const [marketStatus, setMarketStatus] = useState<string>('Open');
   const [lastUpdate, setLastUpdate] = useState<string>('');
-  const [selectedTab, setSelectedTab] = useState<'gainers' | 'losers' | 'trending'>('gainers');
+  const [selectedTab, setSelectedTab] = useState<'gainers' | 'losers' | 'trending' | 'analysis'>('gainers');
   const [loading, setLoading] = useState(true);
   const [marketStats, setMarketStats] = useState<{
     totalVolume: number;
@@ -349,91 +349,16 @@ export default function HomePage() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-10 lg:mb-12">
               {/* Market Movers */}
               <div className="lg:col-span-2">
-                <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
-                  <div className="p-4 sm:p-6 border-b border-gray-200">
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
-                      <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Market Movers</h2>
-                      <div className="flex items-center gap-1 sm:gap-2 w-full sm:w-auto overflow-x-auto scrollbar-hide">
-                        <button
-                          onClick={() => setSelectedTab('gainers')}
-                          className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-xs sm:text-sm whitespace-nowrap ${selectedTab === 'gainers'
-                            ? 'bg-green-100 text-green-700'
-                            : 'text-gray-600 hover:text-gray-900'
-                            }`}
-                        >
-                          Gainers
-                        </button>
-                        <button
-                          onClick={() => setSelectedTab('losers')}
-                          className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-xs sm:text-sm whitespace-nowrap ${selectedTab === 'losers'
-                            ? 'bg-red-100 text-red-700'
-                            : 'text-gray-600 hover:text-gray-900'
-                            }`}
-                        >
-                          Losers
-                        </button>
-                        <button
-                          onClick={() => setSelectedTab('trending')}
-                          className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-xs sm:text-sm whitespace-nowrap ${selectedTab === 'trending'
-                            ? 'bg-emerald-100 text-emerald-700'
-                            : 'text-gray-600 hover:text-gray-900'
-                            }`}
-                        >
-                          Trending
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="p-3 sm:p-4 lg:p-6">
-                    <div className="space-y-3 sm:space-y-4">
-                      {(selectedTab === 'gainers' ? topGainers :
-                        selectedTab === 'losers' ? topLosers : trendingStocks)
-                        .slice(0, 5).map((stock, i) => {
-                          const changeData = formatChange(stock.change, stock.changePercent);
-                          return (
-                            <Link key={i} href={`/stock/${stock.symbol.toLowerCase()}`}>
-                              <div className="flex items-center justify-between p-3 sm:p-4 bg-gray-50 rounded-lg sm:rounded-xl hover:bg-gray-100 transition-colors cursor-pointer border border-gray-100">
-                                <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 min-w-0 flex-1">
-                                  <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0 ${changeData.isPositive ? 'bg-green-100' : 'bg-red-100'
-                                    }`}>
-                                    <span className={`font-bold text-xs sm:text-sm ${changeData.isPositive ? 'text-green-700' : 'text-red-700'
-                                      }`}>
-                                      {stock.symbol.slice(0, 2)}
-                                    </span>
-                                  </div>
-                                  <div className="min-w-0 flex-1">
-                                    <div className="font-semibold text-sm sm:text-base text-gray-900">{stock.symbol}</div>
-                                    <div className="text-xs sm:text-sm text-gray-600 truncate">{stock.name}</div>
-                                    <div className="text-xs text-gray-500 hidden sm:block">{stock.sector}</div>
-                                  </div>
-                                </div>
-                                <div className="text-right ml-2 flex-shrink-0">
-                                  <div className="font-bold text-sm sm:text-base lg:text-lg text-gray-900">{formatPrice(stock.price)}</div>
-                                  <div className={`text-xs sm:text-sm font-medium flex items-center justify-end ${changeData.isPositive ? 'text-green-600' : 'text-red-600'
-                                    }`}>
-                                    {changeData.isPositive ? (
-                                      <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
-                                    ) : (
-                                      <TrendingDown className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
-                                    )}
-                                    <span className="hidden sm:inline">{changeData.value}</span>
-                                    <span className="sm:hidden">{stock.changePercent.toFixed(1)}%</span>
-                                  </div>
-                                  <div className="text-xs text-gray-500 mt-1 hidden sm:block">
-                                    Vol: {stock.volume ? formatVolume(stock.volume) : 'N/A'}
-                                  </div>
-                                </div>
-                              </div>
-                            </Link>
-                          );
-                        })}
-                    </div>
-                    <Link href="/stocks" className="block mt-4 sm:mt-6 text-center py-3 bg-emerald-600 text-white rounded-lg sm:rounded-xl hover:bg-emerald-700 transition-colors font-medium text-sm sm:text-base">
-                      View All Market Data →
-                    </Link>
-                  </div>
-                </div>
+                <MarketMovers
+                  topGainers={topGainers}
+                  topLosers={topLosers}
+                  trendingStocks={trendingStocks}
+                  selectedTab={selectedTab}
+                  setSelectedTab={setSelectedTab}
+                  formatPrice={formatPrice}
+                  formatChange={formatChange}
+                  formatVolume={formatVolume}
+                />
               </div>
 
               {/* Market News & Analysis */}
@@ -643,7 +568,7 @@ export default function HomePage() {
                     : 'Loading...'
                   }
                 </div>
-              </div>
+</div>
 
               <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl border border-gray-200 p-4 sm:p-6">
                 <div className="flex items-center justify-between mb-3 sm:mb-4">
@@ -687,38 +612,6 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* AI Analysis Sidebar - Now beside data tables only */}
-          <div className="w-full xl:w-80 flex-shrink-0">
-            <div className="xl:sticky xl:top-4">
-              <AIAnalysisPanel
-                title="Market Overview"
-                pageType="market-dashboard"
-                pageData={{
-                  indices: marketData.slice(0, 4).map(m => ({
-                    name: m.name,
-                    value: m.value,
-                    change: m.changePercent
-                  })),
-                  topGainers: topGainers.slice(0, 3).map(s => ({
-                    symbol: s.symbol,
-                    change: s.changePercent
-                  })),
-                  topLosers: topLosers.slice(0, 3).map(s => ({
-                    symbol: s.symbol,
-                    change: s.changePercent
-                  })),
-                  marketStatus
-                }}
-                autoAnalyze={!loading && (topGainers.length > 0 || marketData.length > 0)}
-                quickPrompts={[
-                  'Market sentiment today',
-                  'Best opportunities',
-                  'Risk assessment'
-                ]}
-                maxHeight="500px"
-              />
-            </div>
-          </div>
         </div>
       </div>
     </div>
