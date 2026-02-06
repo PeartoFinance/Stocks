@@ -135,10 +135,10 @@ export default function WorldIndices({ className = '' }: WorldIndicesProps) {
         <div className="text-xs text-gray-500">{index.symbol}</div>
       </div>
       <div className="text-right">
-        <div className="text-sm font-semibold text-gray-900">{index.price.toFixed(2)}</div>
-        <div className={`text-xs font-medium flex items-center justify-end ${index.change >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
-          {index.change >= 0 ? <TrendingUp className="h-3 w-3 mr-1" /> : <TrendingDown className="h-3 w-3 mr-1" />}
-          {index.change >= 0 ? '+' : ''}{index.change.toFixed(2)} ({index.changePercent.toFixed(2)}%)
+        <div className="text-sm font-semibold text-gray-900">{(index.price || index.value || 0).toFixed(2)}</div>
+        <div className={`text-xs font-medium flex items-center justify-end ${(index.change || 0) >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
+          {(index.change || 0) >= 0 ? <TrendingUp className="h-3 w-3 mr-1" /> : <TrendingDown className="h-3 w-3 mr-1" />}
+          {(index.change || 0) >= 0 ? '+' : ''}{(index.change || 0).toFixed(2)} ({(index.changePercent || 0).toFixed(2)}%)
         </div>
       </div>
     </div>
