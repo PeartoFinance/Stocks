@@ -47,13 +47,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return {
       id: data.user_id || data.id,
       email: data.email,
-     //changed this for testing
+      //changed this for testing
       name: data.name || data.email?.split('@')[0] || 'User', // Use email as fallback
       firstName: data.first_name || data.firstName || data.email?.split('@')[0] || '',
       lastName: data.last_name || data.lastName || '',
       role: data.role || 'user',
       avatarUrl: data.avatar_url || data.avatarUrl,
-    //changed this for testing
+      //changed this for testing
       lastLoginAt: data.lastLoginAt
     };
   }, []);
