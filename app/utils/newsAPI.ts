@@ -54,9 +54,9 @@ export const newsAPI = {
   // Get general market news
   async getMarketNews(limit: number = 20): Promise<APIResponse<NewsItem[]>> {
     try {
-      const data = await newsFetch<NewsItem[]>(`/api/news/market?limit=${limit}`);
+      const response = await newsFetch<{ items: NewsItem[] }>(`/news/published?limit=${limit}`);
       return {
-        data,
+        data: response.items || [],
         success: true,
         timestamp: new Date().toISOString(),
       };
@@ -69,7 +69,7 @@ export const newsAPI = {
   // Get news for specific symbol
   async getSymbolNews(symbol: string, limit: number = 10): Promise<APIResponse<NewsItem[]>> {
     try {
-      const data = await newsFetch<NewsItem[]>(`/api/news/symbol/${symbol}?limit=${limit}`);
+      const data = await newsFetch<NewsItem[]>(`/news/symbol/${symbol}?limit=${limit}`);
       return {
         data,
         success: true,
@@ -84,7 +84,7 @@ export const newsAPI = {
   // Get trending news
   async getTrendingNews(limit: number = 15): Promise<APIResponse<NewsItem[]>> {
     try {
-      const data = await newsFetch<NewsItem[]>(`/api/news/trending?limit=${limit}`);
+      const data = await newsFetch<NewsItem[]>(`/news/trending?limit=${limit}`);
       return {
         data,
         success: true,
@@ -117,7 +117,7 @@ export const newsAPI = {
   async getNewsByCategory(category: string, limit: number = 20): Promise<APIResponse<NewsItem[]>> {
     try {
       const data = await newsFetch<NewsItem[]>(
-        `/api/news/category/${category}?limit=${limit}`
+        `/news/category/${category}?limit=${limit}`
       );
       return {
         data,
@@ -133,7 +133,7 @@ export const newsAPI = {
   // Get economic calendar events
   async getEconomicCalendar(days: number = 7): Promise<APIResponse<any[]>> {
     try {
-      const data = await newsFetch<any[]>(`/api/news/economic-calendar?days=${days}`);
+      const data = await newsFetch<any[]>(`/news/economic-calendar?days=${days}`);
       return {
         data,
         success: true,
@@ -148,7 +148,7 @@ export const newsAPI = {
   // Get earnings calendar
   async getEarningsCalendar(days: number = 7): Promise<APIResponse<any[]>> {
     try {
-      const data = await newsFetch<any[]>(`/api/news/earnings-calendar?days=${days}`);
+      const data = await newsFetch<any[]>(`/news/earnings-calendar?days=${days}`);
       return {
         data,
         success: true,

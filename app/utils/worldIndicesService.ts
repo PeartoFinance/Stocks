@@ -29,10 +29,12 @@ export interface WorldIndex {
   symbol: string;
   name: string;
   price: number;
+  value?: number; // Backend returns 'value' field
   change: number;
   changePercent: number;
   region: 'americas' | 'europe' | 'asia-pacific';
   country?: string;
+  countryCode?: string; // Backend returns countryCode field
 }
 
 export interface AssetData {
@@ -51,6 +53,21 @@ export interface SectorData {
   ytdReturn: number;
   dayReturn: number;
   stockCount: number;
+  marketCap?: number;
+}
+
+export interface BackendSectorData {
+  sector: string;
+  turnover: number;
+  turnoverPercent: number;
+  volume: number;
+  volumePercent: number;
+  transactions: number;
+  transactionsPercent: number;
+  avgChangePercent: number;
+  advancers: number;
+  decliners: number;
+  unchanged: number;
 }
 
 export interface CryptoData {
@@ -86,8 +103,28 @@ export const worldIndicesService = {
   // World Indices
   async getWorldIndices(): Promise<{ americas: WorldIndex[]; europe: WorldIndex[]; asiaPacific: WorldIndex[] }> {
     try {
-      const response = await apiRequest<{ data: { americas: WorldIndex[]; europe: WorldIndex[]; asiaPacific: WorldIndex[] } }>('/world-indices');
-      return response.data || { americas: [], europe: [], asiaPacific: [] };
+      const response = await apiRequest<{ indices: WorldIndex[] }>('/market/overview');
+      console.log(response)
+      const indices = response.indices || [];
+
+      // Transform backend data to match frontend interface (value -> price)
+      const transformedIndices = indices.map(idx => ({
+        ...idx,
+        price: idx.value || idx.price || 0, // Map backend 'value' to frontend 'price'
+        change: idx.change || 0,
+        changePercent: idx.changePercent || 0,
+        region: idx.region || 'americas' // Add region for UI
+      }));
+
+      // Group indices by region
+      const americas = transformedIndices.filter(idx => idx.countryCode === 'US' || 
+        ['SPY', 'DIA', 'IXIC', 'QQQ', 'IWM'].includes(idx.symbol));
+      const europe = transformedIndices.filter(idx => idx.countryCode === 'DE' || idx.countryCode === 'GB' || idx.countryCode === 'FR' || 
+        ['DAX', 'FTSE', 'CAC', 'STOXX', 'SMI'].includes(idx.symbol));
+      const asiaPacific = transformedIndices.filter(idx => idx.countryCode === 'JP' || idx.countryCode === 'HK' || idx.countryCode === 'AU' || 
+        ['Nikkei', 'HSI', 'ASX', 'N225', 'NKY'].includes(idx.symbol));
+
+      return { americas, europe, asiaPacific };
     } catch (error) {
       console.error('Error fetching world indices:', error);
       // Fallback mock data
@@ -146,8 +183,17 @@ export const worldIndicesService = {
   // Sectors data
   async getSectors(): Promise<SectorData[]> {
     try {
-      const response = await apiRequest<{ data: SectorData[] }>('/sectors');
-      return response.data || [];
+      const response = await apiRequest<{ sectors: BackendSectorData[] }>('/market/sector-analysis');
+      
+      // Transform API response to match expected interface
+      return response.sectors.map(sector => ({
+        sector: sector.sector,
+        marketWeight: sector.turnoverPercent || sector.transactionsPercent || 0,
+        ytdReturn: sector.avgChangePercent || 0,
+        dayReturn: sector.avgChangePercent || 0,
+        stockCount: sector.transactions || 0,
+        marketCap: sector.turnover || 0
+      }));
     } catch (error) {
       console.error('Error fetching sectors:', error);
       // Fallback mock data

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { newsService } from '../../utils/marketService';
+import { newsAPI } from '../../utils/newsAPI';
 import { Newspaper, Clock, ExternalLink } from 'lucide-react';
 
 interface NewsItem {
@@ -12,6 +12,7 @@ interface NewsItem {
   source: string;
   impact: 'high' | 'medium' | 'low';
   url?: string;
+  image?: string;
 }
 
 interface NewsCarouselProps {
@@ -27,17 +28,18 @@ export default function NewsCarousel({ className = '' }: NewsCarouselProps) {
     const fetchNews = async () => {
       try {
         setLoading(true);
-        const data = await newsService.getPublishedNews({ limit: 5 });
+        const response = await newsAPI.getMarketNews(5);
         
-        // Transform the data to match our interface
-        const transformedNews: NewsItem[] = (data as any[]).map((item: any, index) => ({
+        // Transform: data structure to match our interface
+        const transformedNews: NewsItem[] = (response.data as any[]).map((item: any, index) => ({
           id: item.id || index,
           title: item.title || 'Market Update',
           summary: item.summary || item.description || 'Latest market news and updates',
-          time: item.time || item.published_at || new Date().toISOString(),
+          time: item.time || item.publishedAt || new Date().toISOString(),
           source: item.source || 'Market News',
           impact: item.impact || 'medium',
-          url: item.url || '#'
+          url: item.url || '#',
+          image: item.image || undefined
         }));
         
         setNews(transformedNews);
@@ -141,6 +143,15 @@ export default function NewsCarousel({ className = '' }: NewsCarouselProps) {
         <div className="relative">
           {/* News Content */}
           <div className="p-6">
+            {currentNews.image && (
+              <div className="mb-4">
+                <img 
+                  src={currentNews.image} 
+                  alt={currentNews.title}
+                  className="w-full h-48 object-cover rounded-lg"
+                />
+              </div>
+            )}
             <div className="flex items-start gap-3 mb-3">
               <span className={`px-2 py-1 text-xs font-medium rounded-full border ${getImpactColor(currentNews.impact)}`}>
                 {currentNews.impact.toUpperCase()}
