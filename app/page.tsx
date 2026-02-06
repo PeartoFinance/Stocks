@@ -304,49 +304,6 @@ export default function HomePage() {
 
       {/* Main Dashboard Content */}
       <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
-        {/* Hero Section with Advanced Search */}
-        <div className="text-center mb-8 sm:mb-10 lg:mb-12">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-gray-900 via-emerald-800 to-gray-900 bg-clip-text text-transparent mb-4 sm:mb-6 px-4">
-            Professional Stock Analysis Platform
-          </h1>
-          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 mb-6 sm:mb-8 max-w-4xl mx-auto px-4">
-            Real-time data on 100,000+ stocks, ETFs, and funds. Advanced analytics, AI-powered insights,
-            and institutional-grade research tools for professional investors.
-          </p>
-
-          {/* Advanced Search Bar */}
-          <div className="max-w-3xl mx-auto mb-6 sm:mb-8 px-3 sm:px-4">
-            <div className="relative bg-white rounded-xl sm:rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
-              <Search className="absolute left-3 sm:left-6 top-1/2 transform -translate-y-1/2 h-5 w-5 sm:h-6 sm:w-6 text-gray-400" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search stocks, ETFs, indexes..."
-                className="w-full pl-10 sm:pl-16 pr-12 sm:pr-20 py-3 sm:py-5 text-sm sm:text-base lg:text-lg border-0 focus:ring-0 focus:outline-none"
-              />
-              <div className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 flex items-center gap-1 sm:gap-2">
-                <button className="p-1.5 sm:p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors">
-                  <Filter className="h-4 w-4 sm:h-5 sm:w-5" />
-                </button>
-                <div className="hidden sm:block text-gray-400 text-sm px-2 py-1 bg-gray-100 rounded">
-                  Enter
-                </div>
-              </div>
-            </div>
-
-            {/* Quick Search Suggestions */}
-            <div className="mt-3 sm:mt-4 flex flex-wrap justify-center gap-1.5 sm:gap-2">
-              <span className="text-xs sm:text-sm text-gray-600 mr-1 sm:mr-2">Trending:</span>
-              {['NVDA', 'AAPL', 'TSLA', 'META', 'GOOGL', 'MSFT'].map((symbol, i) => (
-                <button key={i} className="px-2 sm:px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full text-xs sm:text-sm hover:bg-emerald-100 transition-colors">
-                  {symbol}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
         {/* Market Overview Grid with AI Sidebar */}
         <div className="flex flex-col xl:flex-row gap-4 sm:gap-6 lg:gap-8">
           {/* Main Data Content */}

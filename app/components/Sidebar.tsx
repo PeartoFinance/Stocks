@@ -21,7 +21,7 @@ export default function Sidebar({ isOpenMobile, setIsOpenMobile }: SidebarProps)
   useEffect(() => {
     const updateWidth = () => {
       if (window.innerWidth >= 1024) {
-        document.documentElement.style.setProperty('--sidebar-width', isCollapsed ? '80px' : '264px');
+        document.documentElement.style.setProperty('--sidebar-width', isCollapsed ? '80px' : '260px');
       } else {
         document.documentElement.style.setProperty('--sidebar-width', '0px');
       }
@@ -50,7 +50,6 @@ export default function Sidebar({ isOpenMobile, setIsOpenMobile }: SidebarProps)
         </div>
       )}
 
-      {/* Navigation */}
       <nav className={`flex-1 px-3 ${isMobile ? 'py-4' : 'py-6'} space-y-2`}>
         {navItems.map((item) => {
           const isActive = pathname === item.href;
@@ -59,20 +58,11 @@ export default function Sidebar({ isOpenMobile, setIsOpenMobile }: SidebarProps)
               key={item.label}
               href={item.href}
               onClick={() => isMobile && setIsOpenMobile(false)}
-              className={`group flex items-center gap-3 p-3 rounded-xl transition-all duration-200 hover:scale-105 ${
-                isActive 
-                  ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400 font-semibold shadow-sm border border-emerald-200 dark:border-emerald-800' 
-                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white hover:shadow-md'
-              } ${isCollapsed && !isMobile ? 'justify-center' : ''}`}
+              className={`group flex items-center gap-4 p-3 rounded-xl transition-all duration-200 hover:scale-105 ${isActive ? 'bg-emerald-50 text-emerald-700 font-bold shadow-sm' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700 hover:shadow-md'
+                } ${isCollapsed && !isMobile ? 'justify-center' : ''}`}
             >
-              <item.icon size={20} className={`transition-transform duration-200 group-hover:scale-110 ${
-                isActive ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-500 dark:text-gray-400'
-              }`} />
-              {(!isCollapsed || isMobile) && (
-                <span className={`text-sm font-medium ${
-                  isActive ? 'text-emerald-700 dark:text-emerald-400' : 'text-gray-700 dark:text-gray-200'
-                }`}>{item.label}</span>
-              )}
+              <item.icon size={22} className="transition-transform duration-200 group-hover:scale-110" />
+              {(!isCollapsed || isMobile) && <span className="text-sm">{item.label}</span>}
             </Link>
           );
         })}
@@ -102,25 +92,17 @@ export default function Sidebar({ isOpenMobile, setIsOpenMobile }: SidebarProps)
         )}
       </AnimatePresence>
 
-      {/* DESKTOP SIDEBAR - Fixed for all pages */}
+      {/* DESKTOP SIDEBAR - Sticky within content area, not fixed full height */}
       <aside
-        className={`fixed top-0 left-0 h-screen bg-white dark:bg-gray-950 border-r border-gray-200 dark:border-gray-700 z-40 transition-all duration-300 hidden lg:block flex-shrink-0 shadow-2xl ${
-          isCollapsed ? 'w-20' : 'w-64'
-        }`}
-        style={{ marginTop: '64px' }}
+        className={`sticky top-0 self-start h-screen bg-white border-r border-gray-200 z-40 transition-all duration-300 hidden lg:block flex-shrink-0 ${isCollapsed ? 'w-20' : 'w-64'
+          }`}
       >
-        {/* Toggle Button */}
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="absolute -right-3 top-24 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-full p-2 shadow-lg z-50 hover:bg-emerald-50 hover:border-emerald-300 hover:scale-110 transition-all duration-200"
+          className="absolute -right-3 top-20 bg-white border border-gray-200 rounded-full p-1 shadow-md z-50 hover:text-emerald-500 hover:scale-110 transition-all duration-200"
         >
-          {isCollapsed ? (
-            <ChevronRight size={16} className="text-emerald-600" />
-          ) : (
-            <ChevronLeft size={16} className="text-emerald-600" />
-          )}
+          {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
         </button>
-        
         <SidebarInner />
       </aside>
     </>

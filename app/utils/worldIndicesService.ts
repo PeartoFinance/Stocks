@@ -83,38 +83,31 @@ export interface PrivateCompany {
 }
 
 export const worldIndicesService = {
-  // World Indices by region
+  // World Indices
   async getWorldIndices(): Promise<{ americas: WorldIndex[]; europe: WorldIndex[]; asiaPacific: WorldIndex[] }> {
     try {
-      // Mock data for now - replace with actual API call
-      const mockData: WorldIndex[] = [
-        // Americas
-        { symbol: '^DJI', name: 'Dow 30', price: 38754.32, change: 123.45, changePercent: 0.32, region: 'americas', country: 'US' },
-        { symbol: '^GSPC', name: 'S&P 500', price: 4987.23, change: 23.67, changePercent: 0.48, region: 'americas', country: 'US' },
-        { symbol: '^IXIC', name: 'NASDAQ', price: 15678.90, change: -45.23, changePercent: -0.29, region: 'americas', country: 'US' },
-        { symbol: '^TSX', name: 'TSX', price: 21876.54, change: 67.89, changePercent: 0.31, region: 'americas', country: 'Canada' },
-        
-        // Europe
-        { symbol: '^FTSE', name: 'FTSE 100', price: 7654.32, change: -23.45, changePercent: -0.31, region: 'europe', country: 'UK' },
-        { symbol: '^DAX', name: 'DAX', price: 18234.56, change: 45.67, changePercent: 0.25, region: 'europe', country: 'Germany' },
-        { symbol: '^CAC', name: 'CAC 40', price: 7234.89, change: 12.34, changePercent: 0.17, region: 'europe', country: 'France' },
-        { symbol: '^STOXX', name: 'Euro Stoxx 50', price: 4567.89, change: 23.45, changePercent: 0.52, region: 'europe', country: 'EU' },
-        
-        // Asia-Pacific
-        { symbol: '^N225', name: 'Nikkei 225', price: 38976.54, change: 234.56, changePercent: 0.61, region: 'asia-pacific', country: 'Japan' },
-        { symbol: '^HSI', name: 'Hang Seng', price: 18234.56, change: -123.45, changePercent: -0.67, region: 'asia-pacific', country: 'Hong Kong' },
-        { symbol: '^AXJO', name: 'ASX 200', price: 7654.32, change: 34.56, changePercent: 0.45, region: 'asia-pacific', country: 'Australia' },
-        { symbol: '^NSEI', name: 'Nifty 50', price: 21876.54, change: 123.45, changePercent: 0.57, region: 'asia-pacific', country: 'India' },
-      ];
-
-      const americas = mockData.filter(idx => idx.region === 'americas');
-      const europe = mockData.filter(idx => idx.region === 'europe');
-      const asiaPacific = mockData.filter(idx => idx.region === 'asia-pacific');
-
-      return { americas, europe, asiaPacific };
+      const response = await apiRequest<{ data: { americas: WorldIndex[]; europe: WorldIndex[]; asiaPacific: WorldIndex[] } }>('/world-indices');
+      return response.data || { americas: [], europe: [], asiaPacific: [] };
     } catch (error) {
       console.error('Error fetching world indices:', error);
-      throw error;
+      // Fallback mock data
+      return {
+        americas: [
+          { symbol: 'SPY', name: 'S&P 500', price: 4532.18, change: 23.45, changePercent: 0.52, region: 'americas' },
+          { symbol: 'DIA', name: 'Dow Jones', price: 35678.92, change: -45.23, changePercent: -0.13, region: 'americas' },
+          { symbol: 'IXIC', name: 'NASDAQ', price: 14234.56, change: 123.67, changePercent: 0.87, region: 'americas' },
+        ],
+        europe: [
+          { symbol: 'DAX', name: 'DAX', price: 16789.34, change: 89.45, changePercent: 0.54, region: 'europe' },
+          { symbol: 'FTSE', name: 'FTSE 100', price: 7456.78, change: -23.45, changePercent: -0.31, region: 'europe' },
+          { symbol: 'CAC', name: 'CAC 40', price: 7234.56, change: 45.67, changePercent: 0.64, region: 'europe' },
+        ],
+        asiaPacific: [
+          { symbol: 'Nikkei', name: 'Nikkei 225', price: 34567.89, change: 234.56, changePercent: 0.68, region: 'asia-pacific' },
+          { symbol: 'HSI', name: 'Hang Seng', price: 17456.78, change: -123.45, changePercent: -0.70, region: 'asia-pacific' },
+          { symbol: 'ASX', name: 'ASX 200', price: 7234.56, change: 45.67, changePercent: 0.64, region: 'asia-pacific' },
+        ]
+      };
     }
   },
 
@@ -153,9 +146,13 @@ export const worldIndicesService = {
   // Sectors data
   async getSectors(): Promise<SectorData[]> {
     try {
-      // Mock data - replace with actual API call
-      const mockSectors: SectorData[] = [
-        { sector: 'Technology', marketWeight: 28.5, ytdReturn: 12.3, dayReturn: 1.2, stockCount: 456 },
+      const response = await apiRequest<{ data: SectorData[] }>('/sectors');
+      return response.data || [];
+    } catch (error) {
+      console.error('Error fetching sectors:', error);
+      // Fallback mock data
+      return [
+        { sector: 'Technology', marketWeight: 28.5, ytdReturn: 12.3, dayReturn: 1.2, stockCount: 222 },
         { sector: 'Healthcare', marketWeight: 13.2, ytdReturn: 8.7, dayReturn: -0.3, stockCount: 234 },
         { sector: 'Financial Services', marketWeight: 12.8, ytdReturn: 6.5, dayReturn: 0.8, stockCount: 189 },
         { sector: 'Consumer Cyclical', marketWeight: 10.5, ytdReturn: -2.1, dayReturn: -1.5, stockCount: 167 },
@@ -166,11 +163,6 @@ export const worldIndicesService = {
         { sector: 'Utilities', marketWeight: 2.9, ytdReturn: 3.4, dayReturn: 0.2, stockCount: 67 },
         { sector: 'Communication', marketWeight: 11.8, ytdReturn: 18.9, dayReturn: 2.8, stockCount: 123 },
       ];
-
-      return mockSectors;
-    } catch (error) {
-      console.error('Error fetching sectors:', error);
-      throw error;
     }
   },
 
@@ -249,18 +241,17 @@ export const worldIndicesService = {
   // Private Companies
   async getPrivateCompanies(): Promise<PrivateCompany[]> {
     try {
-      // Mock data - replace with actual API call
-      const mockPrivate: PrivateCompany[] = [
+      const response = await apiRequest<{ data: PrivateCompany[] }>('/private-companies');
+      return response.data || [];
+    } catch (error) {
+      console.error('Error fetching private companies:', error);
+      // Fallback mock data
+      return [
         { symbol: 'SPACE', name: 'SpaceX', price: 210.00, changePercent: 15.6, lastFunding: 8700000000, valuation: 180000000000 },
         { symbol: 'STRIPE', name: 'Stripe', price: 45.23, changePercent: 8.9, lastFunding: 6500000000, valuation: 50000000000 },
         { symbol: 'DISCORD', name: 'Discord', price: 67.89, changePercent: -2.3, lastFunding: 1000000000, valuation: 15000000000 },
         { symbol: 'REDBULL', name: 'Reddit', price: 54.32, changePercent: 5.6, lastFunding: 410000000, valuation: 10000000000 },
       ];
-
-      return mockPrivate;
-    } catch (error) {
-      console.error('Error fetching private companies:', error);
-      throw error;
     }
   },
 };
