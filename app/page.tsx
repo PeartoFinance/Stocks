@@ -1,11 +1,17 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Search, TrendingUp, TrendingDown, BarChart, List, Activity, Tag, Globe, Users, Clock, DollarSign, Zap, ArrowRight, Star, Bell, Filter, RefreshCw, Eye, Calendar, PieChart, LineChart, Target, Briefcase } from 'lucide-react';
+import { Search, TrendingUp, TrendingDown, BarChart, List, Activity, Tag, Globe, Users, Clock, DollarSign, Zap, ArrowRight, Star, Bell, Filter, RefreshCw, Eye, Calendar, PieChart, LineChart, Target, Briefcase, Bitcoin, Building, Rocket, Coins, Newspaper } from 'lucide-react';
 import Link from 'next/link';
 import { stockAPI } from './utils/api';
 import { marketService, MarketOverviewResponse } from './utils/marketService';
 import MarketMovers from './components/mainpage/MarketMovers';
+import WorldIndices from './components/mainpage/WorldIndices';
+import SectorsSection from './components/mainpage/SectorsSection';
+import ETFsMutualFunds from './components/mainpage/ETFsMutualFunds';
+import PrivateCompanies from './components/mainpage/PrivateCompanies';
+import MarketSummary from './components/mainpage/MarketSummary';
+import NewsCarousel from './components/mainpage/NewsCarousel';
 
 interface MarketIndex {
   name: string;
@@ -298,49 +304,6 @@ export default function HomePage() {
 
       {/* Main Dashboard Content */}
       <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
-        {/* Hero Section with Advanced Search */}
-        <div className="text-center mb-8 sm:mb-10 lg:mb-12">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-gray-900 via-emerald-800 to-gray-900 bg-clip-text text-transparent mb-4 sm:mb-6 px-4">
-            Professional Stock Analysis Platform
-          </h1>
-          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 mb-6 sm:mb-8 max-w-4xl mx-auto px-4">
-            Real-time data on 100,000+ stocks, ETFs, and funds. Advanced analytics, AI-powered insights,
-            and institutional-grade research tools for professional investors.
-          </p>
-
-          {/* Advanced Search Bar */}
-          <div className="max-w-3xl mx-auto mb-6 sm:mb-8 px-3 sm:px-4">
-            <div className="relative bg-white rounded-xl sm:rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
-              <Search className="absolute left-3 sm:left-6 top-1/2 transform -translate-y-1/2 h-5 w-5 sm:h-6 sm:w-6 text-gray-400" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search stocks, ETFs, indexes..."
-                className="w-full pl-10 sm:pl-16 pr-12 sm:pr-20 py-3 sm:py-5 text-sm sm:text-base lg:text-lg border-0 focus:ring-0 focus:outline-none"
-              />
-              <div className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 flex items-center gap-1 sm:gap-2">
-                <button className="p-1.5 sm:p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors">
-                  <Filter className="h-4 w-4 sm:h-5 sm:w-5" />
-                </button>
-                <div className="hidden sm:block text-gray-400 text-sm px-2 py-1 bg-gray-100 rounded">
-                  Enter
-                </div>
-              </div>
-            </div>
-
-            {/* Quick Search Suggestions */}
-            <div className="mt-3 sm:mt-4 flex flex-wrap justify-center gap-1.5 sm:gap-2">
-              <span className="text-xs sm:text-sm text-gray-600 mr-1 sm:mr-2">Trending:</span>
-              {['NVDA', 'AAPL', 'TSLA', 'META', 'GOOGL', 'MSFT'].map((symbol, i) => (
-                <button key={i} className="px-2 sm:px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full text-xs sm:text-sm hover:bg-emerald-100 transition-colors">
-                  {symbol}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
         {/* Market Overview Grid with AI Sidebar */}
         <div className="flex flex-col xl:flex-row gap-4 sm:gap-6 lg:gap-8">
           {/* Main Data Content */}
@@ -361,53 +324,51 @@ export default function HomePage() {
                 />
               </div>
 
-              {/* Market News & Analysis */}
+              {/* Quick Markets */}
               <div>
-                <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
-                  <div className="p-4 sm:p-6 border-b border-gray-200">
-                    <h2 className="text-lg sm:text-xl font-bold text-gray-900 flex items-center">
-                      <Zap className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-yellow-500" />
-                      Live Market News
-                    </h2>
-                  </div>
-                  <div className="p-3 sm:p-4 lg:p-6 max-h-80 sm:max-h-96 overflow-y-auto">
-                    <div className="space-y-3 sm:space-y-4">
-                      {loading ? (
-                        [1,2,3].map(i => (
-                          <div key={i} className="p-3 sm:p-4 bg-gray-50 rounded-lg sm:rounded-xl border border-gray-100 animate-pulse">
-                            <div className="flex items-start justify-between mb-2">
-                              <div className="h-4 w-16 bg-gray-200 rounded"></div>
-                              <div className="h-3 w-12 bg-gray-200 rounded"></div>
-                            </div>
-                            <div className="h-4 w-full bg-gray-200 rounded mb-2"></div>
-                            <div className="h-3 w-3/4 bg-gray-200 rounded"></div>
-                          </div>
-                        ))
-                      ) : marketNews.length > 0 ? (
-                        marketNews.map((news, i) => (
-                          <div key={news.id} className="p-3 sm:p-4 bg-gray-50 rounded-lg sm:rounded-xl hover:bg-gray-100 transition-colors cursor-pointer border border-gray-100">
-                            <div className="flex items-start justify-between mb-2 gap-2">
-                              <div className={`px-2 py-1 rounded text-xs font-medium flex-shrink-0 ${
-                                news.impact === 'high' ? 'bg-red-100 text-red-700' :
-                                news.impact === 'medium' ? 'bg-yellow-100 text-yellow-700' :
-                                'bg-green-100 text-green-700'
-                              }`}>
-                                {news.impact.toUpperCase()}
-                              </div>
-                              <span className="text-xs text-gray-500 flex-shrink-0">{news.time}</span>
-                            </div>
-                            <h3 className="font-semibold text-gray-900 mb-2 text-xs sm:text-sm leading-tight">{news.title}</h3>
-                            <p className="text-xs text-gray-600 line-clamp-2">{news.summary}</p>
-                            <div className="mt-2 text-xs text-gray-500 font-medium">{news.source}</div>
-                          </div>
-                        ))
-                      ) : (
-                        <div className="text-center py-6 sm:py-8 text-gray-500">
-                          <Zap className="h-6 w-6 sm:h-8 sm:w-8 mx-auto mb-2 text-gray-300" />
-                          <p className="text-xs sm:text-sm">No market news available</p>
-                          <p className="text-xs mt-1">Import news from admin panel</p>
-                        </div>
-                      )}
+                <WorldIndices />
+              </div>
+            </div>
+
+            {/* Market Summary with Donut Chart */}
+            <div className="mb-8 sm:mb-10 lg:mb-12">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+                <MarketSummary />
+                <PrivateCompanies />
+              </div>
+            </div>
+
+            {/* Sectors Section */}
+            <div className="mb-8 sm:mb-10 lg:mb-12">
+              <SectorsSection />
+            </div>
+
+            {/* News Section */}
+            <div className="mb-8 sm:mb-10 lg:mb-12">
+              <div className="text-center mb-6 sm:mb-8 px-4">
+                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">Market News & Analysis</h2>
+                <p className="text-sm sm:text-base lg:text-lg text-gray-600">Latest financial news and market insights</p>
+              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+                <div className="lg:col-span-2">
+                  <NewsCarousel />
+                </div>
+                <div className="lg:col-span-1">
+                  <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+                    <h3 className="font-semibold text-gray-900 mb-4">Market Highlights</h3>
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <span className="text-sm text-gray-700">Markets showing positive momentum</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                        <span className="text-sm text-gray-700">Tech sector leading gains</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                        <span className="text-sm text-gray-700">Energy prices volatile</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -514,80 +475,11 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Market Statistics Dashboard */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8 sm:mb-10 lg:mb-12">
-              <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl border border-gray-200 p-4 sm:p-6">
-                <div className="flex items-center justify-between mb-3 sm:mb-4">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-emerald-100 rounded-lg sm:rounded-xl flex items-center justify-center">
-                    <DollarSign className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-600" />
-                  </div>
-                  <span className="text-xs sm:text-sm text-gray-500">24h</span>
-                </div>
-                <div className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">
-                  {marketStats.totalVolume > 0 ? formatVolume(marketStats.totalVolume) : '—'}
-                </div>
-                <div className="text-xs sm:text-sm text-gray-600 mb-2">Total Market Volume</div>
-                <div className="text-xs sm:text-sm text-emerald-600 font-medium">
-                  {marketStats.totalVolume > 0 ? 'Live data' : 'Loading...'}
-                </div>
-              </div>
+         
 
-              <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl border border-gray-200 p-4 sm:p-6">
-                <div className="flex items-center justify-between mb-3 sm:mb-4">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-green-100 rounded-lg sm:rounded-xl flex items-center justify-center">
-                    <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 text-green-600" />
-                  </div>
-                  <span className="text-xs sm:text-sm text-gray-500">Today</span>
-                </div>
-                <div className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">
-                  {marketStats.advancers.toLocaleString()}
-                </div>
-                <div className="text-xs sm:text-sm text-gray-600 mb-2">Advancing Stocks</div>
-                <div className="text-xs sm:text-sm text-green-600 font-medium">
-                  {marketStats.advancers + marketStats.decliners + marketStats.unchanged > 0 
-                    ? `${Math.round((marketStats.advancers / (marketStats.advancers + marketStats.decliners + marketStats.unchanged)) * 100)}% of all stocks`
-                    : 'Loading...'
-                  }
-                </div>
-              </div>
-
-              <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl border border-gray-200 p-4 sm:p-6">
-                <div className="flex items-center justify-between mb-3 sm:mb-4">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-red-100 rounded-lg sm:rounded-xl flex items-center justify-center">
-                    <TrendingDown className="h-4 w-4 sm:h-5 sm:w-5 text-red-600" />
-                  </div>
-                  <span className="text-xs sm:text-sm text-gray-500">Today</span>
-                </div>
-                <div className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">
-                  {marketStats.decliners.toLocaleString()}
-                </div>
-                <div className="text-xs sm:text-sm text-gray-600 mb-2">Declining Stocks</div>
-                <div className="text-xs sm:text-sm text-red-600 font-medium">
-                  {marketStats.advancers + marketStats.decliners + marketStats.unchanged > 0 
-                    ? `${Math.round((marketStats.decliners / (marketStats.advancers + marketStats.decliners + marketStats.unchanged)) * 100)}% of all stocks`
-                    : 'Loading...'
-                  }
-                </div>
-</div>
-
-              <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl border border-gray-200 p-4 sm:p-6">
-                <div className="flex items-center justify-between mb-3 sm:mb-4">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-purple-100 rounded-lg sm:rounded-xl flex items-center justify-center">
-                    <Activity className="h-4 w-4 sm:h-5 sm:w-5 text-purple-600" />
-                  </div>
-                  <span className="text-xs sm:text-sm text-gray-500">Today</span>
-                </div>
-                <div className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">
-                  {marketStats.unchanged.toLocaleString()}
-                </div>
-                <div className="text-xs sm:text-sm text-gray-600 mb-2">Unchanged Stocks</div>
-                <div className="text-xs sm:text-sm text-purple-600 font-medium">
-                  {marketStats.advancers + marketStats.decliners + marketStats.unchanged > 0 
-                    ? `${Math.round((marketStats.unchanged / (marketStats.advancers + marketStats.decliners + marketStats.unchanged)) * 100)}% of all stocks`
-                    : 'Loading...'
-                  }
-                </div>
-              </div>
+            {/* Mainpage Components Integration */}
+            <div className="space-y-8">
+              {/* Empty space for future components */}
             </div>
 
             {/* Call to Action */}
