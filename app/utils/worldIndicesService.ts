@@ -103,26 +103,18 @@ export const worldIndicesService = {
   // World Indices
   async getWorldIndices(): Promise<{ americas: WorldIndex[]; europe: WorldIndex[]; asiaPacific: WorldIndex[] }> {
     try {
-      const response = await apiRequest<{ indices: WorldIndex[] }>('/market/overview');
-      console.log(response)
-      const indices = response.indices || [];
-
-      // Transform backend data to match frontend interface (value -> price)
-      const transformedIndices = indices.map(idx => ({
-        ...idx,
-        price: idx.value || idx.price || 0, // Map backend 'value' to frontend 'price'
-        change: idx.change || 0,
-        changePercent: idx.changePercent || 0,
-        region: idx.region || 'americas' // Add region for UI
-      }));
-
-      // Group indices by region
-      const americas = transformedIndices.filter(idx => idx.countryCode === 'US' || 
+      const response = await apiRequest<WorldIndex[]>('/market/indices');
+      console.log('Raw indices from backend:', response);
+      
+      // Group indices by country code
+      const americas = response.filter(idx => idx.countryCode === 'US' || 
         ['SPY', 'DIA', 'IXIC', 'QQQ', 'IWM'].includes(idx.symbol));
-      const europe = transformedIndices.filter(idx => idx.countryCode === 'DE' || idx.countryCode === 'GB' || idx.countryCode === 'FR' || 
+      const europe = response.filter(idx => idx.countryCode === 'DE' || idx.countryCode === 'GB' || idx.countryCode === 'FR' || 
         ['DAX', 'FTSE', 'CAC', 'STOXX', 'SMI'].includes(idx.symbol));
-      const asiaPacific = transformedIndices.filter(idx => idx.countryCode === 'JP' || idx.countryCode === 'HK' || idx.countryCode === 'AU' || 
+      const asiaPacific = response.filter(idx => idx.countryCode === 'JP' || idx.countryCode === 'HK' || idx.countryCode === 'AU' || 
         ['Nikkei', 'HSI', 'ASX', 'N225', 'NKY'].includes(idx.symbol));
+
+      console.log('Filtered results:', { americas: americas.length, europe: europe.length, asiaPacific: asiaPacific.length });
 
       return { americas, europe, asiaPacific };
     } catch (error) {
