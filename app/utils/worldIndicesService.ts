@@ -126,24 +126,7 @@ export const worldIndicesService = {
       return { americas, europe, asiaPacific };
     } catch (error) {
       console.error('Error fetching world indices:', error);
-      // Fallback mock data
-      return {
-        americas: [
-          { symbol: 'SPY', name: 'S&P 500', price: 4532.18, change: 23.45, changePercent: 0.52, region: 'americas' },
-          { symbol: 'DIA', name: 'Dow Jones', price: 35678.92, change: -45.23, changePercent: -0.13, region: 'americas' },
-          { symbol: 'IXIC', name: 'NASDAQ', price: 14234.56, change: 123.67, changePercent: 0.87, region: 'americas' },
-        ],
-        europe: [
-          { symbol: 'DAX', name: 'DAX', price: 16789.34, change: 89.45, changePercent: 0.54, region: 'europe' },
-          { symbol: 'FTSE', name: 'FTSE 100', price: 7456.78, change: -23.45, changePercent: -0.31, region: 'europe' },
-          { symbol: 'CAC', name: 'CAC 40', price: 7234.56, change: 45.67, changePercent: 0.64, region: 'europe' },
-        ],
-        asiaPacific: [
-          { symbol: 'Nikkei', name: 'Nikkei 225', price: 34567.89, change: 234.56, changePercent: 0.68, region: 'asia-pacific' },
-          { symbol: 'HSI', name: 'Hang Seng', price: 17456.78, change: -123.45, changePercent: -0.70, region: 'asia-pacific' },
-          { symbol: 'ASX', name: 'ASX 200', price: 7234.56, change: 45.67, changePercent: 0.64, region: 'asia-pacific' },
-        ]
-      };
+      throw error;
     }
   },
 
@@ -201,20 +184,7 @@ export const worldIndicesService = {
       }));
     } catch (error) {
       console.error('Error fetching sectors:', error);
-      // Fallback mock data matching API structure
-      return [
-        { sector: 'Technology', advancers: 39, decliners: 9, unchanged: 0, stockCount: 48, turnover: 5166774216.06, turnoverPercent: 71.13, volume: 21846319, volumePercent: 45.55, avgChangePercent: 2.99, avgYtdReturn: 0, weight: 42.86 },
-        { sector: 'Consumer Cyclical', advancers: 8, decliners: 6, unchanged: 0, stockCount: 14, turnover: 652936991.59, turnoverPercent: 8.99, volume: 2766035, volumePercent: 5.77, avgChangePercent: 0.8, avgYtdReturn: 0, weight: 12.5 },
-        { sector: 'Communication Services', advancers: 2, decliners: 2, unchanged: 0, stockCount: 4, turnover: 445185472.93, turnoverPercent: 6.13, volume: 1838725, volumePercent: 3.83, avgChangePercent: 0.5, avgYtdReturn: 0, weight: 3.57 },
-        { sector: 'Financial Services', advancers: 5, decliners: 3, unchanged: 0, stockCount: 8, turnover: 347043756.67, turnoverPercent: 4.78, volume: 4383559, volumePercent: 9.14, avgChangePercent: -0.92, avgYtdReturn: 0, weight: 7.14 },
-        { sector: 'Healthcare', advancers: 6, decliners: 4, unchanged: 0, stockCount: 10, turnover: 148806457.63, turnoverPercent: 2.05, volume: 1959504, volumePercent: 4.09, avgChangePercent: 0.02, avgYtdReturn: 0, weight: 8.93 },
-        { sector: 'Consumer Defensive', advancers: 4, decliners: 0, unchanged: 0, stockCount: 4, turnover: 115984062.63, turnoverPercent: 1.6, volume: 939120, volumePercent: 1.96, avgChangePercent: 2.13, avgYtdReturn: 0, weight: 3.57 },
-        { sector: 'Energy', advancers: 4, decliners: 0, unchanged: 0, stockCount: 4, turnover: 115500638.67, turnoverPercent: 1.59, volume: 710602, volumePercent: 1.48, avgChangePercent: 3.38, avgYtdReturn: 0, weight: 3.57 },
-        { sector: 'Industrials', advancers: 9, decliners: 1, unchanged: 0, stockCount: 10, turnover: 114156884.87, turnoverPercent: 1.57, volume: 876729, volumePercent: 1.83, avgChangePercent: 1.72, avgYtdReturn: 0, weight: 8.93 },
-        { sector: 'Utilities', advancers: 3, decliners: 1, unchanged: 0, stockCount: 4, turnover: 94319174.27, turnoverPercent: 1.3, volume: 1024382, volumePercent: 2.14, avgChangePercent: 1.25, avgYtdReturn: 0, weight: 3.57 },
-        { sector: 'Real Estate', advancers: 3, decliners: 1, unchanged: 0, stockCount: 4, turnover: 61336097.71, turnoverPercent: 0.84, volume: 11480803, volumePercent: 23.94, avgChangePercent: 0.64, avgYtdReturn: 0, weight: 3.57 },
-        { sector: 'Basic Materials', advancers: 2, decliners: 0, unchanged: 0, stockCount: 2, turnover: 1299759.04, turnoverPercent: 0.02, volume: 138189, volumePercent: 0.29, avgChangePercent: 6.64, avgYtdReturn: 0, weight: 1.79 },
-      ];
+      throw error;
     }
   },
 
