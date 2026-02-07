@@ -49,25 +49,32 @@ export interface AssetData {
 
 export interface SectorData {
   sector: string;
-  marketWeight: number;
-  ytdReturn: number;
-  dayReturn: number;
+  advancers: number;
+  decliners: number;
+  unchanged: number;
   stockCount: number;
-  marketCap?: number;
-}
-
-export interface BackendSectorData {
-  sector: string;
   turnover: number;
   turnoverPercent: number;
   volume: number;
   volumePercent: number;
-  transactions: number;
-  transactionsPercent: number;
   avgChangePercent: number;
+  avgYtdReturn: number;
+  weight: number;
+}
+
+export interface BackendSectorData {
+  sector: string;
   advancers: number;
+  avgChangePercent: number;
+  avgYtdReturn: number;
   decliners: number;
+  stockCount: number;
+  turnover: number;
+  turnoverPercent: number;
   unchanged: number;
+  volume: number;
+  volumePercent: number;
+  weight: number;
 }
 
 export interface CryptoData {
@@ -180,26 +187,33 @@ export const worldIndicesService = {
       // Transform API response to match expected interface
       return response.sectors.map(sector => ({
         sector: sector.sector,
-        marketWeight: sector.turnoverPercent || sector.transactionsPercent || 0,
-        ytdReturn: sector.avgChangePercent || 0,
-        dayReturn: sector.avgChangePercent || 0,
-        stockCount: sector.transactions || 0,
-        marketCap: sector.turnover || 0
+        advancers: sector.advancers,
+        decliners: sector.decliners,
+        unchanged: sector.unchanged,
+        stockCount: sector.stockCount,
+        turnover: sector.turnover,
+        turnoverPercent: sector.turnoverPercent,
+        volume: sector.volume,
+        volumePercent: sector.volumePercent,
+        avgChangePercent: sector.avgChangePercent,
+        avgYtdReturn: sector.avgYtdReturn,
+        weight: sector.weight
       }));
     } catch (error) {
       console.error('Error fetching sectors:', error);
-      // Fallback mock data
+      // Fallback mock data matching API structure
       return [
-        { sector: 'Technology', marketWeight: 28.5, ytdReturn: 12.3, dayReturn: 1.2, stockCount: 222 },
-        { sector: 'Healthcare', marketWeight: 13.2, ytdReturn: 8.7, dayReturn: -0.3, stockCount: 234 },
-        { sector: 'Financial Services', marketWeight: 12.8, ytdReturn: 6.5, dayReturn: 0.8, stockCount: 189 },
-        { sector: 'Consumer Cyclical', marketWeight: 10.5, ytdReturn: -2.1, dayReturn: -1.5, stockCount: 167 },
-        { sector: 'Energy', marketWeight: 5.2, ytdReturn: 15.6, dayReturn: 2.3, stockCount: 89 },
-        { sector: 'Industrial', marketWeight: 8.9, ytdReturn: 4.3, dayReturn: 0.5, stockCount: 145 },
-        { sector: 'Materials', marketWeight: 3.4, ytdReturn: -5.6, dayReturn: -2.1, stockCount: 78 },
-        { sector: 'Real Estate', marketWeight: 2.8, ytdReturn: -8.9, dayReturn: -1.8, stockCount: 56 },
-        { sector: 'Utilities', marketWeight: 2.9, ytdReturn: 3.4, dayReturn: 0.2, stockCount: 67 },
-        { sector: 'Communication', marketWeight: 11.8, ytdReturn: 18.9, dayReturn: 2.8, stockCount: 123 },
+        { sector: 'Technology', advancers: 39, decliners: 9, unchanged: 0, stockCount: 48, turnover: 5166774216.06, turnoverPercent: 71.13, volume: 21846319, volumePercent: 45.55, avgChangePercent: 2.99, avgYtdReturn: 0, weight: 42.86 },
+        { sector: 'Consumer Cyclical', advancers: 8, decliners: 6, unchanged: 0, stockCount: 14, turnover: 652936991.59, turnoverPercent: 8.99, volume: 2766035, volumePercent: 5.77, avgChangePercent: 0.8, avgYtdReturn: 0, weight: 12.5 },
+        { sector: 'Communication Services', advancers: 2, decliners: 2, unchanged: 0, stockCount: 4, turnover: 445185472.93, turnoverPercent: 6.13, volume: 1838725, volumePercent: 3.83, avgChangePercent: 0.5, avgYtdReturn: 0, weight: 3.57 },
+        { sector: 'Financial Services', advancers: 5, decliners: 3, unchanged: 0, stockCount: 8, turnover: 347043756.67, turnoverPercent: 4.78, volume: 4383559, volumePercent: 9.14, avgChangePercent: -0.92, avgYtdReturn: 0, weight: 7.14 },
+        { sector: 'Healthcare', advancers: 6, decliners: 4, unchanged: 0, stockCount: 10, turnover: 148806457.63, turnoverPercent: 2.05, volume: 1959504, volumePercent: 4.09, avgChangePercent: 0.02, avgYtdReturn: 0, weight: 8.93 },
+        { sector: 'Consumer Defensive', advancers: 4, decliners: 0, unchanged: 0, stockCount: 4, turnover: 115984062.63, turnoverPercent: 1.6, volume: 939120, volumePercent: 1.96, avgChangePercent: 2.13, avgYtdReturn: 0, weight: 3.57 },
+        { sector: 'Energy', advancers: 4, decliners: 0, unchanged: 0, stockCount: 4, turnover: 115500638.67, turnoverPercent: 1.59, volume: 710602, volumePercent: 1.48, avgChangePercent: 3.38, avgYtdReturn: 0, weight: 3.57 },
+        { sector: 'Industrials', advancers: 9, decliners: 1, unchanged: 0, stockCount: 10, turnover: 114156884.87, turnoverPercent: 1.57, volume: 876729, volumePercent: 1.83, avgChangePercent: 1.72, avgYtdReturn: 0, weight: 8.93 },
+        { sector: 'Utilities', advancers: 3, decliners: 1, unchanged: 0, stockCount: 4, turnover: 94319174.27, turnoverPercent: 1.3, volume: 1024382, volumePercent: 2.14, avgChangePercent: 1.25, avgYtdReturn: 0, weight: 3.57 },
+        { sector: 'Real Estate', advancers: 3, decliners: 1, unchanged: 0, stockCount: 4, turnover: 61336097.71, turnoverPercent: 0.84, volume: 11480803, volumePercent: 23.94, avgChangePercent: 0.64, avgYtdReturn: 0, weight: 3.57 },
+        { sector: 'Basic Materials', advancers: 2, decliners: 0, unchanged: 0, stockCount: 2, turnover: 1299759.04, turnoverPercent: 0.02, volume: 138189, volumePercent: 0.29, avgChangePercent: 6.64, avgYtdReturn: 0, weight: 1.79 },
       ];
     }
   },

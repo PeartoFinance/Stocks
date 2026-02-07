@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { newsAPI } from '../../utils/newsAPI';
-import { Newspaper, Clock, ExternalLink } from 'lucide-react';
+import { Newspaper, Clock, ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface NewsItem {
   id: number;
@@ -30,7 +30,6 @@ export default function NewsCarousel({ className = '' }: NewsCarouselProps) {
         setLoading(true);
         const response = await newsAPI.getMarketNews(5);
         
-        // Transform: data structure to match our interface
         const transformedNews: NewsItem[] = (response.data as any[]).map((item: any, index) => ({
           id: item.id || index,
           title: item.title || 'Market Update',
@@ -54,9 +53,11 @@ export default function NewsCarousel({ className = '' }: NewsCarouselProps) {
   }, []);
 
   useEffect(() => {
+    if (news.length === 0) return;
+
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % news.length);
-    }, 5000); // Auto-rotate every 5 seconds
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [news.length]);
@@ -79,15 +80,10 @@ export default function NewsCarousel({ className = '' }: NewsCarouselProps) {
       const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
       const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-      if (diffMins < 60) {
-        return `${diffMins}m ago`;
-      } else if (diffHours < 24) {
-        return `${diffHours}h ago`;
-      } else if (diffDays < 7) {
-        return `${diffDays}d ago`;
-      } else {
-        return date.toLocaleDateString();
-      }
+      if (diffMins < 60) return `${diffMins}m ago`;
+      if (diffHours < 24) return `${diffHours}h ago`;
+      if (diffDays < 7) return `${diffDays}d ago`;
+      return date.toLocaleDateString();
     } catch {
       return timeString;
     }
@@ -119,12 +115,8 @@ export default function NewsCarousel({ className = '' }: NewsCarouselProps) {
           <Newspaper className="h-12 w-12 mx-auto mb-4 text-gray-300" />
           <h3 className="text-lg font-semibold text-gray-700 mb-2">No News Available</h3>
           <p className="text-sm text-gray-500 mb-4 max-w-md mx-auto">
-            Market news will appear here as soon as it becomes available. Check back later for the latest updates and market analysis.
+            Market news will appear here as soon as it becomes available.
           </p>
-          <div className="flex items-center justify-center gap-3 text-xs text-gray-400">
-            <Clock className="h-4 w-4" />
-            <span>Last updated: Just now</span>
-          </div>
         </div>
       </div>
     );
@@ -140,77 +132,76 @@ export default function NewsCarousel({ className = '' }: NewsCarouselProps) {
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div className="relative">
-          {/* News Content */}
-          <div className="p-6">
-            {currentNews.image && (
-              <div className="mb-4">
-                <img 
-                  src={currentNews.image} 
-                  alt={currentNews.title}
-                  className="w-full h-48 object-cover rounded-lg"
-                />
+        {currentNews && (
+          <div className="relative">
+            <div className="p-6">
+              {/* Added safe optional chaining here */}
+              {currentNews?.image && (
+                <div className="mb-4">
+                  <img 
+                    src={currentNews.image} 
+                    alt={currentNews.title}
+                    className="w-full h-48 object-cover rounded-lg"
+                  />
+                </div>
+              )}
+              
+              <div className="flex items-start gap-3 mb-3">
+                <span className={`px-2 py-1 text-xs font-medium rounded-full border ${getImpactColor(currentNews.impact)}`}>
+                  {currentNews.impact.toUpperCase()}
+                </span>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-semibold text-gray-900 mb-2 leading-tight">
+                    {currentNews.title}
+                  </h3>
+                  <p className="text-sm text-gray-600 line-clamp-3">
+                    {currentNews.summary}
+                  </p>
+                </div>
               </div>
-            )}
-            <div className="flex items-start gap-3 mb-3">
-              <span className={`px-2 py-1 text-xs font-medium rounded-full border ${getImpactColor(currentNews.impact)}`}>
-                {currentNews.impact.toUpperCase()}
-              </span>
-              <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-gray-900 mb-2 leading-tight">
-                  {currentNews.title}
-                </h3>
-                <p className="text-sm text-gray-600 line-clamp-3">
-                  {currentNews.summary}
-                </p>
+              
+              <div className="flex items-center justify-between text-xs text-gray-500">
+                <div className="flex items-center gap-2">
+                  <Clock className="h-3 w-3" />
+                  <span>{formatTime(currentNews.time)}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span>{currentNews.source}</span>
+                  {currentNews.url && currentNews.url !== '#' && (
+                    <a
+                      href={currentNews.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:text-blue-700 transition-colors"
+                    >
+                      <ExternalLink className="h-3 w-3" />
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
-            
-            <div className="flex items-center justify-between text-xs text-gray-500">
-              <div className="flex items-center gap-2">
-                <Clock className="h-3 w-3" />
-                <span>{formatTime(currentNews.time)}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span>{currentNews.source}</span>
-                {currentNews.url && currentNews.url !== '#' && (
-                  <a
-                    href={currentNews.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:text-blue-700 transition-colors"
-                  >
-                    <ExternalLink className="h-3 w-3" />
-                  </a>
-                )}
-              </div>
-            </div>
-          </div>
 
-          {/* Navigation Controls */}
-          <button
-            onClick={prevSlide}
-            className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-700 p-2 rounded-full shadow-lg transition-all"
-            aria-label="Previous news"
-          >
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7 7" />
-            </svg>
-          </button>
-          
-          <button
-            onClick={nextSlide}
-            className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-700 p-2 rounded-full shadow-lg transition-all"
-            aria-label="Next news"
-          >
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-        </div>
+            {/* Navigation Controls */}
+            <button
+              onClick={prevSlide}
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-700 p-2 rounded-full shadow-md transition-all z-10"
+              aria-label="Previous news"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+            
+            <button
+              onClick={nextSlide}
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-700 p-2 rounded-full shadow-md transition-all z-10"
+              aria-label="Next news"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
+        )}
 
         {/* Indicators */}
-        <div className="flex justify-center gap-2 p-4">
+        <div className="flex justify-center gap-2 p-4 border-t border-gray-50">
           {news.map((_, index) => (
             <button
               key={index}
