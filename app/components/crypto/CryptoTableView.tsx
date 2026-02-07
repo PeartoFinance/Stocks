@@ -4,6 +4,7 @@ import React from 'react';
 import { TrendingUp, TrendingDown, ArrowUpRight, ArrowDownRight } from 'lucide-react';
 import { CryptoData } from '@/app/crypto/page';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 interface CryptoTableViewProps {
   cryptoData: CryptoData[];
@@ -12,6 +13,13 @@ interface CryptoTableViewProps {
 }
 
 export default function CryptoTableView({ cryptoData, loading = false, viewMode }: CryptoTableViewProps) {
+  const router = useRouter();
+
+  const handleRowClick = (symbol: string) => {
+    // router.push uses client-side routing (no full reload)
+    router.push(`/crypto/${symbol}`);
+  };
+
   const formatPrice = (price: number | undefined | null) => {
     if (!price || isNaN(price)) return '$0.00';
     if (price >= 1) {
@@ -164,8 +172,7 @@ export default function CryptoTableView({ cryptoData, loading = false, viewMode 
               <tr 
                 key={crypto.id || crypto.symbol || index} 
                 className="hover:bg-gray-50 transition-colors duration-200 cursor-pointer"
-                onClick={() => window.open(`/crypto/${crypto.symbol}`, '_blank')}
-              >
+onClick={() => handleRowClick(crypto.symbol)}                 >
                 <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-600">
                   {crypto.rank || index + 1}
                 </td>

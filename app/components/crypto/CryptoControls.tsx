@@ -61,7 +61,7 @@ export default function CryptoControls({
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
               }`}
             >
-              🚀 Top Gainers
+              Top Gainers
             </button>
             <button
               onClick={() => onTabChange('losers')}
@@ -71,7 +71,7 @@ export default function CryptoControls({
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
               }`}
             >
-              📉 Top Losers
+              Top Losers
             </button>
           </div>
 
