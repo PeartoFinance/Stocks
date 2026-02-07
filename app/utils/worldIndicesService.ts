@@ -49,25 +49,32 @@ export interface AssetData {
 
 export interface SectorData {
   sector: string;
-  marketWeight: number;
-  ytdReturn: number;
-  dayReturn: number;
+  advancers: number;
+  decliners: number;
+  unchanged: number;
   stockCount: number;
-  marketCap?: number;
-}
-
-export interface BackendSectorData {
-  sector: string;
   turnover: number;
   turnoverPercent: number;
   volume: number;
   volumePercent: number;
-  transactions: number;
-  transactionsPercent: number;
   avgChangePercent: number;
+  avgYtdReturn: number;
+  weight: number;
+}
+
+export interface BackendSectorData {
+  sector: string;
   advancers: number;
+  avgChangePercent: number;
+  avgYtdReturn: number;
   decliners: number;
+  stockCount: number;
+  turnover: number;
+  turnoverPercent: number;
   unchanged: number;
+  volume: number;
+  volumePercent: number;
+  weight: number;
 }
 
 export interface CryptoData {
@@ -119,24 +126,7 @@ export const worldIndicesService = {
       return { americas, europe, asiaPacific };
     } catch (error) {
       console.error('Error fetching world indices:', error);
-      // Fallback mock data
-      return {
-        americas: [
-          { symbol: 'SPY', name: 'S&P 500', price: 4532.18, change: 23.45, changePercent: 0.52, region: 'americas' },
-          { symbol: 'DIA', name: 'Dow Jones', price: 35678.92, change: -45.23, changePercent: -0.13, region: 'americas' },
-          { symbol: 'IXIC', name: 'NASDAQ', price: 14234.56, change: 123.67, changePercent: 0.87, region: 'americas' },
-        ],
-        europe: [
-          { symbol: 'DAX', name: 'DAX', price: 16789.34, change: 89.45, changePercent: 0.54, region: 'europe' },
-          { symbol: 'FTSE', name: 'FTSE 100', price: 7456.78, change: -23.45, changePercent: -0.31, region: 'europe' },
-          { symbol: 'CAC', name: 'CAC 40', price: 7234.56, change: 45.67, changePercent: 0.64, region: 'europe' },
-        ],
-        asiaPacific: [
-          { symbol: 'Nikkei', name: 'Nikkei 225', price: 34567.89, change: 234.56, changePercent: 0.68, region: 'asia-pacific' },
-          { symbol: 'HSI', name: 'Hang Seng', price: 17456.78, change: -123.45, changePercent: -0.70, region: 'asia-pacific' },
-          { symbol: 'ASX', name: 'ASX 200', price: 7234.56, change: 45.67, changePercent: 0.64, region: 'asia-pacific' },
-        ]
-      };
+      throw error;
     }
   },
 
@@ -180,27 +170,21 @@ export const worldIndicesService = {
       // Transform API response to match expected interface
       return response.sectors.map(sector => ({
         sector: sector.sector,
-        marketWeight: sector.turnoverPercent || sector.transactionsPercent || 0,
-        ytdReturn: sector.avgChangePercent || 0,
-        dayReturn: sector.avgChangePercent || 0,
-        stockCount: sector.transactions || 0,
-        marketCap: sector.turnover || 0
+        advancers: sector.advancers,
+        decliners: sector.decliners,
+        unchanged: sector.unchanged,
+        stockCount: sector.stockCount,
+        turnover: sector.turnover,
+        turnoverPercent: sector.turnoverPercent,
+        volume: sector.volume,
+        volumePercent: sector.volumePercent,
+        avgChangePercent: sector.avgChangePercent,
+        avgYtdReturn: sector.avgYtdReturn,
+        weight: sector.weight
       }));
     } catch (error) {
       console.error('Error fetching sectors:', error);
-      // Fallback mock data
-      return [
-        { sector: 'Technology', marketWeight: 28.5, ytdReturn: 12.3, dayReturn: 1.2, stockCount: 222 },
-        { sector: 'Healthcare', marketWeight: 13.2, ytdReturn: 8.7, dayReturn: -0.3, stockCount: 234 },
-        { sector: 'Financial Services', marketWeight: 12.8, ytdReturn: 6.5, dayReturn: 0.8, stockCount: 189 },
-        { sector: 'Consumer Cyclical', marketWeight: 10.5, ytdReturn: -2.1, dayReturn: -1.5, stockCount: 167 },
-        { sector: 'Energy', marketWeight: 5.2, ytdReturn: 15.6, dayReturn: 2.3, stockCount: 89 },
-        { sector: 'Industrial', marketWeight: 8.9, ytdReturn: 4.3, dayReturn: 0.5, stockCount: 145 },
-        { sector: 'Materials', marketWeight: 3.4, ytdReturn: -5.6, dayReturn: -2.1, stockCount: 78 },
-        { sector: 'Real Estate', marketWeight: 2.8, ytdReturn: -8.9, dayReturn: -1.8, stockCount: 56 },
-        { sector: 'Utilities', marketWeight: 2.9, ytdReturn: 3.4, dayReturn: 0.2, stockCount: 67 },
-        { sector: 'Communication', marketWeight: 11.8, ytdReturn: 18.9, dayReturn: 2.8, stockCount: 123 },
-      ];
+      throw error;
     }
   },
 

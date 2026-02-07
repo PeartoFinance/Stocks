@@ -2,28 +2,28 @@
 
 import React, { useState, useEffect } from 'react';
 import { worldIndicesService, SectorData } from '../../utils/worldIndicesService';
-import { Building, PieChart as PieChartIcon } from 'lucide-react';
-// Fix: Import 'Pie' from react-chartjs-2
-import { Pie } from 'react-chartjs-2';
+import { Building, PieChart as PieChartIcon, TrendingUp, TrendingDown, Minus, Info } from 'lucide-react';
+import { Doughnut } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   ArcElement,
   Tooltip,
   Legend,
-  CategoryScale
+  ChartOptions
 } from 'chart.js';
-import SectorHeatmap from './SectorHeatmap';
 
-// Register Chart.js components
-ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale);
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface SectorsSectionProps {
   className?: string;
 }
 
+type ChartTabType = 'weight' | 'volume' | 'ytd';
+
 export default function SectorsSection({ className = '' }: SectorsSectionProps) {
   const [sectors, setSectors] = useState<SectorData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<ChartTabType>('weight');
 
   useEffect(() => {
     const fetchSectors = async () => {
@@ -37,112 +37,199 @@ export default function SectorsSection({ className = '' }: SectorsSectionProps) 
         setLoading(false);
       }
     };
-
     fetchSectors();
   }, []);
 
-  if (loading) {
-    return (
-      <div className={`bg-white rounded-xl shadow-sm border border-gray-200 p-8 ${className}`}>
-        <div className="flex items-center justify-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
-          <span className="ml-3 text-gray-600">Loading sectors data...</span>
-        </div>
-      </div>
-    );
-  }
-
-  // Chart Data Configuration
-  const pieData = {
-    labels: sectors.map(d => d.sector),
-    datasets: [{
-      data: sectors.map(d => d.marketWeight),
-      backgroundColor: [
-        '#10b981', '#ef4444', '#22c55e', '#fb923c', 
-        '#dc26af', '#9333ea', '#34d399', '#4a90e2', '#8b4513'
-      ],
-      borderColor: '#ffffff',
-      borderWidth: 2
-    }]
+  // Professional Financial Colors
+  const colors = {
+    gainStrong: 'bg-[#008d41] text-white border-[#00a34c]',
+    gainMed: 'bg-[#00c55a] text-white border-[#00d662]',
+    gainLight: 'bg-[#e6f9ed] text-[#008d41] border-[#b3eccd]',
+    lossLight: 'bg-[#fff5f5] text-[#c1272d] border-[#feb2b2]',
+    lossMed: 'bg-[#fc8181] text-white border-[#f56565]',
+    lossStrong: 'bg-[#c1272d] text-white border-[#a51d22]',
+    neutral: 'bg-gray-50 text-gray-500 border-gray-200'
   };
 
-  const pieOptions = {
+  const getIntensity = (val: number) => {
+    if (val >= 2.5) return colors.gainStrong;
+    if (val >= 1.2) return colors.gainMed;
+    if (val > 0) return colors.gainLight;
+    if (val === 0) return colors.neutral;
+    if (val > -1.2) return colors.lossLight;
+    if (val > -2.5) return colors.lossMed;
+    return colors.lossStrong;
+  };
+
+  const getWeightClass = (weight: number) => {
+    if (weight >= 18) return 'col-span-3 row-span-2';
+    if (weight >= 10) return 'col-span-2 row-span-1';
+    return 'col-span-1 row-span-1';
+  };
+
+  const chartPalette = [
+    '#008d41', '#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', 
+    '#06b6d4', '#f97316', '#84cc16', '#a855f7', '#c1272d', '#6366f1'
+  ];
+
+  const getChartData = () => {
+    const labels = sectors.map(s => s.sector);
+    const data = sectors.map(s => {
+      if (activeTab === 'ytd') return Math.abs(s.avgYtdReturn) || 0.1;
+      if (activeTab === 'volume') return s.volumePercent;
+      return s.weight;
+    });
+
+    return {
+      labels,
+      datasets: [{
+        data,
+        backgroundColor: chartPalette,
+        borderColor: '#ffffff',
+        borderWidth: 2,
+        hoverOffset: 10
+      }]
+    };
+  };
+
+  const chartOptions: ChartOptions<'doughnut'> = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: {
-        position: 'bottom' as const,
-        labels: {
-          boxWidth: 12,
-          font: { size: 10 }
-        }
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#1f2937',
+        padding: 12,
+        titleFont: { size: 14, weight: 'bold' },
+        cornerRadius: 8
       }
-    }
+    },
+    cutout: '50%',
   };
 
+  if (loading) return (
+    <div className="flex items-center justify-center h-96 bg-white rounded-xl border border-gray-100 shadow-sm">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+    </div>
+  );
+
   return (
-    <div className={`space-y-6 ${className}`}>
-      <div className="flex items-center gap-2 mb-4">
-        <Building className="h-5 w-5 text-purple-600" />
-        <h2 className="text-xl font-bold text-gray-900">Sector Analysis</h2>
+    <div className={`max-w-7xl mx-auto space-y-6 ${className}`}>
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-indigo-600 rounded-lg shadow-lg">
+            <Building className="h-5 w-5 text-white" />
+          </div>
+          <h2 className="text-2xl font-black text-gray-900 tracking-tight">Sector Performance</h2>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
-        {/* Sector Details - Left Side */}
-        <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-          <div className="px-4 py-3 bg-gradient-to-r from-purple-50 to-indigo-50 border-b border-gray-200">
-            <h3 className="font-semibold text-gray-900 text-sm">Sector Performance</h3>
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        
+        {/* LEFT: HEATMAP GRID */}
+        <div className="xl:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-200 p-5">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+              Market Heatmap <Info size={14} className="opacity-50" />
+            </h3>
+            <div className="flex gap-4 text-[10px] font-bold uppercase text-gray-400">
+              <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-[#008d41]" /> Gain</span>
+              <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-[#c1272d]" /> Loss</span>
+            </div>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-200">
-                <tr>
-                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sector</th>
-                  <th className="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Weight</th>
-                  <th className="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">YTD Return</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {sectors.map((sector, i) => (
-                  <tr key={sector.sector} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-3 py-3">
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium text-gray-900 text-sm">{sector.sector}</span>
-                        <span className="text-xs text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded">
-                          {sector.stockCount} stocks
-                        </span>
-                      </div>
-                    </td>
-                    <td className="px-3 py-2 text-right text-sm text-gray-900 font-mono">
-                      {sector.marketWeight.toFixed(1)}%
-                    </td>
-                    <td className={`px-3 py-2 text-right text-xs font-semibold ${
-                      sector.ytdReturn >= 0 ? 'text-green-600' : 'text-red-600'
-                    }`}>
-                      {sector.ytdReturn >= 0 ? '+' : ''}{sector.ytdReturn.toFixed(1)}%
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+
+          <div className="grid grid-cols-4 md:grid-cols-6 gap-2 auto-rows-[minmax(85px,auto)]">
+            {sectors.map((sector) => (
+              <div
+                key={sector.sector}
+                className={`
+                  ${getWeightClass(sector.weight)}
+                  ${getIntensity(sector.avgChangePercent)}
+                  group flex flex-col justify-between p-3 rounded-xl border-2 transition-all duration-300 
+                  hover:scale-[1.02] hover:shadow-xl cursor-pointer overflow-hidden
+                `}
+              >
+                <div className="flex justify-between items-start">
+                  <span className="font-bold text-[10px] md:text-xs uppercase tracking-tighter leading-none truncate pr-1">
+                    {sector.sector}
+                  </span>
+                  <div className="shrink-0 opacity-40">
+                    {sector.avgChangePercent > 0 ? <TrendingUp size={14}/> : <TrendingDown size={14}/>}
+                  </div>
+                </div>
+                <div className="mt-2">
+                  <div className="text-xl font-black font-mono leading-none tracking-tighter">
+                    {sector.avgChangePercent > 0 ? '+' : ''}{sector.avgChangePercent.toFixed(2)}%
+                  </div>
+                  <div className="text-[9px] font-bold opacity-70 mt-1 uppercase">
+                    {sector.weight.toFixed(1)}% Weight
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Sector Analysis - Right Side */}
-        <div className="flex flex-col gap-4 lg:gap-6">
-          {/* Distribution Card */}
-          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-            <div className="px-4 py-3 bg-gradient-to-r from-orange-50 to-red-50 border-b border-gray-200 flex items-center gap-2">
-              <PieChartIcon className="h-4 w-4 text-orange-600" />
-              <h3 className="font-semibold text-gray-900 text-sm">Market Weighting</h3>
-            </div>
-            <div className="p-6 h-[300px]">
-              <Pie data={pieData} options={pieOptions} />
+        {/* RIGHT: DISTRIBUTION & DUAL-COLUMN PROGRESS BARS */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 flex flex-col">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="font-bold text-gray-900 text-lg">Distribution</h3>
+            <PieChartIcon className="h-5 w-5 text-indigo-500" />
+          </div>
+
+          {/* Tab Switcher */}
+          <div className="flex bg-gray-100 p-1 rounded-xl mb-8">
+            {(['weight', 'volume', 'ytd'] as const).map(tab => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-wider rounded-lg transition-all ${
+                  activeTab === tab ? 'bg-white text-indigo-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+
+          {/* Chart with Center Label */}
+          <div className="h-44 relative mb-10">
+            <Doughnut data={getChartData()} options={chartOptions} />
+            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+              <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Selected</span>
+              <span className="text-xl font-black text-gray-900 tracking-tighter">100%</span>
             </div>
           </div>
 
-          {/* Day Returns Heatmap Card */}
-          <SectorHeatmap sectors={sectors} />
+          {/* TWO COLUMN PROGRESS BARS */}
+          <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+            {sectors.map((sector, index) => {
+              const color = chartPalette[index % chartPalette.length];
+              const val = activeTab === 'weight' ? sector.weight : 
+                          activeTab === 'volume' ? sector.volumePercent : 
+                          Math.abs(sector.avgYtdReturn);
+              
+              return (
+                <div key={sector.sector} className="flex flex-col gap-1.5">
+                  <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-tighter">
+                    <span className="text-gray-500 truncate max-w-[80px]">{sector.sector}</span>
+                    <span className="text-gray-900 font-mono">{val.toFixed(1)}%</span>
+                  </div>
+                  <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full rounded-full transition-all duration-1000 ease-out"
+                      style={{ 
+                        width: `${Math.min(val * 2.5, 100)}%`, // Multiplied for better visual feedback on small %
+                        backgroundColor: color,
+                        boxShadow: `0 0 10px ${color}30` 
+                      }}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>
