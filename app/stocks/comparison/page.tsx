@@ -459,9 +459,9 @@ export default function StockComparison() {
     if (comparedStocks.length === 0) {
       return (
         <div className="text-center py-12">
-          <Search className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">No stocks to compare</h3>
-          <p className="text-sm text-gray-600">Search and add stocks to start comparing</p>
+          <Search className="h-12 w-12 text-gray-300 dark:text-pearto-gray mx-auto mb-3" />
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna mb-2">No stocks to compare</h3>
+          <p className="text-sm text-gray-600 dark:text-pearto-cloud dark:text-pearto-cloud">Search and add stocks to start comparing</p>
         </div>
       );
     }
@@ -541,11 +541,11 @@ export default function StockComparison() {
       <div className="overflow-x-auto">
         <table className="min-w-full text-xs">
           <thead>
-            <tr className="border-b border-gray-100">
-              <th className="text-left py-2 px-3 font-medium text-gray-700">
+            <tr className="border-b border-gray-100 dark:border-pearto-border">
+              <th className="text-left py-2 px-3 font-medium text-gray-700 dark:text-pearto-cloud dark:text-pearto-cloud">
                 <button
                   onClick={() => handleSort('metric')}
-                  className="flex items-center gap-1 hover:text-blue-600 transition-colors"
+                  className="flex items-center gap-1 hover:text-blue-600 dark:text-pearto-green dark:hover:text-pearto-green transition-colors"
                 >
                   Metric
                   {sortBy === 'metric' && (
@@ -558,18 +558,18 @@ export default function StockComparison() {
                   <div className="flex flex-col items-center space-y-0.5">
                     <div className="flex items-center gap-2">
                       <div 
-                        className="w-4 h-4 rounded-full shadow-md border-2 border-white" 
+                        className="w-4 h-4 rounded-full shadow-md dark:shadow-pearto-border border-2 border-white" 
                         style={{ backgroundColor: stock.color }}
                       />
-                      <Link href={`/stock/${stock.symbol.toLowerCase()}`} className="text-sm font-semibold text-gray-900 hover:text-blue-600 transition-colors">
+                      <Link href={`/stock/${stock.symbol.toLowerCase()}`} className="text-sm font-semibold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna hover:text-blue-600 dark:text-pearto-green dark:hover:text-pearto-green transition-colors">
                         {stock.symbol}
                       </Link>
                     </div>
-                    <span className="text-xs text-gray-500 text-center truncate max-w-20">{stock.name}</span>
+                    <span className="text-xs text-gray-500 dark:text-pearto-gray dark:text-pearto-gray text-center truncate max-w-20">{stock.name}</span>
                     <div className={`text-xs px-2 py-1 rounded-full font-medium ${
                       stock.changePercent >= 0 
-                        ? 'bg-green-50 text-green-700 border border-green-200' 
-                        : 'bg-red-50 text-red-700 border border-red-200'
+                        ? 'bg-green-50 dark:bg-pearto-green/10 text-green-700 dark:text-pearto-green border border-green-200 dark:border-pearto-green/30' 
+                        : 'bg-red-50 dark:bg-pearto-pink/10 text-red-700 dark:text-pearto-pink border border-red-200 dark:border-pearto-pink/30'
                     }`}>
                       {stock.changePercent >= 0 ? '+' : ''}{stock.changePercent.toFixed(2)}%
                     </div>
@@ -587,13 +587,13 @@ export default function StockComparison() {
               const minValue = numValues.length > 0 ? Math.min(...numValues) : 0;
               
               return (
-                <tr key={metric.key} className={`hover:bg-gray-50 transition-colors ${
-                  index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'
+                <tr key={metric.key} className={`hover:bg-gray-50 dark:hover:bg-pearto-surface dark:hover:bg-pearto-surface transition-colors ${
+                  index % 2 === 0 ? 'bg-white dark:bg-pearto-card' : 'bg-gray-50/50 dark:bg-pearto-surface/50'
                 }`}>
-                  <td className="py-2 px-3 font-medium text-gray-700">
+                  <td className="py-2 px-3 font-medium text-gray-700 dark:text-pearto-cloud dark:text-pearto-cloud">
                     <button
                       onClick={() => handleSort(metric.key)}
-                      className="flex items-center gap-1 hover:text-blue-600 transition-colors"
+                      className="flex items-center gap-1 hover:text-blue-600 dark:text-pearto-green dark:hover:text-pearto-green transition-colors"
                     >
                       {metric.label}
                       {sortBy === metric.key && (
@@ -610,19 +610,19 @@ export default function StockComparison() {
                     
                     let cellClass = 'font-medium text-sm py-1 px-3 text-center ';
                     if (metric.key === 'change' || metric.key === 'changePercent') {
-                      cellClass += isNegative ? 'text-red-600' : 'text-green-600';
+                      cellClass += isNegative ? 'text-red-600 dark:text-pearto-pink' : 'text-green-600 dark:text-pearto-green';
                     } else if (isBest && (metric.key === 'price' || metric.key === 'marketCap' || metric.key === 'eps')) {
-                      cellClass += 'text-green-700 font-semibold';
+                      cellClass += 'text-green-700 dark:text-pearto-green font-semibold';
                     } else if (isWorst && (metric.key === 'price' || metric.key === 'marketCap' || metric.key === 'eps')) {
-                      cellClass += 'text-red-600';
+                      cellClass += 'text-red-600 dark:text-pearto-pink';
                     } else {
-                      cellClass += 'text-gray-700';
+                      cellClass += 'text-gray-700 dark:text-pearto-cloud';
                     }
                     
                     return (
                       <td key={`${stock.symbol}-${metric.key}`} className={cellClass}>
                         <div className="flex items-center justify-center">
-                          <span className="px-2 py-0.5 rounded-md bg-white border border-gray-100">
+                          <span className="px-2 py-0.5 rounded-md bg-white dark:bg-pearto-card border border-gray-100 dark:border-pearto-border">
                             {formatValue(value, metric.format)}
                           </span>
                         </div>
@@ -645,23 +645,23 @@ export default function StockComparison() {
     
     if (stocksWithData.length === 0) {
       return (
-        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+        <div className="bg-white dark:bg-pearto-card rounded-lg p-6 shadow-sm dark:shadow-pearto-border border border-gray-200 dark:border-pearto-border">
           <div className="text-center py-8">
-            <Activity className="h-12 w-12 text-blue-600 animate-spin mx-auto mb-3" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Loading Chart Data</h3>
-            <p className="text-sm text-gray-600">Fetching historical data for the selected stocks...</p>
+            <Activity className="h-12 w-12 text-blue-600 dark:text-pearto-green animate-spin mx-auto mb-3" />
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna mb-2">Loading Chart Data</h3>
+            <p className="text-sm text-gray-600 dark:text-pearto-cloud dark:text-pearto-cloud">Fetching historical data for the selected stocks...</p>
           </div>
         </div>
       );
     }
 
     return (
-      <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
+      <div className="bg-white dark:bg-pearto-card rounded-lg p-4 shadow-sm dark:shadow-pearto-border border border-gray-200 dark:border-pearto-border">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
-          <h3 className="text-lg font-semibold text-gray-900">Price Comparison</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna">Price Comparison</h3>
           <div className="flex flex-wrap items-center gap-3">
             {/* Chart Type Selector */}
-            <div className="flex bg-gray-100 rounded-lg p-0.5">
+            <div className="flex bg-gray-100 dark:bg-pearto-surface rounded-lg p-0.5">
               {[{ key: 'line', label: 'Line' }, { key: 'area', label: 'Area' }, { key: 'candle', label: 'Candle' }].map((type) => (
                 <button
                   key={type.key}
@@ -672,7 +672,7 @@ export default function StockComparison() {
                     setTimeout(() => setChartLoading(false), 500);
                   }}
                   className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
-                    chartType === type.key ? "bg-white text-gray-900 shadow-sm" : "text-gray-600 hover:text-gray-900"
+                    chartType === type.key ? "bg-white dark:bg-pearto-card text-gray-900 dark:text-pearto-luna shadow-sm dark:shadow-pearto-border" : "text-gray-600 dark:text-pearto-cloud hover:text-gray-900 dark:hover:text-pearto-luna"
                   }`}
                 >
                   {type.label}
@@ -681,13 +681,13 @@ export default function StockComparison() {
             </div>
             
             {/* Period Selector */}
-            <div className="flex bg-gray-100 rounded-lg p-0.5">
+            <div className="flex bg-gray-100 dark:bg-pearto-surface rounded-lg p-0.5">
               {periods.map((period) => (
                 <button
                   key={period}
                   onClick={() => handlePeriodChange(period)}
                   className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
-                    chartPeriod === period ? "bg-white text-gray-900 shadow-sm" : "text-gray-600 hover:text-gray-900"
+                    chartPeriod === period ? "bg-white dark:bg-pearto-card text-gray-900 dark:text-pearto-luna shadow-sm dark:shadow-pearto-border" : "text-gray-600 dark:text-pearto-cloud hover:text-gray-900 dark:hover:text-pearto-luna"
                   }`}
                 >
                   {period}
@@ -698,7 +698,7 @@ export default function StockComparison() {
             {/* AI Analysis Button */}
             <button
               onClick={() => setIsAIPanelOpen(true)}
-              className="px-3 py-1.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs font-medium rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all flex items-center gap-1 shadow-md"
+              className="px-3 py-1.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs font-medium rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all flex items-center gap-1 shadow-md dark:shadow-pearto-border"
             >
               <Brain className="h-3 w-3" />
               AI Analysis
@@ -713,37 +713,37 @@ export default function StockComparison() {
               const isPositive = stock.change >= 0;
               const color = index === 0 ? '#16a34a' : stock.color;
               return (
-                <div key={stock.symbol} className={`bg-white rounded-lg p-3 border-2 shadow-sm transition-all hover:shadow-md ${
-                  isPositive ? 'border-green-200 bg-gradient-to-br from-green-50 to-white' : 'border-red-200 bg-gradient-to-br from-red-50 to-white'
+                <div key={stock.symbol} className={`bg-white dark:bg-pearto-card rounded-lg p-3 border-2 shadow-sm dark:shadow-pearto-border transition-all hover:shadow-md ${
+                  isPositive ? 'border-green-200 dark:border-pearto-green/30 bg-gradient-to-br from-green-50 to-white dark:from-pearto-green/10 dark:to-pearto-card' : 'border-red-200 dark:border-pearto-pink/30 bg-gradient-to-br from-red-50 to-white dark:from-pearto-pink/10 dark:to-pearto-card'
                 }`}>
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
                       <div 
-                        className="w-4 h-4 rounded-full shadow-md border-2 border-white" 
+                        className="w-4 h-4 rounded-full shadow-md dark:shadow-pearto-border border-2 border-white dark:border-pearto-card" 
                         style={{ backgroundColor: color }}
                       />
-                      <Link href={`/stock/${stock.symbol.toLowerCase()}`} className="text-sm font-bold text-gray-900 hover:text-blue-600 hover:underline">
+                      <Link href={`/stock/${stock.symbol.toLowerCase()}`} className="text-sm font-bold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna hover:text-blue-600 dark:text-pearto-green dark:hover:text-pearto-green hover:underline dark:hover:text-pearto-green">
                         {stock.symbol}
                       </Link>
                     </div>
                     <button
                       onClick={() => removeFromComparison(stock.symbol)}
-                      className="text-gray-400 hover:text-red-600 transition-colors"
+                      className="text-gray-400 dark:text-pearto-gray hover:text-red-600 dark:text-pearto-pink dark:hover:text-pearto-pink transition-colors"
                     >
                       <X className="h-3 w-3" />
                     </button>
                   </div>
                   <div className="space-y-1">
                     <div className="flex justify-between items-center">
-                      <span className="text-xs text-gray-600">Price</span>
-                      <span className="text-sm font-semibold">{formatPrice(stock.price)}</span>
+                      <span className="text-xs text-gray-600 dark:text-pearto-cloud dark:text-pearto-cloud">Price</span>
+                      <span className="text-sm font-semibold dark:text-pearto-luna">{formatPrice(stock.price)}</span>
                     </div>
                     <div className={`flex justify-between items-center p-1 rounded ${
-                      isPositive ? 'bg-green-100' : 'bg-red-100'
+                      isPositive ? 'bg-green-100 dark:bg-pearto-green/20 dark:bg-pearto-green/20' : 'bg-red-100 dark:bg-pearto-pink/20 dark:bg-pearto-pink/20'
                     }`}>
-                      <span className="text-xs text-gray-700">Change</span>
+                      <span className="text-xs text-gray-700 dark:text-pearto-cloud dark:text-pearto-cloud">Change</span>
                       <span className={`text-sm font-bold ${
-                        isPositive ? 'text-green-700' : 'text-red-700'
+                        isPositive ? 'text-green-700 dark:text-pearto-green' : 'text-red-700 dark:text-pearto-pink'
                       }`}>
                         {isPositive ? '+' : ''}{stock.changePercent.toFixed(2)}%
                       </span>
@@ -757,27 +757,27 @@ export default function StockComparison() {
           {/* Fullscreen Button */}
           <button
             onClick={enterFullscreen}
-            className="ml-4 p-3 bg-white rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-md hover:border-blue-300 transition-all group"
+            className="ml-4 p-3 bg-white dark:bg-pearto-card rounded-lg border-2 border-gray-200 dark:border-pearto-border shadow-sm dark:shadow-pearto-border hover:shadow-md hover:border-blue-300 dark:hover:border-pearto-green transition-all group"
             title="Fullscreen Chart"
           >
-            <Maximize2 className="h-5 w-5 text-gray-600 group-hover:text-blue-600 transition-colors" />
+            <Maximize2 className="h-5 w-5 text-gray-600 dark:text-pearto-cloud group-hover:text-blue-600 dark:group-hover:text-pearto-green transition-colors" />
           </button>
         </div>
 
         {/* Chart Container */}
         <div 
           id="chart-container" 
-          className={`relative bg-gray-50 ${
+          className={`relative bg-gray-50 dark:bg-pearto-blockchain ${
             isFullscreen 
               ? 'fixed inset-0 w-screen h-screen z-[9999] overflow-hidden' 
               : 'h-[32rem] rounded-lg p-3'
           }`}
         >
           {chartLoading && (
-            <div className={`absolute inset-0 flex items-center justify-center bg-white/50 z-10 ${
+            <div className={`absolute inset-0 flex items-center justify-center bg-white/50 dark:bg-pearto-blockchain/50 z-10 ${
               isFullscreen ? '' : 'rounded-lg'
             }`}>
-              <Activity className="h-6 w-6 text-blue-600 animate-spin" />
+              <Activity className="h-6 w-6 text-blue-600 dark:text-pearto-green animate-spin" />
             </div>
           )}
           
@@ -785,18 +785,18 @@ export default function StockComparison() {
           {isFullscreen && (
             <button
               onClick={exitFullscreen}
-              className="fixed top-4 right-4 z-[10000] p-3 bg-white rounded-full shadow-lg hover:shadow-xl hover:bg-gray-100 transition-all"
+              className="fixed top-4 right-4 z-[10000] p-3 bg-white dark:bg-pearto-card rounded-full shadow-lg dark:shadow-pearto-border hover:shadow-xl hover:bg-gray-100 dark:hover:bg-pearto-surface transition-all"
               title="Exit Fullscreen"
             >
-              <Minimize2 className="h-6 w-6 text-gray-700" />
+              <Minimize2 className="h-6 w-6 text-gray-700 dark:text-pearto-cloud" />
             </button>
           )}
           
           {/* Fullscreen Controls - Only visible in fullscreen */}
           {isFullscreen && (
-            <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-[10000] flex items-center gap-3 bg-white/95 backdrop-blur-sm rounded-full shadow-xl px-6 py-3">
+            <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-[10000] flex items-center gap-3 bg-white dark:bg-pearto-card/95 backdrop-blur-sm rounded-full shadow-xl dark:shadow-pearto-border px-6 py-3">
               <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-gray-700">Period:</span>
+                <span className="text-sm font-medium text-gray-700 dark:text-pearto-cloud dark:text-pearto-cloud">Period:</span>
                 <select
                   value={chartPeriod}
                   onChange={(e) => {
@@ -805,16 +805,16 @@ export default function StockComparison() {
                     setChartLoading(true);
                     loadHistoricalData(comparedStocks, newPeriod);
                   }}
-                  className="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white cursor-pointer"
+                  className="px-3 py-1.5 text-sm border border-gray-300 dark:border-pearto-border rounded-lg bg-white dark:bg-pearto-surface text-gray-900 dark:text-pearto-luna focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-pearto-green cursor-pointer"
                 >
                   {periods.map(period => (
                     <option key={period} value={period}>{period}</option>
                   ))}
                 </select>
               </div>
-              <div className="w-px h-6 bg-gray-300"></div>
+              <div className="w-px h-6 bg-gray-300 dark:bg-pearto-border"></div>
               <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-gray-700">Type:</span>
+                <span className="text-sm font-medium text-gray-700 dark:text-pearto-cloud dark:text-pearto-cloud">Type:</span>
                 <select
                   value={chartType}
                   onChange={(e) => {
@@ -823,7 +823,7 @@ export default function StockComparison() {
                     // Clear loading after a short delay since chart type change doesn't require data fetching
                     setTimeout(() => setChartLoading(false), 500);
                   }}
-                  className="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white cursor-pointer"
+                  className="px-3 py-1.5 text-sm border border-gray-300 dark:border-pearto-border rounded-lg bg-white dark:bg-pearto-surface text-gray-900 dark:text-pearto-luna focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-pearto-green cursor-pointer"
                 >
                   <option value="line">Line</option>
                   <option value="area">Area</option>
@@ -855,7 +855,7 @@ export default function StockComparison() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-pearto-surface dark:bg-pearto-blockchain">
       <main className="p-4 lg:p-6">
         <div className="max-w-[1600px] mx-auto">
           {/* Compact Header */}
@@ -865,8 +865,8 @@ export default function StockComparison() {
             transition={{ duration: 0.6 }}
             className="mb-4"
           >
-            <h1 className="text-2xl font-bold text-gray-900 mb-1">Stock Comparison</h1>
-            <p className="text-sm text-gray-600">Compare up to 5 stocks side by side with real-time data and charts</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna mb-1">Stock Comparison</h1>
+            <p className="text-sm text-gray-600 dark:text-pearto-cloud dark:text-pearto-cloud">Compare up to 5 stocks side by side with real-time data and charts</p>
           </motion.div>
 
           {/* Compact Search Section */}
@@ -874,16 +874,16 @@ export default function StockComparison() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="bg-white rounded-lg p-3 shadow-sm border border-gray-200 mb-4"
+            className="bg-white dark:bg-pearto-card rounded-lg p-3 shadow-sm dark:shadow-pearto-border border border-gray-200 dark:border-pearto-border mb-4"
           >
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-sm font-semibold text-gray-900">Add Stocks</h2>
+              <h2 className="text-sm font-semibold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna">Add Stocks</h2>
               <div className="flex items-center gap-2">
-                <span className="text-xs text-gray-500">{comparedStocks.length}/5</span>
+                <span className="text-xs text-gray-500 dark:text-pearto-gray dark:text-pearto-gray">{comparedStocks.length}/5</span>
                 {comparedStocks.length > 0 && (
                   <button
                     onClick={exportToCSV}
-                    className="flex items-center gap-1 px-2 py-1 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+                    className="flex items-center gap-1 px-2 py-1 text-xs font-medium text-gray-700 dark:text-pearto-cloud dark:text-pearto-cloud bg-gray-100 dark:bg-pearto-surface hover:bg-gray-200 dark:hover:bg-pearto-surface rounded-md transition-colors"
                   >
                     <Download className="h-3 w-3" />
                     Export
@@ -893,38 +893,38 @@ export default function StockComparison() {
             </div>
 
             <div className="relative mb-3">
-              <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
+              <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 text-gray-400 dark:text-pearto-gray" />
               <input
                 type="text"
                 placeholder="Search stocks..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-8 pr-8 py-2 text-xs border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-8 pr-8 py-2 text-xs border border-gray-300 dark:border-pearto-border dark:border-pearto-border rounded-lg dark:bg-pearto-surface dark:text-pearto-luna focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
               {loading && (
                 <div className="absolute right-2.5 top-1/2 transform -translate-y-1/2">
-                  <Activity className="h-3.5 w-3.5 text-blue-600 animate-spin" />
+                  <Activity className="h-3.5 w-3.5 text-blue-600 dark:text-pearto-green animate-spin" />
                 </div>
               )}
             </div>
 
             {searchResults.length > 0 && (
-              <div className="border border-gray-200 rounded-lg max-h-48 overflow-y-auto">
+              <div className="border border-gray-200 dark:border-pearto-border rounded-lg max-h-48 overflow-y-auto">
                 {searchResults.map((stock) => (
                   <div
                     key={stock.symbol}
-                    className="flex items-center justify-between p-2 hover:bg-gray-50 border-b border-gray-100 last:border-b-0"
+                    className="flex items-center justify-between p-2 hover:bg-gray-50 dark:hover:bg-pearto-surface dark:bg-pearto-surface dark:hover:bg-pearto-surface border-b border-gray-100 dark:border-pearto-border last:border-b-0"
                   >
                     <div className="flex-1 min-w-0">
-                      <h4 className="text-xs font-semibold text-gray-900 truncate">{stock.symbol}</h4>
-                      <p className="text-xs text-gray-600 truncate">{stock.name}</p>
-                      <p className="text-xs text-gray-500">{stock.sector}</p>
+                      <h4 className="text-xs font-semibold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna truncate">{stock.symbol}</h4>
+                      <p className="text-xs text-gray-600 dark:text-pearto-cloud dark:text-pearto-cloud truncate">{stock.name}</p>
+                      <p className="text-xs text-gray-500 dark:text-pearto-gray dark:text-pearto-gray">{stock.sector}</p>
                     </div>
                     <div className="flex items-center space-x-2">
                       <div className="text-right">
-                        <p className="text-xs font-semibold text-gray-900">{formatPrice(stock.price)}</p>
+                        <p className="text-xs font-semibold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna">{formatPrice(stock.price)}</p>
                         <p className={`text-xs font-medium ${
-                          stock.change >= 0 ? 'text-green-600' : 'text-red-600'
+                          stock.change >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
                         }`}>
                           {stock.change >= 0 ? '+' : ''}{stock.changePercent.toFixed(2)}%
                         </p>
@@ -932,7 +932,7 @@ export default function StockComparison() {
                       <button
                         onClick={() => addToComparison(stock)}
                         disabled={loading}
-                        className="flex items-center space-x-1 px-2 py-1 bg-blue-600 text-white text-xs rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50"
+                        className="flex items-center space-x-1 px-2 py-1 bg-blue-600 dark:bg-pearto-green text-white text-xs rounded-md hover:bg-blue-700 dark:hover:bg-pearto-green/90 transition-colors disabled:opacity-50"
                       >
                         <Plus className="h-3 w-3" />
                         <span>Add</span>
@@ -946,14 +946,14 @@ export default function StockComparison() {
             {/* Quick Add Popular Stocks */}
             {searchTerm === '' && comparedStocks.length < 5 && (
               <div>
-                <h4 className="text-xs font-medium text-gray-700 mb-2">Popular Stocks</h4>
+                <h4 className="text-xs font-medium text-gray-700 dark:text-pearto-cloud dark:text-pearto-cloud mb-2">Popular Stocks</h4>
                 <div className="flex flex-wrap gap-1.5">
                   {['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA', 'NVDA', 'META', 'NFLX'].map((symbol) => (
                     <button
                       key={symbol}
                       onClick={() => setSearchTerm(symbol)}
                       disabled={comparedStocks.some(s => s.symbol === symbol)}
-                      className="px-2 py-1 text-xs font-medium bg-gray-100 hover:bg-gray-200 disabled:bg-gray-50 disabled:text-gray-400 text-gray-700 rounded-md transition-colors"
+                      className="px-2 py-1 text-xs font-medium bg-gray-100 dark:bg-pearto-surface hover:bg-gray-200 dark:hover:bg-pearto-surface disabled:bg-gray-50 dark:bg-pearto-surface disabled:text-gray-400 dark:text-pearto-gray text-gray-700 dark:text-pearto-cloud dark:text-pearto-cloud rounded-md transition-colors"
                     >
                       {symbol}
                     </button>
@@ -984,9 +984,9 @@ export default function StockComparison() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.1 }}
-                    className="bg-white rounded-lg p-3 shadow-sm border border-gray-200 mb-4"
+                    className="bg-white dark:bg-pearto-card rounded-lg p-3 shadow-sm dark:shadow-pearto-border border border-gray-200 dark:border-pearto-border mb-4"
                   >
-                    <h3 className="text-sm font-semibold text-gray-900 mb-3">Performance Summary</h3>
+                    <h3 className="text-sm font-semibold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna mb-3">Performance Summary</h3>
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                       {/* Best Performer */}
                       {(() => {
@@ -994,13 +994,13 @@ export default function StockComparison() {
                           current.changePercent > best.changePercent ? current : best
                         );
                         return (
-                          <div className="text-center p-2 bg-gradient-to-br from-green-50 to-green-100 rounded-lg border border-green-200 shadow-sm">
+                          <div className="text-center p-2 bg-gradient-to-br from-green-50 to-green-100 dark:from-pearto-green/20 dark:to-pearto-green/10 rounded-lg border border-green-200 dark:border-pearto-green/30 shadow-sm dark:shadow-pearto-border">
                             <div className="flex items-center justify-center gap-1 mb-1">
-                              <TrendingUp className="h-3 w-3 text-green-600" />
-                              <span className="text-xs font-semibold text-green-700 uppercase tracking-wide">Best</span>
+                              <TrendingUp className="h-3 w-3 text-green-600 dark:text-pearto-green" />
+                              <span className="text-xs font-semibold text-green-700 dark:text-pearto-green uppercase tracking-wide">Best</span>
                             </div>
-                            <div className="text-sm font-bold text-green-900 mb-1">{bestPerformer.symbol}</div>
-                            <div className="text-xs font-semibold text-green-700">+{bestPerformer.changePercent.toFixed(2)}%</div>
+                            <div className="text-sm font-bold text-green-900 dark:text-pearto-luna mb-1">{bestPerformer.symbol}</div>
+                            <div className="text-xs font-semibold text-green-700 dark:text-pearto-green">+{bestPerformer.changePercent.toFixed(2)}%</div>
                           </div>
                         );
                       })()}
@@ -1011,13 +1011,13 @@ export default function StockComparison() {
                           current.changePercent < worst.changePercent ? current : worst
                         );
                         return (
-                          <div className="text-center p-2 bg-gradient-to-br from-red-50 to-red-100 rounded-lg border border-red-200 shadow-sm">
+                          <div className="text-center p-2 bg-gradient-to-br from-red-50 to-red-100 dark:from-pearto-pink/20 dark:to-pearto-pink/10 rounded-lg border border-red-200 dark:border-pearto-pink/30 shadow-sm dark:shadow-pearto-border">
                             <div className="flex items-center justify-center gap-1 mb-1">
-                              <TrendingDown className="h-3 w-3 text-red-600" />
-                              <span className="text-xs font-semibold text-red-700 uppercase tracking-wide">Worst</span>
+                              <TrendingDown className="h-3 w-3 text-red-600 dark:text-pearto-pink" />
+                              <span className="text-xs font-semibold text-red-700 dark:text-pearto-pink uppercase tracking-wide">Worst</span>
                             </div>
-                            <div className="text-sm font-bold text-red-900 mb-1">{worstPerformer.symbol}</div>
-                            <div className="text-xs font-semibold text-red-700">{worstPerformer.changePercent.toFixed(2)}%</div>
+                            <div className="text-sm font-bold text-red-900 dark:text-pearto-luna mb-1">{worstPerformer.symbol}</div>
+                            <div className="text-xs font-semibold text-red-700 dark:text-pearto-pink">{worstPerformer.changePercent.toFixed(2)}%</div>
                           </div>
                         );
                       })()}
@@ -1028,13 +1028,13 @@ export default function StockComparison() {
                           (current.volume || 0) > (highest.volume || 0) ? current : highest
                         );
                         return (
-                          <div className="text-center p-2 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg border border-blue-200 shadow-sm">
+                          <div className="text-center p-2 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-pearto-surface dark:to-pearto-card rounded-lg border border-blue-200 dark:border-pearto-border shadow-sm dark:shadow-pearto-border">
                             <div className="flex items-center justify-center gap-1 mb-1">
-                              <Activity className="h-3 w-3 text-blue-600" />
-                              <span className="text-xs font-semibold text-blue-700 uppercase tracking-wide">Volume</span>
+                              <Activity className="h-3 w-3 text-blue-600 dark:text-pearto-green" />
+                              <span className="text-xs font-semibold text-blue-700 dark:text-pearto-green uppercase tracking-wide">Volume</span>
                             </div>
-                            <div className="text-sm font-bold text-blue-900 mb-1">{highestVolume.symbol}</div>
-                            <div className="text-xs font-semibold text-blue-700">{formatLargeNumber(highestVolume.volume)}</div>
+                            <div className="text-sm font-bold text-blue-900 dark:text-pearto-luna mb-1">{highestVolume.symbol}</div>
+                            <div className="text-xs font-semibold text-blue-700 dark:text-pearto-green">{formatLargeNumber(highestVolume.volume)}</div>
                           </div>
                         );
                       })()}
@@ -1045,13 +1045,13 @@ export default function StockComparison() {
                           (current.marketCap || 0) > (largest.marketCap || 0) ? current : largest
                         );
                         return (
-                          <div className="text-center p-2 bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg border border-purple-200 shadow-sm">
+                          <div className="text-center p-2 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-pearto-surface dark:to-pearto-card rounded-lg border border-purple-200 dark:border-pearto-border shadow-sm dark:shadow-pearto-border">
                             <div className="flex items-center justify-center gap-1 mb-1">
-                              <DollarSign className="h-3 w-3 text-purple-600" />
-                              <span className="text-xs font-semibold text-purple-700 uppercase tracking-wide">Cap</span>
+                              <DollarSign className="h-3 w-3 text-purple-600 dark:text-pearto-pink" />
+                              <span className="text-xs font-semibold text-purple-700 dark:text-pearto-pink uppercase tracking-wide">Cap</span>
                             </div>
-                            <div className="text-sm font-bold text-purple-900 mb-1">{largestCap.symbol}</div>
-                            <div className="text-xs font-semibold text-purple-700">{formatLargeNumber(largestCap.marketCap)}</div>
+                            <div className="text-sm font-bold text-purple-900 dark:text-pearto-luna mb-1">{largestCap.symbol}</div>
+                            <div className="text-xs font-semibold text-purple-700 dark:text-pearto-pink">{formatLargeNumber(largestCap.marketCap)}</div>
                           </div>
                         );
                       })()}
@@ -1067,12 +1067,12 @@ export default function StockComparison() {
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6, delay: 0.3 }}
-                  className="bg-white rounded-lg shadow-lg border border-gray-200 p-3 sticky top-6"
+                  className="bg-white dark:bg-pearto-card rounded-lg shadow-lg dark:shadow-pearto-border border border-gray-200 dark:border-pearto-border p-3 sticky top-6"
                 >
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-xs font-semibold text-gray-900 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Analysis</h3>
+                    <h3 className="text-xs font-semibold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Analysis</h3>
                     <div className="flex items-center gap-1">
-                      <span className="text-xs text-gray-500">Hover to scroll</span>
+                      <span className="text-xs text-gray-500 dark:text-pearto-gray dark:text-pearto-gray">Hover to scroll</span>
                     </div>
                   </div>
                   
@@ -1093,11 +1093,11 @@ export default function StockComparison() {
                             onClick={() => setActiveCategory(category.key)}
                             className={`flex items-center gap-1 px-2 py-2 rounded-lg text-xs font-medium transition-all flex-shrink-0 min-w-fit ${
                               isActive
-                                ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-sm scale-105'
-                                : 'bg-gradient-to-r from-gray-50 to-gray-100 text-gray-700 hover:from-gray-100 hover:to-gray-200 border border-gray-200'
+                                ? 'bg-gradient-to-r from-blue-600 to-purple-600 dark:from-pearto-green dark:to-pearto-green text-white shadow-sm dark:shadow-pearto-border scale-105'
+                                : 'bg-gradient-to-r from-gray-50 to-gray-100 dark:from-pearto-surface dark:to-pearto-surface text-gray-700 dark:text-pearto-cloud hover:from-gray-100 hover:to-gray-200 dark:hover:from-pearto-surface dark:hover:to-pearto-card border border-gray-200 dark:border-pearto-border'
                             }`}
                           >
-                            <Icon className={`h-3 w-3 ${isActive ? 'text-white' : 'text-gray-600'}`} />
+                            <Icon className={`h-3 w-3 ${isActive ? 'text-white' : 'text-gray-600 dark:text-pearto-cloud'}`} />
                             <span className="whitespace-nowrap">{category.label}</span>
                           </button>
                         );
@@ -1111,10 +1111,10 @@ export default function StockComparison() {
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6, delay: 0.5 }}
-                  className="bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden"
+                  className="bg-white dark:bg-pearto-card rounded-lg shadow-lg dark:shadow-pearto-border border border-gray-200 dark:border-pearto-border overflow-hidden"
                 >
                   <div className="p-3">
-                    <h3 className="text-xs font-semibold text-gray-900 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">Comparison</h3>
+                    <h3 className="text-xs font-semibold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">Comparison</h3>
                     <div className="overflow-x-auto">
                       {renderComparisonTable()}
                     </div>
@@ -1127,20 +1127,20 @@ export default function StockComparison() {
       </main>
 
       {/* Sliding AI Panel */}
-      <div className={`fixed top-0 right-0 h-full w-96 bg-white shadow-2xl transform transition-transform duration-300 ease-in-out z-50 ${
+      <div className={`fixed top-0 right-0 h-full w-96 bg-white dark:bg-pearto-card shadow-2xl dark:shadow-pearto-border transform transition-transform duration-300 ease-in-out z-50 ${
         isAIPanelOpen ? 'translate-x-0' : 'translate-x-full'
       }`}>
         <div className="h-full flex flex-col">
           {/* AI Panel Header */}
-          <div className="px-4 py-3 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-purple-50">
+          <div className="px-4 py-3 border-b border-gray-200 dark:border-pearto-border dark:border-pearto-border bg-gradient-to-r from-blue-50 to-purple-50 dark:from-pearto-surface dark:to-pearto-card">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Brain className="h-5 w-5 text-blue-600" />
-                <h3 className="text-sm font-semibold text-gray-900">AI Analysis</h3>
+                <Brain className="h-5 w-5 text-blue-600 dark:text-pearto-green" />
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna">AI Analysis</h3>
               </div>
               <button
                 onClick={() => setIsAIPanelOpen(false)}
-                className="p-1 text-gray-500 hover:text-gray-700 hover:bg-gray-200 rounded-lg transition-colors"
+                className="p-1 text-gray-500 dark:text-pearto-gray dark:text-pearto-gray hover:text-gray-700 dark:text-pearto-cloud dark:text-pearto-cloud hover:bg-gray-200 dark:hover:bg-pearto-surface rounded-lg transition-colors"
               >
                 <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -1186,7 +1186,7 @@ export default function StockComparison() {
       {/* Overlay */}
       {isAIPanelOpen && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          className="fixed inset-0 bg-black bg-opacity-50 dark:bg-pearto-blockchain dark:bg-opacity-80 z-40"
           onClick={() => setIsAIPanelOpen(false)}
         />
       )}

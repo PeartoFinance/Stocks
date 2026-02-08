@@ -57,7 +57,7 @@ export default function FinancialsTab({ symbol }: FinancialsTabProps) {
 
   if (loading) {
     return (
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-8">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-8 transition-colors duration-300">
         <div className="flex items-center justify-center">
           <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
         </div>
@@ -67,7 +67,7 @@ export default function FinancialsTab({ symbol }: FinancialsTabProps) {
 
   if (error || financials.length === 0) {
     return (
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-8">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-8 transition-colors duration-300">
         <p className="text-red-500 text-center">{error || 'No financial data available'}</p>
       </div>
     );
@@ -79,8 +79,8 @@ export default function FinancialsTab({ symbol }: FinancialsTabProps) {
   return (
     <div className="space-y-6">
       {/* Income Statement */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 transition-colors duration-300">
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
           <DollarSign className="h-5 w-5 text-green-500" />
           Income Statement
         </h3>
@@ -95,13 +95,13 @@ export default function FinancialsTab({ symbol }: FinancialsTabProps) {
             const isPositive = growth >= 0;
             
             return (
-              <div key={index} className="bg-slate-50 dark:bg-slate-800 rounded-lg p-4">
-                <p className="text-sm text-slate-500 dark:text-slate-400 mb-1">{item.label}</p>
-                <p className="text-xl font-bold text-slate-900 dark:text-white">
+              <div key={index} className="bg-slate-50 dark:bg-slate-800 rounded-lg p-4 transition-colors duration-300">
+                <p className="text-sm text-slate-500 dark:text-slate-400 mb-1 transition-colors duration-300">{item.label}</p>
+                <p className="text-xl font-bold text-slate-900 dark:text-white transition-colors duration-300">
                   {formatNumber(item.current || 0)}
                 </p>
                 {item.previous && (
-                  <div className={`flex items-center gap-1 mt-1 ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
+                  <div className={`flex items-center gap-1 mt-1 ${isPositive ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'}`}>
                     {isPositive ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
                     <span className="text-xs font-medium">
                       {isPositive ? '+' : ''}{growth.toFixed(1)}% YoY
@@ -115,8 +115,8 @@ export default function FinancialsTab({ symbol }: FinancialsTabProps) {
       </div>
 
       {/* Balance Sheet */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 transition-colors duration-300">
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
           <BarChart3 className="h-5 w-5 text-blue-500" />
           Balance Sheet
         </h3>
@@ -130,13 +130,13 @@ export default function FinancialsTab({ symbol }: FinancialsTabProps) {
             const isPositive = growth >= 0;
             
             return (
-              <div key={index} className="bg-slate-50 dark:bg-slate-800 rounded-lg p-4">
-                <p className="text-sm text-slate-500 dark:text-slate-400 mb-1">{item.label}</p>
-                <p className="text-xl font-bold text-slate-900 dark:text-white">
+              <div key={index} className="bg-slate-50 dark:bg-slate-800 rounded-lg p-4 transition-colors duration-300">
+                <p className="text-sm text-slate-500 dark:text-slate-400 mb-1 transition-colors duration-300">{item.label}</p>
+                <p className="text-xl font-bold text-slate-900 dark:text-white transition-colors duration-300">
                   {item.label === 'EPS (Actual)' ? `$${(item.current || 0).toFixed(2)}` : formatNumber(item.current || 0)}
                 </p>
                 {item.previous && (
-                  <div className={`flex items-center gap-1 mt-1 ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
+                  <div className={`flex items-center gap-1 mt-1 ${isPositive ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'}`}>
                     {isPositive ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
                     <span className="text-xs font-medium">
                       {isPositive ? '+' : ''}{growth.toFixed(1)}% YoY
@@ -150,25 +150,25 @@ export default function FinancialsTab({ symbol }: FinancialsTabProps) {
       </div>
 
       {/* Financial Summary */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 transition-colors duration-300">
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 transition-colors duration-300">
           Financial Summary
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-3">Latest Period</h4>
+            <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-3 transition-colors duration-300">Latest Period</h4>
             <div className="space-y-2 text-sm">
-              <p><span className="text-slate-500">Period:</span> {currentYear?.period}</p>
-              <p><span className="text-slate-500">Fiscal Date:</span> {new Date(currentYear?.fiscalDateEnding || '').toLocaleDateString()}</p>
-              <p><span className="text-slate-500">Currency:</span> {currentYear?.currency}</p>
+              <p><span className="text-slate-500 dark:text-pearto-gray transition-colors duration-300">Period:</span> {currentYear?.period}</p>
+              <p><span className="text-slate-500 dark:text-pearto-gray transition-colors duration-300">Fiscal Date:</span> {new Date(currentYear?.fiscalDateEnding || '').toLocaleDateString()}</p>
+              <p><span className="text-slate-500 dark:text-pearto-gray transition-colors duration-300">Currency:</span> {currentYear?.currency}</p>
             </div>
           </div>
           <div>
-            <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-3">Key Metrics</h4>
+            <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-3 transition-colors duration-300">Key Metrics</h4>
             <div className="space-y-2 text-sm">
-              <p><span className="text-slate-500">Revenue Growth:</span> {calculateGrowth(currentYear?.revenue, previousYear?.revenue).toFixed(1)}%</p>
-              <p><span className="text-slate-500">Net Income Growth:</span> {calculateGrowth(currentYear?.netIncome, previousYear?.netIncome).toFixed(1)}%</p>
-              <p><span className="text-slate-500">Asset Growth:</span> {calculateGrowth(currentYear?.totalAssets, previousYear?.totalAssets).toFixed(1)}%</p>
+              <p><span className="text-slate-500 dark:text-pearto-gray transition-colors duration-300">Revenue Growth:</span> {calculateGrowth(currentYear?.revenue, previousYear?.revenue).toFixed(1)}%</p>
+              <p><span className="text-slate-500 dark:text-pearto-gray transition-colors duration-300">Net Income Growth:</span> {calculateGrowth(currentYear?.netIncome, previousYear?.netIncome).toFixed(1)}%</p>
+              <p><span className="text-slate-500 dark:text-pearto-gray transition-colors duration-300">Asset Growth:</span> {calculateGrowth(currentYear?.totalAssets, previousYear?.totalAssets).toFixed(1)}%</p>
             </div>
           </div>
         </div>

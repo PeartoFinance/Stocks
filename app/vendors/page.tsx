@@ -150,14 +150,14 @@ export default function VendorsPage() {
     selectedService !== 'all' || showFeaturedOnly;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:bg-gradient-to-br dark:from-slate-900 dark:via-slate-900 dark:to-slate-800">
       <div className="max-w-[2560px] mx-auto px-3 sm:px-4 lg:px-6 xl:px-8 2xl:px-12 py-4 sm:py-6 lg:py-8">
         
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 mb-4 sm:mb-6 lg:mb-8">
           <div>
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Vendors Directory</h1>
-            <p className="text-sm sm:text-base text-gray-600 mt-1 sm:mt-2">Discover and connect with trusted service providers</p>
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-purple-400">Vendors Directory</h1>
+            <p className="text-sm sm:text-base text-gray-600 dark:text-slate-400 mt-1 sm:mt-2">Discover and connect with trusted service providers</p>
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
@@ -168,7 +168,7 @@ export default function VendorsPage() {
               <Star className="h-4 w-4" />
               <span>AI Insights</span>
             </button>
-            <button className="hidden sm:flex items-center gap-2 px-3 sm:px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm">
+            <button className="hidden sm:flex items-center gap-2 px-3 sm:px-4 py-2 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors text-sm text-gray-700 dark:text-slate-300">
               <Share2 className="h-4 w-4" />
               <span className="hidden md:inline">Share</span>
             </button>
@@ -181,7 +181,7 @@ export default function VendorsPage() {
           <div className="flex-1 min-w-0 xl:max-w-[calc(100%-416px)]">
 
         {/* Search and Filters */}
-            <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 p-3 sm:p-4 mb-4 sm:mb-6">
+            <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 dark:bg-slate-800/80 dark:border-slate-700/50 p-3 sm:p-4 mb-4 sm:mb-6">
               <div className="flex flex-col lg:flex-row gap-3">
                 {/* Search Bar */}
                 <div className="relative flex-1">
@@ -200,8 +200,8 @@ export default function VendorsPage() {
                   onClick={() => setShowFilters(!showFilters)}
                   className={`flex items-center gap-2 px-3 sm:px-4 py-2 border rounded-lg transition-all text-sm sm:text-base whitespace-nowrap ${
                     showFilters || hasActiveFilters
-                      ? 'bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-300 text-blue-700 shadow-sm'
-                      : 'bg-white/50 backdrop-blur-sm border-gray-300 text-gray-700 hover:bg-white/70'
+                      ? 'bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 border-blue-300 dark:border-blue-600 text-blue-700 dark:text-blue-300 shadow-sm'
+                      : 'bg-white/50 backdrop-blur-sm dark:bg-slate-700/50 border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-white/70 dark:hover:bg-slate-700'
                   }`}
                 >
                   <Filter className="h-4 w-4" />
@@ -221,16 +221,16 @@ export default function VendorsPage() {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                className="overflow-hidden mt-4 pt-4 border-t border-gray-200"
+                className="overflow-hidden mt-4 pt-4 border-t border-gray-200 dark:border-slate-700"
               >
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                   {/* Category Filter */}
                   <div>
-                    <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">Category</label>
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-slate-300 mb-1.5">Category</label>
                     <select
                       value={selectedCategory}
                       onChange={(e) => setSelectedCategory(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm appearance-none bg-white"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg text-sm appearance-none bg-white dark:bg-slate-700 text-gray-900 dark:text-white"
                     >
                       {categories.map(cat => (
                         <option key={cat} value={cat}>
@@ -242,11 +242,11 @@ export default function VendorsPage() {
 
                   {/* Service Filter */}
                   <div>
-                    <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">Service</label>
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-slate-300 mb-1.5">Service</label>
                     <select
                       value={selectedService}
                       onChange={(e) => setSelectedService(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm appearance-none bg-white"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg text-sm appearance-none bg-white dark:bg-slate-700 text-gray-900 dark:text-white"
                     >
                       {services.map(service => (
                         <option key={service} value={service}>
@@ -258,7 +258,7 @@ export default function VendorsPage() {
 
                   {/* Sort By */}
                   <div>
-                    <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">Sort By</label>
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-slate-300 mb-1.5">Sort By</label>
                     <select
                       value={`${sortBy}-${sortOrder}`}
                       onChange={(e) => {
@@ -266,7 +266,7 @@ export default function VendorsPage() {
                         setSortBy(field as 'rating' | 'reviews' | 'name');
                         setSortOrder(order as 'asc' | 'desc');
                       }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm appearance-none bg-white"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg text-sm appearance-none bg-white dark:bg-slate-700 text-gray-900 dark:text-white"
                     >
                       <option value="rating-desc">Highest Rated</option>
                       <option value="rating-asc">Lowest Rated</option>
@@ -279,13 +279,13 @@ export default function VendorsPage() {
 
                   {/* Featured Only */}
                   <div>
-                    <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">Options</label>
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-slate-300 mb-1.5">Options</label>
                     <button
                       onClick={() => setShowFeaturedOnly(!showFeaturedOnly)}
                       className={`w-full px-3 py-2 border rounded-lg text-sm transition-colors ${
                         showFeaturedOnly
-                          ? 'bg-blue-50 border-blue-300 text-blue-700'
-                          : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                          ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-300 dark:border-blue-600 text-blue-700 dark:text-blue-300'
+                          : 'bg-white dark:bg-slate-700 border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-600'
                       }`}
                     >
                       <TrendingUp className="h-4 w-4 inline mr-2" />
@@ -299,7 +299,7 @@ export default function VendorsPage() {
                   <div className="mt-4 flex justify-end">
                     <button
                       onClick={clearFilters}
-                      className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
+                      className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium flex items-center gap-1"
                     >
                       <X className="h-4 w-4" /> Clear All Filters
                     </button>
@@ -312,7 +312,7 @@ export default function VendorsPage() {
 
         {/* Results Header */}
             <div className="flex items-center justify-between mb-4 sm:mb-6">
-              <h2 className="text-lg sm:text-xl font-semibold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
+              <h2 className="text-lg sm:text-xl font-semibold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent dark:from-white dark:to-slate-300">
                 {loading ? 'Loading...' : `${filteredVendors.length} Vendor${filteredVendors.length !== 1 ? 's' : ''} Found`}
               </h2>
             </div>
@@ -324,9 +324,9 @@ export default function VendorsPage() {
               </div>
             ) : filteredVendors.length === 0 ? (
               <div className="text-center py-12 sm:py-16">
-                <Building2 className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">No vendors found</h3>
-                <p className="text-gray-500 mb-4">Try adjusting your search or filters</p>
+                <Building2 className="h-12 w-12 text-gray-400 dark:text-slate-500 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No vendors found</h3>
+                <p className="text-gray-500 dark:text-slate-400 mb-4">Try adjusting your search or filters</p>
                 <button
                   onClick={clearFilters}
                   className="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all text-sm font-medium shadow-sm"
@@ -342,7 +342,7 @@ export default function VendorsPage() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
-                    className="group bg-white/70 backdrop-blur-sm rounded-xl border border-white/20 hover:shadow-xl hover:scale-105 transition-all duration-300 overflow-hidden cursor-pointer"
+                    className="group bg-white/70 backdrop-blur-sm rounded-xl border border-white/20 hover:shadow-xl hover:scale-105 transition-all duration-300 overflow-hidden cursor-pointer dark:bg-slate-800/70 dark:border-slate-700/50"
                     onClick={() => router.push(`/vendor/${vendor.id}`)}
                   >
                     {/* Vendor Card Header */}
@@ -375,17 +375,17 @@ export default function VendorsPage() {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between gap-2 mb-2">
                             <div className="flex-1 min-w-0">
-                              <h3 className="text-sm font-semibold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent truncate group-hover:from-blue-600 group-hover:to-indigo-600 transition-all">
+                              <h3 className="text-sm font-semibold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent truncate group-hover:from-blue-600 group-hover:to-indigo-600 transition-all dark:from-white dark:to-slate-300 dark:group-hover:from-blue-400 dark:group-hover:to-indigo-400">
                                 {vendor.name}
                               </h3>
                               {vendor.category && (
-                                <span className="inline-block px-2 py-0.5 text-xs font-medium bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 rounded-full mt-1">
+                                <span className="inline-block px-2 py-0.5 text-xs font-medium bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 rounded-full mt-1 dark:from-blue-900/30 dark:to-indigo-900/30 dark:text-blue-300">
                                   {vendor.category}
                                 </span>
                               )}
                             </div>
                             {vendor.isFeatured && (
-                              <div className="flex items-center gap-1 text-xs text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">
+                              <div className="flex items-center gap-1 text-xs text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 px-2 py-0.5 rounded-full">
                                 <TrendingUp className="h-3 w-3" />
                                 <span className="font-medium">Featured</span>
                               </div>
@@ -413,7 +413,7 @@ export default function VendorsPage() {
 
                           {/* Description */}
                           {vendor.description && (
-                            <p className="text-xs text-gray-600 line-clamp-2 mb-2">
+                            <p className="text-xs text-gray-600 dark:text-slate-400 line-clamp-2 mb-2">
                               {vendor.description}
                             </p>
                           )}
@@ -430,7 +430,7 @@ export default function VendorsPage() {
                                 </span>
                               ))}
                               {vendor.services.length > 3 && (
-                                <span className="px-1.5 py-0.5 text-xs text-gray-500">
+                                <span className="px-1.5 py-0.5 text-xs text-gray-500 dark:text-slate-500">
                                   +{vendor.services.length - 3}
                                 </span>
                               )}
@@ -440,7 +440,7 @@ export default function VendorsPage() {
                       </div>
 
                       {/* Contact Actions */}
-                      <div className="flex items-center gap-2 pt-2 border-t border-gray-100">
+                      <div className="flex items-center gap-2 pt-2 border-t border-gray-100 dark:border-slate-700">
                         {vendor.phone && (
                           <a
                             href={`tel:${vendor.phone}`}
@@ -448,7 +448,7 @@ export default function VendorsPage() {
                             title="Phone"
                             onClick={(e) => e.stopPropagation()}
                           >
-                            <Phone className="h-3 w-3 text-gray-500 group-hover:text-blue-600" />
+                            <Phone className="h-3 w-3 text-gray-500 dark:text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400" />
                           </a>
                         )}
                         {vendor.email && (
@@ -458,7 +458,7 @@ export default function VendorsPage() {
                             title="Email"
                             onClick={(e) => e.stopPropagation()}
                           >
-                            <Mail className="h-3 w-3 text-gray-500 group-hover:text-blue-600" />
+                            <Mail className="h-3 w-3 text-gray-500 dark:text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400" />
                           </a>
                         )}
                       </div>

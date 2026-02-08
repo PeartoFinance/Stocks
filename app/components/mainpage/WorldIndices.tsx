@@ -78,7 +78,7 @@ export default function WorldIndices({ className = '' }: WorldIndicesProps) {
       return (
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="flex justify-between items-center p-3 bg-white border border-gray-200 rounded-lg animate-pulse">
+            <div key={i} className="flex justify-between items-center p-3 bg-white dark:bg-pearto-card border border-gray-200 dark:border-pearto-border rounded-lg animate-pulse transition-colors duration-300">
               <div className="flex-1">
                 <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
                 <div className="h-3 bg-gray-200 rounded w-1/2"></div>
@@ -95,7 +95,7 @@ export default function WorldIndices({ className = '' }: WorldIndicesProps) {
 
     if (data.length === 0) {
       return (
-        <div className="flex items-center justify-center h-32 bg-white border border-gray-200 rounded-lg text-gray-500">
+        <div className="flex items-center justify-center h-32 bg-white dark:bg-pearto-card border border-gray-200 dark:border-pearto-border rounded-lg text-gray-500 dark:text-pearto-gray transition-colors duration-300">
           <Globe className="h-5 w-5 mr-2" />
           <span>No data available for {activeTab}</span>
         </div>
@@ -111,7 +111,7 @@ export default function WorldIndices({ className = '' }: WorldIndicesProps) {
           <div className="flex justify-end mb-2">
             <Link
               href="/crypto"
-              className="text-sm text-emerald-600 hover:text-emerald-700 font-medium flex items-center transition-colors"
+              className="text-sm text-emerald-600 dark:text-pearto-green hover:text-emerald-700 font-medium flex items-center transition-colors"
             >
               View All Crypto
               <span className="ml-1">→</span>
@@ -129,14 +129,14 @@ export default function WorldIndices({ className = '' }: WorldIndicesProps) {
   };
 
   const renderIndexCard = (index: WorldIndex) => (
-    <div key={index.symbol} className="flex justify-between items-center p-3 bg-white border border-gray-200 rounded-lg shadow-sm">
+    <div key={index.symbol} className="flex justify-between items-center p-3 bg-white dark:bg-pearto-card border border-gray-200 dark:border-pearto-border rounded-lg shadow-sm transition-colors duration-300">
       <div>
-        <div className="text-sm font-medium text-gray-900">{index.name}</div>
-        <div className="text-xs text-gray-500">{index.symbol}</div>
+        <div className="text-sm font-medium text-gray-900 dark:text-pearto-luna transition-colors duration-300">{index.name}</div>
+        <div className="text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">{index.symbol}</div>
       </div>
       <div className="text-right">
-        <div className="text-sm font-semibold text-gray-900">{(index.price || index.value || 0).toFixed(2)}</div>
-        <div className={`text-xs font-medium flex items-center justify-end ${(index.change || 0) >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
+        <div className="text-sm font-semibold text-gray-900 dark:text-pearto-luna transition-colors duration-300">{(index.price || index.value || 0).toFixed(2)}</div>
+        <div className={`text-xs font-medium flex items-center justify-end ${(index.change || 0) >= 0 ? 'text-emerald-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'}`}>
           {(index.change || 0) >= 0 ? <TrendingUp className="h-3 w-3 mr-1" /> : <TrendingDown className="h-3 w-3 mr-1" />}
           {(index.change || 0) >= 0 ? '+' : ''}{(index.change || 0).toFixed(2)} ({(index.changePercent || 0).toFixed(2)}%)
         </div>
@@ -149,35 +149,35 @@ export default function WorldIndices({ className = '' }: WorldIndicesProps) {
     const cryptoSymbol = crypto.symbol?.toLowerCase() || crypto.id?.toLowerCase();
     
     return (
-      <div key={crypto.id || crypto.symbol} className="flex justify-between items-center p-3 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+      <div key={crypto.id || crypto.symbol} className="flex justify-between items-center p-3 bg-white dark:bg-pearto-card border border-gray-200 dark:border-pearto-border rounded-lg shadow-sm hover:shadow-md transition-shadow">
         <div className="flex-1">
           {cryptoSymbol ? (
             <Link 
               href={`/crypto/${cryptoSymbol}`}
-              className="text-left hover:text-emerald-600 transition-colors group block"
+              className="text-left hover:text-emerald-600 dark:text-pearto-green transition-colors group block"
             >
-              <div className="text-sm font-medium text-gray-900 group-hover:text-emerald-600">
+              <div className="text-sm font-medium text-gray-900 dark:text-pearto-luna group-hover:text-emerald-600 dark:text-pearto-green transition-colors duration-300">
                 {crypto.name || 'Unknown'}
-                <span className="ml-1 text-xs text-gray-400 group-hover:text-emerald-500">→</span>
+                <span className="ml-1 text-xs text-gray-400 group-hover:text-emerald-500 transition-colors duration-300">→</span>
               </div>
-              <div className="text-xs text-gray-500 group-hover:text-emerald-500">{crypto.symbol || 'N/A'}</div>
+              <div className="text-xs text-gray-500 dark:text-pearto-gray group-hover:text-emerald-500 transition-colors duration-300">{crypto.symbol || 'N/A'}</div>
             </Link>
           ) : (
             <div className="text-left">
-              <div className="text-sm font-medium text-gray-900">
+              <div className="text-sm font-medium text-gray-900 dark:text-pearto-luna transition-colors duration-300">
                 {crypto.name || 'Unknown'}
               </div>
-              <div className="text-xs text-gray-500">{crypto.symbol || 'N/A'}</div>
+              <div className="text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">{crypto.symbol || 'N/A'}</div>
             </div>
           )}
         </div>
         <div className="text-right">
-          <div className="text-sm font-semibold text-gray-900">
+          <div className="text-sm font-semibold text-gray-900 dark:text-pearto-luna transition-colors duration-300">
             {crypto.current_price ? `$${crypto.current_price.toFixed(2)}` : 
              crypto.price ? `$${crypto.price.toFixed(2)}` : '$0.00'}
           </div>
           <div className={`text-xs font-medium flex items-center justify-end ${
-            (crypto.price_change_percentage_24h || crypto.changePercent) >= 0 ? 'text-emerald-600' : 'text-red-600'
+            (crypto.price_change_percentage_24h || crypto.changePercent) >= 0 ? 'text-emerald-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
           }`}>
             {(crypto.price_change_percentage_24h || crypto.changePercent) >= 0 ? <TrendingUp className="h-3 w-3 mr-1" /> : <TrendingDown className="h-3 w-3 mr-1" />}
             {(crypto.price_change_percentage_24h || crypto.changePercent) >= 0 ? '+' : ''}
@@ -191,7 +191,7 @@ export default function WorldIndices({ className = '' }: WorldIndicesProps) {
   const renderMovers = () => {
     // This will be replaced with actual movers data later
     return (
-      <div className="flex flex-col items-center justify-center h-32 bg-white border border-gray-200 rounded-lg text-gray-500">
+      <div className="flex flex-col items-center justify-center h-32 bg-white dark:bg-pearto-card border border-gray-200 dark:border-pearto-border rounded-lg text-gray-500 dark:text-pearto-gray transition-colors duration-300">
         <Globe className="h-5 w-5 mb-2" />
         <span className="text-sm">No movers data. Import stocks from admin panel.</span>
       </div>
@@ -199,15 +199,15 @@ export default function WorldIndices({ className = '' }: WorldIndicesProps) {
   };
 
   return (
-    <div className={`bg-white p-6 rounded-xl shadow-lg border border-gray-200 ${className}`}>
+    <div className={`bg-white dark:bg-pearto-card p-6 rounded-xl shadow-lg border border-gray-200 dark:border-pearto-border ${className}`}>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold text-gray-900 flex items-center">
-          <span className="w-2 h-6 bg-emerald-600 rounded-full mr-3"></span>
+        <h2 className="text-xl font-bold text-gray-900 dark:text-pearto-luna flex items-center transition-colors duration-300">
+          <span className="w-2 h-6 bg-emerald-600 dark:bg-pearto-pink rounded-full mr-3 transition-colors duration-300"></span>
           Quick Markets
         </h2>
         <button 
           onClick={() => window.location.reload()}
-          className="p-2 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
+          className="p-2 text-gray-500 dark:text-pearto-gray hover:text-emerald-600 dark:text-pearto-green hover:bg-emerald-50 rounded-lg transition-colors"
         >
           <RefreshCcw className="h-4 w-4" />
         </button>
@@ -221,8 +221,8 @@ export default function WorldIndices({ className = '' }: WorldIndicesProps) {
             onClick={() => setActiveTab(tab)}
             className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
               activeTab === tab
-                ? 'bg-emerald-600 text-white'
-                : 'text-gray-600 hover:text-emerald-600 hover:bg-emerald-50'
+                ? 'bg-emerald-600 dark:bg-pearto-pink text-white'
+                : 'text-gray-600 dark:text-pearto-cloud hover:text-emerald-600 dark:text-pearto-green hover:bg-emerald-50'
             }`}
           >
             {tab}

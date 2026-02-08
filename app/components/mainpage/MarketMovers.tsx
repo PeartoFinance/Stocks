@@ -274,16 +274,16 @@ export default function MarketMovers({
     }
   };
   return (
-    <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
-      <div className="p-3 sm:p-4 border-b border-gray-200">
+    <div className="bg-white dark:bg-pearto-card rounded-xl sm:rounded-2xl shadow-xl border border-gray-200 dark:border-pearto-border overflow-hidden transition-colors duration-300">
+      <div className="p-3 sm:p-4 border-b border-gray-200 dark:border-pearto-border transition-colors duration-300">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
-          <h2 className="text-lg sm:text-xl font-bold text-gray-900">Market Movers</h2>
+          <h2 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-pearto-luna transition-colors duration-300">Market Movers</h2>
           <div className="flex items-center gap-1 sm:gap-2 w-full sm:w-auto overflow-x-auto scrollbar-hide">
             <button
               onClick={() => setSelectedTab('gainers')}
               className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-xs sm:text-sm whitespace-nowrap ${selectedTab === 'gainers'
-                ? 'bg-green-100 text-green-700'
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-green-100 dark:bg-pearto-green/10 text-green-700'
+                : 'text-gray-600 dark:text-pearto-cloud hover:text-gray-900 dark:text-pearto-luna'
                 }`}
             >
               Gainers
@@ -291,8 +291,8 @@ export default function MarketMovers({
             <button
               onClick={() => setSelectedTab('losers')}
               className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-xs sm:text-sm whitespace-nowrap ${selectedTab === 'losers'
-                ? 'bg-red-100 text-red-700'
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-red-100 dark:bg-pearto-pink/10 text-red-700'
+                : 'text-gray-600 dark:text-pearto-cloud hover:text-gray-900 dark:text-pearto-luna'
                 }`}
             >
               Losers
@@ -300,8 +300,8 @@ export default function MarketMovers({
             <button
               onClick={() => setSelectedTab('trending')}
               className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-xs sm:text-sm whitespace-nowrap ${selectedTab === 'trending'
-                ? 'bg-emerald-100 text-emerald-700'
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-emerald-100 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400'
+                : 'text-gray-600 dark:text-pearto-cloud hover:text-gray-900 dark:hover:text-pearto-luna'
                 }`}
             >
               Trending
@@ -309,8 +309,8 @@ export default function MarketMovers({
             <button
               onClick={() => setSelectedTab('analysis')}
               className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-xs sm:text-sm whitespace-nowrap flex items-center gap-1 ${selectedTab === 'analysis'
-                ? 'bg-purple-100 text-purple-700'
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-purple-100 dark:bg-purple-500/10 text-purple-700 dark:text-purple-400'
+                : 'text-gray-600 dark:text-pearto-cloud hover:text-gray-900 dark:hover:text-pearto-luna'
                 }`}
             >
               <BarChart3 className="h-3 w-3" />
@@ -326,43 +326,43 @@ export default function MarketMovers({
             {/* Left Column - Charts */}
             <div className="space-y-4">
               {/* Market Sentiment Pie Chart */}
-              <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-3 rounded-xl">
-                <h3 className="text-sm font-semibold text-gray-700 mb-2 text-center">Market Sentiment</h3>
+              <div className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 p-3 rounded-xl">
+                <h3 className="text-sm font-semibold text-gray-700 dark:text-pearto-cloud mb-2 text-center transition-colors duration-300">Market Sentiment</h3>
                 <div className="h-40 flex items-center justify-center">
                   <Pie data={marketSentimentData} options={pieChartOptions} />
                 </div>
                 <div className="mt-2 grid grid-cols-3 gap-1 text-xs">
-                  <div className="bg-green-100 p-2 rounded-lg text-center">
+                  <div className="bg-green-100 dark:bg-pearto-green/10 p-2 rounded-lg text-center transition-colors duration-300">
                     <div className="font-semibold text-green-700">Gainers</div>
-                    <div className="text-green-600">{topGainers.length}</div>
+                    <div className="text-green-600 dark:text-pearto-green transition-colors duration-300">{topGainers.length}</div>
                     <div className="text-green-500 text-xs">+{avgGain.toFixed(1)}% avg</div>
                   </div>
-                  <div className="bg-red-100 p-2 rounded-lg text-center">
+                  <div className="bg-red-100 dark:bg-pearto-pink/10 p-2 rounded-lg text-center transition-colors duration-300">
                     <div className="font-semibold text-red-700">Losers</div>
-                    <div className="text-red-600">{topLosers.length}</div>
+                    <div className="text-red-600 dark:text-pearto-pink transition-colors duration-300">{topLosers.length}</div>
                     <div className="text-red-500 text-xs">-{avgLoss.toFixed(1)}% avg</div>
                   </div>
-                  <div className="bg-gray-100 p-2 rounded-lg text-center">
-                    <div className="font-semibold text-gray-700">Neutral</div>
-                    <div className="text-gray-600">{neutralStocks}</div>
-                    <div className="text-gray-500 text-xs">Trending</div>
+                  <div className="bg-gray-100 dark:bg-pearto-surface p-2 rounded-lg text-center transition-colors duration-300">
+                    <div className="font-semibold text-gray-700 dark:text-pearto-cloud transition-colors duration-300">Neutral</div>
+                    <div className="text-gray-600 dark:text-pearto-cloud transition-colors duration-300">{neutralStocks}</div>
+                    <div className="text-gray-500 dark:text-pearto-gray text-xs transition-colors duration-300">Trending</div>
                   </div>
                 </div>
               </div>
 
               {/* Price Range Pie Chart */}
-              <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-3 rounded-xl">
-                <h3 className="text-sm font-semibold text-gray-700 mb-2 text-center">Price Distribution</h3>
+              <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 p-3 rounded-xl">
+                <h3 className="text-sm font-semibold text-gray-700 dark:text-pearto-cloud mb-2 text-center transition-colors duration-300">Price Distribution</h3>
                 <div className="h-40 flex items-center justify-center">
                   <Pie data={priceRangeData} options={pieChartOptions} />
                 </div>
                 <div className="mt-2 grid grid-cols-2 gap-1 text-xs">
                   {Object.entries(priceRanges).map(([range, count], i) => (
-                    <div key={i} className="flex items-center justify-between p-2 bg-white rounded-lg">
+                    <div key={i} className="flex items-center justify-between p-2 bg-white dark:bg-pearto-card rounded-lg transition-colors duration-300">
                       <span className="font-medium">{range}</span>
                       <div className="text-right">
-                        <div className="text-gray-600">{count} stocks</div>
-                        <div className="text-gray-500 text-xs">
+                        <div className="text-gray-600 dark:text-pearto-cloud transition-colors duration-300">{count} stocks</div>
+                        <div className="text-gray-500 dark:text-pearto-gray text-xs transition-colors duration-300">
                           {count > 0 ? `${((count / allStocks.length) * 100).toFixed(0)}%` : '0%'}
                         </div>
                       </div>
@@ -372,26 +372,26 @@ export default function MarketMovers({
               </div>
 
               {/* Volume Distribution Donut Chart */}
-              <div className="bg-gradient-to-r from-orange-50 to-yellow-50 p-3 rounded-xl">
-                <h3 className="text-sm font-semibold text-gray-700 mb-2 text-center">Volume Distribution</h3>
+              <div className="bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-orange-900/20 dark:to-yellow-900/20 p-3 rounded-xl">
+                <h3 className="text-sm font-semibold text-gray-700 dark:text-pearto-cloud mb-2 text-center transition-colors duration-300">Volume Distribution</h3>
                 <div className="h-40 flex items-center justify-center">
                   <Doughnut data={volumeDistributionData} options={donutChartOptions} />
                 </div>
                 <div className="mt-2 grid grid-cols-3 gap-1 text-xs">
-                  <div className="bg-amber-100 p-2 rounded-lg text-center">
-                    <div className="font-semibold text-amber-700">High</div>
-                    <div className="text-amber-600">{highVolumeStocks.length}</div>
-                    <div className="text-amber-500 text-xs">&gt;1M</div>
+                  <div className="bg-amber-100 dark:bg-amber-500/10 p-2 rounded-lg text-center transition-colors duration-300">
+                    <div className="font-semibold text-amber-700 dark:text-amber-400 transition-colors duration-300">High</div>
+                    <div className="text-amber-600 dark:text-amber-300 transition-colors duration-300">{highVolumeStocks.length}</div>
+                    <div className="text-amber-500 dark:text-amber-400 text-xs transition-colors duration-300">&gt;1M</div>
                   </div>
-                  <div className="bg-blue-100 p-2 rounded-lg text-center">
-                    <div className="font-semibold text-blue-700">Medium</div>
-                    <div className="text-blue-600">{mediumVolumeStocks.length}</div>
-                    <div className="text-blue-500 text-xs">100K-1M</div>
+                  <div className="bg-blue-100 dark:bg-blue-500/10 p-2 rounded-lg text-center transition-colors duration-300">
+                    <div className="font-semibold text-blue-700 dark:text-blue-400 transition-colors duration-300">Medium</div>
+                    <div className="text-blue-600 dark:text-blue-300 transition-colors duration-300">{mediumVolumeStocks.length}</div>
+                    <div className="text-blue-500 dark:text-blue-400 text-xs transition-colors duration-300">100K-1M</div>
                   </div>
-                  <div className="bg-gray-100 p-2 rounded-lg text-center">
-                    <div className="font-semibold text-gray-700">Low</div>
-                    <div className="text-gray-600">{lowVolumeStocks.length}</div>
-                    <div className="text-gray-500 text-xs">&lt;100K</div>
+                  <div className="bg-gray-100 dark:bg-pearto-surface p-2 rounded-lg text-center transition-colors duration-300">
+                    <div className="font-semibold text-gray-700 dark:text-pearto-cloud transition-colors duration-300">Low</div>
+                    <div className="text-gray-600 dark:text-pearto-cloud transition-colors duration-300">{lowVolumeStocks.length}</div>
+                    <div className="text-gray-500 dark:text-pearto-gray text-xs transition-colors duration-300">&lt;100K</div>
                   </div>
                 </div>
               </div>
@@ -400,20 +400,20 @@ export default function MarketMovers({
             {/* Right Column - Deep Analysis */}
             <div className="space-y-4">
               {/* Sector Performance Analysis */}
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-3 rounded-xl">
-                <h3 className="text-sm font-semibold text-gray-700 mb-2 text-center">Sector Performance</h3>
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-3 rounded-xl">
+                <h3 className="text-sm font-semibold text-gray-700 dark:text-pearto-cloud mb-2 text-center transition-colors duration-300">Sector Performance</h3>
                 <div className="space-y-2">
                   {sectorAnalysis.slice(0, 4).map((sector, i) => (
-                    <div key={i} className="flex items-center justify-between p-2 bg-white rounded-lg">
+                    <div key={i} className="flex items-center justify-between p-2 bg-white dark:bg-pearto-card rounded-lg transition-colors duration-300">
                       <div className="flex-1 min-w-0">
-                        <div className="font-medium text-xs text-gray-900 truncate">{sector.sector}</div>
-                        <div className="text-xs text-gray-500">{sector.stockCount} stocks</div>
+                        <div className="font-medium text-xs text-gray-900 dark:text-pearto-luna truncate transition-colors duration-300">{sector.sector}</div>
+                        <div className="text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">{sector.stockCount} stocks</div>
                       </div>
                       <div className="text-right ml-2">
-                        <div className={`font-bold text-xs ${sector.avgChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                        <div className={`font-bold text-xs ${sector.avgChange >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'}`}>
                           {sector.avgChange >= 0 ? '+' : ''}{sector.avgChange.toFixed(1)}%
                         </div>
-                        <div className="text-xs text-gray-500">Vol: {sector.volatility.toFixed(1)}</div>
+                        <div className="text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">Vol: {sector.volatility.toFixed(1)}</div>
                       </div>
                     </div>
                   ))}
@@ -421,27 +421,27 @@ export default function MarketMovers({
               </div>
 
               {/* Top Performers */}
-              <div className="bg-gradient-to-r from-emerald-50 to-teal-50 p-3 rounded-xl">
-                <h3 className="text-sm font-semibold text-gray-700 mb-2 text-center">Top Performers</h3>
+              <div className="bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 p-3 rounded-xl">
+                <h3 className="text-sm font-semibold text-gray-700 dark:text-pearto-cloud mb-2 text-center transition-colors duration-300">Top Performers</h3>
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <div className="text-xs font-medium text-green-700 mb-1">Best Gainers</div>
+                    <div className="text-xs font-medium text-green-700 dark:text-pearto-green mb-1 transition-colors duration-300">Best Gainers</div>
                     <div className="space-y-1">
                       {topGainers.slice(0, 3).map((stock, i) => (
-                        <div key={i} className="flex items-center justify-between p-1 bg-green-50 rounded text-xs">
+                        <div key={i} className="flex items-center justify-between p-1 bg-green-50 dark:bg-pearto-green/10 rounded text-xs transition-colors duration-300">
                           <span className="font-medium">{stock.symbol}</span>
-                          <span className="text-green-600">+{stock.changePercent.toFixed(1)}%</span>
+                          <span className="text-green-600 dark:text-pearto-green transition-colors duration-300">+{stock.changePercent.toFixed(1)}%</span>
                         </div>
                       ))}
                     </div>
                   </div>
                   <div>
-                    <div className="text-xs font-medium text-red-700 mb-1">Worst Losers</div>
+                    <div className="text-xs font-medium text-red-700 dark:text-pearto-pink mb-1 transition-colors duration-300">Worst Losers</div>
                     <div className="space-y-1">
                       {topLosers.slice(0, 3).map((stock, i) => (
-                        <div key={i} className="flex items-center justify-between p-1 bg-red-50 rounded text-xs">
+                        <div key={i} className="flex items-center justify-between p-1 bg-red-50 dark:bg-pearto-pink/10 rounded text-xs transition-colors duration-300">
                           <span className="font-medium">{stock.symbol}</span>
-                          <span className="text-red-600">{stock.changePercent.toFixed(1)}%</span>
+                          <span className="text-red-600 dark:text-pearto-pink transition-colors duration-300">{stock.changePercent.toFixed(1)}%</span>
                         </div>
                       ))}
                     </div>
@@ -450,51 +450,51 @@ export default function MarketMovers({
               </div>
 
               {/* Market Summary Stats */}
-              <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-3 rounded-xl">
-                <h3 className="text-sm font-semibold text-indigo-700 mb-2 text-center">Market Summary</h3>
+              <div className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 p-3 rounded-xl">
+                <h3 className="text-sm font-semibold text-indigo-700 dark:text-indigo-400 mb-2 text-center transition-colors duration-300">Market Summary</h3>
                 <div className="grid grid-cols-2 gap-2 text-xs">
-                  <div className="text-center p-2 bg-white rounded-lg">
-                    <div className="text-lg font-bold text-indigo-600">{allStocks.length}</div>
-                    <div className="text-indigo-500">Total Stocks</div>
+                  <div className="text-center p-2 bg-white dark:bg-pearto-card rounded-lg transition-colors duration-300">
+                    <div className="text-lg font-bold text-indigo-600 dark:text-indigo-400 transition-colors duration-300">{allStocks.length}</div>
+                    <div className="text-indigo-500 dark:text-indigo-400 transition-colors duration-300">Total Stocks</div>
                   </div>
-                  <div className="text-center p-2 bg-white rounded-lg">
-                    <div className="text-lg font-bold text-green-600">{avgGain.toFixed(1)}%</div>
-                    <div className="text-green-500">Avg Gain</div>
+                  <div className="text-center p-2 bg-white dark:bg-pearto-card rounded-lg transition-colors duration-300">
+                    <div className="text-lg font-bold text-green-600 dark:text-pearto-green transition-colors duration-300">{avgGain.toFixed(1)}%</div>
+                    <div className="text-green-500 dark:text-pearto-green transition-colors duration-300">Avg Gain</div>
                   </div>
-                  <div className="text-center p-2 bg-white rounded-lg">
-                    <div className="text-lg font-bold text-blue-600">${avgPrice.toFixed(0)}</div>
-                    <div className="text-blue-500">Avg Price</div>
+                  <div className="text-center p-2 bg-white dark:bg-pearto-card rounded-lg transition-colors duration-300">
+                    <div className="text-lg font-bold text-blue-600 dark:text-blue-400 transition-colors duration-300">${avgPrice.toFixed(0)}</div>
+                    <div className="text-blue-500 dark:text-blue-400 transition-colors duration-300">Avg Price</div>
                   </div>
-                  <div className="text-center p-2 bg-white rounded-lg">
-                    <div className="text-lg font-bold text-orange-600">{formatVolume(totalVolume)}</div>
-                    <div className="text-orange-500">Total Volume</div>
+                  <div className="text-center p-2 bg-white dark:bg-pearto-card rounded-lg transition-colors duration-300">
+                    <div className="text-lg font-bold text-orange-600 dark:text-orange-400 transition-colors duration-300">{formatVolume(totalVolume)}</div>
+                    <div className="text-orange-500 dark:text-orange-400 transition-colors duration-300">Total Volume</div>
                   </div>
                 </div>
-                <div className="mt-2 text-center p-2 bg-white rounded-lg">
-                  <div className="text-xs text-indigo-600 font-medium">
+                <div className="mt-2 text-center p-2 bg-white dark:bg-pearto-card rounded-lg transition-colors duration-300">
+                  <div className="text-xs text-indigo-600 dark:text-indigo-400 font-medium transition-colors duration-300">
                     Market Sentiment: {topGainers.length > topLosers.length ? '📈 Bullish' : topGainers.length < topLosers.length ? '📉 Bearish' : '⚖️ Neutral'}
                   </div>
-                  <div className="text-xs text-gray-500 mt-1">
+                  <div className="text-xs text-gray-500 dark:text-pearto-gray mt-1 transition-colors duration-300">
                     Volatility: {sectorAnalysis.length > 0 ? (sectorAnalysis.reduce((sum, s) => sum + s.volatility, 0) / sectorAnalysis.length).toFixed(1) : '0'}%
                   </div>
                 </div>
               </div>
 
               {/* Risk Analysis */}
-              <div className="bg-gradient-to-r from-red-50 to-pink-50 p-3 rounded-xl">
-                <h3 className="text-sm font-semibold text-gray-700 mb-2 text-center">Risk Analysis</h3>
+              <div className="bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 p-3 rounded-xl">
+                <h3 className="text-sm font-semibold text-gray-700 dark:text-pearto-cloud mb-2 text-center transition-colors duration-300">Risk Analysis</h3>
                 <div className="grid grid-cols-2 gap-2 text-xs">
-                  <div className="text-center p-2 bg-white rounded-lg">
-                    <div className="text-lg font-bold text-red-600">{highVolumeStocks.length}</div>
-                    <div className="text-red-500">High Activity</div>
+                  <div className="text-center p-2 bg-white dark:bg-pearto-card rounded-lg transition-colors duration-300">
+                    <div className="text-lg font-bold text-red-600 dark:text-pearto-pink transition-colors duration-300">{highVolumeStocks.length}</div>
+                    <div className="text-red-500 dark:text-pearto-pink transition-colors duration-300">High Activity</div>
                   </div>
-                  <div className="text-center p-2 bg-white rounded-lg">
-                    <div className="text-lg font-bold text-yellow-600">{neutralStocks}</div>
-                    <div className="text-yellow-500">Neutral Stocks</div>
+                  <div className="text-center p-2 bg-white dark:bg-pearto-card rounded-lg transition-colors duration-300">
+                    <div className="text-lg font-bold text-yellow-600 dark:text-yellow-400 transition-colors duration-300">{neutralStocks}</div>
+                    <div className="text-yellow-500 dark:text-yellow-400 transition-colors duration-300">Neutral Stocks</div>
                   </div>
                 </div>
-                <div className="mt-2 text-center p-2 bg-white rounded-lg">
-                  <div className="text-xs text-gray-600">
+                <div className="mt-2 text-center p-2 bg-white dark:bg-pearto-card rounded-lg transition-colors duration-300">
+                  <div className="text-xs text-gray-600 dark:text-pearto-cloud transition-colors duration-300">
                     🎯 Risk Level: {avgLoss > avgGain ? '⚠️ High' : avgLoss > avgGain * 0.5 ? '⚡ Moderate' : '✅ Low'}
                   </div>
                 </div>
@@ -509,9 +509,9 @@ export default function MarketMovers({
                 const changeData = formatChange(stock.change, stock.changePercent);
                 return (
                   <Link key={i} href={`/stock/${stock.symbol.toLowerCase()}`}>
-                    <div className="flex items-center justify-between p-2 sm:p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer border border-gray-100">
+                    <div className="flex items-center justify-between p-2 sm:p-3 bg-gray-50 dark:bg-pearto-surface rounded-lg hover:bg-gray-100 dark:hover:bg-pearto-card transition-colors cursor-pointer border border-gray-100 dark:border-pearto-border-subtle">
                       <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
-                        <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${changeData.isPositive ? 'bg-green-100' : 'bg-red-100'
+                        <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${changeData.isPositive ? 'bg-green-100 dark:bg-pearto-green/10' : 'bg-red-100 dark:bg-pearto-pink/10'
                           }`}>
                           <span className={`font-bold text-xs ${changeData.isPositive ? 'text-green-700' : 'text-red-700'
                             }`}>
@@ -519,14 +519,14 @@ export default function MarketMovers({
                           </span>
                         </div>
                         <div className="min-w-0 flex-1">
-                          <div className="font-semibold text-xs sm:text-sm text-gray-900">{stock.symbol}</div>
-                          <div className="text-xs text-gray-600 truncate">{stock.name}</div>
-                          <div className="text-xs text-gray-500 hidden lg:block">{stock.sector}</div>
+                          <div className="font-semibold text-xs sm:text-sm text-gray-900 dark:text-pearto-luna transition-colors duration-300">{stock.symbol}</div>
+                          <div className="text-xs text-gray-600 dark:text-pearto-cloud truncate transition-colors duration-300">{stock.name}</div>
+                          <div className="text-xs text-gray-500 dark:text-pearto-gray hidden lg:block transition-colors duration-300">{stock.sector}</div>
                         </div>
                       </div>
                       <div className="text-right ml-1.5 flex-shrink-0">
-                        <div className="font-bold text-xs sm:text-sm text-gray-900">{formatPrice(stock.price)}</div>
-                        <div className={`text-xs font-medium flex items-center justify-end ${changeData.isPositive ? 'text-green-600' : 'text-red-600'
+                        <div className="font-bold text-xs sm:text-sm text-gray-900 dark:text-pearto-luna transition-colors duration-300">{formatPrice(stock.price)}</div>
+                        <div className={`text-xs font-medium flex items-center justify-end ${changeData.isPositive ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
                           }`}>
                           {changeData.isPositive ? (
                             <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
@@ -536,7 +536,7 @@ export default function MarketMovers({
                           <span className="hidden sm:inline">{changeData.value}</span>
                           <span className="sm:hidden">{stock.changePercent.toFixed(1)}%</span>
                         </div>
-                        <div className="text-xs text-gray-500 mt-0.5 hidden lg:block">
+                        <div className="text-xs text-gray-500 dark:text-pearto-gray mt-0.5 hidden lg:block transition-colors duration-300">
                           Vol: {stock.volume ? formatVolume(stock.volume) : 'N/A'}
                         </div>
                       </div>
@@ -546,7 +546,7 @@ export default function MarketMovers({
               })}
           </div>
         )}
-        <Link href="/stocks" className="block mt-3 sm:mt-4 text-center py-2.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium text-xs sm:text-sm">
+        <Link href="/stocks" className="block mt-3 sm:mt-4 text-center py-2.5 bg-emerald-600 dark:bg-pearto-pink text-white rounded-lg hover:bg-emerald-700 dark:hover:bg-pearto-pink-hover transition-colors font-medium text-xs sm:text-sm">
           View All Market Data →
         </Link>
       </div>

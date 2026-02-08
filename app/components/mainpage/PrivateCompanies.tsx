@@ -45,39 +45,39 @@ export default function PrivateCompanies({ className = '' }: PrivateCompaniesPro
 
   if (loading) {
     return (
-      <div className={`bg-white rounded-xl shadow-sm border border-gray-200 p-8 ${className}`}>
+      <div className={`bg-white dark:bg-pearto-card rounded-xl shadow-sm border border-gray-200 dark:border-pearto-border p-8 ${className}`}>
         <div className="flex items-center justify-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
-          <span className="ml-3 text-gray-600">Loading private companies...</span>
+          <span className="ml-3 text-gray-600 dark:text-pearto-cloud transition-colors duration-300">Loading private companies...</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className={`bg-white rounded-xl shadow-lg border border-gray-200 p-4 ${className}`}>
+    <div className={`bg-white dark:bg-pearto-card rounded-xl shadow-lg border border-gray-200 dark:border-pearto-border p-4 ${className}`}>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-bold text-gray-900 flex items-center">
-          <span className="w-2 h-5 bg-purple-600 rounded-full mr-2"></span>
+        <h2 className="text-lg font-bold text-gray-900 dark:text-pearto-luna flex items-center transition-colors duration-300">
+          <span className="w-2 h-5 bg-purple-600 dark:bg-purple-500 rounded-lg mr-2"></span>
           Private Companies
         </h2>
       </div>
 
       <div className="overflow-x-auto">
         <table className="w-full">
-          <thead className="bg-gray-50 border-b border-gray-200">
+          <thead className="bg-gray-50 dark:bg-pearto-surface border-b border-gray-200 dark:border-pearto-border transition-colors duration-300">
             <tr>
-              <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Symbol</th>
-              <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-              <th className="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase">Price</th>
-              <th className="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase">52-Wk %</th>
-              <th className="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase">Last Funding</th>
-              <th className="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase">Valuation</th>
+              <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-pearto-gray uppercase transition-colors duration-300">Symbol</th>
+              <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-pearto-gray uppercase transition-colors duration-300">Name</th>
+              <th className="px-3 py-2 text-right text-xs font-medium text-gray-500 dark:text-pearto-gray uppercase transition-colors duration-300">Price</th>
+              <th className="px-3 py-2 text-right text-xs font-medium text-gray-500 dark:text-pearto-gray uppercase transition-colors duration-300">52-Wk %</th>
+              <th className="px-3 py-2 text-right text-xs font-medium text-gray-500 dark:text-pearto-gray uppercase transition-colors duration-300">Last Funding</th>
+              <th className="px-3 py-2 text-right text-xs font-medium text-gray-500 dark:text-pearto-gray uppercase transition-colors duration-300">Valuation</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200">
+          <tbody className="divide-y divide-gray-200 dark:divide-pearto-border transition-colors duration-300">
             {companies.map((company) => (
-              <tr key={company.symbol} className="hover:bg-gray-50 transition-colors">
+              <tr key={company.symbol} className="hover:bg-gray-50 dark:hover:bg-pearto-surface transition-colors">
                 <td className="px-3 py-2">
                   <div className="flex items-center gap-2">
                     <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center">
@@ -85,17 +85,17 @@ export default function PrivateCompanies({ className = '' }: PrivateCompaniesPro
                         {company.symbol.slice(0, 2)}
                       </span>
                     </div>
-                    <span className="font-medium text-gray-900 text-sm">{company.symbol}</span>
+                    <span className="font-medium text-gray-900 dark:text-pearto-luna text-sm transition-colors duration-300">{company.symbol}</span>
                   </div>
                 </td>
-                <td className="px-3 py-2 text-sm text-gray-900 max-w-[150px] truncate">
+                <td className="px-3 py-2 text-sm text-gray-900 dark:text-pearto-luna max-w-[150px] truncate transition-colors duration-300">
                   {company.name}
                 </td>
-                <td className="px-3 py-2 text-sm text-gray-900 text-right">
+                <td className="px-3 py-2 text-sm text-gray-900 dark:text-pearto-luna text-right transition-colors duration-300">
                   ${company.price.toLocaleString()}
                 </td>
                 <td className={`px-3 py-2 text-sm text-right font-medium ${
-                  company.changePercent >= 0 ? 'text-green-600' : 'text-red-600'
+                  company.changePercent >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
                 }`}>
                   <div className="flex items-center justify-end gap-1">
                     {company.changePercent >= 0 ? (
@@ -108,10 +108,10 @@ export default function PrivateCompanies({ className = '' }: PrivateCompaniesPro
                     </span>
                   </div>
                 </td>
-                <td className="px-3 py-2 text-sm text-gray-900 text-right">
+                <td className="px-3 py-2 text-sm text-gray-900 dark:text-pearto-luna text-right transition-colors duration-300">
                   {formatFunding(company.lastFunding)}
                 </td>
-                <td className="px-3 py-2 text-sm text-gray-900 text-right">
+                <td className="px-3 py-2 text-sm text-gray-900 dark:text-pearto-luna text-right transition-colors duration-300">
                   {formatValuation(company.valuation)}
                 </td>
               </tr>

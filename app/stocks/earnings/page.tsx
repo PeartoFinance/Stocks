@@ -272,7 +272,7 @@ export default function EarningsCalendar() {
                   <th className="text-center py-4 px-6 text-sm font-semibold text-gray-600">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-gray-200 dark:divide-pearto-border">
                 {filteredEarnings.map((event, index) => (
                   <motion.tr
                     key={event.id}

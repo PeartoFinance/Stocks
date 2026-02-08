@@ -91,12 +91,12 @@ export default function StockCompareModal({
     };
 
     return (
-      <div className="grid grid-cols-3 gap-4 py-3 border-b border-slate-100 dark:border-slate-800">
-        <span className="text-sm text-slate-500 dark:text-slate-400">{label}</span>
-        <span className="text-sm font-medium text-slate-900 dark:text-white text-center">
+      <div className="grid grid-cols-3 gap-4 py-3 border-b border-slate-100 dark:border-slate-800 transition-colors duration-300">
+        <span className="text-sm text-slate-500 dark:text-slate-400 transition-colors duration-300">{label}</span>
+        <span className="text-sm font-medium text-slate-900 dark:text-white text-center transition-colors duration-300">
           {formatValue(value1)}
         </span>
-        <span className="text-sm font-medium text-slate-900 dark:text-white text-center">
+        <span className="text-sm font-medium text-slate-900 dark:text-white text-center transition-colors duration-300">
           {formatValue(value2)}
         </span>
       </div>
@@ -107,10 +107,10 @@ export default function StockCompareModal({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 w-full max-w-4xl max-h-[90vh] overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 w-full max-w-4xl max-h-[90vh] overflow-hidden transition-colors duration-300">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-700">
-          <h2 className="text-xl font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+        <div className="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-700 transition-colors duration-300">
+          <h2 className="text-xl font-semibold text-slate-900 dark:text-white flex items-center gap-2 transition-colors duration-300">
             <BarChart3 className="h-5 w-5 text-blue-500" />
             Compare Stocks
           </h2>
@@ -118,14 +118,14 @@ export default function StockCompareModal({
             onClick={onClose}
             className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
           >
-            <X className="h-5 w-5 text-slate-500" />
+            <X className="h-5 w-5 text-slate-500 dark:text-pearto-gray transition-colors duration-300" />
           </button>
         </div>
 
         <div className="p-6 overflow-y-auto max-h-[calc(90vh-80px)]">
           {/* Search Section */}
           <div className="mb-6">
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2 transition-colors duration-300">
               Search for a stock to compare with {initialSymbol}
             </label>
             <div className="relative">
@@ -135,7 +135,7 @@ export default function StockCompareModal({
                 placeholder="Enter symbol or company name..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-3 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-300"
               />
             </div>
           </div>
@@ -143,7 +143,7 @@ export default function StockCompareModal({
           {/* Search Results */}
           {searchResults.length > 0 && (
             <div className="mb-6">
-              <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Search Results</h3>
+              <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3 transition-colors duration-300">Search Results</h3>
               <div className="space-y-2">
                 {searchResults.map((stock) => {
                   const isPositive = stock.change >= 0;
@@ -155,17 +155,17 @@ export default function StockCompareModal({
                     >
                       <div className="flex items-center justify-between">
                         <div>
-                          <h4 className="font-medium text-slate-900 dark:text-white">
+                          <h4 className="font-medium text-slate-900 dark:text-white transition-colors duration-300">
                             {stock.name} ({stock.symbol})
                           </h4>
-                          <p className="text-sm text-slate-500 dark:text-slate-400">{stock.sector}</p>
+                          <p className="text-sm text-slate-500 dark:text-slate-400 transition-colors duration-300">{stock.sector}</p>
                         </div>
                         <div className="text-right">
-                          <p className="font-semibold text-slate-900 dark:text-white">
+                          <p className="font-semibold text-slate-900 dark:text-white transition-colors duration-300">
                             ${formatNumber(stock.price)}
                           </p>
                           <div className={`flex items-center gap-1 text-sm ${
-                            isPositive ? 'text-green-600' : 'text-red-600'
+                            isPositive ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
                           }`}>
                             {isPositive ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
                             <span>{isPositive ? '+' : ''}{formatNumber(stock.changePercent)}%</span>
@@ -182,18 +182,18 @@ export default function StockCompareModal({
           {/* Comparison Table */}
           {selectedStock && initialStock && (
             <div>
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Comparison</h3>
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 transition-colors duration-300">Comparison</h3>
               
               {/* Stock Headers */}
-              <div className="grid grid-cols-3 gap-4 mb-4 p-4 bg-slate-50 dark:bg-slate-800 rounded-lg">
-                <div className="text-sm font-medium text-slate-500 dark:text-slate-400">Metric</div>
+              <div className="grid grid-cols-3 gap-4 mb-4 p-4 bg-slate-50 dark:bg-slate-800 rounded-lg transition-colors duration-300">
+                <div className="text-sm font-medium text-slate-500 dark:text-slate-400 transition-colors duration-300">Metric</div>
                 <div className="text-center">
-                  <h4 className="font-semibold text-slate-900 dark:text-white">{initialStock.symbol}</h4>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">{initialStock.name}</p>
+                  <h4 className="font-semibold text-slate-900 dark:text-white transition-colors duration-300">{initialStock.symbol}</h4>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 transition-colors duration-300">{initialStock.name}</p>
                 </div>
                 <div className="text-center">
-                  <h4 className="font-semibold text-slate-900 dark:text-white">{selectedStock.symbol}</h4>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">{selectedStock.name}</p>
+                  <h4 className="font-semibold text-slate-900 dark:text-white transition-colors duration-300">{selectedStock.symbol}</h4>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 transition-colors duration-300">{selectedStock.name}</p>
                 </div>
               </div>
 
@@ -260,10 +260,10 @@ export default function StockCompareModal({
               </div>
 
               {/* Action Buttons */}
-              <div className="flex gap-3 mt-6 pt-6 border-t border-slate-200 dark:border-slate-700">
+              <div className="flex gap-3 mt-6 pt-6 border-t border-slate-200 dark:border-slate-700 transition-colors duration-300">
                 <button
                   onClick={() => window.open(`/stock/${selectedStock.symbol}`, '_blank')}
-                  className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
+                  className="flex-1 px-4 py-2 bg-blue-600 dark:bg-pearto-blue hover:bg-blue-700 dark:hover:bg-pearto-blue-hover text-white rounded-lg font-medium transition-colors"
                 >
                   View {selectedStock.symbol} Details
                 </button>
@@ -281,10 +281,10 @@ export default function StockCompareModal({
           {searchTerm.length > 1 && searchResults.length === 0 && !loading && (
             <div className="text-center py-8">
               <Search className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2 transition-colors duration-300">
                 No Results Found
               </h3>
-              <p className="text-slate-500 dark:text-slate-400">
+              <p className="text-slate-500 dark:text-slate-400 transition-colors duration-300">
                 Try searching with a different symbol or company name.
               </p>
             </div>
@@ -294,10 +294,10 @@ export default function StockCompareModal({
           {searchTerm.length <= 1 && (
             <div className="text-center py-8">
               <BarChart3 className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2 transition-colors duration-300">
                 Compare {initialSymbol} with Another Stock
               </h3>
-              <p className="text-slate-500 dark:text-slate-400">
+              <p className="text-slate-500 dark:text-slate-400 transition-colors duration-300">
                 Search for a stock symbol or company name to start comparing.
               </p>
             </div>

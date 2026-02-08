@@ -22,18 +22,18 @@ export default function StockOverview({ stock }: StockOverviewProps) {
   ];
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-      <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50">
-        <h3 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">
+    <div className="bg-white dark:bg-pearto-card rounded-xl border border-slate-200 dark:border-pearto-border shadow-sm dark:shadow-pearto-green/5 overflow-hidden transition-colors duration-300">
+      <div className="px-4 py-3 border-b border-slate-100 dark:border-pearto-border bg-slate-50/50 dark:bg-pearto-surface/50 transition-colors duration-300">
+        <h3 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-pearto-gray">
           Market Statistics
         </h3>
       </div>
       <div className="p-4">
         <div className="grid grid-cols-1 gap-y-0 text-sm">
           {metrics.map((metric, idx) => (
-            <div key={idx} className="flex justify-between py-2.5 border-b border-slate-50 dark:border-slate-800/50 last:border-0">
-              <span className="text-slate-500 dark:text-slate-400 font-medium">{metric.label}</span>
-              <span className="font-semibold text-slate-900 dark:text-slate-100">{metric.value}</span>
+            <div key={idx} className="flex justify-between py-2.5 border-b border-slate-50 dark:border-pearto-border-subtle last:border-0 transition-colors duration-300">
+              <span className="text-slate-500 dark:text-pearto-cloud font-medium">{metric.label}</span>
+              <span className="font-semibold text-slate-900 dark:text-pearto-luna">{metric.value}</span>
             </div>
           ))}
         </div>

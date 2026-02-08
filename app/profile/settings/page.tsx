@@ -42,7 +42,7 @@ export default function SettingsPage() {
 
     if (authLoading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-slate-50">
+            <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-gray-900">
                 <div className="animate-spin rounded-full h-12 w-12 border-2 border-green-500 border-t-transparent" />
             </div>
         );
@@ -71,7 +71,7 @@ export default function SettingsPage() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-50">
+        <div className="min-h-screen bg-slate-50 dark:bg-gray-900">
             <div className="bg-gradient-to-br from-green-600 to-emerald-600 pb-8">
                 <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
                     <div className="flex items-center gap-3">
@@ -87,40 +87,40 @@ export default function SettingsPage() {
             </div>
 
             <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 max-w-2xl">
-                <section className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-6">
-                    <div className="px-4 sm:px-6 py-4 border-b border-slate-100">
+                <section className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-slate-200 dark:border-gray-700 overflow-hidden mb-6">
+                    <div className="px-4 sm:px-6 py-4 border-b border-slate-100 dark:border-gray-700">
                         <div className="flex items-center gap-3">
-                            <User className="h-5 w-5 text-slate-400" />
-                            <h2 className="font-semibold text-slate-900">Profile</h2>
+                            <User className="h-5 w-5 text-slate-400 dark:text-gray-500" />
+                            <h2 className="font-semibold text-slate-900 dark:text-white">Profile</h2>
                         </div>
                     </div>
                     <div className="p-4 sm:p-6 space-y-4">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-sm font-medium text-slate-700 mb-1.5">First name</label>
+                                <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-1.5">First name</label>
                                 <input
                                     type="text"
                                     value={firstName}
                                     onChange={(e) => setFirstName(e.target.value)}
-                                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 outline-none transition"
+                                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-gray-600 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 outline-none transition bg-white dark:bg-gray-700 text-slate-900 dark:text-white"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-slate-700 mb-1.5">Last name</label>
+                                <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-1.5">Last name</label>
                                 <input
                                     type="text"
                                     value={lastName}
                                     onChange={(e) => setLastName(e.target.value)}
-                                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 outline-none transition"
+                                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-gray-600 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 outline-none transition bg-white dark:bg-gray-700 text-slate-900 dark:text-white"
                                 />
                             </div>
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1.5">Email</label>
+                            <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-1.5">Email</label>
                             <div className="flex items-center gap-2">
-                                <Mail className="h-5 w-5 text-slate-400" />
-                                <span className="text-slate-600">{user.email}</span>
-                                <span className="px-2 py-0.5 rounded-lg text-xs bg-green-100 text-green-700 font-medium">
+                                <Mail className="h-5 w-5 text-slate-400 dark:text-gray-500" />
+                                <span className="text-slate-600 dark:text-gray-400">{user.email}</span>
+                                <span className="px-2 py-0.5 rounded-lg text-xs bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-400 font-medium">
                                     Verified
                                 </span>
                             </div>
@@ -147,22 +147,22 @@ export default function SettingsPage() {
                     </div>
                 </section>
 
-                <section className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-6">
-                    <div className="px-4 sm:px-6 py-4 border-b border-slate-100">
+                <section className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-slate-200 dark:border-gray-700 overflow-hidden mb-6">
+                    <div className="px-4 sm:px-6 py-4 border-b border-slate-100 dark:border-gray-700">
                         <div className="flex items-center gap-3">
-                            <Globe className="h-5 w-5 text-slate-400" />
-                            <h2 className="font-semibold text-slate-900">Country & Region</h2>
+                            <Globe className="h-5 w-5 text-slate-400 dark:text-gray-500" />
+                            <h2 className="font-semibold text-slate-900 dark:text-white">Country & Region</h2>
                         </div>
                     </div>
                     <div className="p-4 sm:p-6">
-                        <p className="text-sm text-slate-500 mb-4">
+                        <p className="text-sm text-slate-500 dark:text-gray-400 mb-4">
                             Your country is used for market data and localization.
                         </p>
                         <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
                             <select
                                 value={country}
                                 onChange={(e) => setCountry(e.target.value)}
-                                className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 outline-none transition"
+                                className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-gray-600 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 outline-none transition bg-white dark:bg-gray-700 text-slate-900 dark:text-white"
                             >
                                 {countries.length > 0 ? (
                                     countries.map((c) => (
@@ -179,73 +179,73 @@ export default function SettingsPage() {
                                     </>
                                 )}
                             </select>
-                            <span className="text-xs text-slate-400 sm:flex-shrink-0">
+                            <span className="text-xs text-slate-400 dark:text-gray-500 sm:flex-shrink-0">
                                 {source === 'auto' ? 'Auto-detected' : 'Manual'}
                             </span>
                         </div>
                     </div>
                 </section>
 
-                <section className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-6">
-                    <div className="px-4 sm:px-6 py-4 border-b border-slate-100">
+                <section className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-slate-200 dark:border-gray-700 overflow-hidden mb-6">
+                    <div className="px-4 sm:px-6 py-4 border-b border-slate-100 dark:border-gray-700">
                         <div className="flex items-center gap-3">
-                            <Shield className="h-5 w-5 text-slate-400" />
-                            <h2 className="font-semibold text-slate-900">Security</h2>
+                            <Shield className="h-5 w-5 text-slate-400 dark:text-gray-500" />
+                            <h2 className="font-semibold text-slate-900 dark:text-white">Security</h2>
                         </div>
                     </div>
-                    <div className="divide-y divide-slate-100">
+                    <div className="divide-y divide-slate-100 dark:divide-gray-700">
                         <Link
                             href="/forgot-password"
-                            className="flex items-center justify-between p-4 sm:p-6 hover:bg-slate-50 transition"
+                            className="flex items-center justify-between p-4 sm:p-6 hover:bg-slate-50 dark:hover:bg-gray-700 transition"
                         >
                             <div className="flex items-center gap-4">
-                                <Lock className="h-5 w-5 text-slate-400 flex-shrink-0" />
+                                <Lock className="h-5 w-5 text-slate-400 dark:text-gray-500 flex-shrink-0" />
                                 <div>
-                                    <div className="font-medium text-slate-900">Change password</div>
-                                    <div className="text-sm text-slate-500">Update your password</div>
+                                    <div className="font-medium text-slate-900 dark:text-white">Change password</div>
+                                    <div className="text-sm text-slate-500 dark:text-gray-400">Update your password</div>
                                 </div>
                             </div>
-                            <ChevronRight className="h-5 w-5 text-slate-300 flex-shrink-0" />
+                            <ChevronRight className="h-5 w-5 text-slate-300 dark:text-gray-600 flex-shrink-0" />
                         </Link>
                     </div>
                 </section>
 
-                <section className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-6">
-                    <div className="px-4 sm:px-6 py-4 border-b border-slate-100">
+                <section className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-slate-200 dark:border-gray-700 overflow-hidden mb-6">
+                    <div className="px-4 sm:px-6 py-4 border-b border-slate-100 dark:border-gray-700">
                         <div className="flex items-center gap-3">
-                            <Bell className="h-5 w-5 text-slate-400" />
-                            <h2 className="font-semibold text-slate-900">Notifications</h2>
+                            <Bell className="h-5 w-5 text-slate-400 dark:text-gray-500" />
+                            <h2 className="font-semibold text-slate-900 dark:text-white">Notifications</h2>
                         </div>
                     </div>
                     <div className="p-4 sm:p-6 space-y-4">
-                        <label className="flex items-center justify-between gap-4">
-                            <span className="text-slate-700">Email notifications</span>
+                        <label className="flex items-center justify-between gap-4 cursor-pointer">
+                            <span className="text-slate-700 dark:text-gray-300">Email notifications</span>
                             <input type="checkbox" defaultChecked className="h-5 w-5 rounded text-green-500 focus:ring-green-500" />
                         </label>
-                        <label className="flex items-center justify-between gap-4">
-                            <span className="text-slate-700">Price alerts</span>
+                        <label className="flex items-center justify-between gap-4 cursor-pointer">
+                            <span className="text-slate-700 dark:text-gray-300">Price alerts</span>
                             <input type="checkbox" defaultChecked className="h-5 w-5 rounded text-green-500 focus:ring-green-500" />
                         </label>
-                        <label className="flex items-center justify-between gap-4">
-                            <span className="text-slate-700">Market news</span>
+                        <label className="flex items-center justify-between gap-4 cursor-pointer">
+                            <span className="text-slate-700 dark:text-gray-300">Market news</span>
                             <input type="checkbox" className="h-5 w-5 rounded text-green-500 focus:ring-green-500" />
                         </label>
-                        <label className="flex items-center justify-between gap-4">
-                            <span className="text-slate-700">Weekly portfolio summary</span>
+                        <label className="flex items-center justify-between gap-4 cursor-pointer">
+                            <span className="text-slate-700 dark:text-gray-300">Weekly portfolio summary</span>
                             <input type="checkbox" defaultChecked className="h-5 w-5 rounded text-green-500 focus:ring-green-500" />
                         </label>
                     </div>
                 </section>
 
-                <section className="bg-white rounded-2xl shadow-sm border border-red-200 overflow-hidden">
-                    <div className="px-4 sm:px-6 py-4 border-b border-red-100 bg-red-50">
-                        <h2 className="font-semibold text-red-900">Danger zone</h2>
+                <section className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-red-200 dark:border-red-900 overflow-hidden">
+                    <div className="px-4 sm:px-6 py-4 border-b border-red-100 dark:border-red-900/50 bg-red-50 dark:bg-red-900/20">
+                        <h2 className="font-semibold text-red-900 dark:text-red-400">Danger zone</h2>
                     </div>
                     <div className="p-4 sm:p-6">
-                        <p className="text-sm text-slate-500 mb-4">
+                        <p className="text-sm text-slate-500 dark:text-gray-400 mb-4">
                             Deleting your account is permanent. This cannot be undone.
                         </p>
-                        <button className="px-4 py-2.5 rounded-xl border border-red-300 text-red-600 hover:bg-red-50 font-medium transition">
+                        <button className="px-4 py-2.5 rounded-xl border border-red-300 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 font-medium transition">
                             Delete account
                         </button>
                     </div>

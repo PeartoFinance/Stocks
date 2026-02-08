@@ -58,7 +58,7 @@ export default function VendorsList({ className = '', limit = 10, category }: Ve
   if (loading) {
     return (
       <div className={`bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 ${className}`}>
-        <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+        <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
           <Building2 className="h-4 w-4 text-blue-600" />
           Featured Vendors
         </h3>
@@ -78,13 +78,13 @@ export default function VendorsList({ className = '', limit = 10, category }: Ve
   if (error || vendors.length === 0) {
     return (
       <div className={`bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 ${className}`}>
-        <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+        <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
           <Building2 className="h-4 w-4 text-blue-600" />
           Featured Vendors
         </h3>
         <div className="text-center py-8">
           <Building2 className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 dark:text-pearto-gray transition-colors duration-300">
             {error || 'No vendors available'}
           </p>
         </div>
@@ -94,7 +94,7 @@ export default function VendorsList({ className = '', limit = 10, category }: Ve
 
   return (
     <div className={`bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 ${className}`}>
-      <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+      <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
         <Building2 className="h-4 w-4 text-blue-600" />
         Featured Vendors
       </h3>
@@ -137,17 +137,17 @@ export default function VendorsList({ className = '', limit = 10, category }: Ve
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between">
                   <div className="flex-1 min-w-0">
-                    <h4 className="text-sm font-semibold text-slate-900 dark:text-white truncate">
+                    <h4 className="text-sm font-semibold text-slate-900 dark:text-white truncate transition-colors duration-300">
                       {vendor.name}
                     </h4>
                     {vendor.category && (
-                      <span className="inline-block px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 rounded-full mt-1">
+                      <span className="inline-block px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 rounded-full mt-1 transition-colors duration-300">
                         {vendor.category}
                       </span>
                     )}
                   </div>
                   {vendor.isFeatured && (
-                    <div className="flex items-center gap-1 text-xs text-amber-600 dark:text-amber-400">
+                    <div className="flex items-center gap-1 text-xs text-amber-600 dark:text-amber-400 transition-colors duration-300">
                       <TrendingUp className="h-3 w-3" />
                       <span className="font-medium">Featured</span>
                     </div>
@@ -161,14 +161,14 @@ export default function VendorsList({ className = '', limit = 10, category }: Ve
               <div className="flex items-center">
                 {renderStars(vendor.rating)}
               </div>
-              <span className="text-xs text-slate-600 dark:text-slate-400">
+              <span className="text-xs text-slate-600 dark:text-slate-400 transition-colors duration-300">
                 {vendor.rating.toFixed(1)} ({vendor.reviewCount})
               </span>
             </div>
 
             {/* Description */}
             {vendor.description && (
-              <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 mb-2">
+              <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 mb-2 transition-colors duration-300">
                 {vendor.description}
               </p>
             )}
@@ -179,13 +179,13 @@ export default function VendorsList({ className = '', limit = 10, category }: Ve
                 {vendor.services.slice(0, 3).map((service, idx) => (
                   <span
                     key={idx}
-                    className="px-2 py-0.5 text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded"
+                    className="px-2 py-0.5 text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded transition-colors duration-300"
                   >
                     {service}
                   </span>
                 ))}
                 {vendor.services.length > 3 && (
-                  <span className="px-2 py-0.5 text-xs text-slate-500 dark:text-slate-500">
+                  <span className="px-2 py-0.5 text-xs text-slate-500 dark:text-slate-500 dark:text-pearto-gray transition-colors duration-300">
                     +{vendor.services.length - 3}
                   </span>
                 )}
@@ -202,7 +202,7 @@ export default function VendorsList({ className = '', limit = 10, category }: Ve
                   className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded transition-colors"
                   title="Website"
                 >
-                  <Globe className="h-3 w-3 text-slate-500" />
+                  <Globe className="h-3 w-3 text-slate-500 dark:text-pearto-gray transition-colors duration-300" />
                 </a>
               )}
               {vendor.phone && (
@@ -211,7 +211,7 @@ export default function VendorsList({ className = '', limit = 10, category }: Ve
                   className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded transition-colors"
                   title="Phone"
                 >
-                  <Phone className="h-3 w-3 text-slate-500" />
+                  <Phone className="h-3 w-3 text-slate-500 dark:text-pearto-gray transition-colors duration-300" />
                 </a>
               )}
               {vendor.email && (
@@ -220,7 +220,7 @@ export default function VendorsList({ className = '', limit = 10, category }: Ve
                   className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded transition-colors"
                   title="Email"
                 >
-                  <Mail className="h-3 w-3 text-slate-500" />
+                  <Mail className="h-3 w-3 text-slate-500 dark:text-pearto-gray transition-colors duration-300" />
                 </a>
               )}
             </div>
@@ -229,7 +229,7 @@ export default function VendorsList({ className = '', limit = 10, category }: Ve
       </div>
 
       {/* View More Link */}
-      <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+      <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 transition-colors duration-300">
         <a
           href="/vendors"
           className="flex items-center justify-center gap-2 text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium transition-colors"

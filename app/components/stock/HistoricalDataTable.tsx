@@ -218,17 +218,17 @@ export default function HistoricalDataTable({ data, symbol, onDataUpdate, onLoad
 
   return (
     <div className="w-full">
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 transition-colors duration-300">
       {/* Header */}
-      <div className="p-3 lg:p-5 border-b border-slate-200 dark:border-slate-700">
+      <div className="p-3 lg:p-5 border-b border-slate-200 dark:border-slate-700 transition-colors duration-300">
         <div className="flex flex-col gap-3 lg:gap-4">
           <div>
-            <h2 className="text-base lg:text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <h2 className="text-base lg:text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2 transition-colors duration-300">
               <BarChart3 className="h-4 w-4 text-blue-600" />
               Historical Data
               {loading && <Activity className="h-4 w-4 text-blue-600 animate-spin" />}
             </h2>
-            <p className="text-xs lg:text-sm text-slate-500 dark:text-slate-400 mt-1">
+            <p className="text-xs lg:text-sm text-slate-500 dark:text-slate-400 mt-1 transition-colors duration-300">
               {symbol} historical price data
             </p>
           </div>
@@ -245,7 +245,7 @@ export default function HistoricalDataTable({ data, symbol, onDataUpdate, onLoad
               </button>
               
               {showTimeframeDropdown && (
-                <div className="absolute top-full left-0 mt-1 z-10 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-md shadow-lg min-w-[70px] lg:min-w-[80px]">
+                <div className="absolute top-full left-0 mt-1 z-10 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-md shadow-lg min-w-[70px] lg:min-w-[80px] transition-colors duration-300">
                   {timeframes.map((tf) => (
                     <button
                       key={tf}
@@ -272,7 +272,7 @@ export default function HistoricalDataTable({ data, symbol, onDataUpdate, onLoad
               </button>
               
               {showPeriodDropdown && (
-                <div className="absolute top-full left-0 mt-1 z-10 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-md shadow-lg min-w-[70px] lg:min-w-[80px]">
+                <div className="absolute top-full left-0 mt-1 z-10 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-md shadow-lg min-w-[70px] lg:min-w-[80px] transition-colors duration-300">
                   {periods.map((p) => (
                     <button
                       key={p}
@@ -291,7 +291,7 @@ export default function HistoricalDataTable({ data, symbol, onDataUpdate, onLoad
             {/* Export Button */}
             <button
               onClick={exportData}
-              className="flex items-center gap-1.5 px-3 py-1.5 lg:px-4 lg:py-2 bg-blue-600 text-white rounded-md text-xs lg:text-sm font-medium hover:bg-blue-700 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 lg:px-4 lg:py-2 bg-blue-600 dark:bg-pearto-blue text-white rounded-md text-xs lg:text-sm font-medium hover:bg-blue-700 dark:hover:bg-pearto-blue-hover transition-colors"
             >
               <Download className="h-2.5 w-2.5 lg:h-3.5 lg:w-3.5" />
               Export
@@ -303,63 +303,63 @@ export default function HistoricalDataTable({ data, symbol, onDataUpdate, onLoad
       {/* Table */}
       <div className="overflow-x-auto">
         <table className="w-full">
-          <thead className="bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
+          <thead className="bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 transition-colors duration-300">
             <tr>
               <th className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-left">
                 <button
                   onClick={toggleSort}
-                  className="flex items-center gap-1 text-[10px] lg:text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wide hover:text-blue-600 dark:hover:text-blue-400"
+                  className="flex items-center gap-1 text-[10px] lg:text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wide hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300"
                 >
                   Date
                   {sortOrder === 'desc' ? <ChevronDown className="h-3 w-3 lg:h-3.5 lg:w-3.5" /> : <ChevronUp className="h-3 w-3 lg:h-3.5 lg:w-3.5" />}
                 </button>
               </th>
-              <th className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-left text-[10px] lg:text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wide hidden sm:table-cell">
+              <th className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-left text-[10px] lg:text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wide hidden sm:table-cell transition-colors duration-300">
                 Open
               </th>
-              <th className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-left text-[10px] lg:text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wide hidden sm:table-cell">
+              <th className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-left text-[10px] lg:text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wide hidden sm:table-cell transition-colors duration-300">
                 High
               </th>
-              <th className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-left text-[10px] lg:text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wide hidden sm:table-cell">
+              <th className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-left text-[10px] lg:text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wide hidden sm:table-cell transition-colors duration-300">
                 Low
               </th>
-              <th className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-left text-[10px] lg:text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wide">
+              <th className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-left text-[10px] lg:text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wide transition-colors duration-300">
                 Close
               </th>
-              <th className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-left text-[10px] lg:text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wide hidden lg:table-cell">
+              <th className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-left text-[10px] lg:text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wide hidden lg:table-cell transition-colors duration-300">
                 Adj. Close
               </th>
-              <th className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-left text-[10px] lg:text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wide">
+              <th className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-left text-[10px] lg:text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wide transition-colors duration-300">
                 Change
               </th>
-              <th className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-left text-[10px] lg:text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wide hidden md:table-cell">
+              <th className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-left text-[10px] lg:text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wide hidden md:table-cell transition-colors duration-300">
                 Volume
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
+          <tbody className="divide-y divide-slate-200 dark:divide-slate-700 transition-colors duration-300">
             {filteredData.map((row, index) => {
               const change = row.close && row.open ? formatChange(row.close, row.open) : null;
               const isPositive = change && change.value >= 0;
               
               return (
                 <tr key={index} className="hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
-                  <td className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-xs lg:text-sm text-slate-900 dark:text-white font-medium">
+                  <td className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-xs lg:text-sm text-slate-900 dark:text-white font-medium transition-colors duration-300">
                     {formatDate(row.date)}
                   </td>
-                  <td className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-xs lg:text-sm text-slate-900 dark:text-white hidden sm:table-cell">
+                  <td className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-xs lg:text-sm text-slate-900 dark:text-white hidden sm:table-cell transition-colors duration-300">
                     {row.open ? formatPrice(row.open) : '-'}
                   </td>
-                  <td className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-xs lg:text-sm text-slate-900 dark:text-white hidden sm:table-cell">
+                  <td className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-xs lg:text-sm text-slate-900 dark:text-white hidden sm:table-cell transition-colors duration-300">
                     {row.high ? formatPrice(row.high) : '-'}
                   </td>
-                  <td className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-xs lg:text-sm text-slate-900 dark:text-white hidden sm:table-cell">
+                  <td className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-xs lg:text-sm text-slate-900 dark:text-white hidden sm:table-cell transition-colors duration-300">
                     {row.low ? formatPrice(row.low) : '-'}
                   </td>
-                  <td className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-xs lg:text-sm text-slate-900 dark:text-white font-medium">
+                  <td className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-xs lg:text-sm text-slate-900 dark:text-white font-medium transition-colors duration-300">
                     {row.close ? formatPrice(row.close) : '-'}
                   </td>
-                  <td className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-xs lg:text-sm text-slate-900 dark:text-white hidden lg:table-cell">
+                  <td className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-xs lg:text-sm text-slate-900 dark:text-white hidden lg:table-cell transition-colors duration-300">
                     {row.close ? formatPrice(row.close) : '-'}
                   </td>
                   <td className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-xs lg:text-sm">
@@ -373,7 +373,7 @@ export default function HistoricalDataTable({ data, symbol, onDataUpdate, onLoad
                       </div>
                     ) : '-'}
                   </td>
-                  <td className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-xs lg:text-sm text-slate-900 dark:text-white hidden md:table-cell">
+                  <td className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-xs lg:text-sm text-slate-900 dark:text-white hidden md:table-cell transition-colors duration-300">
                     {row.volume ? formatVolume(row.volume) : '-'}
                   </td>
                 </tr>
@@ -384,8 +384,8 @@ export default function HistoricalDataTable({ data, symbol, onDataUpdate, onLoad
         
         {filteredData.length === 0 && (
           <div className="text-center py-6 lg:py-10">
-            <BarChart3 className="h-8 w-8 lg:h-10 lg:w-10 text-slate-300 dark:text-slate-600 mx-auto mb-3 lg:mb-4" />
-            <p className="text-xs lg:text-sm text-slate-500 dark:text-slate-400">No historical data available</p>
+            <BarChart3 className="h-8 w-8 lg:h-10 lg:w-10 text-slate-300 dark:text-slate-600 dark:text-pearto-cloud mx-auto mb-3 lg:mb-4 transition-colors duration-300" />
+            <p className="text-xs lg:text-sm text-slate-500 dark:text-slate-400 transition-colors duration-300">No historical data available</p>
           </div>
         )}
       </div>

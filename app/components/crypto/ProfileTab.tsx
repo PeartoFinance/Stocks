@@ -105,16 +105,16 @@ export default function ProfileTab({ crypto }: ProfileTabProps) {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-6">
+      <div className="bg-white  dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-6 transition-colors duration-300">
         <div className="flex items-start gap-4">
           <div className="w-16 h-16 bg-gradient-to-br from-emerald-400 to-teal-600 rounded-xl flex items-center justify-center shadow-lg">
             <span className="text-2xl font-bold text-white">{crypto.symbol.substring(0, 2).toUpperCase()}</span>
           </div>
           <div className="flex-1">
-            <h1 className="text-2xl lg:text-3xl font-bold text-slate-900 dark:text-white mb-2">
+            <h1 className="text-2xl lg:text-3xl font-bold text-slate-900 dark:text-white mb-2 transition-colors duration-300">
               {crypto.name}
             </h1>
-            <div className="flex flex-wrap items-center gap-3 text-sm text-slate-600 dark:text-slate-400">
+            <div className="flex flex-wrap items-center gap-3 text-sm text-slate-600 dark:text-slate-400 transition-colors duration-300">
               <span className="font-medium">{crypto.symbol}</span>
               <span>•</span>
               <span>{crypto.assetType}</span>
@@ -123,7 +123,7 @@ export default function ProfileTab({ crypto }: ProfileTabProps) {
               {crypto.isFeatured && (
                 <>
                   <span>•</span>
-                  <span className="flex items-center gap-1 text-emerald-600">
+                  <span className="flex items-center gap-1 text-emerald-600 dark:text-pearto-green transition-colors duration-300">
                     <Star className="h-4 w-4 fill-current" />
                     Featured
                   </span>
@@ -135,17 +135,17 @@ export default function ProfileTab({ crypto }: ProfileTabProps) {
       </div>
 
       {/* Description */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-6">
+      <div className="bg-white  dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-6 transition-colors duration-300">
         <div className="flex items-center gap-3 mb-4">
           <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
-            <FileText className="h-4 w-4 text-emerald-600" />
+            <FileText className="h-4 w-4 text-emerald-600 dark:text-pearto-green transition-colors duration-300" />
           </div>
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-white">About {crypto.name}</h2>
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-white transition-colors duration-300">About {crypto.name}</h2>
         </div>
         
         {crypto.description ? (
-          <div className="prose prose-slate dark:prose-invert max-w-none">
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+          <div className="prose prose-slate dark:prose-invert max-w-none transition-colors duration-300">
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed transition-colors duration-300">
               {crypto.description}
             </p>
           </div>
@@ -159,12 +159,12 @@ export default function ProfileTab({ crypto }: ProfileTabProps) {
       {/* Key Information */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
         {/* Basic Information */}
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-6">
+        <div className="bg-white  dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-6 transition-colors duration-300">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
               <Hash className="h-4 w-4 text-blue-600" />
             </div>
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Basic Information</h3>
+            <h3 className="text-lg font-semibold text-slate-900 dark:text-white transition-colors duration-300">Basic Information</h3>
           </div>
           
           <div className="space-y-3">
@@ -176,21 +176,21 @@ export default function ProfileTab({ crypto }: ProfileTabProps) {
               { label: 'Market Cap Rank', value: `#${crypto.id}` },
               { label: 'Last Updated', value: formatDate(crypto.lastUpdated) },
             ].map((item, i) => (
-              <div key={i} className="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800 last:border-b-0">
-                <span className="text-sm text-slate-500 dark:text-slate-400">{item.label}</span>
-                <span className="text-sm font-medium text-slate-900 dark:text-white">{item.value}</span>
+              <div key={i} className="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800 last:border-b-0 transition-colors duration-300">
+                <span className="text-sm text-slate-500 dark:text-slate-400 transition-colors duration-300">{item.label}</span>
+                <span className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">{item.value}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Supply Information */}
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-6">
+        <div className="bg-white  dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-6 transition-colors duration-300">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
               <BarChart3 className="h-4 w-4 text-purple-600" />
             </div>
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Supply Information</h3>
+            <h3 className="text-lg font-semibold text-slate-900 dark:text-white transition-colors duration-300">Supply Information</h3>
           </div>
           
           <div className="space-y-3">
@@ -201,9 +201,9 @@ export default function ProfileTab({ crypto }: ProfileTabProps) {
               { label: '24h Volume', value: `$${(crypto.volume / 1e6).toFixed(2)}M` },
               { label: 'Volume/Market Cap', value: crypto.marketCap ? `${((crypto.volume / crypto.marketCap) * 100).toFixed(2)}%` : '-' },
             ].map((item, i) => (
-              <div key={i} className="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800 last:border-b-0">
-                <span className="text-sm text-slate-500 dark:text-slate-400">{item.label}</span>
-                <span className="text-sm font-medium text-slate-900 dark:text-white">{item.value}</span>
+              <div key={i} className="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800 last:border-b-0 transition-colors duration-300">
+                <span className="text-sm text-slate-500 dark:text-slate-400 transition-colors duration-300">{item.label}</span>
+                <span className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">{item.value}</span>
               </div>
             ))}
           </div>
@@ -211,12 +211,12 @@ export default function ProfileTab({ crypto }: ProfileTabProps) {
       </div>
 
       {/* Technology Stack */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-6">
+      <div className="bg-white  dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-6 transition-colors duration-300">
         <div className="flex items-center gap-3 mb-4">
           <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
-            <Zap className="h-4 w-4 text-emerald-600" />
+            <Zap className="h-4 w-4 text-emerald-600 dark:text-pearto-green transition-colors duration-300" />
           </div>
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Technology</h3>
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white transition-colors duration-300">Technology</h3>
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -225,12 +225,12 @@ export default function ProfileTab({ crypto }: ProfileTabProps) {
             { label: 'Consensus', value: additionalInfo.technology.consensus, icon: Target },
             { label: 'Launch Date', value: new Date(additionalInfo.technology.launchDate).toLocaleDateString(), icon: Clock },
           ].map((item, i) => (
-            <div key={i} className="bg-slate-50 dark:bg-slate-800 p-4 rounded-lg">
+            <div key={i} className="bg-slate-50 dark:bg-slate-800 p-4 rounded-lg transition-colors duration-300">
               <div className="flex items-center gap-2 mb-2">
-                <item.icon className="h-4 w-4 text-slate-600 dark:text-slate-400" />
-                <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{item.label}</span>
+                <item.icon className="h-4 w-4 text-slate-600 dark:text-slate-400 transition-colors duration-300" />
+                <span className="text-sm font-medium text-slate-700 dark:text-slate-300 transition-colors duration-300">{item.label}</span>
               </div>
-              <p className="text-slate-900 dark:text-white font-medium">{item.value}</p>
+              <p className="text-slate-900 dark:text-white font-medium transition-colors duration-300">{item.value}</p>
             </div>
           ))}
         </div>
@@ -239,12 +239,12 @@ export default function ProfileTab({ crypto }: ProfileTabProps) {
       {/* Links */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
         {/* Official Links */}
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-6">
+        <div className="bg-white  dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-6 transition-colors duration-300">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
               <Globe className="h-4 w-4 text-blue-600" />
             </div>
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Official Links</h3>
+            <h3 className="text-lg font-semibold text-slate-900 dark:text-white transition-colors duration-300">Official Links</h3>
           </div>
           
           <div className="space-y-3">
@@ -256,8 +256,8 @@ export default function ProfileTab({ crypto }: ProfileTabProps) {
                 className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  <Globe className="h-4 w-4 text-slate-600 dark:text-slate-400" />
-                  <span className="text-sm font-medium text-slate-900 dark:text-white">Official Website</span>
+                  <Globe className="h-4 w-4 text-slate-600 dark:text-slate-400 transition-colors duration-300" />
+                  <span className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">Official Website</span>
                 </div>
                 <ExternalLink className="h-4 w-4 text-slate-400" />
               </a>
@@ -271,8 +271,8 @@ export default function ProfileTab({ crypto }: ProfileTabProps) {
                 className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  <FileText className="h-4 w-4 text-slate-600 dark:text-slate-400" />
-                  <span className="text-sm font-medium text-slate-900 dark:text-white">Whitepaper</span>
+                  <FileText className="h-4 w-4 text-slate-600 dark:text-slate-400 transition-colors duration-300" />
+                  <span className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">Whitepaper</span>
                 </div>
                 <ExternalLink className="h-4 w-4 text-slate-400" />
               </a>
@@ -281,12 +281,12 @@ export default function ProfileTab({ crypto }: ProfileTabProps) {
         </div>
 
         {/* Social Links */}
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-6">
+        <div className="bg-white  dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-6 transition-colors duration-300">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
               <Twitter className="h-4 w-4 text-purple-600" />
             </div>
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Community</h3>
+            <h3 className="text-lg font-semibold text-slate-900 dark:text-white transition-colors duration-300">Community</h3>
           </div>
           
           <div className="space-y-3">
@@ -298,8 +298,8 @@ export default function ProfileTab({ crypto }: ProfileTabProps) {
                 className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  <Twitter className="h-4 w-4 text-slate-600 dark:text-slate-400" />
-                  <span className="text-sm font-medium text-slate-900 dark:text-white">Twitter</span>
+                  <Twitter className="h-4 w-4 text-slate-600 dark:text-slate-400 transition-colors duration-300" />
+                  <span className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">Twitter</span>
                 </div>
                 <ExternalLink className="h-4 w-4 text-slate-400" />
               </a>
@@ -314,8 +314,8 @@ export default function ProfileTab({ crypto }: ProfileTabProps) {
                 className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  <Activity className="h-4 w-4 text-slate-600 dark:text-slate-400" />
-                  <span className="text-sm font-medium text-slate-900 dark:text-white">{explorer.name}</span>
+                  <Activity className="h-4 w-4 text-slate-600 dark:text-slate-400 transition-colors duration-300" />
+                  <span className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">{explorer.name}</span>
                 </div>
                 <ExternalLink className="h-4 w-4 text-slate-400" />
               </a>
@@ -325,12 +325,12 @@ export default function ProfileTab({ crypto }: ProfileTabProps) {
       </div>
 
       {/* Status */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-6">
+      <div className="bg-white  dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-6 transition-colors duration-300">
         <div className="flex items-center gap-3 mb-4">
           <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
-            <Shield className="h-4 w-4 text-emerald-600" />
+            <Shield className="h-4 w-4 text-emerald-600 dark:text-pearto-green transition-colors duration-300" />
           </div>
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Status & Recognition</h3>
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white transition-colors duration-300">Status & Recognition</h3>
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -340,12 +340,12 @@ export default function ProfileTab({ crypto }: ProfileTabProps) {
             { label: 'Active', value: 'Yes', icon: Activity, color: 'green' },
             { label: 'Verified', value: 'Yes', icon: Shield, color: 'purple' },
           ].map((item, i) => (
-            <div key={i} className={`bg-${item.color}-50 dark:bg-${item.color}-900/20 p-4 rounded-lg border border-${item.color}-100 dark:border-${item.color}-800`}>
+            <div key={i} className="bg-emerald-50 dark:bg-slate-800 p-4 rounded-lg border border-emerald-100 dark:border-slate-700">
               <div className="flex items-center gap-2 mb-2">
                 <item.icon className={`h-4 w-4 text-${item.color}-600 dark:text-${item.color}-400`} />
                 <span className={`text-sm font-medium text-${item.color}-700 dark:text-${item.color}-300`}>{item.label}</span>
               </div>
-              <p className={`text-lg font-bold text-${item.color}-900 dark:text-${item.color}-100`}>{item.value}</p>
+              <p className={`text-lg font-bold text-${item.color}-900 dark:text-white`}>{item.value}</p>
             </div>
           ))}
         </div>

@@ -259,9 +259,9 @@ export default function ChartAnalysis({ stocks, title, type }: ChartAnalysisProp
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white rounded-xl shadow-sm border border-gray-200 p-3"
+        className="bg-white dark:bg-pearto-card rounded-xl shadow-sm border border-gray-200 dark:border-pearto-border p-3 transition-colors duration-300"
       >
-        <h3 className="text-base font-bold text-gray-900 mb-2">{title} Analysis</h3>
+        <h3 className="text-base font-bold text-gray-900 dark:text-pearto-luna mb-2 transition-colors duration-300">{title} Analysis</h3>
         <div className="grid grid-cols-2 gap-2 text-xs">
           <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-2 border border-blue-200">
             <div className="text-blue-600 font-medium mb-1">Total Stocks</div>
@@ -269,12 +269,12 @@ export default function ChartAnalysis({ stocks, title, type }: ChartAnalysisProp
           </div>
           <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg p-2 border border-purple-200">
             <div className="text-purple-600 font-medium mb-1">Avg Change</div>
-            <div className={`font-bold text-sm ${avgChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+            <div className={`font-bold text-sm ${avgChange >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'}`}>
               {avgChange >= 0 ? '+' : ''}{avgChange.toFixed(2)}%
             </div>
           </div>
           <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-2 border border-green-200">
-            <div className="text-green-600 font-medium mb-1">Total Volume</div>
+            <div className="text-green-600 dark:text-pearto-green font-medium mb-1 transition-colors duration-300">Total Volume</div>
             <div className="text-green-900 font-bold text-sm">{formatNumber(totalVolume)}</div>
           </div>
           <div className="bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-2 border border-orange-200">
@@ -291,7 +291,7 @@ export default function ChartAnalysis({ stocks, title, type }: ChartAnalysisProp
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-white rounded-xl shadow-sm border border-gray-200 p-3"
+          className="bg-white dark:bg-pearto-card rounded-xl shadow-sm border border-gray-200 dark:border-pearto-border p-3 transition-colors duration-300"
         >
           <div className="h-48">
             <Pie 
@@ -328,7 +328,7 @@ export default function ChartAnalysis({ stocks, title, type }: ChartAnalysisProp
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-white rounded-xl shadow-sm border border-gray-200 p-3"
+          className="bg-white dark:bg-pearto-card rounded-xl shadow-sm border border-gray-200 dark:border-pearto-border p-3 transition-colors duration-300"
         >
           <div className="h-48">
             <Doughnut 
@@ -365,7 +365,7 @@ export default function ChartAnalysis({ stocks, title, type }: ChartAnalysisProp
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="bg-white rounded-xl shadow-sm border border-gray-200 p-3"
+          className="bg-white dark:bg-pearto-card rounded-xl shadow-sm border border-gray-200 dark:border-pearto-border p-3 transition-colors duration-300"
         >
           <div className="h-48">
             <Pie 

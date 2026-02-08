@@ -45,7 +45,7 @@ export default function CryptoTabs({ activeTab, onTabChange }: CryptoTabsProps) 
   return (
     // min-w-0 ensures this component doesn't force the parent width to expand
     <div className="sticky top-24 z-30 mb-6 w-full min-w-0">
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-pearto-card dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden transition-colors duration-300">
         
         <nav 
           ref={scrollRef}
@@ -68,7 +68,7 @@ export default function CryptoTabs({ activeTab, onTabChange }: CryptoTabsProps) 
                   /* DESKTOP (lg): natural width, horizontal row */
                   lg:w-auto lg:flex-row lg:px-4 lg:py-2.5 lg:gap-2
                   ${isActive
-                    ? 'bg-emerald-600 text-white shadow-md'
+                    ? 'bg-emerald-600 dark:bg-pearto-pink text-white shadow-md'
                     : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
                   }
                   rounded-lg font-bold

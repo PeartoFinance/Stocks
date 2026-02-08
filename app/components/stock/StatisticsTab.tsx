@@ -93,7 +93,7 @@ export default function StatisticsTab({ stock }: StatisticsTabProps) {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="flex items-center gap-3 text-slate-500">
+        <div className="flex items-center gap-3 text-slate-500 dark:text-pearto-gray transition-colors duration-300">
           <Loader2 className="h-6 w-6 animate-spin" />
           <span>Loading statistics...</span>
         </div>
@@ -104,11 +104,11 @@ export default function StatisticsTab({ stock }: StatisticsTabProps) {
   if (error && !statistics) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="text-center text-slate-500">
+        <div className="text-center text-slate-500 dark:text-pearto-gray transition-colors duration-300">
           <p className="mb-2">{error}</p>
           <button 
             onClick={() => window.location.reload()} 
-            className="text-blue-600 hover:text-blue-500 text-sm"
+            className="text-blue-600 hover:text-blue-500 text-sm transition-colors duration-300"
           >
             Try again
           </button>
@@ -168,8 +168,8 @@ export default function StatisticsTab({ stock }: StatisticsTabProps) {
   return (
     <div className="space-y-6">
       {/* Valuation Metrics */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 transition-colors duration-300">
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
           <PieChart className="h-5 w-5 text-blue-500" />
           Valuation Metrics
         </h3>
@@ -181,8 +181,8 @@ export default function StatisticsTab({ stock }: StatisticsTabProps) {
       </div>
 
       {/* Trading Metrics */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 transition-colors duration-300">
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
           <BarChart3 className="h-5 w-5 text-green-500" />
           Trading Information
         </h3>
@@ -194,8 +194,8 @@ export default function StatisticsTab({ stock }: StatisticsTabProps) {
       </div>
 
       {/* Performance Metrics */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 transition-colors duration-300">
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
           <Activity className="h-5 w-5 text-purple-500" />
           Performance Analysis
         </h3>
@@ -207,37 +207,37 @@ export default function StatisticsTab({ stock }: StatisticsTabProps) {
       </div>
 
       {/* Additional Statistics */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 transition-colors duration-300">
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 transition-colors duration-300">
           Additional Statistics
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-3">
-            <h4 className="font-medium text-slate-700 dark:text-slate-300">Company Information</h4>
+            <h4 className="font-medium text-slate-700 dark:text-slate-300 transition-colors duration-300">Company Information</h4>
             {[
               { label: 'Sector', value: stock.sector || '-' },
               { label: 'Industry', value: stock.industry || '-' },
               { label: 'Symbol', value: data.symbol },
               { label: 'Current Price', value: `$${formatNumber(stock.price)}` },
             ].map((item, i) => (
-              <div key={i} className="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800">
-                <span className="text-sm text-slate-500 dark:text-slate-400">{item.label}</span>
-                <span className="text-sm font-medium text-slate-900 dark:text-white">{item.value}</span>
+              <div key={i} className="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800 transition-colors duration-300">
+                <span className="text-sm text-slate-500 dark:text-slate-400 transition-colors duration-300">{item.label}</span>
+                <span className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">{item.value}</span>
               </div>
             ))}
           </div>
           
           <div className="space-y-3">
-            <h4 className="font-medium text-slate-700 dark:text-slate-300">Risk Metrics</h4>
+            <h4 className="font-medium text-slate-700 dark:text-slate-300 transition-colors duration-300">Risk Metrics</h4>
             {[
               { label: 'Beta (5Y Monthly)', value: formatNumber(data.beta) },
               { label: 'Volatility', value: data.beta ? `${(data.beta * 15).toFixed(1)}%` : '-' },
               { label: 'Risk Level', value: data.beta ? (data.beta > 1.5 ? 'High' : data.beta > 1 ? 'Medium' : 'Low') : '-' },
               { label: 'Market Correlation', value: data.beta ? (data.beta > 1 ? 'High' : 'Moderate') : '-' },
             ].map((item, i) => (
-              <div key={i} className="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800">
-                <span className="text-sm text-slate-500 dark:text-slate-400">{item.label}</span>
-                <span className="text-sm font-medium text-slate-900 dark:text-white">{item.value}</span>
+              <div key={i} className="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800 transition-colors duration-300">
+                <span className="text-sm text-slate-500 dark:text-slate-400 transition-colors duration-300">{item.label}</span>
+                <span className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">{item.value}</span>
               </div>
             ))}
           </div>

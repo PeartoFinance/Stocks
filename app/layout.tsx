@@ -4,6 +4,7 @@ import './globals.css';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
 import { CountryProvider } from './context/CountryContext';
+import { ThemeProvider } from './context/ThemeContext';
 import LayoutWrapper from './components/layoutWrapper';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -16,15 +17,17 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${inter.className} antialiased bg-gray-50`}>
-        <AuthProvider>
-          <CountryProvider>
-            <LayoutWrapper>
-              {children}
-            </LayoutWrapper>
-            <Toaster position="top-right" />
-          </CountryProvider>
-        </AuthProvider>
+      <body className={`${inter.className} antialiased`}>
+        <ThemeProvider>
+          <AuthProvider>
+            <CountryProvider>
+              <LayoutWrapper>
+                {children}
+              </LayoutWrapper>
+              <Toaster position="top-right" />
+            </CountryProvider>
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

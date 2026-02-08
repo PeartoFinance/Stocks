@@ -113,7 +113,7 @@ export default function ETFHoldingsPage() {
   const concentration = getConcentrationLevel();
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-pearto-blockchain dark:bg-pearto-surface">
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <motion.div
@@ -124,12 +124,12 @@ export default function ETFHoldingsPage() {
         >
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">{selectedETF.symbol} Holdings</h1>
-              <p className="text-gray-600 mt-2">{selectedETF.name}</p>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna">{selectedETF.symbol} Holdings</h1>
+              <p className="text-gray-600 dark:text-pearto-cloud dark:text-pearto-cloud mt-2">{selectedETF.name}</p>
             </div>
             <div className="text-right">
-              <p className="text-sm text-gray-500">Total Holdings</p>
-              <p className="text-2xl font-bold text-gray-900">{selectedETF.totalHoldings}</p>
+              <p className="text-sm text-gray-500 dark:text-pearto-gray dark:text-pearto-gray">Total Holdings</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna">{selectedETF.totalHoldings}</p>
             </div>
           </div>
         </motion.div>
@@ -140,21 +140,21 @@ export default function ETFHoldingsPage() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8"
         >
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <div className="bg-white dark:bg-pearto-card dark:bg-pearto-card rounded-xl p-6 border border-gray-200 dark:border-pearto-border dark:border-pearto-border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Total Assets</p>
-                <p className="text-2xl font-bold text-gray-900">{selectedETF.totalAssets}</p>
+                <p className="text-sm text-gray-600 dark:text-pearto-cloud dark:text-pearto-cloud">Total Assets</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna">{selectedETF.totalAssets}</p>
               </div>
               <DollarSign className="h-8 w-8 text-blue-600" />
             </div>
           </div>
 
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <div className="bg-white dark:bg-pearto-card dark:bg-pearto-card rounded-xl p-6 border border-gray-200 dark:border-pearto-border dark:border-pearto-border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Top 10 Weight</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-sm text-gray-600 dark:text-pearto-cloud dark:text-pearto-cloud">Top 10 Weight</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna">
                   {holdings.slice(0, 10).reduce((sum, holding) => sum + holding.weight, 0).toFixed(1)}%
                 </p>
               </div>
@@ -162,10 +162,10 @@ export default function ETFHoldingsPage() {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <div className="bg-white dark:bg-pearto-card dark:bg-pearto-card rounded-xl p-6 border border-gray-200 dark:border-pearto-border dark:border-pearto-border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Concentration</p>
+                <p className="text-sm text-gray-600 dark:text-pearto-cloud dark:text-pearto-cloud">Concentration</p>
                 <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${concentration.bg} ${concentration.color}`}>
                   {concentration.level}
                 </span>
@@ -174,11 +174,11 @@ export default function ETFHoldingsPage() {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <div className="bg-white dark:bg-pearto-card dark:bg-pearto-card rounded-xl p-6 border border-gray-200 dark:border-pearto-border dark:border-pearto-border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Sectors</p>
-                <p className="text-2xl font-bold text-gray-900">{Object.keys(sectorAllocation).length}</p>
+                <p className="text-sm text-gray-600 dark:text-pearto-cloud dark:text-pearto-cloud">Sectors</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna">{Object.keys(sectorAllocation).length}</p>
               </div>
               <Building2 className="h-8 w-8 text-orange-600" />
             </div>
@@ -191,11 +191,11 @@ export default function ETFHoldingsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6"
+              className="bg-white dark:bg-pearto-card dark:bg-pearto-card rounded-xl shadow-sm border border-gray-200 dark:border-pearto-border dark:border-pearto-border p-6 mb-6"
             >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Search Holdings</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-pearto-cloud dark:text-pearto-cloud mb-2">Search Holdings</label>
                   <div className="relative">
                     <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                     <input
@@ -203,17 +203,17 @@ export default function ETFHoldingsPage() {
                       placeholder="Search by symbol or company name..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-pearto-border dark:border-pearto-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Filter by Sector</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-pearto-cloud dark:text-pearto-cloud mb-2">Filter by Sector</label>
                   <select
                     value={sectorFilter}
                     onChange={(e) => setSectorFilter(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-pearto-border dark:border-pearto-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option value="all">All Sectors</option>
                     {Object.keys(sectorAllocation).map(sector => (
@@ -228,10 +228,10 @@ export default function ETFHoldingsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden"
+              className="bg-white dark:bg-pearto-card dark:bg-pearto-card rounded-xl shadow-sm border border-gray-200 dark:border-pearto-border dark:border-pearto-border overflow-hidden"
             >
-              <div className="px-6 py-4 border-b border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900">
+              <div className="px-6 py-4 border-b border-gray-200 dark:border-pearto-border dark:border-pearto-border">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna">
                   Top Holdings ({filteredHoldings.length} of {holdings.length})
                 </h3>
               </div>
@@ -242,34 +242,34 @@ export default function ETFHoldingsPage() {
                 </div>
               ) : (
                 <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+                  <table className="min-w-full divide-y divide-gray-200 dark:divide-pearto-border dark:divide-pearto-border">
+                    <thead className="bg-gray-50 dark:bg-pearto-blockchain dark:bg-pearto-surface">
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Weight</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Market Value</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Change</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sector</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-pearto-gray dark:text-pearto-gray uppercase tracking-wider">Company</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-pearto-gray dark:text-pearto-gray uppercase tracking-wider">Weight</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-pearto-gray dark:text-pearto-gray uppercase tracking-wider">Market Value</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-pearto-gray dark:text-pearto-gray uppercase tracking-wider">Change</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-pearto-gray dark:text-pearto-gray uppercase tracking-wider">Sector</th>
                       </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody className="bg-white dark:bg-pearto-card dark:bg-pearto-card divide-y divide-gray-200 dark:divide-pearto-border dark:divide-pearto-border">
                       {filteredHoldings.map((holding, index) => (
                         <motion.tr
                           key={holding.symbol}
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.3, delay: index * 0.03 }}
-                          className="hover:bg-gray-50 transition-colors"
+                          className="hover:bg-gray-50 dark:bg-pearto-blockchain dark:bg-pearto-surface transition-colors"
                         >
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div>
-                              <div className="text-sm font-medium text-gray-900">{holding.symbol}</div>
-                              <div className="text-sm text-gray-500">{holding.name}</div>
+                              <div className="text-sm font-medium text-gray-900 dark:text-pearto-luna dark:text-pearto-luna">{holding.symbol}</div>
+                              <div className="text-sm text-gray-500 dark:text-pearto-gray dark:text-pearto-gray">{holding.name}</div>
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center space-x-2">
-                              <div className="text-sm font-medium text-gray-900">{holding.weight.toFixed(2)}%</div>
+                              <div className="text-sm font-medium text-gray-900 dark:text-pearto-luna dark:text-pearto-luna">{holding.weight.toFixed(2)}%</div>
                               <div className="w-16 bg-gray-200 rounded-full h-2">
                                 <div
                                   className="bg-blue-600 h-2 rounded-full"
@@ -279,7 +279,7 @@ export default function ETFHoldingsPage() {
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900">{holding.marketValue}</div>
+                            <div className="text-sm text-gray-900 dark:text-pearto-luna dark:text-pearto-luna">{holding.marketValue}</div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className={`flex items-center space-x-1 ${holding.changePercent >= 0 ? 'text-green-600' : 'text-red-600'}`}>
@@ -290,7 +290,7 @@ export default function ETFHoldingsPage() {
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-pearto-surface dark:bg-pearto-surface text-gray-800">
                               {holding.sector}
                             </span>
                           </td>
@@ -308,16 +308,16 @@ export default function ETFHoldingsPage() {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="bg-white rounded-xl shadow-sm border border-gray-200 p-6"
+              className="bg-white dark:bg-pearto-card dark:bg-pearto-card rounded-xl shadow-sm border border-gray-200 dark:border-pearto-border dark:border-pearto-border p-6"
             >
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Sector Allocation</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna mb-4">Sector Allocation</h3>
               <div className="space-y-4">
                 {topSectors.map(([sector, weight], index) => (
                   <div key={sector} className="flex items-center justify-between">
                     <div className="flex-1">
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-sm font-medium text-gray-900">{sector}</span>
-                        <span className="text-sm text-gray-600">{weight.toFixed(1)}%</span>
+                        <span className="text-sm font-medium text-gray-900 dark:text-pearto-luna dark:text-pearto-luna">{sector}</span>
+                        <span className="text-sm text-gray-600 dark:text-pearto-cloud dark:text-pearto-cloud">{weight.toFixed(1)}%</span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
                         <motion.div
@@ -337,23 +337,23 @@ export default function ETFHoldingsPage() {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.5 }}
-              className="bg-white rounded-xl shadow-sm border border-gray-200 p-6"
+              className="bg-white dark:bg-pearto-card dark:bg-pearto-card rounded-xl shadow-sm border border-gray-200 dark:border-pearto-border dark:border-pearto-border p-6"
             >
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Geographic Allocation</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna mb-4">Geographic Allocation</h3>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
                     <MapPin className="h-4 w-4 text-blue-600" />
-                    <span className="text-sm font-medium text-gray-900">United States</span>
+                    <span className="text-sm font-medium text-gray-900 dark:text-pearto-luna dark:text-pearto-luna">United States</span>
                   </div>
-                  <span className="text-sm text-gray-600">98.5%</span>
+                  <span className="text-sm text-gray-600 dark:text-pearto-cloud dark:text-pearto-cloud">98.5%</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
                     <MapPin className="h-4 w-4 text-green-600" />
-                    <span className="text-sm font-medium text-gray-900">International</span>
+                    <span className="text-sm font-medium text-gray-900 dark:text-pearto-luna dark:text-pearto-luna">International</span>
                   </div>
-                  <span className="text-sm text-gray-600">1.5%</span>
+                  <span className="text-sm text-gray-600 dark:text-pearto-cloud dark:text-pearto-cloud">1.5%</span>
                 </div>
               </div>
             </motion.div>
@@ -362,14 +362,14 @@ export default function ETFHoldingsPage() {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.6 }}
-              className="bg-white rounded-xl shadow-sm border border-gray-200 p-6"
+              className="bg-white dark:bg-pearto-card dark:bg-pearto-card rounded-xl shadow-sm border border-gray-200 dark:border-pearto-border dark:border-pearto-border p-6"
             >
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Data Info</h3>
-              <div className="space-y-2 text-sm text-gray-600">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna mb-4">Data Info</h3>
+              <div className="space-y-2 text-sm text-gray-600 dark:text-pearto-cloud dark:text-pearto-cloud">
                 <p><strong>Last Updated:</strong> {selectedETF.lastUpdated}</p>
                 <p><strong>Frequency:</strong> Daily</p>
                 <p><strong>Source:</strong> Fund Company</p>
-                <p className="text-xs text-gray-500 mt-3">
+                <p className="text-xs text-gray-500 dark:text-pearto-gray dark:text-pearto-gray mt-3">
                   Holdings data is updated daily and represents the most recent portfolio information available.
                 </p>
               </div>
