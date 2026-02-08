@@ -112,13 +112,13 @@ export const worldIndicesService = {
     try {
       const response = await apiRequest<WorldIndex[]>('/market/indices');
       console.log('Raw indices from backend:', response);
-      
+
       // Group indices by country code
-      const americas = response.filter(idx => idx.countryCode === 'US' || 
+      const americas = response.filter(idx => idx.countryCode === 'US' ||
         ['SPY', 'DIA', 'IXIC', 'QQQ', 'IWM'].includes(idx.symbol));
-      const europe = response.filter(idx => idx.countryCode === 'DE' || idx.countryCode === 'GB' || idx.countryCode === 'FR' || 
+      const europe = response.filter(idx => idx.countryCode === 'DE' || idx.countryCode === 'GB' || idx.countryCode === 'FR' ||
         ['DAX', 'FTSE', 'CAC', 'STOXX', 'SMI'].includes(idx.symbol));
-      const asiaPacific = response.filter(idx => idx.countryCode === 'JP' || idx.countryCode === 'HK' || idx.countryCode === 'AU' || 
+      const asiaPacific = response.filter(idx => idx.countryCode === 'JP' || idx.countryCode === 'HK' || idx.countryCode === 'AU' ||
         ['Nikkei', 'HSI', 'ASX', 'N225', 'NKY'].includes(idx.symbol));
 
       console.log('Filtered results:', { americas: americas.length, europe: europe.length, asiaPacific: asiaPacific.length });
@@ -166,7 +166,7 @@ export const worldIndicesService = {
   async getSectors(): Promise<SectorData[]> {
     try {
       const response = await apiRequest<{ sectors: BackendSectorData[] }>('/market/sector-analysis');
-      
+
       // Transform API response to match expected interface
       return response.sectors.map(sector => ({
         sector: sector.sector,
@@ -195,7 +195,7 @@ export const worldIndicesService = {
       const cryptoModule = await import('./cryptoService');
       const cryptoService = cryptoModule.cryptoService || cryptoModule.default;
       const cryptoData = await cryptoService.getMarkets({ limit: 10 }) as any[];
-      
+
       return cryptoData.map((crypto: any) => ({
         symbol: crypto.symbol || crypto.id,
         name: crypto.name || crypto.name,
