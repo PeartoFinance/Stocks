@@ -87,7 +87,7 @@ export default function ETFScreener() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-pearto-blockchain">
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col xl:flex-row gap-8">
           {/* Main Content */}
@@ -95,17 +95,17 @@ export default function ETFScreener() {
             {/* Header */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">ETF Screener</h1>
-                <p className="text-gray-600 mt-2">Find ETFs that match your investment criteria</p>
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-pearto-luna">ETF Screener</h1>
+                <p className="text-gray-600 dark:text-pearto-cloud mt-2">Find ETFs that match your investment criteria</p>
               </div>
             </div>
 
             {/* Search and Filters */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+            <div className="bg-white dark:bg-pearto-card rounded-xl shadow-sm border border-gray-200 dark:border-pearto-border p-6 mb-8">
               <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
                 {/* Search */}
                 <div className="lg:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Search ETFs</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-pearto-cloud mb-2">Search ETFs</label>
                   <div className="relative">
                     <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                     <input
@@ -113,18 +113,18 @@ export default function ETFScreener() {
                       placeholder="Search by symbol or name..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-pearto-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
                 </div>
 
                 {/* Category Filter */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-pearto-cloud mb-2">Category</label>
                   <select
                     value={filters.category}
                     onChange={(e) => setFilters({ ...filters, category: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-pearto-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option value="all">All Categories</option>
                     <option value="Technology">Technology</option>
@@ -139,26 +139,26 @@ export default function ETFScreener() {
 
                 {/* Min AUM */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Min AUM (B)</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-pearto-cloud mb-2">Min AUM (B)</label>
                   <input
                     type="number"
                     placeholder="e.g. 1"
                     value={filters.minAUM}
                     onChange={(e) => setFilters({ ...filters, minAUM: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-pearto-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
 
                 {/* Max Expense Ratio */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Max Exp Ratio (%)</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-pearto-cloud mb-2">Max Exp Ratio (%)</label>
                   <input
                     type="number"
                     step="0.01"
                     placeholder="e.g. 0.5"
                     value={filters.maxExpenseRatio}
                     onChange={(e) => setFilters({ ...filters, maxExpenseRatio: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-pearto-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
               </div>
@@ -166,21 +166,21 @@ export default function ETFScreener() {
 
             {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-              <div className="bg-white rounded-xl p-6 border border-gray-200">
+              <div className="bg-white dark:bg-pearto-card rounded-xl p-6 border border-gray-200 dark:border-pearto-border">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600">Total ETFs</p>
-                    <p className="text-2xl font-bold text-gray-900">{filteredETFs.length}</p>
+                    <p className="text-sm text-gray-600 dark:text-pearto-cloud">Total ETFs</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-pearto-luna">{filteredETFs.length}</p>
                   </div>
                   <BarChart3 className="h-8 w-8 text-blue-600" />
                 </div>
               </div>
 
-              <div className="bg-white rounded-xl p-6 border border-gray-200">
+              <div className="bg-white dark:bg-pearto-card rounded-xl p-6 border border-gray-200 dark:border-pearto-border">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600">Avg Expense Ratio</p>
-                    <p className="text-2xl font-bold text-gray-900">
+                    <p className="text-sm text-gray-600 dark:text-pearto-cloud">Avg Expense Ratio</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-pearto-luna">
                       {(filteredETFs.reduce((acc, etf) => acc + (etf.expenseRatio || 0), 0) / filteredETFs.length || 0).toFixed(2)}%
                     </p>
                   </div>
@@ -188,11 +188,11 @@ export default function ETFScreener() {
                 </div>
               </div>
 
-              <div className="bg-white rounded-xl p-6 border border-gray-200">
+              <div className="bg-white dark:bg-pearto-card rounded-xl p-6 border border-gray-200 dark:border-pearto-border">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600">Avg Yield</p>
-                    <p className="text-2xl font-bold text-gray-900">
+                    <p className="text-sm text-gray-600 dark:text-pearto-cloud">Avg Yield</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-pearto-luna">
                       {(filteredETFs.reduce((acc, etf) => acc + (etf.yield || 0), 0) / filteredETFs.length || 0).toFixed(1)}%
                     </p>
                   </div>
@@ -200,11 +200,11 @@ export default function ETFScreener() {
                 </div>
               </div>
 
-              <div className="bg-white rounded-xl p-6 border border-gray-200">
+              <div className="bg-white dark:bg-pearto-card rounded-xl p-6 border border-gray-200 dark:border-pearto-border">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600">Total AUM</p>
-                    <p className="text-2xl font-bold text-gray-900">
+                    <p className="text-sm text-gray-600 dark:text-pearto-cloud">Total AUM</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-pearto-luna">
                       ${calculateTotalAUM()}T
                     </p>
                   </div>
@@ -214,14 +214,14 @@ export default function ETFScreener() {
             </div>
 
             {/* ETF Table */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-              <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-900">
+            <div className="bg-white dark:bg-pearto-card rounded-xl shadow-sm border border-gray-200 dark:border-pearto-border overflow-hidden">
+              <div className="px-6 py-4 border-b border-gray-200 dark:border-pearto-border flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-pearto-luna">
                   {isLoading ? 'Loading...' : `${filteredETFs.length} ETFs Found`}
                 </h3>
                 <div className="flex items-center space-x-2">
                   <Filter className="h-4 w-4 text-gray-400" />
-                  <span className="text-sm text-gray-600">Filters applied</span>
+                  <span className="text-sm text-gray-600 dark:text-pearto-cloud">Filters applied</span>
                 </div>
               </div>
 
@@ -231,36 +231,36 @@ export default function ETFScreener() {
                 </div>
               ) : (
                 <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+                  <table className="min-w-full divide-y divide-gray-200 dark:divide-pearto-border">
+                    <thead className="bg-gray-50 dark:bg-pearto-blockchain">
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ETF</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Change</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Volume</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">AUM</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Exp Ratio</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Yield</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-pearto-gray uppercase tracking-wider">ETF</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-pearto-gray uppercase tracking-wider">Price</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-pearto-gray uppercase tracking-wider">Change</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-pearto-gray uppercase tracking-wider">Volume</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-pearto-gray uppercase tracking-wider">AUM</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-pearto-gray uppercase tracking-wider">Exp Ratio</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-pearto-gray uppercase tracking-wider">Yield</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-pearto-gray uppercase tracking-wider">Category</th>
                       </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody className="bg-white dark:bg-pearto-card divide-y divide-gray-200 dark:divide-pearto-border">
                       {filteredETFs.map((etf, index) => (
                         <motion.tr
                           key={etf.symbol}
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.3, delay: index * 0.05 }}
-                          className="hover:bg-gray-50 transition-colors"
+                          className="hover:bg-gray-50 dark:bg-pearto-blockchain transition-colors"
                         >
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div>
-                              <div className="text-sm font-medium text-gray-900">{etf.symbol}</div>
-                              <div className="text-sm text-gray-500">{etf.name}</div>
+                              <div className="text-sm font-medium text-gray-900 dark:text-pearto-luna">{etf.symbol}</div>
+                              <div className="text-sm text-gray-500 dark:text-pearto-gray">{etf.name}</div>
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm font-medium text-gray-900">${etf.price?.toFixed(2) || 'N/A'}</div>
+                            <div className="text-sm font-medium text-gray-900 dark:text-pearto-luna">${etf.price?.toFixed(2) || 'N/A'}</div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className={`flex items-center space-x-1 ${(etf.changePercent || 0) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
@@ -271,16 +271,16 @@ export default function ETFScreener() {
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900">{formatNumber(etf.volume)}</div>
+                            <div className="text-sm text-gray-900 dark:text-pearto-luna">{formatNumber(etf.volume)}</div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900">{etf.aum || 'N/A'}</div>
+                            <div className="text-sm text-gray-900 dark:text-pearto-luna">{etf.aum || 'N/A'}</div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900">{etf.expenseRatio?.toFixed(2) || 'N/A'}%</div>
+                            <div className="text-sm text-gray-900 dark:text-pearto-luna">{etf.expenseRatio?.toFixed(2) || 'N/A'}%</div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900">{etf.yield?.toFixed(1) || 'N/A'}%</div>
+                            <div className="text-sm text-gray-900 dark:text-pearto-luna">{etf.yield?.toFixed(1) || 'N/A'}%</div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">

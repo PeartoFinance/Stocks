@@ -39,19 +39,19 @@ export default function StockScreener() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-pearto-blockchain transition-colors duration-300">
       <div className="max-w-[2560px] mx-auto px-3 sm:px-4 lg:px-6 xl:px-8 2xl:px-12 py-4 sm:py-6 lg:py-8">
         
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 mb-4 sm:mb-6 lg:mb-8">
           <div>
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">Stock Market</h1>
-            <p className="text-sm sm:text-base text-gray-600 mt-1 sm:mt-2">Explore stocks, gainers, losers, and trending assets</p>
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-pearto-luna transition-colors duration-300">Stock Market</h1>
+            <p className="text-sm sm:text-base text-gray-600 dark:text-pearto-cloud mt-1 sm:mt-2 transition-colors duration-300">Explore stocks, gainers, losers, and trending assets</p>
           </div>
         </div>
 
         {/* Tab Navigation */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-1 mb-4 sm:mb-6">
+        <div className="bg-white dark:bg-pearto-card rounded-xl shadow-sm border border-gray-200 dark:border-pearto-border p-1 mb-4 sm:mb-6 transition-colors duration-300">
           <div className="flex flex-col sm:flex-row gap-1">
             {tabs.map((tab) => {
               const Icon = tab.icon;
@@ -61,16 +61,16 @@ export default function StockScreener() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all text-sm sm:text-base ${
+                  className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all duration-300 text-sm sm:text-base ${
                     isActive
-                      ? `bg-${tab.color}-600 text-white shadow-sm`
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                      ? `text-white shadow-sm`
+                      : 'text-gray-600 dark:text-pearto-cloud hover:text-gray-900 dark:hover:text-pearto-luna hover:bg-gray-50 dark:hover:bg-pearto-surface'
                   }`}
                   style={{
                     backgroundColor: isActive ? 
                       (tab.color === 'blue' ? '#2563eb' : 
-                       tab.color === 'green' ? '#16a34a' : 
-                       tab.color === 'red' ? '#dc2626' : 
+                       tab.color === 'green' ? '#0aff8d' : 
+                       tab.color === 'red' ? '#e02d75' : 
                        tab.color === 'purple' ? '#9333ea' : undefined) : undefined
                   }}
                 >

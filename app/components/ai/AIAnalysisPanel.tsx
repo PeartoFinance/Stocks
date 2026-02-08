@@ -341,7 +341,7 @@ Format your response with clean, readable markdown:
                             onClick={() => setIsExpanded(!isExpanded)}
                             className="h-7 w-7 flex items-center justify-center rounded-md hover:bg-purple-100 dark:hover:bg-purple-900/50 transition-colors"
                         >
-                            {isExpanded ? <ChevronUp className="w-3.5 h-3.5 text-gray-600 dark:text-gray-300" /> : <ChevronDown className="w-3.5 h-3.5 text-gray-600 dark:text-gray-300" />}
+                            {isExpanded ? <ChevronUp className="w-3.5 h-3.5 text-gray-600 dark:text-gray-300 transition-colors duration-300" /> : <ChevronDown className="w-3.5 h-3.5 text-gray-600 dark:text-gray-300 transition-colors duration-300" />}
                         </button>
                     </div>
                 </div>
@@ -375,13 +375,13 @@ Format your response with clean, readable markdown:
                         {isLoading && (
                             <div className="flex items-center gap-2 py-4">
                                 <Loader2 className="w-4 h-4 animate-spin text-purple-600" />
-                                <span className="text-sm text-gray-500">Analyzing data...</span>
+                                <span className="text-sm text-gray-500 dark:text-pearto-gray transition-colors duration-300">Analyzing data...</span>
                             </div>
                         )}
 
                         {/* Error State */}
                         {error && !isLoading && (
-                            <div className="text-sm text-red-600 dark:text-red-400 py-2">
+                            <div className="text-sm text-red-600 dark:text-red-400 py-2 transition-colors duration-300">
                                 {error}
                             </div>
                         )}
@@ -393,22 +393,22 @@ Format your response with clean, readable markdown:
                                     remarkPlugins={[remarkGfm]}
                                     components={{
                                         h1: ({ children }) => (
-                                            <h1 className="text-lg font-bold text-purple-800 dark:text-purple-300 mt-4 mb-3 pb-2 border-b-2 border-purple-200 dark:border-purple-800">
+                                            <h1 className="text-lg font-bold text-purple-800 dark:text-purple-300 mt-4 mb-3 pb-2 border-b-2 border-purple-200 dark:border-purple-800 transition-colors duration-300">
                                                 {children}
                                             </h1>
                                         ),
                                         h2: ({ children }) => (
-                                            <h2 className="text-base font-semibold text-purple-700 dark:text-purple-400 mt-5 mb-2 pb-1 border-b border-purple-100 dark:border-purple-900">
+                                            <h2 className="text-base font-semibold text-purple-700 dark:text-purple-400 mt-5 mb-2 pb-1 border-b border-purple-100 dark:border-purple-900 transition-colors duration-300">
                                                 {children}
                                             </h2>
                                         ),
                                         h3: ({ children }) => (
-                                            <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200 mt-4 mb-2">
+                                            <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200 mt-4 mb-2 transition-colors duration-300">
                                                 {children}
                                             </h3>
                                         ),
                                         p: ({ children }) => (
-                                            <p className="my-3 leading-relaxed text-gray-700 dark:text-gray-300">
+                                            <p className="my-3 leading-relaxed text-gray-700 dark:text-gray-300 transition-colors duration-300">
                                                 {children}
                                             </p>
                                         ),
@@ -423,60 +423,60 @@ Format your response with clean, readable markdown:
                                             </ol>
                                         ),
                                         li: ({ children }) => (
-                                            <li className="flex items-start gap-2 text-gray-700 dark:text-gray-300">
+                                            <li className="flex items-start gap-2 text-gray-700 dark:text-gray-300 transition-colors duration-300">
                                                 <span className="text-purple-500 mt-1.5 text-xs">●</span>
                                                 <span className="flex-1">{children}</span>
                                             </li>
                                         ),
                                         strong: ({ children }) => (
-                                            <strong className="font-semibold text-emerald-700 dark:text-emerald-400">
+                                            <strong className="font-semibold text-emerald-700 dark:text-emerald-400 transition-colors duration-300">
                                                 {children}
                                             </strong>
                                         ),
                                         em: ({ children }) => (
-                                            <em className="italic text-gray-600 dark:text-gray-400">
+                                            <em className="italic text-gray-600 dark:text-gray-400 transition-colors duration-300">
                                                 {children}
                                             </em>
                                         ),
                                         table: ({ children }) => (
-                                            <div className="my-4 overflow-x-auto rounded-lg border border-purple-200 dark:border-purple-800">
+                                            <div className="my-4 overflow-x-auto rounded-lg border border-purple-200 dark:border-purple-800 transition-colors duration-300">
                                                 <table className="w-full text-sm">
                                                     {children}
                                                 </table>
                                             </div>
                                         ),
                                         thead: ({ children }) => (
-                                            <thead className="bg-purple-50 dark:bg-purple-900/40">
+                                            <thead className="bg-purple-50 dark:bg-purple-900/40 transition-colors duration-300">
                                                 {children}
                                             </thead>
                                         ),
                                         th: ({ children }) => (
-                                            <th className="px-3 py-2 text-left font-semibold text-purple-800 dark:text-purple-300 border-b border-purple-200 dark:border-purple-800">
+                                            <th className="px-3 py-2 text-left font-semibold text-purple-800 dark:text-purple-300 border-b border-purple-200 dark:border-purple-800 transition-colors duration-300">
                                                 {children}
                                             </th>
                                         ),
                                         td: ({ children }) => (
-                                            <td className="px-3 py-2 border-b border-purple-100 dark:border-purple-900/50">
+                                            <td className="px-3 py-2 border-b border-purple-100 dark:border-purple-900/50 transition-colors duration-300">
                                                 {children}
                                             </td>
                                         ),
                                         hr: () => (
-                                            <hr className="my-4 border-t-2 border-purple-100 dark:border-purple-900" />
+                                            <hr className="my-4 border-t-2 border-purple-100 dark:border-purple-900 transition-colors duration-300" />
                                         ),
                                         code: ({ children, className }) => {
                                             const isInline = !className;
                                             return isInline ? (
-                                                <code className="px-1.5 py-0.5 rounded bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-300 text-xs font-mono">
+                                                <code className="px-1.5 py-0.5 rounded bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-300 text-xs font-mono transition-colors duration-300">
                                                     {children}
                                                 </code>
                                             ) : (
-                                                <code className="block p-3 rounded-lg bg-gray-100 dark:bg-gray-800 text-xs font-mono overflow-x-auto">
+                                                <code className="block p-3 rounded-lg bg-gray-100 dark:bg-gray-800 text-xs font-mono overflow-x-auto transition-colors duration-300">
                                                     {children}
                                                 </code>
                                             );
                                         },
                                         blockquote: ({ children }) => (
-                                            <blockquote className="my-3 pl-4 border-l-4 border-purple-300 dark:border-purple-700 bg-purple-50/50 dark:bg-purple-900/20 py-2 italic text-gray-600 dark:text-gray-400">
+                                            <blockquote className="my-3 pl-4 border-l-4 border-purple-300 dark:border-purple-700 bg-purple-50/50 dark:bg-purple-900/20 py-2 italic text-gray-600 dark:text-gray-400 transition-colors duration-300">
                                                 {children}
                                             </blockquote>
                                         ),
@@ -493,8 +493,8 @@ Format your response with clean, readable markdown:
                         {/* Empty State */}
                         {!analysis && !isLoading && !error && (
                             <div className="text-center py-4">
-                                <MessageSquare className="w-8 h-8 mx-auto text-purple-300 dark:text-purple-700 mb-2" />
-                                <p className="text-xs text-gray-500">
+                                <MessageSquare className="w-8 h-8 mx-auto text-purple-300 dark:text-purple-700 mb-2 transition-colors duration-300" />
+                                <p className="text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">
                                     Click refresh to get AI insights
                                 </p>
                             </div>
@@ -503,7 +503,7 @@ Format your response with clean, readable markdown:
 
                     {/* Disclaimer */}
                     {displayedText && !isTyping && (
-                        <p className="text-[9px] text-gray-400 mt-3 pt-2 border-t border-purple-100 dark:border-purple-900">
+                        <p className="text-[9px] text-gray-400 mt-3 pt-2 border-t border-purple-100 dark:border-purple-900 transition-colors duration-300">
                             ⚠️ AI analysis is for informational purposes only. Not financial advice.
                         </p>
                     )}

@@ -64,10 +64,10 @@ export default function NewsCarousel({ className = '' }: NewsCarouselProps) {
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-      case 'high': return 'bg-red-100 text-red-700 border-red-200';
+      case 'high': return 'bg-red-100 dark:bg-pearto-pink/10 text-red-700 border-red-200';
       case 'medium': return 'bg-yellow-100 text-yellow-700 border-yellow-200';
-      case 'low': return 'bg-green-100 text-green-700 border-green-200';
-      default: return 'bg-gray-100 text-gray-700 border-gray-200';
+      case 'low': return 'bg-green-100 dark:bg-pearto-green/10 text-green-700 border-green-200';
+      default: return 'bg-gray-100 dark:bg-pearto-surface text-gray-700 dark:text-pearto-cloud border-gray-200 dark:border-pearto-border';
     }
   };
 
@@ -99,10 +99,10 @@ export default function NewsCarousel({ className = '' }: NewsCarouselProps) {
 
   if (loading) {
     return (
-      <div className={`bg-white rounded-xl shadow-sm border border-gray-200 p-8 ${className}`}>
+      <div className={`bg-white dark:bg-pearto-card rounded-xl shadow-sm border border-gray-200 dark:border-pearto-border p-8 ${className}`}>
         <div className="flex items-center justify-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-          <span className="ml-3 text-gray-600">Loading news...</span>
+          <span className="ml-3 text-gray-600 dark:text-pearto-cloud transition-colors duration-300">Loading news...</span>
         </div>
       </div>
     );
@@ -110,11 +110,11 @@ export default function NewsCarousel({ className = '' }: NewsCarouselProps) {
 
   if (news.length === 0) {
     return (
-      <div className={`bg-white rounded-xl shadow-lg border border-gray-200 p-8 ${className}`}>
+      <div className={`bg-white dark:bg-pearto-card rounded-xl shadow-lg border border-gray-200 dark:border-pearto-border p-8 ${className}`}>
         <div className="text-center">
           <Newspaper className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-          <h3 className="text-lg font-semibold text-gray-700 mb-2">No News Available</h3>
-          <p className="text-sm text-gray-500 mb-4 max-w-md mx-auto">
+          <h3 className="text-lg font-semibold text-gray-700 dark:text-pearto-cloud mb-2 transition-colors duration-300">No News Available</h3>
+          <p className="text-sm text-gray-500 dark:text-pearto-gray mb-4 max-w-md mx-auto transition-colors duration-300">
             Market news will appear here as soon as it becomes available.
           </p>
         </div>
@@ -128,10 +128,10 @@ export default function NewsCarousel({ className = '' }: NewsCarouselProps) {
     <div className={`space-y-6 ${className}`}>
       <div className="flex items-center gap-2 mb-4">
         <Newspaper className="h-5 w-5 text-blue-600" />
-        <h2 className="text-xl font-bold text-gray-900">Latest News</h2>
+        <h2 className="text-xl font-bold text-gray-900 dark:text-pearto-luna transition-colors duration-300">Latest News</h2>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <div className="bg-white dark:bg-pearto-card rounded-xl shadow-sm border border-gray-200 dark:border-pearto-border overflow-hidden transition-colors duration-300">
         {currentNews && (
           <div className="relative">
             <div className="p-6">
@@ -151,16 +151,16 @@ export default function NewsCarousel({ className = '' }: NewsCarouselProps) {
                   {currentNews.impact.toUpperCase()}
                 </span>
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-gray-900 mb-2 leading-tight">
+                  <h3 className="font-semibold text-gray-900 dark:text-pearto-luna mb-2 leading-tight transition-colors duration-300">
                     {currentNews.title}
                   </h3>
-                  <p className="text-sm text-gray-600 line-clamp-3">
+                  <p className="text-sm text-gray-600 dark:text-pearto-cloud line-clamp-3 transition-colors duration-300">
                     {currentNews.summary}
                   </p>
                 </div>
               </div>
               
-              <div className="flex items-center justify-between text-xs text-gray-500">
+              <div className="flex items-center justify-between text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">
                 <div className="flex items-center gap-2">
                   <Clock className="h-3 w-3" />
                   <span>{formatTime(currentNews.time)}</span>
@@ -184,7 +184,7 @@ export default function NewsCarousel({ className = '' }: NewsCarouselProps) {
             {/* Navigation Controls */}
             <button
               onClick={prevSlide}
-              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-700 p-2 rounded-full shadow-md transition-all z-10"
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white dark:bg-pearto-card/90 hover:bg-white dark:bg-pearto-card text-gray-700 dark:text-pearto-cloud p-2 rounded-full shadow-md transition-all z-10"
               aria-label="Previous news"
             >
               <ChevronLeft className="h-4 w-4" />
@@ -192,7 +192,7 @@ export default function NewsCarousel({ className = '' }: NewsCarouselProps) {
             
             <button
               onClick={nextSlide}
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-700 p-2 rounded-full shadow-md transition-all z-10"
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white dark:bg-pearto-card/90 hover:bg-white dark:bg-pearto-card text-gray-700 dark:text-pearto-cloud p-2 rounded-full shadow-md transition-all z-10"
               aria-label="Next news"
             >
               <ChevronRight className="h-4 w-4" />
@@ -208,7 +208,7 @@ export default function NewsCarousel({ className = '' }: NewsCarouselProps) {
               onClick={() => setCurrentIndex(index)}
               className={`w-2 h-2 rounded-full transition-all ${
                 index === currentIndex
-                  ? 'bg-blue-600 w-8'
+                  ? 'bg-blue-600 dark:bg-pearto-blue w-8'
                   : 'bg-gray-300 hover:bg-gray-400'
               }`}
               aria-label={`Go to news ${index + 1}`}

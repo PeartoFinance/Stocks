@@ -132,9 +132,9 @@ export default function NewsPage() {
         <main className="p-8">
           <div className="flex items-center justify-center h-96">
             <div className="text-center">
-              <Activity className="h-12 w-12 text-blue-600 animate-spin mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-gray-900">Loading News</h2>
-              <p className="text-gray-600">Please wait while we fetch the latest financial news...</p>
+              <Activity className="h-12 w-12 text-blue-600 dark:text-blue-400 animate-spin mx-auto mb-4" />
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Loading News</h2>
+              <p className="text-gray-600 dark:text-slate-400">Please wait while we fetch the latest financial news...</p>
             </div>
           </div>
         </main>
@@ -143,7 +143,7 @@ export default function NewsPage() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
       <main className="p-8">
         {/* Header */}
         <motion.div
@@ -152,10 +152,10 @@ export default function NewsPage() {
           transition={{ duration: 0.6 }}
           className="mb-8"
         >
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent  dark:from-blue-300 dark:to-purple-400 mb-4">
             Financial News
           </h1>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-gray-600 dark:text-slate-400">
             Stay informed with the latest market news and financial insights
           </p>
         </motion.div>
@@ -167,40 +167,40 @@ export default function NewsPage() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8"
         >
-          <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
+          <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-lg border border-gray-100 dark:border-slate-700">
             <div className="flex items-center justify-between mb-4">
-              <Newspaper className="h-8 w-8 text-blue-600" />
-              <span className="text-sm text-gray-500">Articles</span>
+              <Newspaper className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+              <span className="text-sm text-gray-500 dark:text-slate-400">Articles</span>
             </div>
-            <p className="text-3xl font-bold text-gray-900">{stats.total}</p>
-            <p className="text-sm text-gray-600">Total available</p>
+            <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.total}</p>
+            <p className="text-sm text-gray-600 dark:text-slate-400">Total available</p>
           </div>
           
-          <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
+          <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-lg border border-gray-100 dark:border-slate-700">
             <div className="flex items-center justify-between mb-4">
-              <TrendingUp className="h-8 w-8 text-green-600" />
-              <span className="text-sm text-gray-500">Category</span>
+              <TrendingUp className="h-8 w-8 text-green-600 dark:text-green-400" />
+              <span className="text-sm text-gray-500 dark:text-slate-400">Category</span>
             </div>
-            <p className="text-2xl font-bold text-gray-900">{activeCategory}</p>
-            <p className="text-sm text-gray-600">Current filter</p>
+            <p className="text-2xl font-bold text-gray-900 dark:text-white">{activeCategory}</p>
+            <p className="text-sm text-gray-600 dark:text-slate-400">Current filter</p>
           </div>
           
-          <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
+          <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-lg border border-gray-100 dark:border-slate-700">
             <div className="flex items-center justify-between mb-4">
-              <Filter className="h-8 w-8 text-purple-600" />
-              <span className="text-sm text-gray-500">Filtered</span>
+              <Filter className="h-8 w-8 text-purple-600 dark:text-purple-400" />
+              <span className="text-sm text-gray-500 dark:text-slate-400">Filtered</span>
             </div>
-            <p className="text-3xl font-bold text-gray-900">{filteredNews.length}</p>
-            <p className="text-sm text-gray-600">Matching results</p>
+            <p className="text-3xl font-bold text-gray-900 dark:text-white">{filteredNews.length}</p>
+            <p className="text-sm text-gray-600 dark:text-slate-400">Matching results</p>
           </div>
           
-          <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
+          <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-lg border border-gray-100 dark:border-slate-700">
             <div className="flex items-center justify-between mb-4">
-              <Globe className="h-8 w-8 text-orange-600" />
-              <span className="text-sm text-gray-500">Sources</span>
+              <Globe className="h-8 w-8 text-orange-600 dark:text-orange-400" />
+              <span className="text-sm text-gray-500 dark:text-slate-400">Sources</span>
             </div>
-            <p className="text-3xl font-bold text-gray-900">{stats.sources}</p>
-            <p className="text-sm text-gray-600">Unique publishers</p>
+            <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.sources}</p>
+            <p className="text-sm text-gray-600 dark:text-slate-400">Unique publishers</p>
           </div>
         </motion.div>
 
@@ -209,7 +209,7 @@ export default function NewsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 mb-8"
+          className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-lg border border-gray-100 dark:border-slate-700 mb-8"
         >
           <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
             {/* Categories */}
@@ -220,8 +220,8 @@ export default function NewsPage() {
                   onClick={() => setActiveCategory(category)}
                   className={`px-3 py-1 rounded-full text-sm font-medium transition-all ${
                     activeCategory === category
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      ? 'bg-blue-600 dark:bg-blue-500 text-white'
+                      : 'bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-600'
                   }`}
                 >
                   {category}
@@ -237,7 +237,7 @@ export default function NewsPage() {
                 placeholder="Search news..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="pl-10 pr-4 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-slate-700 text-gray-900 dark:text-white"
               />
             </div>
           </div>
@@ -258,36 +258,36 @@ export default function NewsPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
-                className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all cursor-pointer"
+                className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-lg border border-gray-100 dark:border-slate-700 hover:shadow-xl transition-all cursor-pointer"
                 onClick={() => setSelectedNews(article)}
               >
                 <div className="flex justify-between items-start mb-4">
                   <div className="flex items-center space-x-2">
-                    <span className="text-sm font-medium text-blue-600">{article.source}</span>
-                    <span className="text-gray-300">•</span>
-                    <span className="text-sm text-gray-500">{formatTimeAgo(article.publishedAt)}</span>
+                    <span className="text-sm font-medium text-blue-600 dark:text-blue-400">{article.source}</span>
+                    <span className="text-gray-300 dark:text-slate-600">•</span>
+                    <span className="text-sm text-gray-500 dark:text-slate-400">{formatTimeAgo(article.publishedAt)}</span>
                   </div>
-                  <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-blue-50 text-blue-600">
+                  <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
                     {article.category}
                   </span>
                 </div>
 
-                <h2 className="text-xl font-bold text-gray-900 mb-3 hover:text-blue-600 transition-colors">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-3 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                   {article.title}
                 </h2>
 
-                <p className="text-gray-600 mb-4 line-clamp-2">
+                <p className="text-gray-600 dark:text-slate-400 mb-4 line-clamp-2">
                   {article.summary}
                 </p>
 
-                <div className="flex justify-between items-center pt-4 border-t border-gray-100">
-                  <div className="flex items-center space-x-4 text-sm text-gray-500">
+                <div className="flex justify-between items-center pt-4 border-t border-gray-100 dark:border-slate-700">
+                  <div className="flex items-center space-x-4 text-sm text-gray-500 dark:text-slate-400">
                     <span className="flex items-center space-x-1">
                       <Clock className="h-4 w-4" />
                       <span>Read article</span>
                     </span>
                   </div>
-                  <button className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 transition-colors">
+                  <button className="flex items-center space-x-1 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">
                     <span className="text-sm font-medium">Read More</span>
                     <ChevronRight className="h-4 w-4" />
                   </button>
@@ -304,54 +304,54 @@ export default function NewsPage() {
             className="space-y-6"
           >
             {/* Market Summary */}
-            <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">Market Summary</h3>
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-lg border border-gray-100 dark:border-slate-700">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Market Summary</h3>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">S&P 500</span>
-                  <span className="text-sm font-medium text-green-600">+0.85%</span>
+                  <span className="text-sm text-gray-600 dark:text-slate-400">S&P 500</span>
+                  <span className="text-sm font-medium text-green-600 dark:text-green-400">+0.85%</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">NASDAQ</span>
-                  <span className="text-sm font-medium text-green-600">+1.23%</span>
+                  <span className="text-sm text-gray-600 dark:text-slate-400">NASDAQ</span>
+                  <span className="text-sm font-medium text-green-600 dark:text-green-400">+1.23%</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Dow Jones</span>
-                  <span className="text-sm font-medium text-red-600">-0.34%</span>
+                  <span className="text-sm text-gray-600 dark:text-slate-400">Dow Jones</span>
+                  <span className="text-sm font-medium text-red-600 dark:text-red-400">-0.34%</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">VIX</span>
-                  <span className="text-sm font-medium text-gray-900">15.2</span>
+                  <span className="text-sm text-gray-600 dark:text-slate-400">VIX</span>
+                  <span className="text-sm font-medium text-gray-900 dark:text-white">15.2</span>
                 </div>
               </div>
             </div>
 
             {/* Trending Topics */}
-            <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">Trending Topics</h3>
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-lg border border-gray-100 dark:border-slate-700">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Trending Topics</h3>
               <div className="space-y-3">
                 {['Federal Reserve', 'AI Technology', 'Climate Investment', 'Cryptocurrency', 'Supply Chain'].map((topic, index) => (
                   <div key={topic} className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">{topic}</span>
-                    <span className="text-xs text-gray-400">#{index + 1}</span>
+                    <span className="text-sm text-gray-600 dark:text-slate-400">{topic}</span>
+                    <span className="text-xs text-gray-400 dark:text-slate-500">#{index + 1}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Resources */}
-            <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">Resources</h3>
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-lg border border-gray-100 dark:border-slate-700">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Resources</h3>
               <div className="space-y-3">
-                <button className="flex items-center space-x-2 text-sm text-blue-600 hover:text-blue-700 transition-colors w-full text-left">
+                <button className="flex items-center space-x-2 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors w-full text-left">
                   <BookOpen className="h-4 w-4" />
                   <span>Financial Education</span>
                 </button>
-                <button className="flex items-center space-x-2 text-sm text-blue-600 hover:text-blue-700 transition-colors w-full text-left">
+                <button className="flex items-center space-x-2 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors w-full text-left">
                   <Video className="h-4 w-4" />
                   <span>Market Analysis Videos</span>
                 </button>
-                <button className="flex items-center space-x-2 text-sm text-blue-600 hover:text-blue-700 transition-colors w-full text-left">
+                <button className="flex items-center space-x-2 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors w-full text-left">
                   <Newspaper className="h-4 w-4" />
                   <span>Newsletter Archive</span>
                 </button>
@@ -362,9 +362,9 @@ export default function NewsPage() {
 
         {filteredNews.length === 0 && (
           <div className="text-center py-16">
-            <Newspaper className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">No news found</h3>
-            <p className="text-gray-600">Try adjusting your search or filter criteria</p>
+            <Newspaper className="h-16 w-16 text-gray-300 dark:text-slate-600 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">No news found</h3>
+            <p className="text-gray-600 dark:text-slate-400">Try adjusting your search or filter criteria</p>
           </div>
         )}
       </main>

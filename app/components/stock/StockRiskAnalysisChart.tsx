@@ -114,12 +114,12 @@ export default function StockRiskAnalysisChart({ className = '', stock }: StockR
 
   const getRiskColor = (level: string) => {
     const colors = {
-      'Low': 'text-green-600',
+      'Low': 'text-green-600 dark:text-pearto-green',
       'Medium': 'text-yellow-600', 
-      'High': 'text-red-600',
+      'High': 'text-red-600 dark:text-pearto-pink',
       'Very High': 'text-purple-600'
     };
-    return colors[level as keyof typeof colors] || 'text-gray-600';
+    return colors[level as keyof typeof colors] || 'text-gray-600 dark:text-pearto-cloud';
   };
 
   const options = {
@@ -164,8 +164,8 @@ export default function StockRiskAnalysisChart({ className = '', stock }: StockR
   return (
     <div className={`bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-3 ${className}`}>
       <div className="mb-2">
-        <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-1">Risk Analysis</h3>
-        <p className="text-xs text-gray-600 dark:text-gray-400">
+        <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-1 transition-colors duration-300">Risk Analysis</h3>
+        <p className="text-xs text-gray-600 dark:text-gray-400 transition-colors duration-300">
           Based on {stock.symbol} metrics
         </p>
       </div>
@@ -182,35 +182,35 @@ export default function StockRiskAnalysisChart({ className = '', stock }: StockR
       </div>
       
       {/* Key Metrics - 3 rows */}
-      <div className="space-y-1.5 pt-2 border-t border-slate-200 dark:border-slate-700">
+      <div className="space-y-1.5 pt-2 border-t border-slate-200 dark:border-slate-700 transition-colors duration-300">
         <div className="flex items-center justify-between text-xs">
-          <span className="text-gray-600 dark:text-gray-400">Volatility</span>
+          <span className="text-gray-600 dark:text-gray-400 transition-colors duration-300">Volatility</span>
           <span className={`font-semibold ${
-            Math.abs(stock.changePercent || 0) < 2 ? 'text-green-600' :
+            Math.abs(stock.changePercent || 0) < 2 ? 'text-green-600 dark:text-pearto-green' :
             Math.abs(stock.changePercent || 0) < 5 ? 'text-yellow-600' :
-            Math.abs(stock.changePercent || 0) < 10 ? 'text-red-600' : 'text-purple-600'
+            Math.abs(stock.changePercent || 0) < 10 ? 'text-red-600 dark:text-pearto-pink' : 'text-purple-600'
           }`}>
             {Math.abs(stock.changePercent || 0).toFixed(2)}%
           </span>
         </div>
         
         <div className="flex items-center justify-between text-xs">
-          <span className="text-gray-600 dark:text-gray-400">P/E Ratio</span>
+          <span className="text-gray-600 dark:text-gray-400 transition-colors duration-300">P/E Ratio</span>
           <span className={`font-semibold ${
-            (stock.pe || 0) > 0 && (stock.pe || 0) < 15 ? 'text-green-600' :
+            (stock.pe || 0) > 0 && (stock.pe || 0) < 15 ? 'text-green-600 dark:text-pearto-green' :
             (stock.pe || 0) >= 15 && (stock.pe || 0) < 25 ? 'text-yellow-600' :
-            (stock.pe || 0) >= 25 && (stock.pe || 0) < 35 ? 'text-red-600' : 'text-purple-600'
+            (stock.pe || 0) >= 25 && (stock.pe || 0) < 35 ? 'text-red-600 dark:text-pearto-pink' : 'text-purple-600'
           }`}>
             {stock.pe ? stock.pe.toFixed(1) : 'N/A'}
           </span>
         </div>
         
         <div className="flex items-center justify-between text-xs">
-          <span className="text-gray-600 dark:text-gray-400">Market Cap</span>
+          <span className="text-gray-600 dark:text-gray-400 transition-colors duration-300">Market Cap</span>
           <span className={`font-semibold ${
-            stockMarketCap > 100000000000 ? 'text-green-600' :
+            stockMarketCap > 100000000000 ? 'text-green-600 dark:text-pearto-green' :
             stockMarketCap > 10000000000 ? 'text-yellow-600' :
-            stockMarketCap > 1000000000 ? 'text-red-600' : 'text-purple-600'
+            stockMarketCap > 1000000000 ? 'text-red-600 dark:text-pearto-pink' : 'text-purple-600'
           }`}>
             {stockMarketCap > 1000000000 
               ? `$${(stockMarketCap / 1000000000).toFixed(1)}B` 

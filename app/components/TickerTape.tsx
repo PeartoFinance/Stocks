@@ -74,8 +74,8 @@ export default function TickerTape() {
 
     if (error && tickerData.length === 0) {
         return (
-            <div className="bg-gray-100 text-gray-800 py-2 text-xs font-medium border-b border-gray-300">
-                <div className="flex items-center justify-center gap-2 text-gray-600">
+            <div className="bg-gray-100 dark:bg-pearto-surface text-gray-800 dark:text-pearto-cloud py-2 text-xs font-medium border-b border-gray-300 dark:border-pearto-border transition-colors duration-300">
+                <div className="flex items-center justify-center gap-2 text-gray-600 dark:text-pearto-gray">
                     <span>Market data unavailable</span>
                     <span className="text-xs">• Import data from admin panel</span>
                 </div>
@@ -85,23 +85,23 @@ export default function TickerTape() {
 
     if (loading && tickerData.length === 0) {
         return (
-            <div className="bg-gray-100 text-gray-800 py-2 text-xs font-medium border-b border-gray-300">
+            <div className="bg-gray-100 dark:bg-pearto-surface text-gray-800 dark:text-pearto-cloud py-2 text-xs font-medium border-b border-gray-300 dark:border-pearto-border transition-colors duration-300">
                 <div className="flex items-center justify-center gap-2">
                     <Loader2 className="animate-spin" size={12} />
-                    <span className="text-gray-600">Loading market data...</span>
+                    <span className="text-gray-600 dark:text-pearto-gray">Loading market data...</span>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="bg-gray-100 text-gray-800 py-2 text-xs font-medium overflow-hidden border-b border-gray-300">
+        <div className="bg-gray-100 dark:bg-pearto-surface text-gray-800 dark:text-pearto-cloud py-2 text-xs font-medium overflow-hidden border-b border-gray-300 dark:border-pearto-border transition-colors duration-300">
             <div className="flex items-center gap-8 animate-marquee hover:pause-animation">
                 {tickerData.map((ticker, index) => (
                     <div key={index} className="flex items-center gap-2 flex-shrink-0">
-                        <span className="text-gray-600">{ticker.symbol}</span>
+                        <span className="text-gray-600 dark:text-pearto-gray">{ticker.symbol}</span>
                         <span className="font-semibold">{ticker.value}</span>
-                        <span className={`flex items-center gap-0.5 ${ticker.up ? 'text-green-600' : 'text-red-600'}`}>
+                        <span className={`flex items-center gap-0.5 ${ticker.up ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'}`}>
                             {ticker.up ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
                             {ticker.change}
                         </span>
@@ -110,9 +110,9 @@ export default function TickerTape() {
 
                 {tickerData.map((ticker, index) => (
                     <div key={`dup-${index}`} className="flex items-center gap-2 flex-shrink-0">
-                        <span className="text-gray-600">{ticker.symbol}</span>
+                        <span className="text-gray-600 dark:text-pearto-gray">{ticker.symbol}</span>
                         <span className="font-semibold">{ticker.value}</span>
-                        <span className={`flex items-center gap-0.5 ${ticker.up ? 'text-green-600' : 'text-red-600'}`}>
+                        <span className={`flex items-center gap-0.5 ${ticker.up ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'}`}>
                             {ticker.up ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
                             {ticker.change}
                         </span>

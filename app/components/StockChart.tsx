@@ -11,6 +11,7 @@ import {
   Time
 } from 'lightweight-charts';
 import { HistoricalData } from '../types';
+import { useTheme } from '../context/ThemeContext';
 
 type ChartType = 'area' | 'candlestick' | 'line' | 'mountain';
 
@@ -27,6 +28,8 @@ interface StockChartProps {
 export default function StockChart({ data, compareData, isPositive, height = 400, chartType = 'area', color, showComparison = false }: StockChartProps) {
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
 
   useEffect(() => {
     if (!chartContainerRef.current || data.length === 0) return;
@@ -34,18 +37,18 @@ export default function StockChart({ data, compareData, isPositive, height = 400
     const chart = createChart(chartContainerRef.current, {
       layout: {
         background: { type: ColorType.Solid, color: 'transparent' },
-        textColor: '#6b7280',
+        textColor: isDark ? '#dadada' : '#6b7280',
         attributionLogo: false, 
       },
       width: chartContainerRef.current.clientWidth,
       height,
       grid: {
-        vertLines: { color: 'rgba(243, 244, 246, 0.5)' },
-        horzLines: { color: 'rgba(243, 244, 246, 0.5)' },
+        vertLines: { color: isDark ? 'rgba(44, 44, 44, 0.5)' : 'rgba(243, 244, 246, 0.5)' },
+        horzLines: { color: isDark ? 'rgba(44, 44, 44, 0.5)' : 'rgba(243, 244, 246, 0.5)' },
       },
       timeScale: {
-        borderColor: '#e5e7eb',
-        timeVisible: data.length > 0 && data[0].date.includes('T'), // Show time for minute data
+        borderColor: isDark ? '#2C2C2C' : '#e5e7eb',
+        timeVisible: data.length > 0 && data[0].date.includes('T'),
         secondsVisible: false,
       },
       rightPriceScale: {
@@ -62,9 +65,9 @@ export default function StockChart({ data, compareData, isPositive, height = 400
       return `rgba(${r}, ${g}, ${b}, ${alpha})`;
     };
 
-    const mainColor = color || (isPositive ? '#10b981' : '#ef4444');
-    const topGradient = color ? hexToRgba(color, 0.4) : (isPositive ? 'rgba(16, 185, 129, 0.4)' : 'rgba(239, 68, 68, 0.4)');
-    const bottomGradient = color ? hexToRgba(color, 0.05) : (isPositive ? 'rgba(16, 185, 129, 0.05)' : 'rgba(239, 68, 68, 0.05)');
+    const mainColor = color || (isDark ? (isPositive ? '#0aff8d' : '#e02d75') : (isPositive ? '#10b981' : '#ef4444'));
+    const topGradient = color ? hexToRgba(color, 0.4) : (isDark ? (isPositive ? 'rgba(10, 255, 141, 0.4)' : 'rgba(224, 45, 117, 0.4)') : (isPositive ? 'rgba(16, 185, 129, 0.4)' : 'rgba(239, 68, 68, 0.4)'));
+    const bottomGradient = color ? hexToRgba(color, 0.05) : (isDark ? (isPositive ? 'rgba(10, 255, 141, 0.05)' : 'rgba(224, 45, 117, 0.05)') : (isPositive ? 'rgba(16, 185, 129, 0.05)' : 'rgba(239, 68, 68, 0.05)'));
 
     const formatTime = (dateStr: string): Time => {
       if (dateStr.includes('T')) {
@@ -77,11 +80,11 @@ export default function StockChart({ data, compareData, isPositive, height = 400
 
     if (chartType === 'candlestick') {
       const series = chart.addSeries(CandlestickSeries, {
-        upColor: '#2563eb',
-        downColor: '#1d4ed8',
+        upColor: isDark ? '#0aff8d' : '#2563eb',
+        downColor: isDark ? '#e02d75' : '#1d4ed8',
         borderVisible: false,
-        wickUpColor: '#2563eb',
-        wickDownColor: '#1d4ed8',
+        wickUpColor: isDark ? '#0aff8d' : '#2563eb',
+        wickDownColor: isDark ? '#e02d75' : '#1d4ed8',
       });
       series.setData(data.map(item => ({
         time: formatTime(item.date),
@@ -91,14 +94,13 @@ export default function StockChart({ data, compareData, isPositive, height = 400
         close: item.close,
       })));
       
-      // Add comparison data if available
       if (showComparison && compareData && compareData.length > 0) {
         const compareSeries = chart.addSeries(CandlestickSeries, {
-          upColor: '#ea580c',
-          downColor: '#c2410c',
+          upColor: isDark ? '#00c2ff' : '#ea580c',
+          downColor: isDark ? '#92b2e5' : '#c2410c',
           borderVisible: false,
-          wickUpColor: '#ea580c',
-          wickDownColor: '#c2410c',
+          wickUpColor: isDark ? '#00c2ff' : '#ea580c',
+          wickDownColor: isDark ? '#92b2e5' : '#c2410c',
         });
         compareSeries.setData(compareData.map(item => ({
           time: formatTime(item.date),
@@ -111,7 +113,7 @@ export default function StockChart({ data, compareData, isPositive, height = 400
     } 
     else if (chartType === 'line') {
       const series = chart.addSeries(LineSeries, {
-        color: showComparison ? '#2563eb' : mainColor,
+        color: showComparison ? (isDark ? '#00c2ff' : '#2563eb') : mainColor,
         lineWidth: showComparison ? 3 : 2,
       });
       series.setData(data.map(item => ({ 
@@ -119,10 +121,9 @@ export default function StockChart({ data, compareData, isPositive, height = 400
         value: item.close 
       })));
       
-      // Add comparison line if available
       if (showComparison && compareData && compareData.length > 0) {
         const compareSeries = chart.addSeries(LineSeries, {
-          color: '#ea580c',
+          color: isDark ? '#ffc857' : '#ea580c',
           lineWidth: 3,
         });
         compareSeries.setData(compareData.map(item => ({ 
@@ -133,14 +134,14 @@ export default function StockChart({ data, compareData, isPositive, height = 400
     } 
     else {
       const isMountain = chartType === 'mountain';
-      const primaryColor = showComparison ? '#2563eb' : mainColor;
-      const primaryTopColor = showComparison ? 'rgba(37, 99, 235, 0.4)' : topGradient;
-      const primaryBottomColor = showComparison ? 'rgba(37, 99, 235, 0.05)' : bottomGradient;
+      const primaryColor = showComparison ? (isDark ? '#00c2ff' : '#2563eb') : mainColor;
+      const primaryTopColor = showComparison ? (isDark ? 'rgba(0, 194, 255, 0.4)' : 'rgba(37, 99, 235, 0.4)') : topGradient;
+      const primaryBottomColor = showComparison ? (isDark ? 'rgba(0, 194, 255, 0.05)' : 'rgba(37, 99, 235, 0.05)') : bottomGradient;
       
       const series = chart.addSeries(AreaSeries, {
         lineColor: primaryColor,
-        topColor: isMountain ? `rgba(37, 99, 235, 0.6)` : primaryTopColor,
-        bottomColor: isMountain ? 'rgba(37, 99, 235, 0)' : primaryBottomColor,
+        topColor: isMountain ? (isDark ? 'rgba(0, 194, 255, 0.6)' : 'rgba(37, 99, 235, 0.6)') : primaryTopColor,
+        bottomColor: isMountain ? (isDark ? 'rgba(0, 194, 255, 0)' : 'rgba(37, 99, 235, 0)') : primaryBottomColor,
         lineWidth: isMountain ? 3 : 2,
       });
       series.setData(data.map(item => ({ 
@@ -148,12 +149,11 @@ export default function StockChart({ data, compareData, isPositive, height = 400
         value: item.close 
       })));
       
-      // Add comparison area if available
       if (showComparison && compareData && compareData.length > 0) {
         const compareSeries = chart.addSeries(AreaSeries, {
-          lineColor: '#ea580c',
-          topColor: isMountain ? 'rgba(234, 88, 12, 0.6)' : 'rgba(234, 88, 12, 0.4)',
-          bottomColor: isMountain ? 'rgba(234, 88, 12, 0)' : 'rgba(234, 88, 12, 0.05)',
+          lineColor: isDark ? '#ffc857' : '#ea580c',
+          topColor: isMountain ? (isDark ? 'rgba(255, 200, 87, 0.6)' : 'rgba(234, 88, 12, 0.6)') : (isDark ? 'rgba(255, 200, 87, 0.4)' : 'rgba(234, 88, 12, 0.4)'),
+          bottomColor: isMountain ? (isDark ? 'rgba(255, 200, 87, 0)' : 'rgba(234, 88, 12, 0)') : (isDark ? 'rgba(255, 200, 87, 0.05)' : 'rgba(234, 88, 12, 0.05)'),
           lineWidth: isMountain ? 3 : 2,
         });
         compareSeries.setData(compareData.map(item => ({ 
@@ -178,7 +178,7 @@ export default function StockChart({ data, compareData, isPositive, height = 400
       resizeObserver.disconnect();
       chart.remove();
     };
-  }, [data, compareData, isPositive, height, chartType, color, showComparison]);
+  }, [data, compareData, isPositive, height, chartType, color, showComparison, isDark, theme]);
 
   return (
     <div className="w-full overflow-hidden relative">

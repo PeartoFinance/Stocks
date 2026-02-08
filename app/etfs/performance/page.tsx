@@ -103,7 +103,7 @@ export default function ETFPerformancePage() {
   const risk = getRiskLevel(currentPerf?.volatility || 0);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-pearto-blockchain dark:bg-pearto-surface">
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
@@ -115,14 +115,14 @@ export default function ETFPerformancePage() {
         >
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">{selectedETF.symbol} Performance</h1>
-              <p className="text-gray-600 mt-2">{selectedETF.name}</p>
-              <p className="text-sm text-gray-500">vs {selectedETF.benchmark}</p>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna">{selectedETF.symbol} Performance</h1>
+              <p className="text-gray-600 dark:text-pearto-cloud dark:text-pearto-cloud mt-2">{selectedETF.name}</p>
+              <p className="text-sm text-gray-500 dark:text-pearto-gray dark:text-pearto-gray">vs {selectedETF.benchmark}</p>
             </div>
             <div className="text-right">
-              <p className="text-sm text-gray-500">Current NAV</p>
+              <p className="text-sm text-gray-500 dark:text-pearto-gray dark:text-pearto-gray">Current NAV</p>
               <div className="flex items-center space-x-2">
-                <span className="text-2xl font-bold text-gray-900">${selectedETF.nav.toFixed(2)}</span>
+                <span className="text-2xl font-bold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna">${selectedETF.nav.toFixed(2)}</span>
                 <span className={`flex items-center space-x-1 ${getPerformanceColor(selectedETF.navChangePercent)}`}>
                   {selectedETF.navChangePercent >= 0 ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
                   <span className="text-sm font-medium">
@@ -141,30 +141,30 @@ export default function ETFPerformancePage() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8"
         >
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <div className="bg-white dark:bg-pearto-card dark:bg-pearto-card rounded-xl p-6 border border-gray-200 dark:border-pearto-border dark:border-pearto-border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Total Assets</p>
-                <p className="text-2xl font-bold text-gray-900">{selectedETF.aum}</p>
+                <p className="text-sm text-gray-600 dark:text-pearto-cloud dark:text-pearto-cloud">Total Assets</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna">{selectedETF.aum}</p>
               </div>
               <BarChart3 className="h-8 w-8 text-blue-600" />
             </div>
           </div>
           
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <div className="bg-white dark:bg-pearto-card dark:bg-pearto-card rounded-xl p-6 border border-gray-200 dark:border-pearto-border dark:border-pearto-border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Expense Ratio</p>
-                <p className="text-2xl font-bold text-gray-900">{selectedETF.expenseRatio}%</p>
+                <p className="text-sm text-gray-600 dark:text-pearto-cloud dark:text-pearto-cloud">Expense Ratio</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna">{selectedETF.expenseRatio}%</p>
               </div>
               <Target className="h-8 w-8 text-green-600" />
             </div>
           </div>
           
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <div className="bg-white dark:bg-pearto-card dark:bg-pearto-card rounded-xl p-6 border border-gray-200 dark:border-pearto-border dark:border-pearto-border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Risk Level</p>
+                <p className="text-sm text-gray-600 dark:text-pearto-cloud dark:text-pearto-cloud">Risk Level</p>
                 <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${risk.bg} ${risk.color}`}>
                   {risk.level}
                 </span>
@@ -173,11 +173,11 @@ export default function ETFPerformancePage() {
             </div>
           </div>
           
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <div className="bg-white dark:bg-pearto-card dark:bg-pearto-card rounded-xl p-6 border border-gray-200 dark:border-pearto-border dark:border-pearto-border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Sharpe Ratio</p>
-                <p className="text-2xl font-bold text-gray-900">{currentPerf?.sharpeRatio.toFixed(2) || '--'}</p>
+                <p className="text-sm text-gray-600 dark:text-pearto-cloud dark:text-pearto-cloud">Sharpe Ratio</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna">{currentPerf?.sharpeRatio.toFixed(2) || '--'}</p>
               </div>
               <Award className="h-8 w-8 text-orange-600" />
             </div>
@@ -191,10 +191,10 @@ export default function ETFPerformancePage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6"
+              className="bg-white dark:bg-pearto-card dark:bg-pearto-card rounded-xl shadow-sm border border-gray-200 dark:border-pearto-border dark:border-pearto-border overflow-hidden mb-6"
             >
-              <div className="px-6 py-4 border-b border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900">Performance vs Benchmark</h3>
+              <div className="px-6 py-4 border-b border-gray-200 dark:border-pearto-border dark:border-pearto-border">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna">Performance vs Benchmark</h3>
               </div>
 
               {isLoading ? (
@@ -203,28 +203,28 @@ export default function ETFPerformancePage() {
                 </div>
               ) : (
                 <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+                  <table className="min-w-full divide-y divide-gray-200 dark:divide-pearto-border dark:divide-pearto-border">
+                    <thead className="bg-gray-50 dark:bg-pearto-blockchain dark:bg-pearto-surface">
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Period</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ETF Return</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Benchmark</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Difference</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Volatility</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-pearto-gray dark:text-pearto-gray uppercase tracking-wider">Period</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-pearto-gray dark:text-pearto-gray uppercase tracking-wider">ETF Return</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-pearto-gray dark:text-pearto-gray uppercase tracking-wider">Benchmark</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-pearto-gray dark:text-pearto-gray uppercase tracking-wider">Difference</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-pearto-gray dark:text-pearto-gray uppercase tracking-wider">Volatility</th>
                       </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody className="bg-white dark:bg-pearto-card dark:bg-pearto-card divide-y divide-gray-200 dark:divide-pearto-border dark:divide-pearto-border">
                       {performanceData.map((perf, index) => (
                         <motion.tr
                           key={perf.period}
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.3, delay: index * 0.05 }}
-                          className={`hover:bg-gray-50 transition-colors ${perf.period === selectedPeriod ? 'bg-blue-50 border-blue-200' : ''}`}
+                          className={`hover:bg-gray-50 dark:bg-pearto-blockchain transition-colors ${perf.period === selectedPeriod ? 'bg-blue-50 border-blue-200' : ''}`}
                           onClick={() => setSelectedPeriod(perf.period)}
                         >
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm font-medium text-gray-900">{perf.period}</div>
+                            <div className="text-sm font-medium text-gray-900 dark:text-pearto-luna dark:text-pearto-luna">{perf.period}</div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className={`flex items-center space-x-1 ${getPerformanceColor(perf.etfReturn)}`}>
@@ -245,7 +245,7 @@ export default function ETFPerformancePage() {
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900">{perf.volatility.toFixed(1)}%</div>
+                            <div className="text-sm text-gray-900 dark:text-pearto-luna dark:text-pearto-luna">{perf.volatility.toFixed(1)}%</div>
                           </td>
                         </motion.tr>
                       ))}
@@ -260,13 +260,13 @@ export default function ETFPerformancePage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="bg-white rounded-xl shadow-sm border border-gray-200 p-6"
+              className="bg-white dark:bg-pearto-card dark:bg-pearto-card rounded-xl shadow-sm border border-gray-200 dark:border-pearto-border dark:border-pearto-border p-6"
             >
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Performance Chart</h3>
-              <div className="h-64 flex items-center justify-center bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna mb-4">Performance Chart</h3>
+              <div className="h-64 flex items-center justify-center bg-gray-50 dark:bg-pearto-blockchain dark:bg-pearto-surface rounded-lg border-2 border-dashed border-gray-300 dark:border-pearto-border dark:border-pearto-border">
                 <div className="text-center">
                   <BarChart3 className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-500 font-medium">Interactive Performance Chart</p>
+                  <p className="text-gray-500 dark:text-pearto-gray dark:text-pearto-gray font-medium">Interactive Performance Chart</p>
                   <p className="text-sm text-gray-400">Compare ETF vs Benchmark over time</p>
                 </div>
               </div>
@@ -280,9 +280,9 @@ export default function ETFPerformancePage() {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="bg-white rounded-xl shadow-sm border border-gray-200 p-6"
+              className="bg-white dark:bg-pearto-card dark:bg-pearto-card rounded-xl shadow-sm border border-gray-200 dark:border-pearto-border dark:border-pearto-border p-6"
             >
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Time Period</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna mb-4">Time Period</h3>
               <div className="grid grid-cols-3 gap-2">
                 {periods.map((period) => (
                   <button
@@ -305,24 +305,24 @@ export default function ETFPerformancePage() {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.5 }}
-              className="bg-white rounded-xl shadow-sm border border-gray-200 p-6"
+              className="bg-white dark:bg-pearto-card dark:bg-pearto-card rounded-xl shadow-sm border border-gray-200 dark:border-pearto-border dark:border-pearto-border p-6"
             >
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Risk Analysis</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna mb-4">Risk Analysis</h3>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-700">Standard Deviation</span>
-                  <span className="text-sm text-gray-900">{currentPerf?.volatility.toFixed(1)}%</span>
+                  <span className="text-sm font-medium text-gray-700 dark:text-pearto-cloud dark:text-pearto-cloud">Standard Deviation</span>
+                  <span className="text-sm text-gray-900 dark:text-pearto-luna dark:text-pearto-luna">{currentPerf?.volatility.toFixed(1)}%</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-700">Beta (vs Benchmark)</span>
-                  <span className="text-sm text-gray-900">0.99</span>
+                  <span className="text-sm font-medium text-gray-700 dark:text-pearto-cloud dark:text-pearto-cloud">Beta (vs Benchmark)</span>
+                  <span className="text-sm text-gray-900 dark:text-pearto-luna dark:text-pearto-luna">0.99</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-700">Tracking Error</span>
-                  <span className="text-sm text-gray-900">0.05%</span>
+                  <span className="text-sm font-medium text-gray-700 dark:text-pearto-cloud dark:text-pearto-cloud">Tracking Error</span>
+                  <span className="text-sm text-gray-900 dark:text-pearto-luna dark:text-pearto-luna">0.05%</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-700">Max Drawdown</span>
+                  <span className="text-sm font-medium text-gray-700 dark:text-pearto-cloud dark:text-pearto-cloud">Max Drawdown</span>
                   <span className="text-sm text-red-600">-12.3%</span>
                 </div>
               </div>
@@ -333,9 +333,9 @@ export default function ETFPerformancePage() {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.6 }}
-              className="bg-white rounded-xl shadow-sm border border-gray-200 p-6"
+              className="bg-white dark:bg-pearto-card dark:bg-pearto-card rounded-xl shadow-sm border border-gray-200 dark:border-pearto-border dark:border-pearto-border p-6"
             >
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Performance Summary</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna mb-4">Performance Summary</h3>
               <div className="space-y-3">
                 <div className={`p-3 rounded-lg ${getPerformanceBg(currentPerf?.difference || 0)}`}>
                   <div className="flex items-center space-x-2">
@@ -347,21 +347,21 @@ export default function ETFPerformancePage() {
                       {(currentPerf?.difference || 0) >= 0 ? 'Outperforming' : 'Underperforming'}
                     </span>
                   </div>
-                  <p className="text-xs text-gray-600 mt-1">
+                  <p className="text-xs text-gray-600 dark:text-pearto-cloud dark:text-pearto-cloud mt-1">
                     vs benchmark by {Math.abs(currentPerf?.difference || 0).toFixed(2)}%
                   </p>
                 </div>
                 
                 <div className="text-sm space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-600">Risk-Adjusted Return</span>
-                    <span className="font-medium text-gray-900">
+                    <span className="text-gray-600 dark:text-pearto-cloud dark:text-pearto-cloud">Risk-Adjusted Return</span>
+                    <span className="font-medium text-gray-900 dark:text-pearto-luna dark:text-pearto-luna">
                       {currentPerf?.sharpeRatio.toFixed(2)}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-600">Correlation</span>
-                    <span className="font-medium text-gray-900">0.998</span>
+                    <span className="text-gray-600 dark:text-pearto-cloud dark:text-pearto-cloud">Correlation</span>
+                    <span className="font-medium text-gray-900 dark:text-pearto-luna dark:text-pearto-luna">0.998</span>
                   </div>
                 </div>
               </div>
@@ -372,14 +372,14 @@ export default function ETFPerformancePage() {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.7 }}
-              className="bg-white rounded-xl shadow-sm border border-gray-200 p-6"
+              className="bg-white dark:bg-pearto-card dark:bg-pearto-card rounded-xl shadow-sm border border-gray-200 dark:border-pearto-border dark:border-pearto-border p-6"
             >
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Data Information</h3>
-              <div className="space-y-2 text-sm text-gray-600">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna mb-4">Data Information</h3>
+              <div className="space-y-2 text-sm text-gray-600 dark:text-pearto-cloud dark:text-pearto-cloud">
                 <p><strong>Benchmark:</strong> {selectedETF.benchmark}</p>
                 <p><strong>Inception Date:</strong> January 22, 1993</p>
                 <p><strong>Last Updated:</strong> Today, 4:00 PM ET</p>
-                <p className="text-xs text-gray-500 mt-3">
+                <p className="text-xs text-gray-500 dark:text-pearto-gray dark:text-pearto-gray mt-3">
                   Performance data includes dividends and is net of fees. Past performance does not guarantee future results.
                 </p>
               </div>

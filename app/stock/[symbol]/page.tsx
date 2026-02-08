@@ -356,17 +356,17 @@ export default function StockDetailPage({ params }: PageProps) {
               <div className="lg:col-span-3">
                 <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-5">
                   {/* Chart Controls */}
-                  <div className="mb-4 p-3 bg-slate-50/50 rounded-xl border border-slate-100">
+                  <div className="mb-4 p-3 bg-slate-50/50 dark:bg-pearto-surface/50 rounded-xl border border-slate-100 dark:border-pearto-border transition-colors duration-300">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
                       <div className="flex items-center gap-3">
-                        <span className="text-sm font-semibold text-gray-700">Duration</span>
-                        <div className="flex bg-white rounded-lg p-1 border border-slate-200 overflow-x-auto">
+                        <span className="text-sm font-semibold text-gray-700 dark:text-pearto-luna transition-colors duration-300">Duration</span>
+                        <div className="flex bg-white dark:bg-pearto-card rounded-lg p-1 border border-slate-200 dark:border-pearto-border transition-colors duration-300 overflow-x-auto">
                           {periods.map((p) => (
                             <button
                               key={p}
                               onClick={() => handlePeriodChange(p)}
                               className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
-                                chartPeriod === p ? "bg-gray-900 text-white shadow-sm" : "text-gray-600 hover:bg-gray-100"
+                                chartPeriod === p ? "bg-gray-900 dark:bg-pearto-green text-white shadow-sm" : "text-gray-600 dark:text-pearto-cloud hover:bg-gray-100 dark:hover:bg-pearto-surface"
                               }`}
                             >
                               {p}
@@ -376,7 +376,7 @@ export default function StockDetailPage({ params }: PageProps) {
                       </div>
 
                       <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-bold ${
-                        stock.change >= 0 ? "text-green-700 bg-green-50" : "text-red-700 bg-red-50"
+                        stock.change >= 0 ? "text-green-700 bg-green-50 dark:bg-pearto-green/10" : "text-red-700 bg-red-50 dark:bg-pearto-pink/10"
                       }`}>
                         {stock.change >= 0 ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
                         {formatChange(stock.change, stock.changePercent)}
@@ -384,14 +384,14 @@ export default function StockDetailPage({ params }: PageProps) {
                     </div>
 
                     <div className="flex items-center gap-3">
-                      <span className="text-sm font-semibold text-gray-700">Type</span>
-                      <div className="flex bg-white rounded-lg p-1 border border-slate-200">
+                      <span className="text-sm font-semibold text-gray-700 dark:text-pearto-luna transition-colors duration-300">Type</span>
+                      <div className="flex bg-white dark:bg-pearto-card rounded-lg p-1 border border-slate-200 dark:border-pearto-border transition-colors duration-300">
                         {chartTypes.map((type) => (
                           <button
                             key={type.key}
                             onClick={() => setChartType(type.key)}
                             className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
-                              chartType === type.key ? "bg-blue-600 text-white shadow-sm" : "text-gray-600 hover:bg-gray-100"
+                              chartType === type.key ? "bg-blue-600 dark:bg-pearto-pink text-white shadow-sm" : "text-gray-600 dark:text-pearto-cloud hover:bg-gray-100 dark:hover:bg-pearto-surface"
                             }`}
                           >
                             <type.icon className="h-3.5 w-3.5" />
@@ -412,7 +412,7 @@ export default function StockDetailPage({ params }: PageProps) {
                     {historicalData.length > 0 ? (
                       <StockChart data={historicalData} isPositive={stock.change >= 0} height={320} chartType={chartType} />
                     ) : (
-                      <div className="flex items-center justify-center h-full bg-gray-50 rounded-lg text-gray-400">
+                      <div className="flex items-center justify-center h-full bg-gray-50 dark:bg-pearto-surface rounded-lg text-gray-400">
                         No data available for this period.
                       </div>
                     )}
@@ -440,7 +440,7 @@ export default function StockDetailPage({ params }: PageProps) {
                 {/* Mobile Chart Header */}
                 <div className="flex items-center justify-between mb-3">
                   <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-bold ${
-                    stock.change >= 0 ? "text-green-700 bg-green-50" : "text-red-700 bg-red-50"
+                    stock.change >= 0 ? "text-green-700 bg-green-50 dark:bg-pearto-green/10" : "text-red-700 bg-red-50 dark:bg-pearto-pink/10"
                   }`}>
                     {stock.change >= 0 ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
                     {formatChange(stock.change, stock.changePercent)}
@@ -462,7 +462,7 @@ export default function StockDetailPage({ params }: PageProps) {
                         onClick={() => handlePeriodChange(p)}
                         className={`px-4 py-2 text-sm font-medium rounded-lg whitespace-nowrap transition-all ${
                           chartPeriod === p 
-                            ? "bg-blue-600 text-white shadow-sm" 
+                            ? "bg-blue-600 dark:bg-pearto-pink text-white shadow-sm" 
                             : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300"
                         }`}
                       >
@@ -511,7 +511,7 @@ export default function StockDetailPage({ params }: PageProps) {
                   {historicalData.length > 0 ? (
                     <StockChart data={historicalData} isPositive={stock.change >= 0} height={256} chartType={chartType} />
                   ) : (
-                    <div className="flex items-center justify-center h-full bg-gray-50 rounded-lg text-gray-400 text-sm">
+                    <div className="flex items-center justify-center h-full bg-gray-50 dark:bg-pearto-surface rounded-lg text-gray-400 text-sm">
                       No data available
                     </div>
                   )}
@@ -539,12 +539,12 @@ export default function StockDetailPage({ params }: PageProps) {
                 { label: "Volume", val: stock.volume ? `${(stock.volume / 1e6).toFixed(1)}M` : "N/A", color: "purple", Icon: BarChart3 },
                 { label: "Avg Vol", val: stock.avgVolume ? `${(stock.avgVolume / 1e6).toFixed(1)}M` : "N/A", color: "indigo", Icon: Activity },
               ].map((item, i) => (
-                <div key={i} className={`bg-${item.color}-50 p-3 rounded-xl border border-${item.color}-100`}>
+                <div key={i} className={`bg-${item.color}-50 dark:bg-pearto-surface p-3 rounded-xl border border-${item.color}-100 dark:border-pearto-border`}>
                   <div className="flex justify-between items-center mb-1">
-                    <span className={`text-xs font-medium text-${item.color}-700`}>{item.label}</span>
-                    <item.Icon className={`h-3 w-3 text-${item.color}-600`} />
+                    <span className={`text-xs font-medium text-${item.color}-700 dark:text-pearto-luna`}>{item.label}</span>
+                    <item.Icon className={`h-3 w-3 text-${item.color}-600 dark:text-pearto-green`} />
                   </div>
-                  <p className={`text-sm font-bold text-${item.color}-900`}>
+                  <p className={`text-sm font-bold text-${item.color}-900 dark:text-pearto-luna`}>
                     {typeof item.val === 'number' ? formatPrice(item.val) : item.val}
                   </p>
                 </div>
@@ -669,14 +669,14 @@ export default function StockDetailPage({ params }: PageProps) {
           <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-5">
             <div className="mb-4 lg:mb-6 p-3 lg:p-4 bg-slate-50/50 rounded-xl border border-slate-100">
               <div className="flex flex-col gap-3 mb-3">
-                <span className="text-sm font-semibold text-gray-700">Duration</span>
-                <div className="flex bg-white rounded-lg p-1 border border-slate-200 overflow-x-auto scrollbar-hide">
+                <span className="text-sm font-semibold text-gray-700 dark:text-pearto-luna transition-colors duration-300">Duration</span>
+                <div className="flex bg-white dark:bg-pearto-card rounded-lg p-1 border border-slate-200 dark:border-pearto-border transition-colors duration-300 overflow-x-auto scrollbar-hide">
                   {periods.map((p) => (
                     <button
                       key={p}
                       onClick={() => handlePeriodChange(p)}
                       className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all whitespace-nowrap ${
-                        chartPeriod === p ? "bg-gray-900 text-white shadow-sm" : "text-gray-600 hover:bg-gray-100"
+                        chartPeriod === p ? "bg-gray-900 dark:bg-pearto-green text-white shadow-sm" : "text-gray-600 dark:text-pearto-cloud hover:bg-gray-100 dark:hover:bg-pearto-surface"
                       }`}
                     >
                       {p}
@@ -685,14 +685,14 @@ export default function StockDetailPage({ params }: PageProps) {
                 </div>
               </div>
               <div className="flex flex-col gap-3">
-                <span className="text-sm font-semibold text-gray-700">Type</span>
-                <div className="flex bg-white rounded-lg p-1 border border-slate-200 overflow-x-auto scrollbar-hide">
+                <span className="text-sm font-semibold text-gray-700 dark:text-pearto-luna transition-colors duration-300">Type</span>
+                <div className="flex bg-white dark:bg-pearto-card rounded-lg p-1 border border-slate-200 dark:border-pearto-border transition-colors duration-300 overflow-x-auto scrollbar-hide">
                   {chartTypes.map((type) => (
                     <button
                       key={type.key}
                       onClick={() => setChartType(type.key)}
                       className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-md transition-all whitespace-nowrap ${
-                        chartType === type.key ? "bg-blue-600 text-white shadow-sm" : "text-gray-600 hover:bg-gray-100"
+                        chartType === type.key ? "bg-blue-600 dark:bg-pearto-pink text-white shadow-sm" : "text-gray-600 dark:text-pearto-cloud hover:bg-gray-100 dark:hover:bg-pearto-surface"
                       }`}
                     >
                       <type.icon className="h-3.5 w-3.5" />
@@ -711,7 +711,7 @@ export default function StockDetailPage({ params }: PageProps) {
               {historicalData.length > 0 ? (
                 <StockChart data={historicalData} isPositive={stock.change >= 0} height={window.innerWidth < 1024 ? 256 : 500} chartType={chartType} />
               ) : (
-                <div className="flex items-center justify-center h-full bg-gray-50 rounded-lg text-gray-400">
+                <div className="flex items-center justify-center h-full bg-gray-50 dark:bg-pearto-surface rounded-lg text-gray-400">
                   No data available for this period.
                 </div>
               )}
@@ -742,7 +742,7 @@ export default function StockDetailPage({ params }: PageProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen p-4 lg:p-8 flex items-center justify-center bg-gray-50 dark:bg-slate-900">
+      <div className="min-h-screen p-4 lg:p-8 flex items-center justify-center bg-gray-50 dark:bg-pearto-surface dark:bg-slate-900">
         <div className="text-center">
           <Activity className="h-12 w-12 text-blue-600 animate-spin mx-auto mb-4" />
           <p className="text-slate-500">Loading stock data...</p>
@@ -753,7 +753,7 @@ export default function StockDetailPage({ params }: PageProps) {
 
   if (!stock) {
     return (
-      <div className="min-h-screen p-4 lg:p-8 flex items-center justify-center bg-gray-50 dark:bg-slate-900">
+      <div className="min-h-screen p-4 lg:p-8 flex items-center justify-center bg-gray-50 dark:bg-pearto-surface dark:bg-slate-900">
         <div className="text-center">
           <h1 className="text-xl lg:text-2xl font-bold text-slate-900 dark:text-white mb-2">Stock Not Found</h1>
           <p className="text-slate-500 dark:text-slate-400 mb-4">The symbol "{symbol}" could not be found.</p>
@@ -768,7 +768,7 @@ export default function StockDetailPage({ params }: PageProps) {
   const isPositive = stock.change >= 0;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-pearto-surface dark:bg-slate-900">
       {/* Mobile Header - Sticky */}
       <div className="lg:hidden sticky top-0 z-30 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700">
         <div className="px-4 py-3">

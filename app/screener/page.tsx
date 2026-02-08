@@ -122,13 +122,13 @@ export default function ScreenerPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen">
+      <div className="min-h-screen bg-gray-50 dark:bg-pearto-blockchain transition-colors duration-300">
         <main className="p-8">
           <div className="flex items-center justify-center h-96">
             <div className="text-center">
-              <Activity className="h-12 w-12 text-blue-600 animate-spin mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-gray-900">Loading Stock Screener</h2>
-              <p className="text-gray-600">Please wait while we fetch stock data...</p>
+              <Activity className="h-12 w-12 text-blue-600 dark:text-pearto-green animate-spin mx-auto mb-4" />
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-pearto-luna transition-colors duration-300">Loading Stock Screener</h2>
+              <p className="text-gray-600 dark:text-pearto-cloud transition-colors duration-300">Please wait while we fetch stock data...</p>
             </div>
           </div>
         </main>
@@ -137,7 +137,7 @@ export default function ScreenerPage() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gray-50 dark:bg-pearto-blockchain transition-colors duration-300">
       <main className="p-3 sm:p-4 md:p-6 lg:p-8">
         <div className="flex flex-col xl:flex-row gap-4 sm:gap-6 lg:gap-8">
           {/* Main Content */}
@@ -152,7 +152,7 @@ export default function ScreenerPage() {
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3 sm:mb-4">
                 Stock Screener
               </h1>
-              <p className="text-sm sm:text-base lg:text-xl text-gray-600">
+              <p className="text-sm sm:text-base lg:text-xl text-gray-600 dark:text-pearto-cloud transition-colors duration-300">
                 Find the best investment opportunities with advanced filtering
               </p>
             </motion.div>
@@ -162,7 +162,7 @@ export default function ScreenerPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="bg-white rounded-xl p-4 sm:p-6 shadow-lg border border-gray-100 mb-6 sm:mb-8"
+              className="bg-white dark:bg-pearto-card rounded-xl p-4 sm:p-6 shadow-lg dark:shadow-pearto-border border border-gray-100 dark:border-pearto-border mb-6 sm:mb-8 transition-colors duration-300"
             >
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 {/* Search Bar */}
@@ -174,7 +174,7 @@ export default function ScreenerPage() {
                       placeholder="Search by symbol or company..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full pl-10 pr-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-pearto-border rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-pearto-green focus:border-transparent bg-white dark:bg-pearto-surface text-gray-900 dark:text-pearto-luna transition-colors duration-300"
                     />
                   </div>
                 </div>
@@ -183,8 +183,8 @@ export default function ScreenerPage() {
                 <button
                   onClick={() => setShowFilters(!showFilters)}
                   className={`px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold transition-all flex items-center justify-center text-sm sm:text-base whitespace-nowrap ${showFilters
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? 'bg-blue-600 dark:bg-pearto-green text-white'
+                    : 'bg-gray-100 dark:bg-pearto-surface text-gray-700 dark:text-pearto-cloud hover:bg-gray-200 dark:hover:bg-pearto-card'
                     }`}
                 >
                   <Filter className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
@@ -194,7 +194,7 @@ export default function ScreenerPage() {
                 {/* Reset Button */}
                 <button
                   onClick={resetFilters}
-                  className="px-4 sm:px-6 py-2.5 sm:py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all font-semibold text-sm sm:text-base whitespace-nowrap"
+                  className="px-4 sm:px-6 py-2.5 sm:py-3 bg-gray-100 dark:bg-pearto-surface text-gray-700 dark:text-pearto-cloud rounded-lg hover:bg-gray-200 dark:hover:bg-pearto-card transition-all font-semibold text-sm sm:text-base whitespace-nowrap"
                 >
                   Reset
                 </button>
@@ -207,12 +207,12 @@ export default function ScreenerPage() {
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-gray-200"
+                  className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-gray-200 dark:border-pearto-border transition-colors duration-300"
                 >
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                     {/* Price Range */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-pearto-cloud mb-2 transition-colors duration-300">
                         Price Range
                       </label>
                       <div className="space-y-2">
@@ -221,21 +221,21 @@ export default function ScreenerPage() {
                           placeholder="Min Price"
                           value={filters.minPrice || ''}
                           onChange={(e) => setFilters(prev => ({ ...prev, minPrice: Number(e.target.value) || 0 }))}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-pearto-border rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-pearto-green bg-white dark:bg-pearto-surface text-gray-900 dark:text-pearto-luna transition-colors duration-300"
                         />
                         <input
                           type="number"
                           placeholder="Max Price"
                           value={filters.maxPrice || ''}
                           onChange={(e) => setFilters(prev => ({ ...prev, maxPrice: Number(e.target.value) || 10000 }))}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-pearto-border rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-pearto-green bg-white dark:bg-pearto-surface text-gray-900 dark:text-pearto-luna transition-colors duration-300"
                         />
                       </div>
                     </div>
 
                     {/* Market Cap Range */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-pearto-cloud mb-2 transition-colors duration-300">
                         Market Cap (Billions)
                       </label>
                       <div className="space-y-2">
@@ -247,7 +247,7 @@ export default function ScreenerPage() {
                             ...prev,
                             minMarketCap: (Number(e.target.value) || 0) * 1000000000
                           }))}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-pearto-border rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-pearto-green bg-white dark:bg-pearto-surface text-gray-900 dark:text-pearto-luna transition-colors duration-300"
                         />
                         <input
                           type="number"
@@ -257,14 +257,14 @@ export default function ScreenerPage() {
                             ...prev,
                             maxMarketCap: (Number(e.target.value) || 100000) * 1000000000
                           }))}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-pearto-border rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-pearto-green bg-white dark:bg-pearto-surface text-gray-900 dark:text-pearto-luna transition-colors duration-300"
                         />
                       </div>
                     </div>
 
                     {/* P/E Ratio Range */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-pearto-cloud mb-2 transition-colors duration-300">
                         P/E Ratio
                       </label>
                       <div className="space-y-2">
@@ -273,21 +273,21 @@ export default function ScreenerPage() {
                           placeholder="Min P/E"
                           value={filters.minPE || ''}
                           onChange={(e) => setFilters(prev => ({ ...prev, minPE: Number(e.target.value) || 0 }))}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-pearto-border rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-pearto-green bg-white dark:bg-pearto-surface text-gray-900 dark:text-pearto-luna transition-colors duration-300"
                         />
                         <input
                           type="number"
                           placeholder="Max P/E"
                           value={filters.maxPE || ''}
                           onChange={(e) => setFilters(prev => ({ ...prev, maxPE: Number(e.target.value) || 100 }))}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-pearto-border rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-pearto-green bg-white dark:bg-pearto-surface text-gray-900 dark:text-pearto-luna transition-colors duration-300"
                         />
                       </div>
                     </div>
 
                     {/* Sectors */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-pearto-cloud mb-2 transition-colors duration-300">
                         Sectors
                       </label>
                       <select
@@ -297,7 +297,7 @@ export default function ScreenerPage() {
                           const selected = Array.from(e.target.selectedOptions, option => option.value);
                           setFilters(prev => ({ ...prev, sectors: selected }));
                         }}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 h-20"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-pearto-border rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-pearto-green h-20 bg-white dark:bg-pearto-surface text-gray-900 dark:text-pearto-luna transition-colors duration-300"
                       >
                         {sectors.map(sector => (
                           <option key={sector} value={sector}>{sector}</option>
@@ -316,9 +316,9 @@ export default function ScreenerPage() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="mb-4 sm:mb-6"
             >
-              <p className="text-sm sm:text-base text-gray-600 px-1">
-                Showing <span className="font-semibold text-gray-900">{filteredStocks.length}</span> of{' '}
-                <span className="font-semibold text-gray-900">{stocks.length}</span> stocks
+              <p className="text-sm sm:text-base text-gray-600 dark:text-pearto-cloud px-1 transition-colors duration-300">
+                Showing <span className="font-semibold text-gray-900 dark:text-pearto-luna transition-colors duration-300">{filteredStocks.length}</span> of{' '}
+                <span className="font-semibold text-gray-900 dark:text-pearto-luna transition-colors duration-300">{stocks.length}</span> stocks
               </p>
             </motion.div>
 
@@ -327,16 +327,16 @@ export default function ScreenerPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="hidden lg:block bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden"
+              className="hidden lg:block bg-white dark:bg-pearto-card rounded-xl shadow-lg dark:shadow-pearto-border border border-gray-100 dark:border-pearto-border overflow-hidden transition-colors duration-300"
             >
               <div className="overflow-x-auto">
                 <table className="w-full">
-                  <thead className="bg-gray-50 border-b border-gray-200">
+                  <thead className="bg-gray-50 dark:bg-pearto-surface border-b border-gray-200 dark:border-pearto-border transition-colors duration-300">
                     <tr>
                       <th className="px-6 py-4 text-left">
                         <button
                           onClick={() => handleSort('symbol')}
-                          className="flex items-center space-x-1 font-semibold text-gray-900 hover:text-blue-600"
+                          className="flex items-center space-x-1 font-semibold text-gray-900 dark:text-pearto-luna hover:text-blue-600 dark:hover:text-pearto-green transition-colors duration-300"
                         >
                           <span>Symbol</span>
                           <ArrowUpDown className="h-4 w-4" />
@@ -345,7 +345,7 @@ export default function ScreenerPage() {
                       <th className="px-6 py-4 text-left">
                         <button
                           onClick={() => handleSort('name')}
-                          className="flex items-center space-x-1 font-semibold text-gray-900 hover:text-blue-600"
+                          className="flex items-center space-x-1 font-semibold text-gray-900 dark:text-pearto-luna hover:text-blue-600 dark:hover:text-pearto-green transition-colors duration-300"
                         >
                           <span>Company</span>
                           <ArrowUpDown className="h-4 w-4" />
@@ -354,7 +354,7 @@ export default function ScreenerPage() {
                       <th className="px-6 py-4 text-right">
                         <button
                           onClick={() => handleSort('price')}
-                          className="flex items-center space-x-1 font-semibold text-gray-900 hover:text-blue-600"
+                          className="flex items-center space-x-1 font-semibold text-gray-900 dark:text-pearto-luna hover:text-blue-600 dark:hover:text-pearto-green transition-colors duration-300"
                         >
                           <span>Price</span>
                           <ArrowUpDown className="h-4 w-4" />
@@ -363,7 +363,7 @@ export default function ScreenerPage() {
                       <th className="px-6 py-4 text-right">
                         <button
                           onClick={() => handleSort('changePercent')}
-                          className="flex items-center space-x-1 font-semibold text-gray-900 hover:text-blue-600"
+                          className="flex items-center space-x-1 font-semibold text-gray-900 dark:text-pearto-luna hover:text-blue-600 dark:hover:text-pearto-green transition-colors duration-300"
                         >
                           <span>Change %</span>
                           <ArrowUpDown className="h-4 w-4" />
@@ -372,7 +372,7 @@ export default function ScreenerPage() {
                       <th className="px-6 py-4 text-right">
                         <button
                           onClick={() => handleSort('marketCap')}
-                          className="flex items-center space-x-1 font-semibold text-gray-900 hover:text-blue-600"
+                          className="flex items-center space-x-1 font-semibold text-gray-900 dark:text-pearto-luna hover:text-blue-600 dark:hover:text-pearto-green transition-colors duration-300"
                         >
                           <span>Market Cap</span>
                           <ArrowUpDown className="h-4 w-4" />
@@ -381,7 +381,7 @@ export default function ScreenerPage() {
                       <th className="px-6 py-4 text-right">
                         <button
                           onClick={() => handleSort('volume')}
-                          className="flex items-center space-x-1 font-semibold text-gray-900 hover:text-blue-600"
+                          className="flex items-center space-x-1 font-semibold text-gray-900 dark:text-pearto-luna hover:text-blue-600 dark:hover:text-pearto-green transition-colors duration-300"
                         >
                           <span>Volume</span>
                           <ArrowUpDown className="h-4 w-4" />
@@ -390,16 +390,16 @@ export default function ScreenerPage() {
                       <th className="px-6 py-4 text-right">
                         <button
                           onClick={() => handleSort('peRatio')}
-                          className="flex items-center space-x-1 font-semibold text-gray-900 hover:text-blue-600"
+                          className="flex items-center space-x-1 font-semibold text-gray-900 dark:text-pearto-luna hover:text-blue-600 dark:hover:text-pearto-green transition-colors duration-300"
                         >
                           <span>P/E</span>
                           <ArrowUpDown className="h-4 w-4" />
                         </button>
                       </th>
-                      <th className="px-6 py-4 text-left">Sector</th>
+                      <th className="px-6 py-4 text-left font-semibold text-gray-900 dark:text-pearto-luna transition-colors duration-300">Sector</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-200">
+                  <tbody className="divide-y divide-gray-200 dark:divide-pearto-border transition-colors duration-300">
                     {filteredStocks.map((stock, index) => {
                       const changeData = formatChange(stock.change, stock.changePercent);
                       return (
@@ -408,26 +408,26 @@ export default function ScreenerPage() {
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.3, delay: index * 0.02 }}
-                          className="hover:bg-gray-50 transition-colors"
+                          className="hover:bg-gray-50 dark:hover:bg-pearto-surface transition-colors"
                         >
                           <td className="px-6 py-4">
                             <Link
                               href={`/stock/${stock.symbol}`}
-                              className="font-semibold text-blue-600 hover:text-blue-800"
+                              className="font-semibold text-blue-600 dark:text-pearto-green hover:text-blue-800 dark:hover:text-pearto-green/80 transition-colors duration-300"
                             >
                               {stock.symbol}
                             </Link>
                           </td>
                           <td className="px-6 py-4">
                             <div>
-                              <p className="font-medium text-gray-900 line-clamp-1">{stock.name}</p>
+                              <p className="font-medium text-gray-900 dark:text-pearto-luna line-clamp-1 transition-colors duration-300">{stock.name}</p>
                             </div>
                           </td>
-                          <td className="px-6 py-4 text-right font-semibold text-gray-900">
+                          <td className="px-6 py-4 text-right font-semibold text-gray-900 dark:text-pearto-luna transition-colors duration-300">
                             {formatPrice(stock.price)}
                           </td>
                           <td className="px-6 py-4 text-right">
-                            <div className={`flex items-center justify-end ${changeData.isPositive ? 'text-green-600' : 'text-red-600'
+                            <div className={`flex items-center justify-end ${changeData.isPositive ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
                               }`}>
                               {changeData.isPositive ? (
                                 <TrendingUp className="h-4 w-4 mr-1" />
@@ -437,17 +437,17 @@ export default function ScreenerPage() {
                               <span className="font-medium">{changeData.value}</span>
                             </div>
                           </td>
-                          <td className="px-6 py-4 text-right font-medium text-gray-900">
+                          <td className="px-6 py-4 text-right font-medium text-gray-900 dark:text-pearto-luna transition-colors duration-300">
                             {formatNumber(stock.marketCap)}
                           </td>
-                          <td className="px-6 py-4 text-right text-gray-600">
+                          <td className="px-6 py-4 text-right text-gray-600 dark:text-pearto-cloud transition-colors duration-300">
                             {formatVolume(stock.volume)}
                           </td>
-                          <td className="px-6 py-4 text-right font-medium text-gray-900">
+                          <td className="px-6 py-4 text-right font-medium text-gray-900 dark:text-pearto-luna transition-colors duration-300">
                             {stock.peRatio ? stock.peRatio.toFixed(2) : 'N/A'}
                           </td>
                           <td className="px-6 py-4">
-                            <span className="inline-flex px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded-full">
+                            <span className="inline-flex px-2 py-1 text-xs font-medium bg-gray-100 dark:bg-pearto-surface text-gray-800 dark:text-pearto-cloud rounded-full transition-colors duration-300">
                               {stock.sector || 'Other'}
                             </span>
                           </td>
@@ -460,9 +460,9 @@ export default function ScreenerPage() {
 
               {filteredStocks.length === 0 && (
                 <div className="text-center py-12">
-                  <BarChart3 className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">No stocks found</h3>
-                  <p className="text-gray-600">Try adjusting your filters or search terms</p>
+                  <BarChart3 className="h-16 w-16 text-gray-400 dark:text-pearto-gray mx-auto mb-4 transition-colors duration-300" />
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-pearto-luna mb-2 transition-colors duration-300">No stocks found</h3>
+                  <p className="text-gray-600 dark:text-pearto-cloud transition-colors duration-300">Try adjusting your filters or search terms</p>
                 </div>
               )}
             </motion.div>
@@ -483,19 +483,19 @@ export default function ScreenerPage() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3, delay: index * 0.02 }}
-                        className="bg-white rounded-xl p-4 shadow-lg border border-gray-100 hover:shadow-xl transition-all"
+                        className="bg-white dark:bg-pearto-card rounded-xl p-4 shadow-lg dark:shadow-pearto-border border border-gray-100 dark:border-pearto-border hover:shadow-xl transition-all"
                       >
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex-1 min-w-0">
-                            <h3 className="font-semibold text-blue-600 text-base mb-1">{stock.symbol}</h3>
-                            <p className="text-sm text-gray-900 font-medium line-clamp-1">{stock.name}</p>
-                            <span className="inline-flex px-2 py-1 mt-2 text-xs font-medium bg-gray-100 text-gray-800 rounded-full">
+                            <h3 className="font-semibold text-blue-600 dark:text-pearto-green text-base mb-1 transition-colors duration-300">{stock.symbol}</h3>
+                            <p className="text-sm text-gray-900 dark:text-pearto-luna font-medium line-clamp-1 transition-colors duration-300">{stock.name}</p>
+                            <span className="inline-flex px-2 py-1 mt-2 text-xs font-medium bg-gray-100 dark:bg-pearto-surface text-gray-800 dark:text-pearto-cloud rounded-full transition-colors duration-300">
                               {stock.sector || 'Other'}
                             </span>
                           </div>
                           <div className="text-right ml-3">
-                            <div className="text-lg font-bold text-gray-900">{formatPrice(stock.price)}</div>
-                            <div className={`text-sm font-medium flex items-center justify-end mt-1 ${changeData.isPositive ? 'text-green-600' : 'text-red-600'}`}>
+                            <div className="text-lg font-bold text-gray-900 dark:text-pearto-luna transition-colors duration-300">{formatPrice(stock.price)}</div>
+                            <div className={`text-sm font-medium flex items-center justify-end mt-1 ${changeData.isPositive ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'}`}>
                               {changeData.isPositive ? (
                                 <TrendingUp className="h-4 w-4 mr-1" />
                               ) : (
@@ -505,18 +505,18 @@ export default function ScreenerPage() {
                             </div>
                           </div>
                         </div>
-                        <div className="grid grid-cols-3 gap-3 pt-3 border-t border-gray-100">
+                        <div className="grid grid-cols-3 gap-3 pt-3 border-t border-gray-100 dark:border-pearto-border transition-colors duration-300">
                           <div>
-                            <div className="text-xs text-gray-500">Market Cap</div>
-                            <div className="text-sm font-semibold text-gray-900">{formatNumber(stock.marketCap)}</div>
+                            <div className="text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">Market Cap</div>
+                            <div className="text-sm font-semibold text-gray-900 dark:text-pearto-luna transition-colors duration-300">{formatNumber(stock.marketCap)}</div>
                           </div>
                           <div>
-                            <div className="text-xs text-gray-500">Volume</div>
-                            <div className="text-sm font-semibold text-gray-900">{formatVolume(stock.volume)}</div>
+                            <div className="text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">Volume</div>
+                            <div className="text-sm font-semibold text-gray-900 dark:text-pearto-luna transition-colors duration-300">{formatVolume(stock.volume)}</div>
                           </div>
                           <div>
-                            <div className="text-xs text-gray-500">P/E Ratio</div>
-                            <div className="text-sm font-semibold text-gray-900">
+                            <div className="text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">P/E Ratio</div>
+                            <div className="text-sm font-semibold text-gray-900 dark:text-pearto-luna transition-colors duration-300">
                               {stock.peRatio ? stock.peRatio.toFixed(2) : 'N/A'}
                             </div>
                           </div>
@@ -526,10 +526,10 @@ export default function ScreenerPage() {
                   );
                 })
               ) : (
-                <div className="bg-white rounded-xl p-8 text-center shadow-lg border border-gray-100">
-                  <BarChart3 className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-                  <h3 className="text-base font-semibold text-gray-900 mb-2">No stocks found</h3>
-                  <p className="text-sm text-gray-600">Try adjusting your filters or search terms</p>
+                <div className="bg-white dark:bg-pearto-card rounded-xl p-8 text-center shadow-lg dark:shadow-pearto-border border border-gray-100 dark:border-pearto-border transition-colors duration-300">
+                  <BarChart3 className="h-12 w-12 text-gray-400 dark:text-pearto-gray mx-auto mb-3 transition-colors duration-300" />
+                  <h3 className="text-base font-semibold text-gray-900 dark:text-pearto-luna mb-2 transition-colors duration-300">No stocks found</h3>
+                  <p className="text-sm text-gray-600 dark:text-pearto-cloud transition-colors duration-300">Try adjusting your filters or search terms</p>
                 </div>
               )}
             </motion.div>

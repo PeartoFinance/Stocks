@@ -16,7 +16,7 @@ export default function InsightsPage() {
 
     if (isLoading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-slate-50">
+            <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-gray-900">
                 <div className="animate-spin rounded-full h-12 w-12 border-2 border-green-500 border-t-transparent" />
             </div>
         );
@@ -24,7 +24,7 @@ export default function InsightsPage() {
     if (!isAuthenticated) return null;
 
     return (
-        <div className="min-h-screen bg-slate-50">
+        <div className="min-h-screen bg-slate-50 dark:bg-gray-900">
             <div className="bg-gradient-to-br from-green-600 to-emerald-600 pb-8">
                 <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
                     <div className="flex items-center gap-3">
@@ -39,12 +39,12 @@ export default function InsightsPage() {
                 </div>
             </div>
             <div className="container mx-auto px-4 sm:px-6 py-12 max-w-2xl">
-                <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8 sm:p-12 text-center">
-                    <div className="h-16 w-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6">
-                        <Lightbulb className="h-8 w-8 text-green-600" />
+                <div className="bg-white dark:bg-gray-800 rounded-2xl border border-slate-200 dark:border-gray-700 shadow-sm p-8 sm:p-12 text-center">
+                    <div className="h-16 w-16 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto mb-6">
+                        <Lightbulb className="h-8 w-8 text-green-600 dark:text-green-400" />
                     </div>
-                    <h2 className="text-xl font-semibold text-slate-900 mb-2">Personalized insights</h2>
-                    <p className="text-slate-500 mb-8 max-w-sm mx-auto">
+                    <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">Personalized insights</h2>
+                    <p className="text-slate-500 dark:text-gray-400 mb-8 max-w-sm mx-auto">
                         Market insights based on your watchlist and portfolio are coming soon.
                     </p>
                     <Link

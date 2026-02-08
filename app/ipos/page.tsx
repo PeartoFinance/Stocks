@@ -153,8 +153,8 @@ export default function IPOsPage() {
           <div className="flex items-center justify-center h-96">
             <div className="text-center">
               <Activity className="h-12 w-12 text-blue-600 animate-spin mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-gray-900">Loading IPO Data</h2>
-              <p className="text-gray-600">Please wait while we fetch the latest IPO information...</p>
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-pearto-luna">Loading IPO Data</h2>
+              <p className="text-gray-600 dark:text-pearto-cloud">Please wait while we fetch the latest IPO information...</p>
             </div>
           </div>
         </main>
@@ -178,7 +178,7 @@ export default function IPOsPage() {
               <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
                 Initial Public Offerings
               </h1>
-              <p className="text-xl text-gray-600">
+              <p className="text-xl text-gray-600 dark:text-pearto-cloud">
                 Track upcoming IPOs, recent listings, and investment opportunities
               </p>
             </motion.div>
@@ -190,40 +190,40 @@ export default function IPOsPage() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8"
             >
-              <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
+              <div className="bg-white dark:bg-pearto-card rounded-xl p-6 shadow-lg border border-gray-100 dark:border-pearto-border">
                 <div className="flex items-center justify-between mb-4">
                   <Calendar className="h-8 w-8 text-blue-600" />
-                  <span className="text-sm text-gray-500">This Month</span>
+                  <span className="text-sm text-gray-500 dark:text-pearto-gray">This Month</span>
                 </div>
-                <p className="text-3xl font-bold text-gray-900">{stats.upcoming}</p>
-                <p className="text-sm text-gray-600">Upcoming offers</p>
+                <p className="text-3xl font-bold text-gray-900 dark:text-pearto-luna">{stats.upcoming}</p>
+                <p className="text-sm text-gray-600 dark:text-pearto-cloud">Upcoming offers</p>
               </div>
 
-              <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
+              <div className="bg-white dark:bg-pearto-card rounded-xl p-6 shadow-lg border border-gray-100 dark:border-pearto-border">
                 <div className="flex items-center justify-between mb-4">
                   <DollarSign className="h-8 w-8 text-green-600" />
-                  <span className="text-sm text-gray-500">Total Value</span>
+                  <span className="text-sm text-gray-500 dark:text-pearto-gray">Total Value</span>
                 </div>
-                <p className="text-3xl font-bold text-gray-900">{stats.total}</p>
-                <p className="text-sm text-gray-600">Total offers</p>
+                <p className="text-3xl font-bold text-gray-900 dark:text-pearto-luna">{stats.total}</p>
+                <p className="text-sm text-gray-600 dark:text-pearto-cloud">Total offers</p>
               </div>
 
-              <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
+              <div className="bg-white dark:bg-pearto-card rounded-xl p-6 shadow-lg border border-gray-100 dark:border-pearto-border">
                 <div className="flex items-center justify-between mb-4">
                   <TrendingUp className="h-8 w-8 text-purple-600" />
-                  <span className="text-sm text-gray-500">Avg Performance</span>
+                  <span className="text-sm text-gray-500 dark:text-pearto-gray">Avg Performance</span>
                 </div>
-                <p className="text-3xl font-bold text-gray-900">{stats.pricing}</p>
-                <p className="text-sm text-gray-600">In pricing stage</p>
+                <p className="text-3xl font-bold text-gray-900 dark:text-pearto-luna">{stats.pricing}</p>
+                <p className="text-sm text-gray-600 dark:text-pearto-cloud">In pricing stage</p>
               </div>
 
-              <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
+              <div className="bg-white dark:bg-pearto-card rounded-xl p-6 shadow-lg border border-gray-100 dark:border-pearto-border">
                 <div className="flex items-center justify-between mb-4">
                   <Building2 className="h-8 w-8 text-orange-600" />
-                  <span className="text-sm text-gray-500">Sectors</span>
+                  <span className="text-sm text-gray-500 dark:text-pearto-gray">Sectors</span>
                 </div>
-                <p className="text-3xl font-bold text-gray-900">{filteredIpos.length}</p>
-                <p className="text-sm text-gray-600">Filtered results</p>
+                <p className="text-3xl font-bold text-gray-900 dark:text-pearto-luna">{filteredIpos.length}</p>
+                <p className="text-sm text-gray-600 dark:text-pearto-cloud">Filtered results</p>
               </div>
             </motion.div>
 
@@ -232,11 +232,11 @@ export default function IPOsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 mb-8"
+              className="bg-white dark:bg-pearto-card rounded-xl p-6 shadow-lg border border-gray-100 dark:border-pearto-border mb-8"
             >
               <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
                 {/* Tabs */}
-                <div className="flex space-x-1 bg-gray-100 rounded-lg p-1">
+                <div className="flex space-x-1 bg-gray-100 dark:bg-pearto-surface rounded-lg p-1">
                   {['upcoming', 'recent', 'all'].map((tab) => (
                     <button
                       key={tab}
@@ -259,7 +259,7 @@ export default function IPOsPage() {
                     placeholder="Search IPOs..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="pl-10 pr-4 py-2 border border-gray-300 dark:border-pearto-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
               </div>
@@ -278,7 +278,7 @@ export default function IPOsPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: index * 0.1 }}
-                  className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all card-hover"
+                  className="bg-white dark:bg-pearto-card rounded-xl p-6 shadow-lg border border-gray-100 dark:border-pearto-border hover:shadow-xl transition-all card-hover"
                 >
                   <div className="flex justify-between items-start mb-4">
                     <div className="flex items-center space-x-3">
@@ -286,17 +286,17 @@ export default function IPOsPage() {
                         <Building2 className="h-6 w-6 text-white" />
                       </div>
                       <div>
-                        <h3 className="text-lg font-bold text-gray-900">{ipo.company}</h3>
-                        <p className="text-sm text-gray-600">{ipo.symbol} • {ipo.exchange}</p>
+                        <h3 className="text-lg font-bold text-gray-900 dark:text-pearto-luna">{ipo.company}</h3>
+                        <p className="text-sm text-gray-600 dark:text-pearto-cloud">{ipo.symbol} • {ipo.exchange}</p>
                       </div>
                     </div>
                     {getStatusBadge(ipo.status)}
                   </div>
 
                   <div className="mb-4">
-                    <p className="text-sm text-gray-600 mb-2">{ipo.description}</p>
+                    <p className="text-sm text-gray-600 dark:text-pearto-cloud mb-2">{ipo.description}</p>
                     {ipo.offerType && (
-                      <span className="inline-flex px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">
+                      <span className="inline-flex px-2 py-1 text-xs font-medium bg-gray-100 dark:bg-pearto-surface text-gray-700 dark:text-pearto-cloud rounded-full">
                         {ipo.offerType}
                       </span>
                     )}
@@ -304,29 +304,29 @@ export default function IPOsPage() {
 
                   <div className="grid grid-cols-2 gap-4 mb-4">
                     <div>
-                      <p className="text-xs text-gray-500 mb-1">Price Range</p>
-                      <p className="font-semibold text-gray-900">{ipo.priceRange}</p>
+                      <p className="text-xs text-gray-500 dark:text-pearto-gray mb-1">Price Range</p>
+                      <p className="font-semibold text-gray-900 dark:text-pearto-luna">{ipo.priceRange}</p>
                     </div>
                     {ipo.openDate && (
                       <div>
-                        <p className="text-xs text-gray-500 mb-1">Open Date</p>
-                        <p className="font-semibold text-gray-900">
+                        <p className="text-xs text-gray-500 dark:text-pearto-gray mb-1">Open Date</p>
+                        <p className="font-semibold text-gray-900 dark:text-pearto-luna">
                           {new Date(ipo.openDate).toLocaleDateString()}
                         </p>
                       </div>
                     )}
                     {ipo.closeDate && (
                       <div>
-                        <p className="text-xs text-gray-500 mb-1">Close Date</p>
-                        <p className="font-semibold text-gray-900">
+                        <p className="text-xs text-gray-500 dark:text-pearto-gray mb-1">Close Date</p>
+                        <p className="font-semibold text-gray-900 dark:text-pearto-luna">
                           {new Date(ipo.closeDate).toLocaleDateString()}
                         </p>
                       </div>
                     )}
                     {ipo.listingDate && (
                       <div>
-                        <p className="text-xs text-gray-500 mb-1">Listing Date</p>
-                        <p className="font-semibold text-gray-900">
+                        <p className="text-xs text-gray-500 dark:text-pearto-gray mb-1">Listing Date</p>
+                        <p className="font-semibold text-gray-900 dark:text-pearto-luna">
                           {new Date(ipo.listingDate).toLocaleDateString()}
                         </p>
                       </div>
@@ -335,7 +335,7 @@ export default function IPOsPage() {
 
                   {ipo.underwriters && ipo.underwriters.length > 0 && (
                     <div className="mb-4">
-                      <p className="text-xs text-gray-500 mb-2">Lead Underwriters</p>
+                      <p className="text-xs text-gray-500 dark:text-pearto-gray mb-2">Lead Underwriters</p>
                       <div className="flex flex-wrap gap-1">
                         {ipo.underwriters.slice(0, 2).map((underwriter) => (
                           <span
@@ -346,7 +346,7 @@ export default function IPOsPage() {
                           </span>
                         ))}
                         {ipo.underwriters.length > 2 && (
-                          <span className="inline-flex px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-md">
+                          <span className="inline-flex px-2 py-1 text-xs bg-gray-100 dark:bg-pearto-surface text-gray-600 dark:text-pearto-cloud rounded-md">
                             +{ipo.underwriters.length - 2} more
                           </span>
                         )}
@@ -359,7 +359,7 @@ export default function IPOsPage() {
                       <Star className="h-4 w-4" />
                       <span className="text-sm font-medium">Add to Watchlist</span>
                     </button>
-                    <button className="flex items-center space-x-1 text-gray-600 hover:text-gray-700 transition-colors">
+                    <button className="flex items-center space-x-1 text-gray-600 dark:text-pearto-cloud hover:text-gray-700 dark:text-pearto-cloud transition-colors">
                       <ExternalLink className="h-4 w-4" />
                       <span className="text-sm font-medium">View Details</span>
                     </button>
@@ -371,8 +371,8 @@ export default function IPOsPage() {
             {filteredIpos.length === 0 && (
               <div className="text-center py-16">
                 <Calendar className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">No IPOs found</h3>
-                <p className="text-gray-600">Try adjusting your search or filter criteria</p>
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-pearto-luna mb-2">No IPOs found</h3>
+                <p className="text-gray-600 dark:text-pearto-cloud">Try adjusting your search or filter criteria</p>
               </div>
             )}
           </div>

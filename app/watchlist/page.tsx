@@ -260,45 +260,45 @@ export default function WatchlistPage() {
   const getCellValue = (stock: WatchlistStock, columnKey: string) => {
     switch (columnKey) {
       case 'symbol':
-        return <Link href={`/stock/${stock.symbol.toLowerCase()}`} className="font-semibold text-blue-600 hover:text-emerald-600">{stock.symbol}</Link>;
+        return <Link href={`/stock/${stock.symbol.toLowerCase()}`} className="font-semibold text-blue-600 dark:text-pearto-green hover:text-emerald-600 dark:hover:text-pearto-green/80 transition-colors duration-300">{stock.symbol}</Link>;
       case 'price':
-        return <span className="font-medium">{formatPrice(stock.price)}</span>;
+        return <span className="font-medium text-gray-900 dark:text-pearto-luna transition-colors duration-300">{formatPrice(stock.price)}</span>;
       case 'chg':
         return (
-          <span className={`font-medium ${stock.changePercent >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+          <span className={`font-medium ${stock.changePercent >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'}`}>
             {stock.changePercent >= 0 ? '+' : ''}{stock.changePercent.toFixed(2)}%
           </span>
         );
       case 'volume':
-        return <span className="text-gray-600">{formatVolume(stock.volume)}</span>;
+        return <span className="text-gray-600 dark:text-pearto-cloud transition-colors duration-300">{formatVolume(stock.volume)}</span>;
       case 'marketCap':
-        return <span className="text-gray-600">{formatNumber(stock.marketCap)}</span>;
+        return <span className="text-gray-600 dark:text-pearto-cloud transition-colors duration-300">{formatNumber(stock.marketCap)}</span>;
       case 'annualDiv':
-        return <span className="text-gray-600">{formatPrice(stock.annualDividend || 0)}</span>;
+        return <span className="text-gray-600 dark:text-pearto-cloud transition-colors duration-300">{formatPrice(stock.annualDividend || 0)}</span>;
       case 'divYield':
-        return <span className="text-gray-900 font-medium">{(stock.dividendYield || 0).toFixed(2)}%</span>;
+        return <span className="text-gray-900 dark:text-pearto-luna font-medium transition-colors duration-300">{(stock.dividendYield || 0).toFixed(2)}%</span>;
       case 'divGrowth':
         return (
-          <span className={`font-medium ${(stock.dividendGrowth || 0) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+          <span className={`font-medium ${(stock.dividendGrowth || 0) >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'}`}>
             {(stock.dividendGrowth || 0) >= 0 ? '+' : ''}{(stock.dividendGrowth || 0).toFixed(1)}%
           </span>
         );
       case 'priceTarget':
         const target = stock.price * (0.9 + Math.random() * 0.4);
-        return <span className="font-medium">{formatPrice(target)}</span>;
+        return <span className="font-medium text-gray-900 dark:text-pearto-luna transition-colors duration-300">{formatPrice(target)}</span>;
       case 'priceTargetUpside':
         const upside = (Math.random() - 0.3) * 40;
         return (
-          <span className={`font-medium ${upside >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+          <span className={`font-medium ${upside >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'}`}>
             {upside >= 0 ? '+' : ''}{upside.toFixed(1)}%
           </span>
         );
       case 'analystRating':
         const ratings = ['Strong Buy', 'Buy', 'Hold'];
-        const colors = ['text-green-700', 'text-green-600', 'text-yellow-600'];
+        const colors = ['text-green-700 dark:text-pearto-green', 'text-green-600 dark:text-pearto-green', 'text-yellow-600 dark:text-yellow-400'];
         const ratingIndex = Math.floor(Math.random() * ratings.length);
         return (
-          <span className={`${colors[ratingIndex]} font-medium text-xs`}>
+          <span className={`${colors[ratingIndex]} font-medium text-xs transition-colors duration-300`}>
             {ratings[ratingIndex]}
           </span>
         );
@@ -314,34 +314,34 @@ export default function WatchlistPage() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm hover:shadow-md transition-shadow"
+      className="bg-white dark:bg-pearto-card rounded-lg border border-gray-200 dark:border-pearto-border p-4 shadow-sm dark:shadow-pearto-border hover:shadow-md transition-all duration-300"
       onClick={() => setSelectedStock(stock)}
     >
       <div className="flex items-start justify-between mb-3">
         <div className="flex-1">
           <Link 
             href={`/stock/${stock.symbol.toLowerCase()}`}
-            className="text-lg font-bold text-blue-600 hover:text-emerald-600"
+            className="text-lg font-bold text-blue-600 dark:text-pearto-green hover:text-emerald-600 dark:hover:text-pearto-green/80 transition-colors duration-300"
             onClick={(e) => e.stopPropagation()}
           >
             {stock.symbol}
           </Link>
-          <p className="text-sm text-gray-500 mt-0.5">{stock.name}</p>
+          <p className="text-sm text-gray-500 dark:text-pearto-gray mt-0.5 transition-colors duration-300">{stock.name}</p>
         </div>
-        <button className="p-1 hover:bg-gray-100 rounded-full">
-          <MoreVertical className="h-5 w-5 text-gray-400" />
+        <button className="p-1 hover:bg-gray-100 dark:hover:bg-pearto-surface rounded-full transition-colors duration-300">
+          <MoreVertical className="h-5 w-5 text-gray-400 dark:text-pearto-gray" />
         </button>
       </div>
 
       <div className="flex items-center justify-between mb-3">
         <div>
-          <div className="text-2xl font-bold text-gray-900">
+          <div className="text-2xl font-bold text-gray-900 dark:text-pearto-luna transition-colors duration-300">
             {formatPrice(stock.price)}
           </div>
-          <div className={`flex items-center space-x-1 text-sm font-medium ${stock.changePercent >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+          <div className={`flex items-center space-x-1 text-sm font-medium ${stock.changePercent >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'}`}>
             {stock.changePercent >= 0 ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
             <span>{stock.changePercent >= 0 ? '+' : ''}{stock.changePercent.toFixed(2)}%</span>
-            <span className="text-gray-400">({stock.changePercent >= 0 ? '+' : ''}{formatPrice(stock.change)})</span>
+            <span className="text-gray-400 dark:text-pearto-gray transition-colors duration-300">({stock.changePercent >= 0 ? '+' : ''}{formatPrice(stock.change)})</span>
           </div>
         </div>
 
@@ -361,40 +361,40 @@ export default function WatchlistPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-3 pt-3 border-t border-gray-100">
+      <div className="grid grid-cols-3 gap-3 pt-3 border-t border-gray-100 dark:border-pearto-border transition-colors duration-300">
         <div>
-          <div className="text-xs text-gray-500">Volume</div>
-          <div className="text-sm font-medium text-gray-900">{formatVolume(stock.volume)}</div>
+          <div className="text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">Volume</div>
+          <div className="text-sm font-medium text-gray-900 dark:text-pearto-luna transition-colors duration-300">{formatVolume(stock.volume)}</div>
         </div>
         <div>
-          <div className="text-xs text-gray-500">Mkt Cap</div>
-          <div className="text-sm font-medium text-gray-900">{formatNumber(stock.marketCap)}</div>
+          <div className="text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">Mkt Cap</div>
+          <div className="text-sm font-medium text-gray-900 dark:text-pearto-luna transition-colors duration-300">{formatNumber(stock.marketCap)}</div>
         </div>
         <div>
-          <div className="text-xs text-gray-500">P/E</div>
-          <div className="text-sm font-medium text-gray-900">{stock.peRatio?.toFixed(2) || 'N/A'}</div>
+          <div className="text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">P/E</div>
+          <div className="text-sm font-medium text-gray-900 dark:text-pearto-luna transition-colors duration-300">{stock.peRatio?.toFixed(2) || 'N/A'}</div>
         </div>
       </div>
     </motion.div>
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-pearto-blockchain transition-colors duration-300">
       {/* Mobile Header */}
-      <div className="lg:hidden bg-white border-b border-gray-200 sticky top-0 z-30">
+      <div className="lg:hidden bg-white dark:bg-pearto-card border-b border-gray-200 dark:border-pearto-border sticky top-0 z-30 transition-colors duration-300">
         <div className="px-4 py-3">
           <div className="flex items-center justify-between mb-3">
-            <h1 className="text-xl font-bold text-gray-900">Watchlist</h1>
+            <h1 className="text-xl font-bold text-gray-900 dark:text-pearto-luna transition-colors duration-300">Watchlist</h1>
             <div className="flex items-center space-x-2">
               <button
                 onClick={() => setShowAIPanel(true)}
-                className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
+                className="p-2 text-blue-600 dark:text-pearto-green hover:bg-blue-50 dark:hover:bg-pearto-surface rounded-lg transition-colors duration-300"
               >
                 <BarChart3 className="h-5 w-5" />
               </button>
               <button
                 onClick={() => setShowMobileMenu(!showMobileMenu)}
-                className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+                className="p-2 text-gray-600 dark:text-pearto-cloud hover:bg-gray-100 dark:hover:bg-pearto-surface rounded-lg transition-colors duration-300"
               >
                 {showMobileMenu ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </button>
@@ -409,7 +409,7 @@ export default function WatchlistPage() {
               value={newSymbol}
               onChange={(e) => setNewSymbol(e.target.value.toUpperCase())}
               onKeyPress={(e) => e.key === 'Enter' && addStock()}
-              className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2.5 border border-gray-300 dark:border-pearto-border rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-pearto-green focus:border-transparent bg-white dark:bg-pearto-surface text-gray-900 dark:text-pearto-luna transition-colors duration-300"
             />
           </div>
         </div>
@@ -421,19 +421,19 @@ export default function WatchlistPage() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="border-t border-gray-200 bg-white"
+              className="border-t border-gray-200 dark:border-pearto-border bg-white dark:bg-pearto-card transition-colors duration-300"
             >
               <div className="px-4 py-3 space-y-2">
                 <button
                   onClick={() => {
                     setShowWatchlistMenu(!showWatchlistMenu);
                   }}
-                  className="w-full flex items-center justify-between px-3 py-2 bg-gray-50 rounded-lg text-sm font-medium"
+                  className="w-full flex items-center justify-between px-3 py-2 bg-gray-50 dark:bg-pearto-surface rounded-lg text-sm font-medium text-gray-900 dark:text-pearto-luna transition-colors duration-300"
                 >
                   <span>{activeWatchlist}</span>
                   <ChevronDown className="h-4 w-4" />
                 </button>
-                <div className="text-xs text-gray-500 px-3">
+                <div className="text-xs text-gray-500 dark:text-pearto-gray px-3 transition-colors duration-300">
                   {stocks.length} stocks • Updated 2 min ago
                 </div>
               </div>
@@ -443,7 +443,7 @@ export default function WatchlistPage() {
       </div>
 
       {/* Desktop Header */}
-      <div className="hidden lg:block bg-white border-b border-gray-200 mb-4">
+      <div className="hidden lg:block bg-white dark:bg-pearto-card border-b border-gray-200 dark:border-pearto-border mb-8 transition-colors duration-300">
         <div className="px-6 py-3">
           <div className="flex items-center justify-between max-w-7xl mx-auto">
             <div className="relative flex-1 max-w-lg">
@@ -451,12 +451,8 @@ export default function WatchlistPage() {
               <input
                 type="text"
                 placeholder="Company or stock symbol..."
-                className="w-full pl-9 pr-8 py-2 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-white"
+                className="w-full pl-9 pr-8 py-2 text-sm border border-gray-300 dark:border-pearto-border rounded-md focus:ring-1 focus:ring-blue-500 dark:focus:ring-pearto-green focus:border-blue-500 bg-white dark:bg-pearto-surface text-gray-900 dark:text-pearto-luna transition-colors duration-300"
               />
-            </div>
-            <div className="flex items-center space-x-6">
-              <button className="text-gray-600 hover:text-gray-900 text-sm font-medium">Log Out</button>
-              <button className="text-gray-600 hover:text-gray-900 text-sm font-medium">My Account</button>
             </div>
           </div>
         </div>
@@ -468,16 +464,16 @@ export default function WatchlistPage() {
           <div className="flex-1 min-w-0">
             {/* Market Indices - Hidden on mobile, scrollable on tablet */}
             <div className="hidden md:block mb-4 lg:mb-6">
-              <h2 className="text-sm lg:text-base font-medium text-gray-700 mb-3">Stock Indexes - Premarket</h2>
+              <h2 className="text-sm lg:text-base font-medium text-gray-700 dark:text-pearto-cloud mb-3 transition-colors duration-300">Stock Indexes - Premarket</h2>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                 {marketIndices.map((index) => (
-                  <div key={index.symbol} className="bg-white rounded-lg p-3 border border-gray-200 shadow-sm">
+                  <div key={index.symbol} className="bg-white dark:bg-pearto-card rounded-lg p-3 border border-gray-200 dark:border-pearto-border shadow-sm dark:shadow-pearto-border transition-colors duration-300">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <h3 className="font-medium text-gray-900 text-sm mb-1">{index.name}</h3>
+                        <h3 className="font-medium text-gray-900 dark:text-pearto-luna text-sm mb-1 transition-colors duration-300">{index.name}</h3>
                         <div className="flex items-center space-x-2">
-                          <span className="text-red-600 text-sm">↓</span>
-                          <span className="text-red-600 text-sm font-medium">{index.changePercent.toFixed(2)}%</span>
+                          <span className="text-red-600 dark:text-pearto-pink text-sm transition-colors duration-300">↓</span>
+                          <span className="text-red-600 dark:text-pearto-pink text-sm font-medium transition-colors duration-300">{index.changePercent.toFixed(2)}%</span>
                         </div>
                       </div>
                       <div className="w-16 h-8 lg:w-20 lg:h-10">
@@ -498,34 +494,34 @@ export default function WatchlistPage() {
             </div>
 
             {/* Desktop Table View */}
-            <div className="hidden lg:block bg-white rounded-lg border border-gray-200 shadow-sm">
+            <div className="hidden lg:block bg-white dark:bg-pearto-card rounded-lg border border-gray-200 dark:border-pearto-border shadow-sm dark:shadow-pearto-border transition-colors duration-300">
               {/* Header */}
-              <div className="px-6 py-4 border-b border-gray-200">
+              <div className="px-6 py-4 border-b border-gray-200 dark:border-pearto-border transition-colors duration-300">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <h1 className="text-xl font-semibold text-gray-900">Watchlist</h1>
-                    <HelpCircle className="h-4 w-4 text-gray-400" />
+                    <h1 className="text-xl font-semibold text-gray-900 dark:text-pearto-luna transition-colors duration-300">Watchlist</h1>
+                    <HelpCircle className="h-4 w-4 text-gray-400 dark:text-pearto-gray" />
                   </div>
-                  <span className="text-sm text-blue-600 hover:text-blue-700 cursor-pointer">Watchlist Tutorial</span>
+                  <span className="text-sm text-blue-600 dark:text-pearto-green hover:text-blue-700 dark:hover:text-pearto-green/80 cursor-pointer transition-colors duration-300">Watchlist Tutorial</span>
                 </div>
               </div>
 
               {/* Watchlist Management */}
-              <div className="px-6 py-3 bg-gray-50 border-b border-gray-200">
+              <div className="px-6 py-3 bg-gray-50 dark:bg-pearto-surface border-b border-gray-200 dark:border-pearto-border transition-colors duration-300">
                 <div className="flex items-center justify-between">
                   <div className="relative">
                     <button
                       onClick={() => setShowWatchlistMenu(!showWatchlistMenu)}
-                      className="flex items-center space-x-2 px-3 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50 text-sm"
+                      className="flex items-center space-x-2 px-3 py-2 bg-white dark:bg-pearto-card border border-gray-300 dark:border-pearto-border rounded-md hover:bg-gray-50 dark:hover:bg-pearto-surface text-sm transition-colors duration-300"
                     >
-                      <span className="font-medium text-gray-700">{activeWatchlist}</span>
-                      <ChevronDown className="h-4 w-4 text-gray-500" />
+                      <span className="font-medium text-gray-700 dark:text-pearto-luna transition-colors duration-300">{activeWatchlist}</span>
+                      <ChevronDown className="h-4 w-4 text-gray-500 dark:text-pearto-gray" />
                     </button>
 
                     {showWatchlistMenu && (
-                      <div className="absolute top-full left-0 mt-1 w-64 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                      <div className="absolute top-full left-0 mt-1 w-64 bg-white dark:bg-pearto-card border border-gray-200 dark:border-pearto-border rounded-md shadow-lg dark:shadow-pearto-border z-10 transition-colors duration-300">
                         <div className="p-2">
-                          <div className="text-xs font-medium text-gray-500 uppercase tracking-wide px-2 py-1 mb-1">My Watchlists</div>
+                          <div className="text-xs font-medium text-gray-500 dark:text-pearto-gray uppercase tracking-wide px-2 py-1 mb-1 transition-colors duration-300">My Watchlists</div>
                           {watchlists.map((list) => (
                             <button
                               key={list}
@@ -533,18 +529,18 @@ export default function WatchlistPage() {
                                 setActiveWatchlist(list);
                                 setShowWatchlistMenu(false);
                               }}
-                              className={`w-full text-left px-3 py-2 text-sm rounded hover:bg-gray-50 flex items-center justify-between ${
-                                activeWatchlist === list ? 'bg-blue-50 text-blue-700' : 'text-gray-700'
+                              className={`w-full text-left px-3 py-2 text-sm rounded hover:bg-gray-50 dark:hover:bg-pearto-surface flex items-center justify-between transition-colors duration-300 ${
+                                activeWatchlist === list ? 'bg-blue-50 dark:bg-pearto-green/10 text-blue-700 dark:text-pearto-green' : 'text-gray-700 dark:text-pearto-cloud'
                               }`}
                             >
                               <span>{list}</span>
-                              {activeWatchlist === list && <span className="text-blue-600">✓</span>}
+                              {activeWatchlist === list && <span className="text-blue-600 dark:text-pearto-green">✓</span>}
                             </button>
                           ))}
 
-                          <div className="border-t border-gray-100 mt-2 pt-2">
+                          <div className="border-t border-gray-100 dark:border-pearto-border mt-2 pt-2">
                             <div className="flex items-center space-x-2 px-2">
-                              <Plus className="h-4 w-4 text-gray-400" />
+                              <Plus className="h-4 w-4 text-gray-400 dark:text-pearto-gray" />
                               <input
                                 type="text"
                                 placeholder="Add new watchlist"
@@ -558,7 +554,7 @@ export default function WatchlistPage() {
                                     setShowWatchlistMenu(false);
                                   }
                                 }}
-                                className="flex-1 text-xs border-0 outline-none bg-transparent placeholder-gray-400"
+                                className="flex-1 text-xs border-0 outline-none bg-transparent placeholder-gray-400 dark:placeholder-pearto-gray text-gray-900 dark:text-pearto-luna transition-colors duration-300"
                               />
                             </div>
                           </div>
@@ -567,14 +563,14 @@ export default function WatchlistPage() {
                     )}
                   </div>
 
-                  <div className="text-xs text-gray-500">
+                  <div className="text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">
                     {stocks.length} stocks • Last updated 2 min ago
                   </div>
                 </div>
               </div>
 
               {/* Controls */}
-              <div className="px-6 py-3 border-b border-gray-200 bg-white">
+              <div className="px-6 py-3 border-b border-gray-200 dark:border-pearto-border bg-white dark:bg-pearto-card transition-colors duration-300">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
                     <div className="relative">
@@ -585,12 +581,12 @@ export default function WatchlistPage() {
                         value={newSymbol}
                         onChange={(e) => setNewSymbol(e.target.value.toUpperCase())}
                         onKeyPress={(e) => e.key === 'Enter' && addStock()}
-                        className="pl-9 pr-4 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-sm w-64"
+                        className="pl-9 pr-4 py-2 border border-gray-300 dark:border-pearto-border rounded-md focus:ring-1 focus:ring-blue-500 dark:focus:ring-pearto-green focus:border-blue-500 text-sm w-64 bg-white dark:bg-pearto-surface text-gray-900 dark:text-pearto-luna transition-colors duration-300"
                       />
                     </div>
                     <button
                       onClick={() => setShowAddModal(true)}
-                      className="flex items-center space-x-1 px-3 py-2 text-blue-600 hover:text-blue-700 text-sm border border-blue-200 rounded-md hover:bg-blue-50"
+                      className="flex items-center space-x-1 px-3 py-2 text-blue-600 dark:text-pearto-green hover:text-blue-700 dark:hover:text-pearto-green/80 text-sm border border-blue-200 dark:border-pearto-green/30 rounded-md hover:bg-blue-50 dark:hover:bg-pearto-green/10 transition-colors duration-300"
                     >
                       <Edit3 className="h-4 w-4" />
                       <span>Edit</span>
@@ -600,7 +596,7 @@ export default function WatchlistPage() {
               </div>
 
               {/* Tabs */}
-              <div className="border-b border-gray-200 overflow-x-auto">
+              <div className="border-b border-gray-200 dark:border-pearto-border overflow-x-auto transition-colors duration-300">
                 <nav className="flex space-x-6 px-6 min-w-max">
                   {tabs.map((tab) => (
                     <button
@@ -608,8 +604,8 @@ export default function WatchlistPage() {
                       onClick={() => setActiveTab(tab)}
                       className={`py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                         activeTab === tab
-                          ? 'border-blue-500 text-blue-600'
-                          : 'border-transparent text-gray-600 hover:text-gray-800'
+                          ? 'border-blue-500 dark:border-pearto-green text-blue-600 dark:text-pearto-green'
+                          : 'border-transparent text-gray-600 dark:text-pearto-cloud hover:text-gray-800 dark:hover:text-pearto-luna'
                       }`}
                     >
                       {tab}
@@ -621,29 +617,29 @@ export default function WatchlistPage() {
               {/* Table */}
               <div className="overflow-x-auto">
                 <table className="w-full">
-                  <thead className="bg-gray-50 border-b border-gray-200">
+                  <thead className="bg-gray-50 dark:bg-pearto-surface border-b border-gray-200 dark:border-pearto-border transition-colors duration-300">
                     <tr>
                       {columns.map((col) => (
-                        <th key={col.key} className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
+                        <th key={col.key} className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-pearto-gray uppercase tracking-wider whitespace-nowrap transition-colors duration-300">
                           {col.label}
                         </th>
                       ))}
                     </tr>
                   </thead>
-                  <tbody className="bg-white divide-y divide-gray-100">
+                  <tbody className="bg-white dark:bg-pearto-card divide-y divide-gray-100 dark:divide-pearto-border transition-colors duration-300">
                     {stocks.length === 0 ? (
                       <tr>
                         <td colSpan={columns.length} className="px-6 py-16 text-center">
                           <div className="flex flex-col items-center">
-                            <BarChart3 className="h-12 w-12 text-gray-300 mb-3" />
-                            <p className="text-gray-500 text-base font-medium mb-1">No stocks in watchlist</p>
-                            <p className="text-gray-400 text-sm">Add stocks to start tracking</p>
+                            <BarChart3 className="h-12 w-12 text-gray-300 dark:text-pearto-gray mb-3 transition-colors duration-300" />
+                            <p className="text-gray-500 dark:text-pearto-cloud text-base font-medium mb-1 transition-colors duration-300">No stocks in watchlist</p>
+                            <p className="text-gray-400 dark:text-pearto-gray text-sm transition-colors duration-300">Add stocks to start tracking</p>
                           </div>
                         </td>
                       </tr>
                     ) : (
                       stocks.map((stock) => (
-                        <tr key={stock.symbol} className="hover:bg-gray-50 transition-colors">
+                        <tr key={stock.symbol} className="hover:bg-gray-50 dark:hover:bg-pearto-surface transition-colors">
                           {columns.map((col) => (
                             <td key={col.key} className="px-4 py-3 whitespace-nowrap text-sm">
                               {getCellValue(stock, col.key)}
@@ -668,8 +664,8 @@ export default function WatchlistPage() {
                       onClick={() => setActiveTab(tab)}
                       className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
                         activeTab === tab
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-white text-gray-600 border border-gray-200'
+                          ? 'bg-blue-600 dark:bg-pearto-green text-white'
+                          : 'bg-white dark:bg-pearto-card text-gray-600 dark:text-pearto-cloud border border-gray-200 dark:border-pearto-border'
                       }`}
                     >
                       {tab}
@@ -681,10 +677,10 @@ export default function WatchlistPage() {
               {/* Stock Cards */}
               <div className="space-y-3">
                 {stocks.length === 0 ? (
-                  <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
-                    <BarChart3 className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-                    <p className="text-gray-500 font-medium mb-1">No stocks yet</p>
-                    <p className="text-gray-400 text-sm">Search and add stocks above</p>
+                  <div className="bg-white dark:bg-pearto-card rounded-lg border border-gray-200 dark:border-pearto-border p-12 text-center transition-colors duration-300">
+                    <BarChart3 className="h-12 w-12 text-gray-300 dark:text-pearto-gray mx-auto mb-3 transition-colors duration-300" />
+                    <p className="text-gray-500 dark:text-pearto-cloud font-medium mb-1 transition-colors duration-300">No stocks yet</p>
+                    <p className="text-gray-400 dark:text-pearto-gray text-sm transition-colors duration-300">Search and add stocks above</p>
                   </div>
                 ) : (
                   stocks.map((stock) => (
@@ -742,16 +738,16 @@ export default function WatchlistPage() {
                 animate={{ y: 0 }}
                 exit={{ y: '100%' }}
                 transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-                className="bg-white rounded-t-2xl w-full max-h-[85vh] overflow-hidden"
+                className="bg-white dark:bg-pearto-card rounded-t-2xl w-full max-h-[85vh] overflow-hidden transition-colors duration-300"
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className="p-4 border-b border-gray-200 flex items-center justify-between">
-                  <h3 className="font-semibold text-lg">AI Insights</h3>
+                <div className="p-4 border-b border-gray-200 dark:border-pearto-border flex items-center justify-between transition-colors duration-300">
+                  <h3 className="font-semibold text-lg text-gray-900 dark:text-pearto-luna transition-colors duration-300">AI Insights</h3>
                   <button
                     onClick={() => setShowAIPanel(false)}
-                    className="p-2 hover:bg-gray-100 rounded-full"
+                    className="p-2 hover:bg-gray-100 dark:hover:bg-pearto-surface rounded-full transition-colors duration-300"
                   >
-                    <X className="h-5 w-5" />
+                    <X className="h-5 w-5 text-gray-600 dark:text-pearto-cloud" />
                   </button>
                 </div>
                 <div className="overflow-y-auto" style={{ maxHeight: 'calc(85vh - 64px)' }}>
@@ -800,48 +796,48 @@ export default function WatchlistPage() {
                 animate={{ y: 0 }}
                 exit={{ y: '100%' }}
                 transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-                className="bg-white rounded-t-2xl w-full max-h-[70vh] overflow-hidden"
+                className="bg-white dark:bg-pearto-card rounded-t-2xl w-full max-h-[70vh] overflow-hidden transition-colors duration-300"
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className="p-4 border-b border-gray-200">
+                <div className="p-4 border-b border-gray-200 dark:border-pearto-border transition-colors duration-300">
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-bold text-xl">{selectedStock.symbol}</h3>
+                    <h3 className="font-bold text-xl text-gray-900 dark:text-pearto-luna transition-colors duration-300">{selectedStock.symbol}</h3>
                     <button
                       onClick={() => setSelectedStock(null)}
-                      className="p-2 hover:bg-gray-100 rounded-full"
+                      className="p-2 hover:bg-gray-100 dark:hover:bg-pearto-surface rounded-full transition-colors duration-300"
                     >
-                      <X className="h-5 w-5" />
+                      <X className="h-5 w-5 text-gray-600 dark:text-pearto-cloud" />
                     </button>
                   </div>
                   <div className="flex items-baseline space-x-3">
-                    <span className="text-3xl font-bold">{formatPrice(selectedStock.price)}</span>
-                    <span className={`text-lg font-medium ${selectedStock.changePercent >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    <span className="text-3xl font-bold text-gray-900 dark:text-pearto-luna transition-colors duration-300">{formatPrice(selectedStock.price)}</span>
+                    <span className={`text-lg font-medium ${selectedStock.changePercent >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'}`}>
                       {selectedStock.changePercent >= 0 ? '+' : ''}{selectedStock.changePercent.toFixed(2)}%
                     </span>
                   </div>
                 </div>
                 <div className="p-4 overflow-y-auto" style={{ maxHeight: 'calc(70vh - 120px)' }}>
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-gray-50 rounded-lg p-3">
-                      <div className="text-sm text-gray-500 mb-1">Volume</div>
-                      <div className="text-lg font-semibold">{formatVolume(selectedStock.volume)}</div>
+                    <div className="bg-gray-50 dark:bg-pearto-surface rounded-lg p-3 transition-colors duration-300">
+                      <div className="text-sm text-gray-500 dark:text-pearto-gray mb-1 transition-colors duration-300">Volume</div>
+                      <div className="text-lg font-semibold text-gray-900 dark:text-pearto-luna transition-colors duration-300">{formatVolume(selectedStock.volume)}</div>
                     </div>
-                    <div className="bg-gray-50 rounded-lg p-3">
-                      <div className="text-sm text-gray-500 mb-1">Market Cap</div>
-                      <div className="text-lg font-semibold">{formatNumber(selectedStock.marketCap)}</div>
+                    <div className="bg-gray-50 dark:bg-pearto-surface rounded-lg p-3 transition-colors duration-300">
+                      <div className="text-sm text-gray-500 dark:text-pearto-gray mb-1 transition-colors duration-300">Market Cap</div>
+                      <div className="text-lg font-semibold text-gray-900 dark:text-pearto-luna transition-colors duration-300">{formatNumber(selectedStock.marketCap)}</div>
                     </div>
-                    <div className="bg-gray-50 rounded-lg p-3">
-                      <div className="text-sm text-gray-500 mb-1">P/E Ratio</div>
-                      <div className="text-lg font-semibold">{selectedStock.peRatio?.toFixed(2) || 'N/A'}</div>
+                    <div className="bg-gray-50 dark:bg-pearto-surface rounded-lg p-3 transition-colors duration-300">
+                      <div className="text-sm text-gray-500 dark:text-pearto-gray mb-1 transition-colors duration-300">P/E Ratio</div>
+                      <div className="text-lg font-semibold text-gray-900 dark:text-pearto-luna transition-colors duration-300">{selectedStock.peRatio?.toFixed(2) || 'N/A'}</div>
                     </div>
-                    <div className="bg-gray-50 rounded-lg p-3">
-                      <div className="text-sm text-gray-500 mb-1">Div Yield</div>
-                      <div className="text-lg font-semibold">{(selectedStock.dividendYield || 0).toFixed(2)}%</div>
+                    <div className="bg-gray-50 dark:bg-pearto-surface rounded-lg p-3 transition-colors duration-300">
+                      <div className="text-sm text-gray-500 dark:text-pearto-gray mb-1 transition-colors duration-300">Div Yield</div>
+                      <div className="text-lg font-semibold text-gray-900 dark:text-pearto-luna transition-colors duration-300">{(selectedStock.dividendYield || 0).toFixed(2)}%</div>
                     </div>
                   </div>
                   <Link
                     href={`/stock/${selectedStock.symbol.toLowerCase()}`}
-                    className="mt-4 w-full flex items-center justify-center space-x-2 px-4 py-3 bg-blue-600 text-white rounded-lg font-medium"
+                    className="mt-4 w-full flex items-center justify-center space-x-2 px-4 py-3 bg-blue-600 dark:bg-pearto-green text-white rounded-lg font-medium hover:bg-blue-700 dark:hover:bg-pearto-green/90 transition-colors duration-300"
                   >
                     <span>View Full Details</span>
                     <ExternalLink className="h-4 w-4" />
@@ -866,13 +862,13 @@ export default function WatchlistPage() {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                className="bg-white rounded-xl p-6 w-full max-w-md"
+                className="bg-white dark:bg-pearto-card rounded-xl p-6 w-full max-w-md transition-colors duration-300"
                 onClick={(e) => e.stopPropagation()}
               >
-                <h3 className="text-lg font-bold text-gray-900 mb-4">Add Stock to Watchlist</h3>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-pearto-luna mb-4 transition-colors duration-300">Add Stock to Watchlist</h3>
 
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-pearto-cloud mb-2 transition-colors duration-300">
                     Stock Symbol
                   </label>
                   <input
@@ -880,7 +876,7 @@ export default function WatchlistPage() {
                     value={newSymbol}
                     onChange={(e) => setNewSymbol(e.target.value.toUpperCase())}
                     placeholder="e.g., AAPL"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-pearto-border rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-pearto-green focus:border-transparent bg-white dark:bg-pearto-surface text-gray-900 dark:text-pearto-luna transition-colors duration-300"
                     onKeyPress={(e) => e.key === 'Enter' && addStock()}
                   />
                 </div>
@@ -888,13 +884,13 @@ export default function WatchlistPage() {
                 <div className="flex space-x-3">
                   <button
                     onClick={() => setShowAddModal(false)}
-                    className="flex-1 px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                    className="flex-1 px-4 py-2 text-gray-700 dark:text-pearto-cloud border border-gray-300 dark:border-pearto-border rounded-lg hover:bg-gray-50 dark:hover:bg-pearto-surface transition-colors"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={addStock}
-                    className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    className="flex-1 px-4 py-2 bg-blue-600 dark:bg-pearto-green text-white rounded-lg hover:bg-blue-700 dark:hover:bg-pearto-green/90 transition-colors"
                   >
                     Add Stock
                   </button>

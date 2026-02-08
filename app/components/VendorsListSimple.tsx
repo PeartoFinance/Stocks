@@ -47,7 +47,7 @@ export default function VendorsListSimple({ className = '', limit = 8, category 
   if (loading) {
     return (
       <div className={`bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-2.5 ${className}`}>
-        <h3 className="text-xs font-semibold text-slate-900 dark:text-white mb-2 flex items-center gap-1.5">
+        <h3 className="text-xs font-semibold text-slate-900 dark:text-white mb-2 flex items-center gap-1.5 transition-colors duration-300">
           <Building2 className="h-3.5 w-3.5 text-blue-600" />
           Related Vendors
         </h3>
@@ -66,13 +66,13 @@ export default function VendorsListSimple({ className = '', limit = 8, category 
   if (error || vendors.length === 0) {
     return (
       <div className={`bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-2.5 ${className}`}>
-        <h3 className="text-xs font-semibold text-slate-900 dark:text-white mb-2 flex items-center gap-1.5">
+        <h3 className="text-xs font-semibold text-slate-900 dark:text-white mb-2 flex items-center gap-1.5 transition-colors duration-300">
           <Building2 className="h-3.5 w-3.5 text-blue-600" />
           Related Vendors
         </h3>
         <div className="text-center py-4">
           <Building2 className="h-6 w-6 text-gray-400 mx-auto mb-1.5" />
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">
             {error || 'No vendors available'}
           </p>
         </div>
@@ -82,7 +82,7 @@ export default function VendorsListSimple({ className = '', limit = 8, category 
 
   return (
     <div className={`bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-2.5 ${className}`}>
-      <h3 className="text-xs font-semibold text-slate-900 dark:text-white mb-2 flex items-center gap-1.5">
+      <h3 className="text-xs font-semibold text-slate-900 dark:text-white mb-2 flex items-center gap-1.5 transition-colors duration-300">
         <Building2 className="h-3.5 w-3.5 text-blue-600" />
         Related Vendors
       </h3>
@@ -130,7 +130,7 @@ export default function VendorsListSimple({ className = '', limit = 8, category 
                 {vendor.name}
               </h4>
               {vendor.category && (
-                <span className="text-[10px] text-slate-500 dark:text-slate-400">
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 transition-colors duration-300">
                   {vendor.category}
                 </span>
               )}
@@ -140,7 +140,7 @@ export default function VendorsListSimple({ className = '', limit = 8, category 
       </div>
 
       {/* View More Link */}
-      <div className="mt-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+      <div className="mt-2 pt-2 border-t border-slate-100 dark:border-slate-800 transition-colors duration-300">
         <a
           href="/vendors"
           className="flex items-center justify-center gap-1 text-[11px] text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium transition-colors"

@@ -104,12 +104,12 @@ export default function RiskAnalysisChart({ className = '', crypto }: RiskAnalys
 
   const getRiskColor = (level: string) => {
     const colors = {
-      'Low': 'text-green-600',
+      'Low': 'text-green-600 dark:text-pearto-green',
       'Medium': 'text-yellow-600', 
-      'High': 'text-red-600',
+      'High': 'text-red-600 dark:text-pearto-pink',
       'Very High': 'text-purple-600'
     };
-    return colors[level as keyof typeof colors] || 'text-gray-600';
+    return colors[level as keyof typeof colors] || 'text-gray-600 dark:text-pearto-cloud';
   };
 
   const options = {
@@ -132,7 +132,7 @@ export default function RiskAnalysisChart({ className = '', crypto }: RiskAnalys
             size: 10,
             weight: 500 as const
           },
-          color: '#374151',
+          color: '#374151 dark:text-gray-300',
           boxWidth: 12,
           boxHeight: 12
         }
@@ -162,8 +162,8 @@ export default function RiskAnalysisChart({ className = '', crypto }: RiskAnalys
   return (
     <div className={`bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 ${className}`}>
       <div className="mb-3">
-        <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-1">Risk Analysis</h3>
-        <p className="text-xs text-gray-600 dark:text-gray-400">
+        <h3 className="text-sm font-semibold text-gray-900  dark:text-white mb-1 transition-colors duration-300">Risk Analysis</h3>
+        <p className="text-xs text-gray-600  dark:text-gray-400 transition-colors duration-300">
           Based on {crypto.symbol} market metrics
         </p>
       </div>
@@ -173,11 +173,11 @@ export default function RiskAnalysisChart({ className = '', crypto }: RiskAnalys
         
         {/* Center text - positioned absolutely but with better z-index */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
-          <div className="text-center bg-white/90 dark:bg-slate-900/90 px-3 py-2 rounded-lg shadow-sm">
+          <div className="text-center bg-white dark:bg-pearto-card  dark:bg-slate-900/90 px-3 py-2 rounded-lg shadow-sm transition-colors duration-300">
             <div className={`text-lg font-bold ${getRiskColor(overallRisk)}`}>
               {overallRisk}
             </div>
-            <div className="text-xs text-gray-500 dark:text-gray-400">Risk</div>
+            <div className="text-xs text-gray-500  dark:text-gray-400 transition-colors duration-300">Risk</div>
           </div>
         </div>
       </div>
@@ -185,21 +185,21 @@ export default function RiskAnalysisChart({ className = '', crypto }: RiskAnalys
       {/* Risk Factors */}
       <div className="space-y-2">
         <div className="flex items-center justify-between text-xs">
-          <span className="text-gray-600 dark:text-gray-400">Volatility</span>
+          <span className="text-gray-600  dark:text-gray-400 transition-colors duration-300">Volatility</span>
           <span className={`font-medium ${
-            Math.abs(crypto.changePercent || 0) < 2 ? 'text-green-600' :
+            Math.abs(crypto.changePercent || 0) < 2 ? 'text-green-600 dark:text-pearto-green' :
             Math.abs(crypto.changePercent || 0) < 5 ? 'text-yellow-600' :
-            Math.abs(crypto.changePercent || 0) < 10 ? 'text-red-600' : 'text-purple-600'
+            Math.abs(crypto.changePercent || 0) < 10 ? 'text-red-600 dark:text-pearto-pink' : 'text-purple-600'
           }`}>
             {Math.abs(crypto.changePercent || 0).toFixed(2)}%
           </span>
         </div>
         <div className="flex items-center justify-between text-xs">
-          <span className="text-gray-600 dark:text-gray-400">Market Cap</span>
+          <span className="text-gray-600  dark:text-gray-400 transition-colors duration-300">Market Cap</span>
           <span className={`font-medium ${
-            (crypto.marketCap || 0) > 10000000000 ? 'text-green-600' :
+            (crypto.marketCap || 0) > 10000000000 ? 'text-green-600 dark:text-pearto-green' :
             (crypto.marketCap || 0) > 1000000000 ? 'text-yellow-600' :
-            (crypto.marketCap || 0) > 100000000 ? 'text-red-600' : 'text-purple-600'
+            (crypto.marketCap || 0) > 100000000 ? 'text-red-600 dark:text-pearto-pink' : 'text-purple-600'
           }`}>
             {(crypto.marketCap || 0) > 1000000000 
               ? `$${((crypto.marketCap || 0) / 1000000000).toFixed(1)}B`
@@ -208,11 +208,11 @@ export default function RiskAnalysisChart({ className = '', crypto }: RiskAnalys
           </span>
         </div>
         <div className="flex items-center justify-between text-xs">
-          <span className="text-gray-600 dark:text-gray-400">Volume/Cap</span>
+          <span className="text-gray-600  dark:text-gray-400 transition-colors duration-300">Volume/Cap</span>
           <span className={`font-medium ${
-            ((crypto.volume || 0) / (crypto.marketCap || 1)) > 0.1 ? 'text-green-600' :
+            ((crypto.volume || 0) / (crypto.marketCap || 1)) > 0.1 ? 'text-green-600 dark:text-pearto-green' :
             ((crypto.volume || 0) / (crypto.marketCap || 1)) > 0.05 ? 'text-yellow-600' :
-            ((crypto.volume || 0) / (crypto.marketCap || 1)) > 0.01 ? 'text-red-600' : 'text-purple-600'
+            ((crypto.volume || 0) / (crypto.marketCap || 1)) > 0.01 ? 'text-red-600 dark:text-pearto-pink' : 'text-purple-600'
           }`}>
             {(((crypto.volume || 0) / (crypto.marketCap || 1)) * 100).toFixed(2)}%
           </span>

@@ -114,12 +114,12 @@ export default function StatisticsTab({ crypto }: StatisticsTabProps) {
   return (
     <div className="space-y-6">
       {/* Price Statistics */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-6">
+      <div className="bg-white  dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-6 transition-colors duration-300">
         <div className="flex items-center gap-3 mb-6">
           <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
-            <DollarSign className="h-4 w-4 text-emerald-600" />
+            <DollarSign className="h-4 w-4 text-emerald-600 dark:text-pearto-green transition-colors duration-300" />
           </div>
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Price Statistics</h3>
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white transition-colors duration-300">Price Statistics</h3>
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -131,24 +131,24 @@ export default function StatisticsTab({ crypto }: StatisticsTabProps) {
             { label: 'Day Low', value: crypto.dayLow ? formatPrice(crypto.dayLow) : '-', icon: TrendingDown, color: 'red' },
             { label: 'Previous Close', value: crypto.previousClose ? formatPrice(crypto.previousClose) : '-', icon: Activity, color: 'gray' },
           ].map((item, i) => (
-            <div key={i} className={`bg-${item.color}-50 dark:bg-${item.color}-900/20 p-4 rounded-xl border border-${item.color}-100 dark:border-${item.color}-800`}>
+            <div key={i} className={`bg-${item.color}-50 dark:bg-slate-800 p-4 rounded-xl border border-${item.color}-100 dark:border-slate-700`}>
               <div className="flex items-center gap-2 mb-2">
                 <item.icon className={`h-4 w-4 text-${item.color}-600 dark:text-${item.color}-400`} />
-                <span className={`text-sm font-medium text-${item.color}-700 dark:text-${item.color}-300`}>{item.label}</span>
+                <span className={`text-sm font-medium text-${item.color}-700 dark:text-slate-300`}>{item.label}</span>
               </div>
-              <p className={`text-lg font-bold text-${item.color}-900 dark:text-${item.color}-100`}>{item.value}</p>
+              <p className={`text-lg font-bold text-${item.color}-900 dark:text-white`}>{item.value}</p>
             </div>
           ))}
         </div>
       </div>
 
       {/* Market Statistics */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-6">
+      <div className="bg-white  dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-6 transition-colors duration-300">
         <div className="flex items-center gap-3 mb-6">
           <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
             <PieChart className="h-4 w-4 text-blue-600" />
           </div>
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Market Statistics</h3>
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white transition-colors duration-300">Market Statistics</h3>
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -160,24 +160,24 @@ export default function StatisticsTab({ crypto }: StatisticsTabProps) {
             { label: 'Market Cap Rank', value: `#${crypto.id}`, icon: Hash, color: 'indigo' },
             { label: 'Trading Activity', value: crypto.avgVolume && crypto.volume ? `${((crypto.volume / crypto.avgVolume) * 100).toFixed(1)}%` : '-', icon: Activity, color: 'cyan' },
           ].map((item, i) => (
-            <div key={i} className={`bg-${item.color}-50 dark:bg-${item.color}-900/20 p-4 rounded-xl border border-${item.color}-100 dark:border-${item.color}-800`}>
+            <div key={i} className="bg-blue-50 dark:bg-slate-800 p-4 rounded-xl border border-blue-100 dark:border-slate-700">
               <div className="flex items-center gap-2 mb-2">
-                <item.icon className={`h-4 w-4 text-${item.color}-600 dark:text-${item.color}-400`} />
-                <span className={`text-sm font-medium text-${item.color}-700 dark:text-${item.color}-300`}>{item.label}</span>
+                <item.icon className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                <span className="text-sm font-medium text-blue-700 dark:text-blue-300">{item.label}</span>
               </div>
-              <p className={`text-lg font-bold text-${item.color}-900 dark:text-${item.color}-100`}>{item.value}</p>
+              <p className="text-lg font-bold text-blue-900 dark:text-white">{item.value}</p>
             </div>
           ))}
         </div>
       </div>
 
       {/* Supply Statistics */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-6">
+      <div className="bg-white  dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-6 transition-colors duration-300">
         <div className="flex items-center gap-3 mb-6">
           <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
             <Hash className="h-4 w-4 text-purple-600" />
           </div>
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Supply Statistics</h3>
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white transition-colors duration-300">Supply Statistics</h3>
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -189,24 +189,24 @@ export default function StatisticsTab({ crypto }: StatisticsTabProps) {
             { label: 'Price per Unit', value: formatPrice(crypto.price), icon: DollarSign, color: 'green' },
             { label: 'Market Cap per Supply', value: crypto.circulatingSupply ? formatPrice(crypto.marketCap / crypto.circulatingSupply) : '-', icon: BarChart3, color: 'orange' },
           ].map((item, i) => (
-            <div key={i} className={`bg-${item.color}-50 dark:bg-${item.color}-900/20 p-4 rounded-xl border border-${item.color}-100 dark:border-${item.color}-800`}>
+            <div key={i} className="bg-purple-50 dark:bg-slate-800 p-4 rounded-xl border border-purple-100 dark:border-slate-700">
               <div className="flex items-center gap-2 mb-2">
-                <item.icon className={`h-4 w-4 text-${item.color}-600 dark:text-${item.color}-400`} />
-                <span className={`text-sm font-medium text-${item.color}-700 dark:text-${item.color}-300`}>{item.label}</span>
+                <item.icon className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+                <span className="text-sm font-medium text-purple-700 dark:text-purple-300">{item.label}</span>
               </div>
-              <p className={`text-lg font-bold text-${item.color}-900 dark:text-${item.color}-100`}>{item.value}</p>
+              <p className="text-lg font-bold text-purple-900 dark:text-white">{item.value}</p>
             </div>
           ))}
         </div>
       </div>
 
       {/* Additional Metrics */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-6">
+      <div className="bg-white  dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-6 transition-colors duration-300">
         <div className="flex items-center gap-3 mb-6">
           <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
             <Zap className="h-4 w-4 text-orange-600" />
           </div>
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Additional Metrics</h3>
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white transition-colors duration-300">Additional Metrics</h3>
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -218,12 +218,12 @@ export default function StatisticsTab({ crypto }: StatisticsTabProps) {
             { label: 'Listed', value: crypto.isListed ? 'Yes' : 'No', icon: BarChart3, color: 'blue' },
             { label: 'Last Updated', value: new Date(crypto.lastUpdated).toLocaleDateString(), icon: Clock, color: 'gray' },
           ].map((item, i) => (
-            <div key={i} className={`bg-${item.color}-50 dark:bg-${item.color}-900/20 p-4 rounded-xl border border-${item.color}-100 dark:border-${item.color}-800`}>
+            <div key={i} className="bg-orange-50 dark:bg-slate-800 p-4 rounded-xl border border-orange-100 dark:border-slate-700">
               <div className="flex items-center gap-2 mb-2">
-                <item.icon className={`h-4 w-4 text-${item.color}-600 dark:text-${item.color}-400`} />
-                <span className={`text-sm font-medium text-${item.color}-700 dark:text-${item.color}-300`}>{item.label}</span>
+                <item.icon className="h-4 w-4 text-orange-600 dark:text-orange-400" />
+                <span className="text-sm font-medium text-orange-700 dark:text-orange-300">{item.label}</span>
               </div>
-              <p className={`text-lg font-bold text-${item.color}-900 dark:text-${item.color}-100`}>{item.value}</p>
+              <p className="text-lg font-bold text-orange-900 dark:text-white">{item.value}</p>
             </div>
           ))}
         </div>

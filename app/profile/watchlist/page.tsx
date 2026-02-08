@@ -141,8 +141,8 @@ export default function WatchlistPage() {
     if (!isAuthenticated) return null;
 
     return (
-        <div className="min-h-screen bg-slate-50">
-            <div className="bg-gradient-to-r from-green-600 to-emerald-600 mt-8">
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
+            <div className="bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-800 dark:to-emerald-800 mt-8">
                 <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <div className="flex items-center gap-3">
@@ -162,7 +162,7 @@ export default function WatchlistPage() {
                                 setShowSearch(!showSearch);
                                 setSymbolToAdd('');
                             }}
-                            className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white text-green-600 font-medium hover:bg-green-50 transition shadow-sm"
+                            className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white text-green-600 dark:text-green-400 font-medium hover:bg-green-50 dark:hover:bg-green-900/30 transition shadow-sm"
                         >
                             <Plus className="h-5 w-5" />
                             Add Stock
@@ -173,7 +173,7 @@ export default function WatchlistPage() {
 
             <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 max-w-4xl">
                 {showSearch && (
-                    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-6 mb-6">
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm p-4 sm:p-6 mb-6">
                         <h3 className="font-semibold text-slate-900 mb-4">Add stock to watchlist</h3>
                         <div className="relative">
                             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
@@ -187,7 +187,7 @@ export default function WatchlistPage() {
                                         onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                                         onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
                                         placeholder="Enter stock symbol or name..."
-                                        className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 outline-none"
+                                        className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 outline-none bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                                     />
                                 </div>
                                 <button
@@ -204,19 +204,19 @@ export default function WatchlistPage() {
                             
                             {/* Stock Suggestions Dropdown */}
                             {showSuggestions && filteredStocks.length > 0 && (
-                                <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-xl shadow-lg z-10 max-h-64 overflow-y-auto">
+                                <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg z-10 max-h-64 overflow-y-auto">
                                     {filteredStocks.map((stock, index) => (
                                         <button
                                             key={index}
                                             onClick={() => handleSuggestionClick(stock)}
-                                            className="w-full px-4 py-3 text-left hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-b-0"
+                                            className="w-full px-4 py-3 text-left hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors border-b border-slate-100 dark:border-slate-700 last:border-b-0"
                                         >
                                             <div className="flex items-center justify-between">
                                                 <div>
                                                     <div className="font-semibold text-slate-900">
                                                         {stock.symbol}
                                                     </div>
-                                                    <div className="text-sm text-slate-500 truncate">
+                                                    <div className="text-sm text-slate-500 dark:text-slate-400 truncate">
                                                         {stock.name}
                                                     </div>
                                                 </div>
@@ -239,9 +239,9 @@ export default function WatchlistPage() {
                     </div>
                 )}
 
-                <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                    <div className="px-4 sm:px-6 py-4 border-b border-slate-100">
-                        <h2 className="font-semibold text-slate-900">Your watchlist ({watchlist.length})</h2>
+                <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                    <div className="px-4 sm:px-6 py-4 border-b border-slate-100 dark:border-slate-700">
+                        <h2 className="font-semibold text-slate-900 dark:text-white">Your watchlist ({watchlist.length})</h2>
                     </div>
                     {loading ? (
                         <div className="p-12 flex justify-center">
@@ -249,11 +249,11 @@ export default function WatchlistPage() {
                         </div>
                     ) : watchlist.length === 0 ? (
                         <div className="p-8 sm:p-12 text-center">
-                            <div className="h-14 w-14 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-4">
+                            <div className="h-14 w-14 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center mx-auto mb-4">
                                 <Star className="h-7 w-7 text-amber-500" />
                             </div>
-                            <h3 className="text-lg font-semibold text-slate-900 mb-2">No stocks yet</h3>
-                            <p className="text-slate-500 mb-6 max-w-sm mx-auto">
+                            <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">No stocks yet</h3>
+                            <p className="text-slate-500 dark:text-slate-400 mb-6 max-w-sm mx-auto">
                                 Add stocks to track prices and performance.
                             </p>
                             <button
@@ -265,24 +265,24 @@ export default function WatchlistPage() {
                             </button>
                         </div>
                     ) : (
-                        <div className="divide-y divide-slate-100">
+                        <div className="divide-y divide-slate-100 dark:divide-slate-700">
                             {watchlist.map((item) => (
                                 <div
                                     key={item.symbol}
-                                    className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 sm:px-6 hover:bg-slate-50 transition"
+                                    className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 sm:px-6 hover:bg-slate-50 dark:hover:bg-slate-800 transition"
                                 >
                                     <Link href={`/stock/${item.symbol}`} className="flex-1 min-w-0">
-                                        <div className="font-medium text-slate-900">{item.symbol}</div>
-                                        <div className="text-sm text-slate-500 truncate">{item.name || '—'}</div>
+                                        <div className="font-medium text-slate-900 dark:text-white">{item.symbol}</div>
+                                        <div className="text-sm text-slate-500 dark:text-slate-400 truncate">{item.name || '—'}</div>
                                     </Link>
                                     <div className="flex items-center gap-4 flex-shrink-0">
                                         <div className="text-right">
-                                            <div className="font-medium text-slate-900">
+                                            <div className="font-medium text-slate-900 dark:text-white">
                                                 ${typeof item.price === 'number' && !isNaN(item.price) ? item.price.toFixed(2) : '—'}
                                             </div>
                                             <div
                                                 className={`text-sm flex items-center justify-end gap-1 ${
-                                                    (item.changePercent ?? 0) >= 0 ? 'text-green-600' : 'text-red-600'
+                                                    (item.changePercent ?? 0) >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
                                                 }`}
                                             >
                                                 {(item.changePercent ?? 0) >= 0 ? (
@@ -300,7 +300,7 @@ export default function WatchlistPage() {
                                         <button
                                             onClick={() => handleRemove(item.symbol)}
                                             disabled={removing === item.symbol}
-                                            className="p-2 rounded-lg hover:bg-red-50 text-slate-400 hover:text-red-600 transition disabled:opacity-50"
+                                            className="p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 transition disabled:opacity-50"
                                         >
                                             {removing === item.symbol ? (
                                                 <RefreshCw className="h-4 w-4 animate-spin" />

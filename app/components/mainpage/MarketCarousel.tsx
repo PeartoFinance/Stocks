@@ -46,32 +46,32 @@ export default function MarketCarousel({ className = '' }: MarketCarouselProps) 
 
   if (loading) {
     return (
-      <div className={`bg-white rounded-xl shadow-lg border border-gray-200 p-6 ${className}`}>
+      <div className={`bg-white dark:bg-pearto-card rounded-xl shadow-lg border border-gray-200 dark:border-pearto-border p-6 ${className}`}>
         <div className="flex items-center justify-center h-32">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600"></div>
-          <span className="ml-3 text-gray-600">Loading market data...</span>
+          <span className="ml-3 text-gray-600 dark:text-pearto-cloud transition-colors duration-300">Loading market data...</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className={`bg-white rounded-xl shadow-lg border border-gray-200 p-6 ${className}`}>
+    <div className={`bg-white dark:bg-pearto-card rounded-xl shadow-lg border border-gray-200 dark:border-pearto-border p-6 ${className}`}>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold text-gray-900 flex items-center">
-          <span className="w-2 h-6 bg-emerald-600 rounded-full mr-3"></span>
+        <h2 className="text-xl font-bold text-gray-900 dark:text-pearto-luna flex items-center transition-colors duration-300">
+          <span className="w-2 h-6 bg-emerald-600 dark:bg-pearto-pink rounded-full mr-3 transition-colors duration-300"></span>
           Trending Markets
         </h2>
         <div className="flex gap-2">
           <button
             onClick={prevSlide}
-            className="p-2 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
+            className="p-2 text-gray-500 dark:text-pearto-gray hover:text-emerald-600 dark:text-pearto-green hover:bg-emerald-50 rounded-lg transition-colors"
           >
             <TrendingUp className="h-4 w-4 rotate-90" />
           </button>
           <button
             onClick={nextSlide}
-            className="p-2 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
+            className="p-2 text-gray-500 dark:text-pearto-gray hover:text-emerald-600 dark:text-pearto-green hover:bg-emerald-50 rounded-lg transition-colors"
           >
             <TrendingUp className="h-4 w-4 -rotate-90" />
           </button>
@@ -88,11 +88,11 @@ export default function MarketCarousel({ className = '' }: MarketCarouselProps) 
               <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-lg p-4 border border border-emerald-200">
                 <div className="flex justify-between items-start mb-3">
                   <div>
-                    <div className="text-sm font-medium text-gray-900">{item.symbol}</div>
-                    <div className="text-xs text-gray-500">{item.name}</div>
+                    <div className="text-sm font-medium text-gray-900 dark:text-pearto-luna transition-colors duration-300">{item.symbol}</div>
+                    <div className="text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">{item.name}</div>
                   </div>
                   <div className={`text-lg font-bold ${
-                    item.changePercent >= 0 ? 'text-emerald-600' : 'text-red-600'
+                    item.changePercent >= 0 ? 'text-emerald-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
                   }`}>
                     ${item.change >= 0 ? '+' : ''}{item.change.toFixed(2)}
                   </div>
@@ -100,16 +100,16 @@ export default function MarketCarousel({ className = '' }: MarketCarouselProps) 
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div className="flex items-center gap-1">
                     <BarChart3 className="h-4 w-4 text-gray-400" />
-                    <span className="text-gray-600">${item.price.toFixed(2)}</span>
+                    <span className="text-gray-600 dark:text-pearto-cloud transition-colors duration-300">${item.price.toFixed(2)}</span>
                   </div>
                   <div className="flex items-center gap-1">
                     {item.changePercent >= 0 ? (
-                      <TrendingUp className="h-4 w-4 text-emerald-600" />
+                      <TrendingUp className="h-4 w-4 text-emerald-600 dark:text-pearto-green transition-colors duration-300" />
                     ) : (
-                      <TrendingDown className="h-4 w-4 text-red-600" />
+                      <TrendingDown className="h-4 w-4 text-red-600 dark:text-pearto-pink transition-colors duration-300" />
                     )}
                     <span className={`font-medium ${
-                      item.changePercent >= 0 ? 'text-emerald-600' : 'text-red-600'
+                      item.changePercent >= 0 ? 'text-emerald-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
                     }`}>
                       {item.changePercent >= 0 ? '+' : ''}{item.changePercent.toFixed(2)}%
                     </span>
@@ -117,7 +117,7 @@ export default function MarketCarousel({ className = '' }: MarketCarouselProps) 
                 </div>
                 {item.volume && (
                   <div className="mt-2 pt-2 border-t border-emerald-100">
-                    <div className="flex items-center gap-2 text-xs text-gray-500">
+                    <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">
                       <Users className="h-3 w-3" />
                       <span>Vol: {item.volume}</span>
                     </div>
@@ -137,7 +137,7 @@ export default function MarketCarousel({ className = '' }: MarketCarouselProps) 
             onClick={() => setCurrentIndex(index)}
             className={`w-2 h-2 rounded-full transition-colors ${
               index === currentIndex 
-                ? 'bg-emerald-600' 
+                ? 'bg-emerald-600 dark:bg-pearto-pink' 
                 : 'bg-gray-300 hover:bg-emerald-400'
             }`}
           />

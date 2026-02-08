@@ -26,27 +26,27 @@ const weightClassMap: Record<number, string> = {
 
 export default function SectorHeatmap({ className = '', sectors }: SectorHeatmapProps) {
   const getIntensity = (val: number) => {
-    if (val >= 2) return 'bg-emerald-600 text-white border-emerald-700 hover:bg-emerald-500';
+    if (val >= 2) return 'bg-emerald-600 dark:bg-pearto-pink text-white border-emerald-700 hover:bg-emerald-500';
     if (val >= 0.5) return 'bg-emerald-500/20 text-emerald-700 border-emerald-200 hover:bg-emerald-500/30';
-    if (val >= 0) return 'bg-emerald-50 text-emerald-600 border-emerald-100 hover:bg-emerald-100';
+    if (val >= 0) return 'bg-emerald-50 text-emerald-600 dark:text-pearto-green border-emerald-100 hover:bg-emerald-100';
     if (val > -1.5) return 'bg-rose-50 text-rose-600 border-rose-100 hover:bg-rose-100';
     return 'bg-rose-600 text-white border-rose-700 hover:bg-rose-500';
   };
 
   return (
-    <div className={`bg-white rounded-2xl border border-slate-200 p-5 shadow-sm ${className}`}>
+    <div className={`bg-white dark:bg-pearto-card rounded-2xl border border-slate-200 dark:border-pearto-border p-5 shadow-sm ${className}`}>
       {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-2.5">
           <div className="p-1.5 bg-emerald-50 rounded-lg">
-            <Activity className="h-4 w-4 text-emerald-600" />
+            <Activity className="h-4 w-4 text-emerald-600 dark:text-pearto-green transition-colors duration-300" />
           </div>
           <div>
-            <h2 className="text-slate-900 text-sm font-bold tracking-tight leading-none">Market Heatmap</h2>
-            <p className="text-[10px] text-slate-500 mt-1 font-medium">Performance by Sector Weight</p>
+            <h2 className="text-slate-900 dark:text-pearto-luna text-sm font-bold tracking-tight leading-none transition-colors duration-300">Market Heatmap</h2>
+            <p className="text-[10px] text-slate-500 dark:text-pearto-gray mt-1 font-medium transition-colors duration-300">Performance by Sector Weight</p>
           </div>
         </div>
-        <button className="text-slate-400 hover:text-slate-600 transition-colors">
+        <button className="text-slate-400 hover:text-slate-600 dark:text-pearto-cloud transition-colors">
           <Info className="h-4 w-4" />
         </button>
       </div>
@@ -104,7 +104,7 @@ export default function SectorHeatmap({ className = '', sectors }: SectorHeatmap
         <div className="flex items-center gap-3">
           <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Returns</span>
           <div className="flex gap-1">
-            {['bg-rose-600', 'bg-rose-50', 'bg-emerald-50', 'bg-emerald-600'].map((color, i) => (
+            {['bg-rose-600', 'bg-rose-50', 'bg-emerald-50', 'bg-emerald-600 dark:bg-pearto-pink'].map((color, i) => (
               <div key={i} className={`w-3 h-1.5 rounded-full ${color}`} />
             ))}
           </div>

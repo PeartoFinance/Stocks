@@ -301,11 +301,11 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
   const getTrendColor = (trendType: TrendingCrypto['trendType']) => {
     switch (trendType) {
       case 'gainer': return 'bg-orange-100 text-orange-700';
-      case 'loser': return 'bg-red-100 text-red-700';
+      case 'loser': return 'bg-red-100 dark:bg-pearto-pink/10 text-red-700';
       case 'volume': return 'bg-blue-100 text-blue-700';
       case 'breakout': return 'bg-purple-100 text-purple-700';
       case 'momentum': return 'bg-pink-100 text-pink-700';
-      default: return 'bg-gray-100 text-gray-700';
+      default: return 'bg-gray-100 dark:bg-pearto-surface text-gray-700 dark:text-pearto-cloud';
     }
   };
 
@@ -316,8 +316,8 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
           <div className="flex items-center justify-center h-96">
             <div className="text-center">
               <Activity className="h-12 w-12 text-orange-600 animate-spin mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-gray-900">Loading Trending Cryptocurrencies</h2>
-              <p className="text-gray-600">Please wait while we fetch the latest crypto trending data...</p>
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-pearto-luna transition-colors duration-300">Loading Trending Cryptocurrencies</h2>
+              <p className="text-gray-600 dark:text-pearto-cloud transition-colors duration-300">Please wait while we fetch the latest crypto trending data...</p>
             </div>
           </div>
         </main>
@@ -350,7 +350,7 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
                   AI Analysis
                 </button>
               </div>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-600 dark:text-pearto-cloud transition-colors duration-300">
                 Discover the most talked about and actively traded cryptocurrencies
               </p>
             </motion.div>
@@ -362,12 +362,12 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
               transition={{ duration: 0.6, delay: 0.1 }}
               className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-4"
             >
-              <div className="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
+              <div className="bg-white dark:bg-pearto-card rounded-lg p-3 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
                 <div className="flex items-center justify-between mb-2">
                   <Flame className="h-5 w-5 text-orange-600" />
-                  <span className="text-xs text-gray-500">Most Mentioned</span>
+                  <span className="text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">Most Mentioned</span>
                 </div>
-                <p className="text-sm font-bold text-gray-900 truncate">
+                <p className="text-sm font-bold text-gray-900 dark:text-pearto-luna truncate transition-colors duration-300">
                   {filteredCryptos.length > 0 ? filteredCryptos.reduce((max, crypto) => 
                     crypto.socialMentions > (max?.socialMentions || 0) ? crypto : max, filteredCryptos[0])?.symbol || 'N/A' : 'N/A'}
                 </p>
@@ -379,29 +379,29 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
                 </p>
               </div>
 
-              <div className="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
+              <div className="bg-white dark:bg-pearto-card rounded-lg p-3 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
                 <div className="flex items-center justify-between mb-2">
-                  <TrendingUp className="h-5 w-5 text-green-600" />
-                  <span className="text-xs text-gray-500">Top Gainer</span>
+                  <TrendingUp className="h-5 w-5 text-green-600 dark:text-pearto-green transition-colors duration-300" />
+                  <span className="text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">Top Gainer</span>
                 </div>
-                <p className="text-sm font-bold text-gray-900 truncate">
+                <p className="text-sm font-bold text-gray-900 dark:text-pearto-luna truncate transition-colors duration-300">
                   {filteredCryptos.length > 0 ? 
                     filteredCryptos.filter(c => c.changePercent > 0).sort((a, b) => b.changePercent - a.changePercent)[0]?.symbol || 'N/A' : 
                     'No gainers'}
                 </p>
-                <p className="text-xs text-green-600 font-medium">
+                <p className="text-xs text-green-600 dark:text-pearto-green font-medium transition-colors duration-300">
                   {filteredCryptos.length > 0 ? 
                     `+${Math.max(...filteredCryptos.filter(c => c.changePercent > 0).map(c => c.changePercent)).toFixed(2)}%` : 
                     '+0.00%'}
                 </p>
               </div>
 
-              <div className="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
+              <div className="bg-white dark:bg-pearto-card rounded-lg p-3 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
                 <div className="flex items-center justify-between mb-2">
                   <Eye className="h-5 w-5 text-blue-600" />
-                  <span className="text-xs text-gray-500">Highest Volume</span>
+                  <span className="text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">Highest Volume</span>
                 </div>
-                <p className="text-sm font-bold text-gray-900 truncate">
+                <p className="text-sm font-bold text-gray-900 dark:text-pearto-luna truncate transition-colors duration-300">
                   {filteredCryptos.length > 0 ? 
                     filteredCryptos.sort((a, b) => b.volume - a.volume)[0]?.symbol || 'N/A' : 
                     'No data'}
@@ -413,12 +413,12 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
                 </p>
               </div>
 
-              <div className="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
+              <div className="bg-white dark:bg-pearto-card rounded-lg p-3 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
                 <div className="flex items-center justify-between mb-2">
                   <Zap className="h-5 w-5 text-purple-600" />
-                  <span className="text-xs text-gray-500">Breakout Score</span>
+                  <span className="text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">Breakout Score</span>
                 </div>
-                <p className="text-sm font-bold text-gray-900 truncate">
+                <p className="text-sm font-bold text-gray-900 dark:text-pearto-luna truncate transition-colors duration-300">
                   {filteredCryptos.length > 0 ? 
                     filteredCryptos.sort((a, b) => b.trendScore - a.trendScore)[0]?.symbol || 'N/A' : 
                     'No data'}
@@ -439,8 +439,8 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
               className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4"
             >
               {/* Trend Type Distribution */}
-              <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
-                <h3 className="text-sm font-semibold text-gray-900 mb-3">Trend Distribution</h3>
+              <div className="bg-white dark:bg-pearto-card rounded-lg p-4 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-pearto-luna mb-3 transition-colors duration-300">Trend Distribution</h3>
                 <div className="h-56">
                   <Pie
                     data={getTrendTypeDistribution()}
@@ -478,8 +478,8 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
               </div>
 
               {/* Category Distribution */}
-              <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
-                <h3 className="text-sm font-semibold text-gray-900 mb-3">Category Distribution</h3>
+              <div className="bg-white dark:bg-pearto-card rounded-lg p-4 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-pearto-luna mb-3 transition-colors duration-300">Category Distribution</h3>
                 <div className="h-56">
                   <Doughnut
                     data={getSectorDistribution()}
@@ -517,8 +517,8 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
               </div>
 
               {/* Performance Distribution */}
-              <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
-                <h3 className="text-sm font-semibold text-gray-900 mb-3">Performance Overview</h3>
+              <div className="bg-white dark:bg-pearto-card rounded-lg p-4 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-pearto-luna mb-3 transition-colors duration-300">Performance Overview</h3>
                 <div className="h-56">
                   <Pie
                     data={getPerformanceDistribution()}
@@ -561,7 +561,7 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="bg-white rounded-lg p-3 shadow-sm border border-gray-100 mb-4"
+              className="bg-white dark:bg-pearto-card rounded-lg p-3 shadow-sm border border-gray-100 dark:border-pearto-border-subtle mb-4 transition-colors duration-300"
             >
               <div className="flex flex-col gap-3">
                 {/* Filter Buttons */}
@@ -574,7 +574,7 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
                         onClick={() => setActiveFilter(filter.key)}
                         className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${activeFilter === filter.key
                           ? 'bg-orange-600 text-white'
-                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                          : 'bg-gray-100 dark:bg-pearto-surface text-gray-600 dark:text-pearto-cloud hover:bg-gray-200'
                           }`}
                       >
                         <Icon className="h-3 w-3" />
@@ -594,7 +594,7 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value as any)}
-                    className="flex-1 sm:flex-none px-3 py-1.5 text-xs border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white"
+                    className="flex-1 sm:flex-none px-3 py-1.5 text-xs border border-gray-300 dark:border-pearto-border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-pearto-pink bg-white dark:bg-pearto-surface text-gray-900 dark:text-pearto-luna transition-colors duration-300"
                   >
                     <option value="trendScore">Trend Score</option>
                     <option value="changePercent">Change %</option>
@@ -604,13 +604,13 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
 
                   {/* Search */}
                   <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-3 w-3 text-gray-400" />
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-3 w-3 text-gray-400 dark:text-pearto-gray" />
                     <input
                       type="text"
                       placeholder="Search cryptocurrencies..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full pl-8 pr-3 py-1.5 text-xs border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      className="w-full pl-8 pr-3 py-1.5 text-xs border border-gray-300 dark:border-pearto-border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-pearto-pink bg-white dark:bg-pearto-surface text-gray-900 dark:text-pearto-luna placeholder-gray-400 dark:placeholder-pearto-gray transition-colors duration-300"
                     />
                   </div>
                 </div>
@@ -622,11 +622,11 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden"
+              className="bg-white dark:bg-pearto-card rounded-lg shadow-sm border border-gray-100 dark:border-pearto-border-subtle overflow-hidden transition-colors duration-300"
             >
               {/* Table Header */}
-              <div className="bg-gray-50 px-2 sm:px-4 py-1.5 sm:py-2 border-b border-gray-200">
-                <div className="grid grid-cols-12 gap-0.5 sm:gap-4 text-[10px] sm:text-xs font-semibold text-gray-700 uppercase tracking-wide">
+              <div className="bg-gray-50 dark:bg-pearto-surface px-2 sm:px-4 py-1.5 sm:py-2 border-b border-gray-200 dark:border-pearto-border transition-colors duration-300">
+                <div className="grid grid-cols-12 gap-0.5 sm:gap-4 text-[10px] sm:text-xs font-semibold text-gray-700 dark:text-pearto-cloud uppercase tracking-wide transition-colors duration-300">
                   <div className="col-span-3 sm:col-span-3">Crypto</div>
                   <div className="col-span-2 text-center">Price</div>
                   <div className="col-span-2 text-center">Change</div>
@@ -638,7 +638,7 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
               </div>
 
               {/* Table Rows */}
-              <div className="divide-y divide-gray-100">
+              <div className="divide-y divide-gray-100 dark:divide-pearto-border-subtle transition-colors duration-300">
                 {filteredCryptos.map((crypto, index) => {
                   const TrendIcon = getTrendIcon(crypto.trendType);
                   return (
@@ -647,7 +647,7 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.3, delay: index * 0.05 }}
-                      className="px-2 sm:px-4 py-1.5 sm:py-2 hover:bg-gray-50 transition-colors group"
+                      className="px-2 sm:px-4 py-1.5 sm:py-2 hover:bg-gray-50 dark:bg-pearto-surface transition-colors group"
                     >
                       <div className="grid grid-cols-12 gap-0.5 sm:gap-4 items-center">
                         {/* Crypto Info */}
@@ -658,47 +658,47 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
                           <div className="flex-1 min-w-0">
                             <Link 
                               href={`/crypto/${crypto.symbol.toLowerCase()}`}
-                              className="text-[10px] sm:text-xs font-bold text-gray-900 hover:text-orange-600 transition-colors block truncate"
+                              className="text-[10px] sm:text-xs font-bold text-gray-900 dark:text-pearto-luna hover:text-orange-600 transition-colors block truncate"
                             >
                               {crypto.symbol}
                             </Link>
-                            <p className="text-[9px] sm:text-xs text-gray-600 truncate hidden sm:block">{crypto.name}</p>
+                            <p className="text-[9px] sm:text-xs text-gray-600 dark:text-pearto-cloud truncate hidden sm:block transition-colors duration-300">{crypto.name}</p>
                           </div>
                         </div>
 
                         {/* Price */}
                         <div className="col-span-2 text-center">
-                          <p className="text-[10px] sm:text-sm font-bold text-gray-900 truncate">{formatPrice(crypto.price)}</p>
+                          <p className="text-[10px] sm:text-sm font-bold text-gray-900 dark:text-pearto-luna truncate transition-colors duration-300">{formatPrice(crypto.price)}</p>
                         </div>
 
                         {/* Change */}
                         <div className="col-span-2 text-center">
-                          <p className={`font-semibold text-[9px] sm:text-xs ${crypto.change >= 0 ? 'text-green-600' : 'text-red-600'} truncate`}>
+                          <p className={`font-semibold text-[9px] sm:text-xs ${crypto.change >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'} truncate`}>
                             {crypto.change >= 0 ? '+' : ''}{formatPrice(crypto.change)}
                           </p>
-                          <p className={`text-[9px] sm:text-xs ${crypto.changePercent >= 0 ? 'text-green-600' : 'text-red-600'} truncate`}>
+                          <p className={`text-[9px] sm:text-xs ${crypto.changePercent >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'} truncate`}>
                             {crypto.changePercent >= 0 ? '+' : ''}{formatPercentage(crypto.changePercent)}
                           </p>
                         </div>
 
                         {/* Volume */}
                         <div className="col-span-2 text-center">
-                          <p className="text-[9px] sm:text-xs font-medium text-gray-900 truncate">{formatNumber(crypto.volume)}</p>
+                          <p className="text-[9px] sm:text-xs font-medium text-gray-900 dark:text-pearto-luna truncate transition-colors duration-300">{formatNumber(crypto.volume)}</p>
                         </div>
 
                         {/* Market Cap */}
                         <div className="col-span-1 text-center">
-                          <p className="text-[9px] sm:text-xs font-medium text-gray-900 truncate">{formatNumber(crypto.marketCap)}</p>
+                          <p className="text-[9px] sm:text-xs font-medium text-gray-900 dark:text-pearto-luna truncate transition-colors duration-300">{formatNumber(crypto.marketCap)}</p>
                         </div>
 
                         {/* Trend Score */}
                         <div className="col-span-1 text-center">
-                          <p className="text-[9px] sm:text-xs font-medium text-gray-900 truncate">{crypto.trendScore.toFixed(3)}/100</p>
+                          <p className="text-[9px] sm:text-xs font-medium text-gray-900 dark:text-pearto-luna truncate transition-colors duration-300">{crypto.trendScore.toFixed(3)}/100</p>
                         </div>
 
                         {/* Social */}
                         <div className="col-span-1 text-center">
-                          <p className="text-[9px] sm:text-xs font-medium text-gray-900 truncate">{formatNumber(crypto.socialMentions)}</p>
+                          <p className="text-[9px] sm:text-xs font-medium text-gray-900 dark:text-pearto-luna truncate transition-colors duration-300">{formatNumber(crypto.socialMentions)}</p>
                         </div>
                       </div>
                     </motion.div>
@@ -710,8 +710,8 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
             {filteredCryptos.length === 0 && (
               <div className="text-center py-12">
                 <Activity className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-                <h3 className="text-sm font-semibold text-gray-900 mb-2">No trending cryptocurrencies found</h3>
-                <p className="text-xs text-gray-600">Try adjusting your search or filter criteria</p>
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-pearto-luna mb-2 transition-colors duration-300">No trending cryptocurrencies found</h3>
+                <p className="text-xs text-gray-600 dark:text-pearto-cloud transition-colors duration-300">Try adjusting your search or filter criteria</p>
               </div>
             )}
           </div>
@@ -719,20 +719,20 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
       </main>
 
       {/* Sliding AI Panel */}
-      <div className={`fixed top-0 right-0 h-full w-96 bg-white shadow-2xl transform transition-transform duration-300 ease-in-out z-50 ${
+      <div className={`fixed top-0 right-0 h-full w-96 bg-white dark:bg-pearto-card shadow-2xl transform transition-transform duration-300 ease-in-out z-50 ${
         isAIPanelOpen ? 'translate-x-0' : 'translate-x-full'
       }`}>
         <div className="h-full flex flex-col">
           {/* AI Panel Header */}
-          <div className="px-4 py-3 border-b border-gray-200 bg-gradient-to-r from-orange-50 to-pink-50">
+          <div className="px-4 py-3 border-b border-gray-200 dark:border-pearto-border bg-gradient-to-r from-orange-50 to-pink-50 transition-colors duration-300">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Brain className="h-5 w-5 text-orange-600" />
-                <h3 className="text-sm font-semibold text-gray-900">AI Crypto Analysis</h3>
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-pearto-luna transition-colors duration-300">AI Crypto Analysis</h3>
               </div>
               <button
                 onClick={() => setIsAIPanelOpen(false)}
-                className="p-1 text-gray-500 hover:text-gray-700 hover:bg-gray-200 rounded-lg transition-colors"
+                className="p-1 text-gray-500 dark:text-pearto-gray hover:text-gray-700 dark:text-pearto-cloud hover:bg-gray-200 rounded-lg transition-colors"
               >
                 <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

@@ -240,13 +240,13 @@ export default function StockExchanges() {
 
   if (loading) {
     return (
-      <div className="min-h-screen">
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
         <main className="p-8">
           <div className="flex items-center justify-center h-96">
             <div className="text-center">
-              <Activity className="h-12 w-12 text-blue-600 animate-spin mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-gray-900">Loading Exchanges</h2>
-              <p className="text-gray-600">Please wait while we fetch exchange data...</p>
+              <Activity className="h-12 w-12 text-blue-600 dark:text-blue-400 animate-spin mx-auto mb-4" />
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Loading Exchanges</h2>
+              <p className="text-gray-600 dark:text-slate-400">Please wait while we fetch exchange data...</p>
             </div>
           </div>
         </main>
@@ -255,7 +255,7 @@ export default function StockExchanges() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
 
       <main className="p-8">
         {/* Header Stats */}
@@ -265,40 +265,40 @@ export default function StockExchanges() {
           transition={{ duration: 0.6 }}
           className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8"
         >
-          <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
+          <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-lg border border-gray-100 dark:border-slate-700">
             <div className="flex items-center justify-between mb-4">
-              <Building2 className="h-8 w-8 text-blue-600" />
-              <span className="text-sm text-gray-500">Total Exchanges</span>
+              <Building2 className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+              <span className="text-sm text-gray-500 dark:text-slate-400">Total Exchanges</span>
             </div>
-            <p className="text-3xl font-bold text-gray-900">{exchanges.length}</p>
-            <p className="text-sm text-green-600 font-medium">Worldwide coverage</p>
+            <p className="text-3xl font-bold text-gray-900 dark:text-white">{exchanges.length}</p>
+            <p className="text-sm text-green-600 dark:text-green-400 font-medium">Worldwide coverage</p>
           </div>
 
-          <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
+          <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-lg border border-gray-100 dark:border-slate-700">
             <div className="flex items-center justify-between mb-4">
-              <DollarSign className="h-8 w-8 text-green-600" />
-              <span className="text-sm text-gray-500">Total Market Cap</span>
+              <DollarSign className="h-8 w-8 text-green-600 dark:text-green-400" />
+              <span className="text-sm text-gray-500 dark:text-slate-400">Total Market Cap</span>
             </div>
-            <p className="text-3xl font-bold text-gray-900">$74.1T</p>
-            <p className="text-sm text-gray-600">Global markets</p>
+            <p className="text-3xl font-bold text-gray-900 dark:text-white">$74.1T</p>
+            <p className="text-sm text-gray-600 dark:text-slate-400">Global markets</p>
           </div>
 
-          <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
+          <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-lg border border-gray-100 dark:border-slate-700">
             <div className="flex items-center justify-between mb-4">
-              <Users className="h-8 w-8 text-purple-600" />
-              <span className="text-sm text-gray-500">Listed Companies</span>
+              <Users className="h-8 w-8 text-purple-600 dark:text-purple-400" />
+              <span className="text-sm text-gray-500 dark:text-slate-400">Listed Companies</span>
             </div>
-            <p className="text-3xl font-bold text-gray-900">13.5K</p>
-            <p className="text-sm text-gray-600">Total listings</p>
+            <p className="text-3xl font-bold text-gray-900 dark:text-white">13.5K</p>
+            <p className="text-sm text-gray-600 dark:text-slate-400">Total listings</p>
           </div>
 
-          <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
+          <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-lg border border-gray-100 dark:border-slate-700">
             <div className="flex items-center justify-between mb-4">
-              <Activity className="h-8 w-8 text-orange-600" />
-              <span className="text-sm text-gray-500">Active Now</span>
+              <Activity className="h-8 w-8 text-orange-600 dark:text-orange-400" />
+              <span className="text-sm text-gray-500 dark:text-slate-400">Active Now</span>
             </div>
-            <p className="text-3xl font-bold text-gray-900">{exchanges.filter(e => e.status === 'open').length}</p>
-            <p className="text-sm text-gray-600">Markets trading</p>
+            <p className="text-3xl font-bold text-gray-900 dark:text-white">{exchanges.filter(e => e.status === 'open').length}</p>
+            <p className="text-sm text-gray-600 dark:text-slate-400">Markets trading</p>
           </div>
         </motion.div>
 
@@ -307,7 +307,7 @@ export default function StockExchanges() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 mb-8"
+          className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-lg border border-gray-100 dark:border-slate-700 mb-8"
         >
           <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
             <div className="flex flex-wrap gap-2">
@@ -315,9 +315,10 @@ export default function StockExchanges() {
                 <button
                   key={region.value}
                   onClick={() => setSelectedRegion(region.value)}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${selectedRegion === region.value
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                    selectedRegion === region.value
+                      ? 'bg-blue-600 dark:bg-blue-500 text-white'
+                      : 'bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-600'
                     }`}
                 >
                   <span>{region.label}</span>
@@ -332,7 +333,7 @@ export default function StockExchanges() {
                 placeholder="Search exchanges..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-slate-700 text-gray-900 dark:text-white"
               />
             </div>
           </div>
@@ -351,7 +352,7 @@ export default function StockExchanges() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: index * 0.1 }}
-              className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all"
+              className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-lg border border-gray-100 dark:border-slate-700 hover:shadow-xl transition-all"
             >
               <div className="flex justify-between items-start mb-6">
                 <div className="flex items-center space-x-3">
@@ -359,8 +360,8 @@ export default function StockExchanges() {
                     <Building2 className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-gray-900">{exchange.name}</h3>
-                    <p className="text-sm text-gray-600">{exchange.code}</p>
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">{exchange.name}</h3>
+                    <p className="text-sm text-gray-600 dark:text-slate-400">{exchange.code}</p>
                   </div>
                 </div>
                 <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(exchange.status)}`}>
@@ -370,50 +371,50 @@ export default function StockExchanges() {
 
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div className="flex items-center space-x-2">
-                  <MapPin className="h-4 w-4 text-gray-400" />
+                  <MapPin className="h-4 w-4 text-gray-400 dark:text-slate-500" />
                   <div>
-                    <p className="text-xs text-gray-500">Location</p>
-                    <p className="text-sm font-semibold text-gray-900">{exchange.city}</p>
-                    <p className="text-xs text-gray-600">{exchange.country}</p>
+                    <p className="text-xs text-gray-500 dark:text-slate-400">Location</p>
+                    <p className="text-sm font-semibold text-gray-900 dark:text-white">{exchange.city}</p>
+                    <p className="text-xs text-gray-600 dark:text-slate-400">{exchange.country}</p>
                   </div>
                 </div>
 
                 <div className="flex items-center space-x-2">
-                  <Clock className="h-4 w-4 text-gray-400" />
+                  <Clock className="h-4 w-4 text-gray-400 dark:text-slate-500" />
                   <div>
-                    <p className="text-xs text-gray-500">Trading Hours</p>
-                    <p className="text-sm font-semibold text-gray-900">
+                    <p className="text-xs text-gray-500 dark:text-slate-400">Trading Hours</p>
+                    <p className="text-sm font-semibold text-gray-900 dark:text-white">
                       {exchange.tradingHours.open} - {exchange.tradingHours.close}
                     </p>
-                    <p className="text-xs text-gray-600">{exchange.timezone}</p>
+                    <p className="text-xs text-gray-600 dark:text-slate-400">{exchange.timezone}</p>
                   </div>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div>
-                  <p className="text-xs text-gray-500 mb-1">Market Cap</p>
-                  <p className="font-semibold text-gray-900">{formatPrice(exchange.marketCap / 1e12)}T</p>
+                  <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">Market Cap</p>
+                  <p className="font-semibold text-gray-900 dark:text-white">{formatPrice(exchange.marketCap / 1e12)}T</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 mb-1">Listed Companies</p>
-                  <p className="font-semibold text-gray-900">{formatNumber(exchange.listedCompanies)}</p>
+                  <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">Listed Companies</p>
+                  <p className="font-semibold text-gray-900 dark:text-white">{formatNumber(exchange.listedCompanies)}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 mb-1">Daily Volume</p>
-                  <p className="font-semibold text-gray-900">{formatPrice(exchange.dailyVolume / 1e9)}B</p>
+                  <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">Daily Volume</p>
+                  <p className="font-semibold text-gray-900 dark:text-white">{formatPrice(exchange.dailyVolume / 1e9)}B</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 mb-1">Established</p>
-                  <p className="font-semibold text-gray-900">{exchange.established}</p>
+                  <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">Established</p>
+                  <p className="font-semibold text-gray-900 dark:text-white">{exchange.established}</p>
                 </div>
               </div>
 
               <div className="mb-4">
-                <p className="text-xs text-gray-500 mb-2">Major Indices</p>
+                <p className="text-xs text-gray-500 dark:text-slate-400 mb-2">Major Indices</p>
                 <div className="flex flex-wrap gap-1">
                   {exchange.indices.map((index) => (
-                    <span key={index} className="inline-flex px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded-md">
+                    <span key={index} className="inline-flex px-2 py-1 text-xs bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 rounded-md">
                       {index}
                     </span>
                   ))}
@@ -421,24 +422,24 @@ export default function StockExchanges() {
               </div>
 
               <div className="mb-4">
-                <p className="text-xs text-gray-500 mb-2">Top Sectors</p>
+                <p className="text-xs text-gray-500 dark:text-slate-400 mb-2">Top Sectors</p>
                 <div className="flex flex-wrap gap-1">
                   {exchange.topSectors.map((sector) => (
-                    <span key={sector} className="inline-flex px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded-md">
+                    <span key={sector} className="inline-flex px-2 py-1 text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-md">
                       {sector}
                     </span>
                   ))}
                 </div>
               </div>
 
-              <p className="text-sm text-gray-600 mb-4 line-clamp-2">{exchange.description}</p>
+              <p className="text-sm text-gray-600 dark:text-slate-400 mb-4 line-clamp-2">{exchange.description}</p>
 
-              <div className="flex justify-between items-center pt-4 border-t border-gray-100">
-                <div className="flex items-center space-x-1 text-sm text-gray-500">
+              <div className="flex justify-between items-center pt-4 border-t border-gray-100 dark:border-slate-700">
+                <div className="flex items-center space-x-1 text-sm text-gray-500 dark:text-slate-400">
                   <Globe className="h-4 w-4" />
                   <span>{exchange.website}</span>
                 </div>
-                <button className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 transition-colors">
+                <button className="flex items-center space-x-1 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">
                   <Info className="h-4 w-4" />
                   <span className="text-sm font-medium">View Details</span>
                 </button>

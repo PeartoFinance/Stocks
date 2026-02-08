@@ -138,7 +138,7 @@ export default function HoldingDetailCard({
     };
 
     return (
-        <div className={`bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden hover:shadow-xl transition-shadow duration-300 ${className}`}>
+        <div className={`bg-white dark:bg-pearto-card rounded-2xl shadow-lg border border-slate-200 dark:border-pearto-border overflow-hidden hover:shadow-xl transition-shadow duration-300 ${className}`}>
             {/* Header */}
             <div className="p-6 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-slate-100">
                 <div className="flex items-start justify-between">
@@ -148,17 +148,17 @@ export default function HoldingDetailCard({
                                 <span className="text-white font-bold text-xl">{holding.symbol.slice(0, 2)}</span>
                             </div>
                             <div>
-                                <h3 className="text-2xl font-bold text-slate-900">{holding.symbol}</h3>
-                                <p className="text-base text-slate-600 font-medium">{holding.name || 'Company Name'}</p>
-                                <p className="text-sm text-slate-500 mt-1">{portfolioName}</p>
+                                <h3 className="text-2xl font-bold text-slate-900 dark:text-pearto-luna transition-colors duration-300">{holding.symbol}</h3>
+                                <p className="text-base text-slate-600 dark:text-pearto-cloud font-medium transition-colors duration-300">{holding.name || 'Company Name'}</p>
+                                <p className="text-sm text-slate-500 dark:text-pearto-gray mt-1 transition-colors duration-300">{portfolioName}</p>
                             </div>
                         </div>
                     </div>
                     <button
                         onClick={() => setShowDetails(!showDetails)}
-                        className="p-3 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 transition-all duration-200 shadow-sm hover:shadow-md"
+                        className="p-3 rounded-xl bg-white dark:bg-pearto-card hover:bg-slate-50 dark:bg-pearto-surface border border-slate-200 dark:border-pearto-border transition-all duration-200 shadow-sm hover:shadow-md"
                     >
-                        {showDetails ? <ChevronUp className="h-5 w-5 text-slate-600" /> : <ChevronDown className="h-5 w-5 text-slate-600" />}
+                        {showDetails ? <ChevronUp className="h-5 w-5 text-slate-600 dark:text-pearto-cloud transition-colors duration-300" /> : <ChevronDown className="h-5 w-5 text-slate-600 dark:text-pearto-cloud transition-colors duration-300" />}
                     </button>
                 </div>
             </div>
@@ -171,11 +171,11 @@ export default function HoldingDetailCard({
                             <DollarSign className="h-5 w-5 text-blue-600" />
                             <span className="text-sm text-blue-600 font-semibold">Current Price</span>
                         </div>
-                        <div className="text-2xl font-bold text-slate-900">
+                        <div className="text-2xl font-bold text-slate-900 dark:text-pearto-luna transition-colors duration-300">
                             ${holding.currentPrice?.toFixed(2) || '0.00'}
                         </div>
                         <div className={`text-sm font-semibold mt-1 ${
-                            dayChange >= 0 ? 'text-green-600' : 'text-red-600'
+                            dayChange >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
                         }`}>
                             {dayChange >= 0 ? '+' : ''}{dayChange.toFixed(2)} ({dayChangePercent >= 0 ? '+' : ''}{dayChangePercent.toFixed(2)}%)
                         </div>
@@ -186,23 +186,23 @@ export default function HoldingDetailCard({
                             <BarChart3 className="h-5 w-5 text-purple-600" />
                             <span className="text-sm text-purple-600 font-semibold">Shares</span>
                         </div>
-                        <div className="text-2xl font-bold text-slate-900">
+                        <div className="text-2xl font-bold text-slate-900 dark:text-pearto-luna transition-colors duration-300">
                             {holding.shares.toLocaleString()}
                         </div>
-                        <div className="text-sm text-slate-600 mt-1">
+                        <div className="text-sm text-slate-600 dark:text-pearto-cloud mt-1 transition-colors duration-300">
                             Avg Cost: ${holding.avgCost?.toFixed(2) || '0.00'}
                         </div>
                     </div>
                     
                     <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl p-4 border border-emerald-200">
                         <div className="flex items-center gap-2 mb-2">
-                            <TrendingUp className="h-5 w-5 text-emerald-600" />
-                            <span className="text-sm text-emerald-600 font-semibold">Total Value</span>
+                            <TrendingUp className="h-5 w-5 text-emerald-600 dark:text-pearto-green transition-colors duration-300" />
+                            <span className="text-sm text-emerald-600 dark:text-pearto-green font-semibold transition-colors duration-300">Total Value</span>
                         </div>
-                        <div className="text-2xl font-bold text-slate-900">
+                        <div className="text-2xl font-bold text-slate-900 dark:text-pearto-luna transition-colors duration-300">
                             ${totalValue.toFixed(2)}
                         </div>
-                        <div className="text-sm text-slate-600 mt-1">
+                        <div className="text-sm text-slate-600 dark:text-pearto-cloud mt-1 transition-colors duration-300">
                             Cost: ${totalCost.toFixed(2)}
                         </div>
                     </div>
@@ -213,18 +213,18 @@ export default function HoldingDetailCard({
                             : 'bg-gradient-to-br from-red-50 to-red-100 border-red-200'
                     }`}>
                         <div className="flex items-center gap-2 mb-2">
-                            {totalGain >= 0 ? <TrendingUp className="h-5 w-5 text-green-600" /> : <TrendingDown className="h-5 w-5 text-red-600" />}
+                            {totalGain >= 0 ? <TrendingUp className="h-5 w-5 text-green-600 dark:text-pearto-green transition-colors duration-300" /> : <TrendingDown className="h-5 w-5 text-red-600 dark:text-pearto-pink transition-colors duration-300" />}
                             <span className={`text-sm font-semibold ${
-                                totalGain >= 0 ? 'text-green-600' : 'text-red-600'
+                                totalGain >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
                             }`}>Total Gain</span>
                         </div>
                         <div className={`text-2xl font-bold ${
-                            totalGain >= 0 ? 'text-green-600' : 'text-red-600'
+                            totalGain >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
                         }`}>
                             {totalGain >= 0 ? '+' : ''}${totalGain.toFixed(2)}
                         </div>
                         <div className={`text-sm font-semibold mt-1 ${
-                            totalGain >= 0 ? 'text-green-600' : 'text-red-600'
+                            totalGain >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
                         }`}>
                             ({gainPercent >= 0 ? '+' : ''}{gainPercent.toFixed(2)}%)
                         </div>
@@ -237,13 +237,13 @@ export default function HoldingDetailCard({
                 <div className="border-t border-slate-100 bg-gradient-to-br from-slate-50 to-slate-100">
                     {/* Charts Section */}
                     <div className="p-6">
-                        <h4 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
-                            <BarChart3 className="h-6 w-6 text-slate-600" />
+                        <h4 className="text-xl font-bold text-slate-900 dark:text-pearto-luna mb-6 flex items-center gap-2 transition-colors duration-300">
+                            <BarChart3 className="h-6 w-6 text-slate-600 dark:text-pearto-cloud transition-colors duration-300" />
                             Performance & Analytics
                         </h4>
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                             {/* Price History Chart */}
-                            <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+                            <div className="bg-white dark:bg-pearto-card rounded-xl p-6 shadow-sm border border-slate-200 dark:border-pearto-border transition-colors duration-300">
                                 <h5 className="text-base font-semibold text-slate-800 mb-4 flex items-center gap-2">
                                     <Activity className="h-4 w-4 text-blue-600" />
                                     Price History (30 Days)
@@ -254,7 +254,7 @@ export default function HoldingDetailCard({
                             </div>
                             
                             {/* Portfolio Allocation */}
-                            <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+                            <div className="bg-white dark:bg-pearto-card rounded-xl p-6 shadow-sm border border-slate-200 dark:border-pearto-border transition-colors duration-300">
                                 <h5 className="text-base font-semibold text-slate-800 mb-4 flex items-center gap-2">
                                     <PieChart className="h-4 w-4 text-purple-600" />
                                     Portfolio Allocation
@@ -267,9 +267,9 @@ export default function HoldingDetailCard({
                     </div>
                     
                     {/* Additional Details */}
-                    <div className="p-6 border-t border-slate-200 bg-white">
-                        <h4 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
-                            <Info className="h-6 w-6 text-slate-600" />
+                    <div className="p-6 border-t border-slate-200 dark:border-pearto-border bg-white dark:bg-pearto-card transition-colors duration-300">
+                        <h4 className="text-xl font-bold text-slate-900 dark:text-pearto-luna mb-6 flex items-center gap-2 transition-colors duration-300">
+                            <Info className="h-6 w-6 text-slate-600 dark:text-pearto-cloud transition-colors duration-300" />
                             Detailed Information
                         </h4>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -280,36 +280,36 @@ export default function HoldingDetailCard({
                                     Market Data
                                 </h5>
                                 <div className="space-y-3">
-                                    <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-                                        <span className="text-sm font-medium text-slate-600">52W High:</span>
-                                        <span className="font-bold text-slate-900">
+                                    <div className="flex justify-between items-center p-3 bg-white dark:bg-pearto-card rounded-lg transition-colors duration-300">
+                                        <span className="text-sm font-medium text-slate-600 dark:text-pearto-cloud transition-colors duration-300">52W High:</span>
+                                        <span className="font-bold text-slate-900 dark:text-pearto-luna transition-colors duration-300">
                                             ${marketData?.high52w?.toFixed(2) || 'N/A'}
                                         </span>
                                     </div>
-                                    <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-                                        <span className="text-sm font-medium text-slate-600">52W Low:</span>
-                                        <span className="font-bold text-slate-900">
+                                    <div className="flex justify-between items-center p-3 bg-white dark:bg-pearto-card rounded-lg transition-colors duration-300">
+                                        <span className="text-sm font-medium text-slate-600 dark:text-pearto-cloud transition-colors duration-300">52W Low:</span>
+                                        <span className="font-bold text-slate-900 dark:text-pearto-luna transition-colors duration-300">
                                             ${marketData?.low52w?.toFixed(2) || 'N/A'}
                                         </span>
                                     </div>
-                                    <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-                                        <span className="text-sm font-medium text-slate-600">P/E Ratio:</span>
-                                        <span className="font-bold text-slate-900">
+                                    <div className="flex justify-between items-center p-3 bg-white dark:bg-pearto-card rounded-lg transition-colors duration-300">
+                                        <span className="text-sm font-medium text-slate-600 dark:text-pearto-cloud transition-colors duration-300">P/E Ratio:</span>
+                                        <span className="font-bold text-slate-900 dark:text-pearto-luna transition-colors duration-300">
                                             {marketData?.peRatio?.toFixed(2) || 'N/A'}
                                         </span>
                                     </div>
-                                    <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-                                        <span className="text-sm font-medium text-slate-600">Market Cap:</span>
-                                        <span className="font-bold text-slate-900">
+                                    <div className="flex justify-between items-center p-3 bg-white dark:bg-pearto-card rounded-lg transition-colors duration-300">
+                                        <span className="text-sm font-medium text-slate-600 dark:text-pearto-cloud transition-colors duration-300">Market Cap:</span>
+                                        <span className="font-bold text-slate-900 dark:text-pearto-luna transition-colors duration-300">
                                             {marketData?.marketCap ? 
                                                 `$${(marketData.marketCap / 1000000000).toFixed(1)}B` : 
                                                 'N/A'
                                             }
                                         </span>
                                     </div>
-                                    <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-                                        <span className="text-sm font-medium text-slate-600">Sector:</span>
-                                        <span className="font-bold text-slate-900">
+                                    <div className="flex justify-between items-center p-3 bg-white dark:bg-pearto-card rounded-lg transition-colors duration-300">
+                                        <span className="text-sm font-medium text-slate-600 dark:text-pearto-cloud transition-colors duration-300">Sector:</span>
+                                        <span className="font-bold text-slate-900 dark:text-pearto-luna transition-colors duration-300">
                                             {marketData?.sector || 'N/A'}
                                         </span>
                                     </div>
@@ -323,29 +323,29 @@ export default function HoldingDetailCard({
                                     Investment Metrics
                                 </h5>
                                 <div className="space-y-3">
-                                    <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-                                        <span className="text-sm font-medium text-slate-600">Portfolio Weight:</span>
-                                        <span className="font-bold text-slate-900">
+                                    <div className="flex justify-between items-center p-3 bg-white dark:bg-pearto-card rounded-lg transition-colors duration-300">
+                                        <span className="text-sm font-medium text-slate-600 dark:text-pearto-cloud transition-colors duration-300">Portfolio Weight:</span>
+                                        <span className="font-bold text-slate-900 dark:text-pearto-luna transition-colors duration-300">
                                             {((totalValue / 100000) * 100).toFixed(2)}%
                                         </span>
                                     </div>
-                                    <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-                                        <span className="text-sm font-medium text-slate-600">Daily Return:</span>
+                                    <div className="flex justify-between items-center p-3 bg-white dark:bg-pearto-card rounded-lg transition-colors duration-300">
+                                        <span className="text-sm font-medium text-slate-600 dark:text-pearto-cloud transition-colors duration-300">Daily Return:</span>
                                         <span className={`font-bold ${
-                                            dayChange >= 0 ? 'text-green-600' : 'text-red-600'
+                                            dayChange >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
                                         }`}>
                                             {dayChange >= 0 ? '+' : ''}{dayChange.toFixed(2)}%
                                         </span>
                                     </div>
-                                    <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-                                        <span className="text-sm font-medium text-slate-600">YTD Return:</span>
-                                        <span className="font-bold text-slate-900">
+                                    <div className="flex justify-between items-center p-3 bg-white dark:bg-pearto-card rounded-lg transition-colors duration-300">
+                                        <span className="text-sm font-medium text-slate-600 dark:text-pearto-cloud transition-colors duration-300">YTD Return:</span>
+                                        <span className="font-bold text-slate-900 dark:text-pearto-luna transition-colors duration-300">
                                             +{gainPercent.toFixed(2)}%
                                         </span>
                                     </div>
-                                    <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-                                        <span className="text-sm font-medium text-slate-600">Volatility:</span>
-                                        <span className="font-bold text-slate-900">
+                                    <div className="flex justify-between items-center p-3 bg-white dark:bg-pearto-card rounded-lg transition-colors duration-300">
+                                        <span className="text-sm font-medium text-slate-600 dark:text-pearto-cloud transition-colors duration-300">Volatility:</span>
+                                        <span className="font-bold text-slate-900 dark:text-pearto-luna transition-colors duration-300">
                                             {(Math.random() * 30 + 10).toFixed(1)}%
                                         </span>
                                     </div>
@@ -359,33 +359,33 @@ export default function HoldingDetailCard({
                                     Transaction Summary
                                 </h5>
                                 <div className="space-y-3">
-                                    <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-                                        <span className="text-sm font-medium text-slate-600">Total Transactions:</span>
-                                        <span className="font-bold text-slate-900">
+                                    <div className="flex justify-between items-center p-3 bg-white dark:bg-pearto-card rounded-lg transition-colors duration-300">
+                                        <span className="text-sm font-medium text-slate-600 dark:text-pearto-cloud transition-colors duration-300">Total Transactions:</span>
+                                        <span className="font-bold text-slate-900 dark:text-pearto-luna transition-colors duration-300">
                                             {transactions.length}
                                         </span>
                                     </div>
-                                    <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-                                        <span className="text-sm font-medium text-slate-600">First Purchase:</span>
-                                        <span className="font-bold text-slate-900">
+                                    <div className="flex justify-between items-center p-3 bg-white dark:bg-pearto-card rounded-lg transition-colors duration-300">
+                                        <span className="text-sm font-medium text-slate-600 dark:text-pearto-cloud transition-colors duration-300">First Purchase:</span>
+                                        <span className="font-bold text-slate-900 dark:text-pearto-luna transition-colors duration-300">
                                             {transactions.length > 0 ? 
                                                 new Date(transactions[0].date).toLocaleDateString() : 
                                                 'N/A'
                                             }
                                         </span>
                                     </div>
-                                    <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-                                        <span className="text-sm font-medium text-slate-600">Last Transaction:</span>
-                                        <span className="font-bold text-slate-900">
+                                    <div className="flex justify-between items-center p-3 bg-white dark:bg-pearto-card rounded-lg transition-colors duration-300">
+                                        <span className="text-sm font-medium text-slate-600 dark:text-pearto-cloud transition-colors duration-300">Last Transaction:</span>
+                                        <span className="font-bold text-slate-900 dark:text-pearto-luna transition-colors duration-300">
                                             {transactions.length > 0 ? 
                                                 new Date(transactions[transactions.length - 1].date).toLocaleDateString() : 
                                                 'N/A'
                                             }
                                         </span>
                                     </div>
-                                    <div className="flex justify-between items-center p-3 bg-white rounded-lg">
-                                        <span className="text-sm font-medium text-slate-600">Avg Hold Time:</span>
-                                        <span className="font-bold text-slate-900">
+                                    <div className="flex justify-between items-center p-3 bg-white dark:bg-pearto-card rounded-lg transition-colors duration-300">
+                                        <span className="text-sm font-medium text-slate-600 dark:text-pearto-cloud transition-colors duration-300">Avg Hold Time:</span>
+                                        <span className="font-bold text-slate-900 dark:text-pearto-luna transition-colors duration-300">
                                             {Math.floor(Math.random() * 365 + 30)} days
                                         </span>
                                     </div>

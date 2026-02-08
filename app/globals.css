@@ -4,6 +4,7 @@
 
 @layer base {
   :root {
+    /* Light Mode - Original */
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
@@ -32,30 +33,61 @@
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 84% 4.9%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 94.1%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    /* Pearto Dark Mode System */
+    /* Surface Tokens */
+    --bg-main: #111111;
+    --bg-elevated: #121212;
+    --bg-card: #282828;
+    --bg-miner-slate: #37474f;
+    --bg-surface-a20: #282828;
+    --border-dark: #2C2C2C;
+    --border-subtle: #1A1A1A;
+    
+    /* Text Tokens */
+    --text-primary: #F8E1C3;
+    --text-secondary: #dadada;
+    --text-muted: #B0B0B0;
+    
+    /* Interactive Tokens */
+    --btn-primary: #e02d75;
+    --btn-primary-hover: #e74f83;
+    --accent-success: #0aff8d;
+    --accent-success-hover: #47d5a6;
+    --accent-info: #00c2ff;
+    --accent-info-hover: #92b2e5;
+    --accent-premium: #9d8854;
+    --accent-premium-hover: #cab287;
+    --accent-warning: #ffc857;
+    
+    /* Header/Bar Colors */
+    --header-astronaut: #213774;
+    --header-puerto-rico: #3CBBB1;
+    
+    /* HSL Conversions for Tailwind */
+    --background: 0 0% 6.7%; /* #111111 */
+    --foreground: 39 56% 87%; /* #F8E1C3 */
+    --card: 0 0% 7.1%; /* #121212 */
+    --card-foreground: 39 56% 87%;
+    --popover: 0 0% 17.3%; /* #37474f */
+    --popover-foreground: 39 56% 87%;
+    --primary: 338 76% 53%; /* #e02d75 */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 160 52% 52%; /* #0aff8d */
+    --secondary-foreground: 0 0% 6.7%;
+    --muted: 0 0% 15.7%; /* #282828 */
+    --muted-foreground: 0 0% 69%; /* #B0B0B0 */
+    --accent: 194 100% 50%; /* #00c2ff */
+    --accent-foreground: 0 0% 6.7%;
+    --destructive: 338 76% 53%; /* #e02d75 */
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 17.3%; /* #2C2C2C */
+    --input: 0 0% 17.3%;
+    --ring: 160 52% 52%;
+    --chart-1: 160 100% 52%; /* Gas Fee Green */
+    --chart-2: 194 100% 50%; /* UX LED Blue */
+    --chart-3: 38 100% 63%; /* Token Amber */
+    --chart-4: 338 76% 53%; /* Primary Pink */
+    --chart-5: 37 30% 54%; /* Premium Hub */
   }
 }
 
@@ -70,11 +102,11 @@
 
 @layer components {
   .gradient-bg {
-    @apply bg-gradient-to-br from-blue-50 to-indigo-100;
+    @apply bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-pearto-blockchain dark:to-pearto-surface;
   }
   
   .glass {
-    @apply backdrop-blur-sm bg-white/80 border border-white/20;
+    @apply backdrop-blur-sm bg-white/80 dark:bg-pearto-slate/80 border border-white/20 dark:border-pearto-border/20;
   }
   
   .card-hover {
@@ -82,11 +114,11 @@
   }
   
   .price-positive {
-    @apply text-positive;
+    @apply text-positive dark:text-pearto-green;
   }
   
   .price-negative {
-    @apply text-negative;
+    @apply text-negative dark:text-pearto-pink;
   }
 
   /* Hide scrollbar for Chrome, Safari and Opera */

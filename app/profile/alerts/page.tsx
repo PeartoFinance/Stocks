@@ -195,31 +195,31 @@ export default function AlertsPage() {
 
     if (authLoading || loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-gray-50">
+            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-gray-50 dark:bg-slate-900 dark:via-slate-900 dark:to-slate-900">
                 <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-gray-50 pb-20">
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-gray-50 dark:bg-slate-900 dark:via-slate-900 dark:to-slate-900 pb-20">
             {/* Header */}
-            <div className="bg-white border-b border-gray-200">
+            <div className="bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-700">
                 <div className="container mx-auto px-4 py-6">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
                             <Link
                                 href="/profile"
-                                className="p-2 hover:bg-gray-100 rounded-lg transition"
+                                className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition"
                             >
-                                <ArrowLeft className="h-5 w-5 text-gray-600" />
+                                <ArrowLeft className="h-5 w-5 text-gray-600 dark:text-slate-400" />
                             </Link>
                             <div>
-                                <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                                <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
                                     <Bell className="h-6 w-6 text-emerald-600" />
                                     Price Alerts
                                 </h1>
-                                <p className="text-sm text-gray-500 mt-1">
+                                <p className="text-sm text-gray-500 dark:text-slate-400 mt-1">
                                     {activeAlerts.length} active • {triggeredAlerts.length} triggered
                                 </p>
                             </div>
@@ -238,38 +238,38 @@ export default function AlertsPage() {
             <div className="container mx-auto px-4 py-8 max-w-6xl">
                 {/* Stats Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                    <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                    <div className="bg-white dark:bg-slate-900 rounded-xl p-6 border border-gray-200 dark:border-slate-700 shadow-sm">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm text-gray-500 mb-1">Active Alerts</p>
-                                <p className="text-3xl font-bold text-gray-900">{activeAlerts.length}</p>
+                                <p className="text-sm text-gray-500 dark:text-slate-400 mb-1">Active Alerts</p>
+                                <p className="text-3xl font-bold text-gray-900 dark:text-white">{activeAlerts.length}</p>
                             </div>
-                            <div className="h-12 w-12 bg-emerald-100 rounded-lg flex items-center justify-center">
-                                <Bell className="h-6 w-6 text-emerald-600" />
+                            <div className="h-12 w-12 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center">
+                                <Bell className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
                             </div>
                         </div>
                     </div>
 
-                    <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                    <div className="bg-white dark:bg-slate-900 rounded-xl p-6 border border-gray-200 dark:border-slate-700 shadow-sm">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm text-gray-500 mb-1">Triggered</p>
-                                <p className="text-3xl font-bold text-gray-900">{triggeredAlerts.length}</p>
+                                <p className="text-sm text-gray-500 dark:text-slate-400 mb-1">Triggered</p>
+                                <p className="text-3xl font-bold text-gray-900 dark:text-white">{triggeredAlerts.length}</p>
                             </div>
-                            <div className="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center">
-                                <CheckCircle2 className="h-6 w-6 text-green-600" />
+                            <div className="h-12 w-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
+                                <CheckCircle2 className="h-6 w-6 text-green-600 dark:text-green-400" />
                             </div>
                         </div>
                     </div>
 
-                    <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                    <div className="bg-white dark:bg-slate-900 rounded-xl p-6 border border-gray-200 dark:border-slate-700 shadow-sm">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm text-gray-500 mb-1">Total Alerts</p>
-                                <p className="text-3xl font-bold text-gray-900">{alerts.length}</p>
+                                <p className="text-sm text-gray-500 dark:text-slate-400 mb-1">Total Alerts</p>
+                                <p className="text-3xl font-bold text-gray-900 dark:text-white">{alerts.length}</p>
                             </div>
-                            <div className="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                                <AlertTriangle className="h-6 w-6 text-blue-600" />
+                            <div className="h-12 w-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                                <AlertTriangle className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                             </div>
                         </div>
                     </div>
@@ -277,10 +277,10 @@ export default function AlertsPage() {
 
                 {/* Alerts List */}
                 {alerts.length === 0 ? (
-                    <div className="bg-white rounded-xl p-12 text-center border border-gray-200">
-                        <Bell className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                        <h3 className="text-lg font-semibold text-gray-900 mb-2">No alerts yet</h3>
-                        <p className="text-gray-500 mb-6">
+                    <div className="bg-white dark:bg-slate-900 rounded-xl p-12 text-center border border-gray-200 dark:border-slate-700">
+                        <Bell className="h-16 w-16 text-gray-300 dark:text-slate-600 mx-auto mb-4" />
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No alerts yet</h3>
+                        <p className="text-gray-500 dark:text-slate-400 mb-6">
                             Create your first price alert to get notified when stocks hit your target price
                         </p>
                         <button
@@ -296,7 +296,7 @@ export default function AlertsPage() {
                         {/* Active Alerts */}
                         {activeAlerts.length > 0 && (
                             <div>
-                                <h2 className="text-lg font-semibold text-gray-900 mb-4">Active Alerts</h2>
+                                <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Active Alerts</h2>
                                 <div className="space-y-3">
                                     {activeAlerts.map((alert) => (
                                         <AlertCard
@@ -313,7 +313,7 @@ export default function AlertsPage() {
                         {/* Triggered Alerts */}
                         {triggeredAlerts.length > 0 && (
                             <div>
-                                <h2 className="text-lg font-semibold text-gray-900 mb-4">Triggered Alerts</h2>
+                                <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Triggered Alerts</h2>
                                 <div className="space-y-3">
                                     {triggeredAlerts.map((alert) => (
                                         <AlertCard
@@ -330,7 +330,7 @@ export default function AlertsPage() {
                         {/* Inactive Alerts */}
                         {inactiveAlerts.length > 0 && (
                             <div>
-                                <h2 className="text-lg font-semibold text-gray-900 mb-4">Inactive Alerts</h2>
+                                <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Inactive Alerts</h2>
                                 <div className="space-y-3">
                                     {inactiveAlerts.map((alert) => (
                                         <AlertCard
@@ -349,39 +349,39 @@ export default function AlertsPage() {
 
             {/* Create Alert Modal */}
             {showCreateAlert && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-                    <div className="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
-                        <div className="p-6 border-b border-gray-200 flex items-center justify-between sticky top-0 bg-white">
-                            <h2 className="text-xl font-bold text-gray-900">Create Price Alert</h2>
+                <div className="fixed inset-0 bg-black/50 dark:bg-black/70 flex items-center justify-center p-4 z-50">
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+                        <div className="p-6 border-b border-gray-200 dark:border-slate-700 flex items-center justify-between sticky top-0 bg-white dark:bg-slate-900">
+                            <h2 className="text-xl font-bold text-gray-900 dark:text-white">Create Price Alert</h2>
                             <button
                                 onClick={() => {
                                     setShowCreateAlert(false);
                                     resetForm();
                                 }}
-                                className="p-2 hover:bg-gray-100 rounded-lg transition"
+                                className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition"
                             >
-                                <X className="h-5 w-5 text-gray-500" />
+                                <X className="h-5 w-5 text-gray-500 dark:text-slate-400" />
                             </button>
                         </div>
 
                         <div className="p-6 space-y-6">
                             {/* Search Stock */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                                     Select Stock
                                 </label>
                                 {selectedSymbol ? (
-                                    <div className="flex items-center justify-between p-4 bg-emerald-50 border border-emerald-200 rounded-xl">
+                                    <div className="flex items-center justify-between p-4 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-xl">
                                         <div>
-                                            <p className="font-semibold text-gray-900">{selectedSymbol.symbol}</p>
-                                            <p className="text-sm text-gray-600">{selectedSymbol.name}</p>
+                                            <p className="font-semibold text-gray-900 dark:text-white">{selectedSymbol.symbol}</p>
+                                            <p className="text-sm text-gray-600 dark:text-slate-400">{selectedSymbol.name}</p>
                                         </div>
                                         <button
                                             onClick={() => {
                                                 setSelectedSymbol(null);
                                                 setSearchResults([]);
                                             }}
-                                            className="text-gray-500 hover:text-gray-700"
+                                            className="text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200"
                                         >
                                             <X className="h-5 w-5" />
                                         </button>
@@ -398,34 +398,34 @@ export default function AlertsPage() {
                                                     onFocus={() => setShowSuggestions(true)}
                                                     onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                                                     placeholder="Search stocks by symbol or name..."
-                                                    className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+                                                    className="w-full pl-10 pr-4 py-3 border border-gray-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
                                                 />
                                             </div>
                                             
                                             {/* Stock Suggestions Dropdown */}
                                             {showSuggestions && filteredStocks.length > 0 && (
-                                                <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg z-10 max-h-64 overflow-y-auto">
+                                                <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl shadow-lg z-10 max-h-64 overflow-y-auto">
                                                     {filteredStocks.map((stock, index) => (
                                                         <button
                                                             key={index}
                                                             onClick={() => handleSuggestionClick(stock)}
-                                                            className="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0"
+                                                            className="w-full px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors border-b border-gray-100 dark:border-slate-700 last:border-b-0"
                                                         >
                                                             <div className="flex items-center justify-between">
                                                                 <div>
-                                                                    <div className="font-semibold text-gray-900">
+                                                                    <div className="font-semibold text-gray-900 dark:text-white">
                                                                         {stock.symbol}
                                                                     </div>
-                                                                    <div className="text-sm text-gray-600 truncate">
+                                                                    <div className="text-sm text-gray-600 dark:text-slate-400 truncate">
                                                                         {stock.name}
                                                                     </div>
                                                                 </div>
                                                                 <div className="text-right">
-                                                                    <div className="font-semibold text-gray-900">
+                                                                    <div className="font-semibold text-gray-900 dark:text-white">
                                                                         ${stock.price?.toFixed(2) || '0.00'}
                                                                     </div>
                                                                     <div className={`text-sm font-medium ${
-                                                                        stock.change >= 0 ? 'text-emerald-600' : 'text-red-600'
+                                                                        stock.change >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'
                                                                     }`}>
                                                                         {stock.change >= 0 ? '+' : ''}{stock.changePercent?.toFixed(2) || '0.00'}%
                                                                     </div>
@@ -442,7 +442,7 @@ export default function AlertsPage() {
 
                             {/* Alert Type */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                                     Alert Type
                                 </label>
                                 <div className="grid grid-cols-3 gap-2">
@@ -452,8 +452,8 @@ export default function AlertsPage() {
                                             onClick={() => setAlertType(type)}
                                             className={`py-3 px-4 rounded-xl border-2 font-medium transition capitalize ${
                                                 alertType === type
-                                                    ? 'border-emerald-600 bg-emerald-50 text-emerald-700'
-                                                    : 'border-gray-200 text-gray-700 hover:border-gray-300'
+                                                    ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300'
+                                                    : 'border-gray-200 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:border-gray-300 dark:hover:border-slate-500'
                                             }`}
                                         >
                                             {type}
@@ -465,14 +465,14 @@ export default function AlertsPage() {
                             {/* Condition & Target Value */}
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                                         Condition
                                     </label>
                                     <div className="relative">
                                         <select
                                             value={condition}
                                             onChange={(e) => setCondition(e.target.value as 'above' | 'below')}
-                                            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none appearance-none bg-white"
+                                            className="w-full px-4 py-3 border border-gray-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none appearance-none bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
                                         >
                                             <option value="above">Above</option>
                                             <option value="below">Below</option>
@@ -481,7 +481,7 @@ export default function AlertsPage() {
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
                                         Target Value
                                     </label>
                                     <input
@@ -490,7 +490,7 @@ export default function AlertsPage() {
                                         onChange={(e) => setTargetValue(e.target.value)}
                                         placeholder="0.00"
                                         step="0.01"
-                                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+                                        className="w-full px-4 py-3 border border-gray-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
                                     />
                                 </div>
                             </div>

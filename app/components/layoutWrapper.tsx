@@ -15,10 +15,10 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
     setMounted(true);
   }, []);
 
-  if (!mounted) return <div className="min-h-screen bg-gray-50" />;
+  if (!mounted) return <div className="min-h-screen bg-background" />;
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-background text-foreground transition-colors duration-300">
       {/* Header - Full width at top */}
       <Header onOpenSidebar={() => setIsOpenMobile(true)} />
 

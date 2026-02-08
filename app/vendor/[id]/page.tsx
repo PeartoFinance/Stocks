@@ -177,22 +177,22 @@ export default function VendorDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:bg-gradient-to-br dark:from-slate-900 dark:via-slate-900 dark:to-slate-800 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 dark:border-blue-400"></div>
       </div>
     );
   }
 
   if (!vendor) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:bg-gradient-to-br dark:from-slate-900 dark:via-slate-900 dark:to-slate-800 flex items-center justify-center">
         <div className="text-center">
-          <Building2 className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Vendor Not Found</h2>
-          <p className="text-gray-600 mb-4">The vendor you're looking for doesn't exist.</p>
+          <Building2 className="h-16 w-16 text-gray-400 dark:text-slate-500 mx-auto mb-4" />
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Vendor Not Found</h2>
+          <p className="text-gray-600 dark:text-slate-400 mb-4">The vendor you're looking for doesn't exist.</p>
           <button
             onClick={() => router.push('/vendors')}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
           >
             Back to Vendors
           </button>
@@ -202,20 +202,20 @@ export default function VendorDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:bg-gradient-to-br dark:from-slate-900 dark:via-slate-900 dark:to-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         
         {/* Header */}
         <div className="mb-6 sm:mb-8">
           <button
             onClick={() => router.back()}
-            className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4 transition-colors"
+            className="flex items-center gap-2 text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white mb-4 transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
             Back
           </button>
 
-          <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 p-6 sm:p-8">
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 dark:bg-slate-800/80 dark:border-slate-700/50 p-6 sm:p-8">
             <div className="flex flex-col lg:flex-row gap-6">
               {/* Vendor Logo and Basic Info */}
               <div className="flex items-center gap-4">
@@ -244,7 +244,7 @@ export default function VendorDetailPage() {
                 <div className="flex-1">
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+                      <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">
                         {vendor.name}
                       </h1>
                       <div className="flex items-center gap-4 flex-wrap">
@@ -255,12 +255,12 @@ export default function VendorDetailPage() {
                           </span>
                         </div>
                         {vendor.category && (
-                          <span className="px-3 py-1 text-sm font-medium bg-blue-100 text-blue-800 rounded-full">
+                          <span className="px-3 py-1 text-sm font-medium bg-blue-100 text-blue-800 rounded-full dark:bg-blue-900/30 dark:text-blue-300">
                             {vendor.category}
                           </span>
                         )}
                         {vendor.isFeatured && (
-                          <span className="flex items-center gap-1 text-sm text-amber-600 bg-amber-50 px-3 py-1 rounded-full">
+                          <span className="flex items-center gap-1 text-sm text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 px-3 py-1 rounded-full">
                             <TrendingUp className="h-3 w-3" />
                             Featured
                           </span>
@@ -271,12 +271,12 @@ export default function VendorDetailPage() {
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => setIsFavorited(!isFavorited)}
-                        className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                        className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
                       >
                         <Heart className={`h-5 w-5 ${isFavorited ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
                       </button>
-                      <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors">
-                        <Share2 className="h-5 w-5 text-gray-400" />
+                      <button className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors">
+                        <Share2 className="h-5 w-5 text-gray-400 dark:text-slate-400" />
                       </button>
                     </div>
                   </div>
@@ -299,7 +299,7 @@ export default function VendorDetailPage() {
                 {vendor?.phone && (
                   <a
                     href={`tel:${vendor.phone}`}
-                    className="flex items-center justify-center gap-2 px-3 py-2 border border-gray-300 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors"
+                    className="flex items-center justify-center gap-2 px-3 py-2 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 text-sm font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors"
                   >
                     <Phone className="h-4 w-4" />
                     Call
@@ -308,7 +308,7 @@ export default function VendorDetailPage() {
                 {vendor?.email && (
                   <a
                     href={`mailto:${vendor.email}`}
-                    className="flex items-center justify-center gap-2 px-3 py-2 border border-gray-300 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors"
+                    className="flex items-center justify-center gap-2 px-3 py-2 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 text-sm font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors"
                   >
                     <Mail className="h-4 w-4" />
                     Email
@@ -320,8 +320,8 @@ export default function VendorDetailPage() {
         </div>
 
         {/* Tabs */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 mb-6">
-          <div className="flex border-b border-gray-200">
+        <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 dark:bg-slate-800/80 dark:border-slate-700/50 mb-6">
+          <div className="flex border-b border-gray-200 dark:border-slate-700">
             {[
               { id: 'overview', label: 'Overview', icon: Building2 },
               { id: 'analytics', label: 'Analytics', icon: BarChart3 },
@@ -331,8 +331,8 @@ export default function VendorDetailPage() {
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`flex items-center gap-2 px-6 py-3 font-medium transition-colors ${
                   activeTab === tab.id
-                    ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                    ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400 bg-blue-50 dark:bg-blue-900/30'
+                    : 'text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-slate-700'
                 }`}
               >
                 <tab.icon className="h-4 w-4" />
@@ -382,13 +382,13 @@ export default function VendorDetailPage() {
                     trend: 'Established' 
                   },
                 ].map((stat, index) => (
-                  <div key={index} className={`bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 p-4`}>
+                  <div key={index} className={`bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 dark:bg-slate-800/80 dark:border-slate-700/50 p-4`}>
                     <div className="flex items-center justify-between mb-2">
-                      <stat.icon className={`h-5 w-5 text-${stat.color}-600`} />
-                      <span className="text-xs text-green-600 font-medium">{stat.trend}</span>
+                      <stat.icon className={`h-5 w-5 text-${stat.color}-600 dark:text-${stat.color}-400`} />
+                      <span className="text-xs text-green-600 dark:text-green-400 font-medium">{stat.trend}</span>
                     </div>
-                    <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
-                    <p className="text-sm text-gray-600">{stat.label}</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
+                    <p className="text-sm text-gray-600 dark:text-slate-400">{stat.label}</p>
                   </div>
                 ))}
               </div>
@@ -398,8 +398,8 @@ export default function VendorDetailPage() {
                 {/* Vendor Info & Description */}
                 <div className="lg:col-span-2 space-y-6">
                   {/* About Section */}
-                  <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 p-6">
-                    <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                  <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 dark:bg-slate-800/80 dark:border-slate-700/50 p-6">
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                       <Building2 className="h-5 w-5 text-blue-600" />
                       About {vendor?.name}
                     </h2>
@@ -409,7 +409,7 @@ export default function VendorDetailPage() {
                     
                     {vendor?.services && vendor.services.length > 0 && (
                       <div>
-                        <h3 className="text-lg font-semibold text-gray-900 mb-3">Services Offered</h3>
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Services Offered</h3>
                         <div className="flex flex-wrap gap-2">
                           {vendor.services.map((service, index) => (
                             <span
@@ -425,15 +425,15 @@ export default function VendorDetailPage() {
                   </div>
 
                   {/* Reviews Section */}
-                  <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 p-6">
+                  <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 dark:bg-slate-800/80 dark:border-slate-700/50 p-6">
                     <div className="flex items-center justify-between mb-4">
-                      <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+                      <h2 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                         <MessageSquare className="h-5 w-5 text-blue-600" />
                         Customer Reviews
                       </h2>
                       <div className="flex items-center gap-2">
                         {renderStars(vendor?.rating || 0)}
-                        <span className="text-sm text-gray-600">
+                        <span className="text-sm text-gray-600 dark:text-slate-400">
                           {vendor?.rating?.toFixed(1)} ({vendor?.reviewCount} reviews)
                         </span>
                       </div>
@@ -442,7 +442,7 @@ export default function VendorDetailPage() {
                     {/* Rating Distribution Chart */}
                     {stats && (
                       <div className="mb-6">
-                        <h3 className="text-sm font-semibold text-gray-900 mb-3">Rating Distribution</h3>
+                        <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Rating Distribution</h3>
                         <div className="flex items-center gap-6">
                           {renderPieChart(stats.ratingDistribution, [
                             '#10b981', '#3b82f6', '#f59e0b', '#f97316', '#ef4444'
@@ -452,9 +452,9 @@ export default function VendorDetailPage() {
                               <div key={rating} className="flex items-center gap-3">
                                 <div className="flex items-center gap-1 w-12">
                                   {renderStars(parseInt(rating))}
-                                  <span className="text-sm text-gray-600 ml-1">{rating}</span>
+                                  <span className="text-sm text-gray-600 dark:text-slate-400 ml-1">{rating}</span>
                                 </div>
-                                <div className="flex-1 bg-gray-200 rounded-full h-2">
+                                <div className="flex-1 bg-gray-200 dark:bg-slate-700 rounded-full h-2">
                                   <div
                                     className="bg-gradient-to-r from-blue-500 to-indigo-500 h-2 rounded-full transition-all duration-500"
                                     style={{ width: `${(count / stats.totalReviews) * 100}%` }}
@@ -473,11 +473,11 @@ export default function VendorDetailPage() {
 
                     {/* Recent Reviews */}
                     <div>
-                      <h3 className="text-sm font-semibold text-gray-900 mb-3">Recent Reviews</h3>
+                      <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Recent Reviews</h3>
                       <div className="space-y-3 max-h-64 overflow-y-auto">
                         {reviews.length > 0 ? (
                           reviews.slice(0, 3).map((review) => (
-                            <div key={review.id} className="border-b border-gray-200 pb-3 last:border-b-0">
+                            <div key={review.id} className="border-b border-gray-200 dark:border-slate-700 pb-3 last:border-b-0">
                               <div className="flex items-start justify-between mb-2">
                                 <div className="flex items-center gap-2">
                                   <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
@@ -486,10 +486,10 @@ export default function VendorDetailPage() {
                                     </span>
                                   </div>
                                   <div>
-                                    <p className="text-sm font-medium text-gray-900">{review.userName}</p>
+                                    <p className="text-sm font-medium text-gray-900 dark:text-white">{review.userName}</p>
                                     <div className="flex items-center gap-2">
                                       {renderStars(review.rating)}
-                                      <span className="text-xs text-gray-500">{review.date}</span>
+                                      <span className="text-xs text-gray-500 dark:text-slate-400">{review.date}</span>
                                     </div>
                                   </div>
                                 </div>
@@ -497,13 +497,13 @@ export default function VendorDetailPage() {
                                   <Shield className="h-4 w-4 text-blue-600" />
                                 )}
                               </div>
-                              <p className="text-sm text-gray-600">{review.comment}</p>
+                              <p className="text-sm text-gray-600 dark:text-slate-400">{review.comment}</p>
                               <div className="flex items-center gap-4 mt-2">
-                                <button className="flex items-center gap-1 text-xs text-gray-500 hover:text-green-600 transition-colors">
+                                <button className="flex items-center gap-1 text-xs text-gray-500 dark:text-slate-400 hover:text-green-600 dark:hover:text-green-400 transition-colors">
                                   <ThumbsUp className="h-3 w-3" />
                                   Helpful
                                 </button>
-                                <button className="flex items-center gap-1 text-xs text-gray-500 hover:text-red-600 transition-colors">
+                                <button className="flex items-center gap-1 text-xs text-gray-500 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition-colors">
                                   <ThumbsDown className="h-3 w-3" />
                                   Not Helpful
                                 </button>
@@ -526,16 +526,16 @@ export default function VendorDetailPage() {
                 {/* Sidebar Charts */}
                 <div className="space-y-6">
                   {/* Performance Chart */}
-                  <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 p-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                  <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 dark:bg-slate-800/80 dark:border-slate-700/50 p-6">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                       <Activity className="h-5 w-5 text-green-600" />
                       Quality Metrics
                     </h3>
                     <div className="space-y-4">
                       <div>
                         <div className="flex justify-between text-sm mb-1">
-                          <span className="text-gray-600">Rating Score</span>
-                          <span className="font-medium">{((vendor?.rating || 0) / 5 * 100).toFixed(0)}%</span>
+                          <span className="text-gray-600 dark:text-slate-400">Rating Score</span>
+                          <span className="font-medium dark:text-white">{((vendor?.rating || 0) / 5 * 100).toFixed(0)}%</span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2">
                           <div
@@ -546,8 +546,8 @@ export default function VendorDetailPage() {
                       </div>
                       <div>
                         <div className="flex justify-between text-sm mb-1">
-                          <span className="text-gray-600">Review Count</span>
-                          <span className="font-medium">{Math.min((vendor?.reviewCount || 0) / 2, 100)}%</span>
+                          <span className="text-gray-600 dark:text-slate-400">Review Count</span>
+                          <span className="font-medium dark:text-white">{Math.min((vendor?.reviewCount || 0) / 2, 100)}%</span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2">
                           <div
@@ -558,8 +558,8 @@ export default function VendorDetailPage() {
                       </div>
                       <div>
                         <div className="flex justify-between text-sm mb-1">
-                          <span className="text-gray-600">Service Coverage</span>
-                          <span className="font-medium">{Math.min((vendor?.services?.length || 0) * 20, 100)}%</span>
+                          <span className="text-gray-600 dark:text-slate-400">Service Coverage</span>
+                          <span className="font-medium dark:text-white">{Math.min((vendor?.services?.length || 0) * 20, 100)}%</span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2">
                           <div
@@ -572,8 +572,8 @@ export default function VendorDetailPage() {
                   </div>
 
                   {/* Revenue Growth Chart */}
-                  <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 p-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                  <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 dark:bg-slate-800/80 dark:border-slate-700/50 p-6">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                       <DollarSign className="h-5 w-5 text-amber-600" />
                       Performance Metrics
                     </h3>
@@ -585,14 +585,14 @@ export default function VendorDetailPage() {
                         { label: 'Experience', value: new Date().getFullYear() - new Date(vendor?.createdAt || '').getFullYear(), max: 50, color: 'from-purple-500 to-pink-500' },
                       ].map((metric, index) => (
                         <div key={metric.label} className="flex items-center gap-3">
-                          <span className="text-xs text-gray-600 w-16">{metric.label}</span>
-                          <div className="flex-1 bg-gray-200 rounded-full h-3 relative">
+                          <span className="text-xs text-gray-600 dark:text-slate-400 w-16">{metric.label}</span>
+                          <div className="flex-1 bg-gray-200 dark:bg-slate-700 rounded-full h-3 relative">
                             <div
                               className={`bg-gradient-to-r ${metric.color} h-3 rounded-full transition-all duration-500`}
                               style={{ width: `${(metric.value / metric.max) * 100}%` }}
                             />
                           </div>
-                          <span className="text-xs text-gray-600 w-12 text-right">
+                          <span className="text-xs text-gray-600 dark:text-slate-400 w-12 text-right">
                             {metric.label === 'Rating' ? metric.value.toFixed(1) : 
                              metric.label === 'Experience' ? `${metric.value}y` : 
                              metric.value}
@@ -603,8 +603,8 @@ export default function VendorDetailPage() {
                   </div>
 
                   {/* Quick Actions */}
-                  <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 p-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+                  <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 dark:bg-slate-800/80 dark:border-slate-700/50 p-6">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Quick Actions</h3>
                     <div className="space-y-2">
                       {vendor?.website && (
                         <a
@@ -620,13 +620,13 @@ export default function VendorDetailPage() {
                       {vendor?.phone && (
                         <a
                           href={`tel:${vendor.phone}`}
-                          className="w-full flex items-center justify-center gap-2 px-3 py-2 border border-gray-300 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors"
+                          className="w-full flex items-center justify-center gap-2 px-3 py-2 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 text-sm font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors"
                         >
                           <Phone className="h-4 w-4" />
                           Call Vendor
                         </a>
                       )}
-                      <button className="w-full flex items-center justify-center gap-2 px-3 py-2 border border-gray-300 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors">
+                      <button className="w-full flex items-center justify-center gap-2 px-3 py-2 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-slate-300 text-sm font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors">
                         <MessageSquare className="h-4 w-4" />
                         Write Review
                       </button>
@@ -644,75 +644,75 @@ export default function VendorDetailPage() {
               className="grid grid-cols-1 lg:grid-cols-2 gap-6"
             >
               {/* Performance Metrics */}
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 dark:bg-slate-800/80 dark:border-slate-700/50 p-6">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                   <Activity className="h-5 w-5 text-blue-600" />
                   Performance Metrics
                 </h2>
                 {stats && (
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                    <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
                       <div className="flex items-center gap-2">
-                        <Target className="h-4 w-4 text-blue-600" />
-                        <span className="text-sm font-medium text-gray-900">Success Rate</span>
+                        <Target className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                        <span className="text-sm font-medium text-gray-900 dark:text-white">Success Rate</span>
                       </div>
-                      <span className="text-lg font-bold text-blue-600">{stats.successRate.toFixed(1)}%</span>
+                      <span className="text-lg font-bold text-blue-600 dark:text-blue-400">{stats.successRate.toFixed(1)}%</span>
                     </div>
-                    <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                    <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/30 rounded-lg">
                       <div className="flex items-center gap-2">
-                        <Users className="h-4 w-4 text-green-600" />
-                        <span className="text-sm font-medium text-gray-900">Client Retention</span>
+                        <Users className="h-4 w-4 text-green-600 dark:text-green-400" />
+                        <span className="text-sm font-medium text-gray-900 dark:text-white">Client Retention</span>
                       </div>
-                      <span className="text-lg font-bold text-green-600">{stats.clientRetention.toFixed(1)}%</span>
+                      <span className="text-lg font-bold text-green-600 dark:text-green-400">{stats.clientRetention.toFixed(1)}%</span>
                     </div>
-                    <div className="flex items-center justify-between p-3 bg-amber-50 rounded-lg">
+                    <div className="flex items-center justify-between p-3 bg-amber-50 dark:bg-amber-900/30 rounded-lg">
                       <div className="flex items-center gap-2">
-                        <Clock className="h-4 w-4 text-amber-600" />
-                        <span className="text-sm font-medium text-gray-900">Avg Response</span>
+                        <Clock className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                        <span className="text-sm font-medium text-gray-900 dark:text-white">Avg Response</span>
                       </div>
-                      <span className="text-lg font-bold text-amber-600">{stats.avgResponseTime}h</span>
+                      <span className="text-lg font-bold text-amber-600 dark:text-amber-400">{stats.avgResponseTime}h</span>
                     </div>
-                    <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
+                    <div className="flex items-center justify-between p-3 bg-purple-50 dark:bg-purple-900/30 rounded-lg">
                       <div className="flex items-center gap-2">
-                        <DollarSign className="h-4 w-4 text-purple-600" />
-                        <span className="text-sm font-medium text-gray-900">Revenue Growth</span>
+                        <DollarSign className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+                        <span className="text-sm font-medium text-gray-900 dark:text-white">Revenue Growth</span>
                       </div>
-                      <span className="text-lg font-bold text-purple-600">+{stats.revenueGrowth}%</span>
+                      <span className="text-lg font-bold text-purple-600 dark:text-purple-400">+{stats.revenueGrowth}%</span>
                     </div>
                   </div>
                 )}
               </div>
 
               {/* Trading Stats */}
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 dark:bg-slate-800/80 dark:border-slate-700/50 p-6">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                   <BarChart3 className="h-5 w-5 text-green-600" />
                   Trading Statistics
                 </h2>
                 <div className="space-y-4">
-                  <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg">
+                  <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-lg">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-gray-700">Total Volume</span>
-                      <Zap className="h-4 w-4 text-blue-600" />
+                      <span className="text-sm font-medium text-gray-700 dark:text-slate-300">Total Volume</span>
+                      <Zap className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                     </div>
-                    <p className="text-2xl font-bold text-blue-600">$2.4M</p>
-                    <p className="text-xs text-gray-600 mt-1">+12.5% from last month</p>
+                    <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">$2.4M</p>
+                    <p className="text-xs text-gray-600 dark:text-slate-400 mt-1">+12.5% from last month</p>
                   </div>
-                  <div className="p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg">
+                  <div className="p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 rounded-lg">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-gray-700">Success Trades</span>
-                      <TrendingUp className="h-4 w-4 text-green-600" />
+                      <span className="text-sm font-medium text-gray-700 dark:text-slate-300">Success Trades</span>
+                      <TrendingUp className="h-4 w-4 text-green-600 dark:text-green-400" />
                     </div>
-                    <p className="text-2xl font-bold text-green-600">847</p>
-                    <p className="text-xs text-gray-600 mt-1">89.2% success rate</p>
+                    <p className="text-2xl font-bold text-green-600 dark:text-green-400">847</p>
+                    <p className="text-xs text-gray-600 dark:text-slate-400 mt-1">89.2% success rate</p>
                   </div>
-                  <div className="p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg">
+                  <div className="p-4 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/30 dark:to-pink-900/30 rounded-lg">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-gray-700">Active Clients</span>
-                      <Users className="h-4 w-4 text-purple-600" />
+                      <span className="text-sm font-medium text-gray-700 dark:text-slate-300">Active Clients</span>
+                      <Users className="h-4 w-4 text-purple-600 dark:text-purple-400" />
                     </div>
-                    <p className="text-2xl font-bold text-purple-600">1,234</p>
-                    <p className="text-xs text-gray-600 mt-1">+23 new this week</p>
+                    <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">1,234</p>
+                    <p className="text-xs text-gray-600 dark:text-slate-400 mt-1">+23 new this week</p>
                   </div>
                 </div>
               </div>

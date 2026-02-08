@@ -232,7 +232,7 @@ export function TableExportButton({
                     disabled={isDisabled}
                     className={`p-2 rounded-lg transition ${isDisabled
                         ? 'text-slate-300 cursor-not-allowed'
-                        : 'text-slate-500 hover:text-emerald-500 hover:bg-slate-100'
+                        : 'text-slate-500 dark:text-pearto-gray hover:text-emerald-500 hover:bg-slate-100'
                         } ${className}`}
                     title="Export data"
                 >
@@ -258,7 +258,7 @@ export function TableExportButton({
                     disabled={isDisabled}
                     className={`flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg transition whitespace-nowrap ${isDisabled
                         ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
-                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                        : 'bg-slate-100 text-slate-600 dark:text-pearto-cloud hover:bg-slate-200'
                         } ${className}`}
                 >
                     <Download size={14} />
@@ -287,7 +287,7 @@ export function TableExportButton({
                 disabled={isDisabled}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition ${isDisabled
                     ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
-                    : 'bg-emerald-500 hover:bg-emerald-600 text-white'
+                    : 'bg-emerald-500 hover:bg-emerald-600 dark:bg-pearto-pink text-white'
                     } ${className}`}
             >
                 <Download size={16} />
@@ -316,7 +316,7 @@ function DropdownMenu({
     onSelect: (format: ExportFormat) => void;
 }) {
     return (
-        <div className="absolute right-0 mt-1 w-56 bg-white border border-slate-200 rounded-xl shadow-xl z-[9999] overflow-hidden">
+        <div className="absolute right-0 mt-1 w-56 bg-white dark:bg-pearto-card border border-slate-200 dark:border-pearto-border rounded-xl shadow-xl z-[9999] overflow-hidden transition-colors duration-300">
             <div className="max-h-64 overflow-y-auto">
                 <div className="p-2">
                     <p className="px-2 py-1.5 text-xs font-semibold text-slate-400 uppercase tracking-wide">
@@ -327,12 +327,12 @@ function DropdownMenu({
                             key={option.id}
                             onClick={() => onSelect(option.id)}
                             disabled={exporting !== null}
-                            className="w-full flex items-center gap-3 px-3 py-2.5 text-left rounded-lg hover:bg-slate-50 transition disabled:opacity-50"
+                            className="w-full flex items-center gap-3 px-3 py-2.5 text-left rounded-lg hover:bg-slate-50 dark:bg-pearto-surface transition disabled:opacity-50"
                         >
                         <div className={`p-1.5 rounded-lg ${option.id === 'csv' ? 'bg-blue-100 text-blue-600' :
-                            option.id === 'excel' ? 'bg-green-100 text-green-600' :
+                            option.id === 'excel' ? 'bg-green-100 dark:bg-pearto-green/10 text-green-600 dark:text-pearto-green' :
                                 option.id === 'json' ? 'bg-amber-100 text-amber-600' :
-                                    'bg-red-100 text-red-600'
+                                    'bg-red-100 dark:bg-pearto-pink/10 text-red-600 dark:text-pearto-pink'
                             }`}>
                             {exporting === option.id ? (
                                 <Loader2 size={16} className="animate-spin" />
@@ -341,10 +341,10 @@ function DropdownMenu({
                             )}
                         </div>
                         <div className="flex-1">
-                            <p className="font-medium text-slate-900 text-sm">
+                            <p className="font-medium text-slate-900 dark:text-pearto-luna text-sm transition-colors duration-300">
                                 {option.label}
                             </p>
-                            <p className="text-xs text-slate-500">
+                            <p className="text-xs text-slate-500 dark:text-pearto-gray transition-colors duration-300">
                                 {option.description}
                             </p>
                         </div>
