@@ -42,11 +42,11 @@ export default function Sidebar({ isOpenMobile, setIsOpenMobile }: SidebarProps)
   ];
 
   const SidebarInner = ({ isMobile = false }) => (
-    <div className="flex flex-col h-full bg-white dark:bg-pearto-blockchain border-r border-gray-200 dark:border-pearto-border transition-colors duration-300">
+    <div className="flex flex-col h-full bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800/50 transition-colors duration-300">
       {/* Mobile close button */}
       {isMobile && (
-        <div className="h-16 flex items-center justify-end px-6 border-b border-gray-100 dark:border-pearto-border">
-          <X className="w-5 h-5 text-gray-500 dark:text-pearto-cloud hover:text-gray-700 dark:hover:text-pearto-luna transition-colors duration-200 cursor-pointer" onClick={() => setIsOpenMobile(false)} />
+        <div className="h-16 flex items-center justify-end px-6 border-b border-gray-100 dark:border-gray-800/50">
+          <X className="w-5 h-5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors duration-200 cursor-pointer" onClick={() => setIsOpenMobile(false)} />
         </div>
       )}
 
@@ -59,8 +59,8 @@ export default function Sidebar({ isOpenMobile, setIsOpenMobile }: SidebarProps)
               href={item.href}
               onClick={() => isMobile && setIsOpenMobile(false)}
               className={`group flex items-center gap-4 p-3 rounded-xl transition-all duration-200 hover:scale-105 ${isActive 
-                ? 'bg-emerald-50 dark:bg-pearto-slate text-emerald-700 dark:text-pearto-green font-bold shadow-sm' 
-                : 'text-gray-500 dark:text-pearto-cloud hover:bg-gray-50 dark:hover:bg-pearto-surface hover:text-gray-700 dark:hover:text-pearto-luna hover:shadow-md'
+                ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 font-bold shadow-sm' 
+                : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 hover:shadow-md'
               } ${isCollapsed && !isMobile ? 'justify-center' : ''}`}
             >
               <item.icon size={22} className="transition-transform duration-200 group-hover:scale-110" />
@@ -96,12 +96,12 @@ export default function Sidebar({ isOpenMobile, setIsOpenMobile }: SidebarProps)
 
       {/* DESKTOP SIDEBAR - Sticky within content area, not fixed full height */}
       <aside
-        className={`sticky top-0 self-start h-screen bg-white dark:bg-pearto-blockchain border-r border-gray-200 dark:border-pearto-border z-40 transition-all duration-300 hidden lg:block flex-shrink-0 ${isCollapsed ? 'w-20' : 'w-64'
+        className={`sticky top-0 self-start h-screen bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800/50 z-40 transition-all duration-300 hidden lg:block flex-shrink-0 ${isCollapsed ? 'w-20' : 'w-64'
           }`}
       >
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="absolute -right-3 top-20 bg-white dark:bg-pearto-slate border border-gray-200 dark:border-pearto-border rounded-full p-1 shadow-md z-50 text-gray-600 dark:text-pearto-cloud hover:text-emerald-500 dark:hover:text-pearto-green hover:scale-110 transition-all duration-200"
+          className="absolute -right-3 top-20 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full p-1 shadow-md z-50 text-gray-600 dark:text-gray-400 hover:text-emerald-500 dark:hover:text-emerald-400 hover:scale-110 transition-all duration-200"
         >
           {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
         </button>
