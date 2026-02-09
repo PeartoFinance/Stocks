@@ -94,32 +94,32 @@ export default function ChartTab({
   return (
     <div className="space-y-6">
       {/* Chart Header */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-6 transition-colors duration-300">
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 lg:p-6 transition-colors duration-300">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
           <div>
-            <h2 className="text-xl lg:text-2xl font-bold text-slate-900 dark:text-white mb-2 transition-colors duration-300">
+            <h2 className="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white mb-2 transition-colors duration-300">
               {crypto.name} ({crypto.symbol}) Price Chart
             </h2>
             <div className="flex items-center gap-4">
               <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-bold ${
-                isPositive ? "text-emerald-700 bg-emerald-50" : "text-red-700 bg-red-50 dark:bg-pearto-pink/10"
+                isPositive ? "text-emerald-700 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-900/20" : "text-red-700 bg-red-50 dark:text-red-400 dark:bg-red-900/20"
               }`}>
                 {isPositive ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
                 {formatPrice(historicalData[historicalData.length - 1]?.price || crypto.change)}
               </div>
               <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-bold ${
-                periodChange.change >= 0 ? "text-emerald-700 bg-emerald-50" : "text-red-700 bg-red-50 dark:bg-pearto-pink/10"
+                periodChange.change >= 0 ? "text-emerald-700 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-900/20" : "text-red-700 bg-red-50 dark:text-red-400 dark:bg-red-900/20"
               }`}>
                 {periodChange.change >= 0 ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
                 {periodChange.change >= 0 ? '+' : ''}{formatNumber(periodChange.change)} ({periodChange.change >= 0 ? '+' : ''}{formatNumber(periodChange.changePercent)}%)
-                <span className="text-xs text-slate-500 dark:text-pearto-gray transition-colors duration-300">({chartPeriod})</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300">({chartPeriod})</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* Chart Controls */}
-        <div className="mb-6 p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 transition-colors duration-300">
+        <div className="mb-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-xl border border-gray-200 dark:border-gray-600 transition-colors duration-300">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
             {/* Period Selector */}
             <div>
@@ -131,8 +131,8 @@ export default function ChartTab({
                     onClick={() => onPeriodChange(p)}
                     className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${
                       chartPeriod === p 
-                        ? "bg-emerald-600 dark:bg-pearto-pink text-white shadow-sm" 
-                        : "bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-600 border border-slate-200 dark:border-slate-600"
+                        ? "bg-emerald-600 text-white shadow-sm" 
+                        : "bg-white dark:bg-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-500 border border-gray-200 dark:border-gray-500"
                     }`}
                   >
                     {p}
@@ -151,8 +151,8 @@ export default function ChartTab({
                     onClick={() => onChartTypeChange(type.key as any)}
                     className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all ${
                       chartType === type.key 
-                        ? "bg-blue-600 dark:bg-pearto-blue text-white shadow-sm" 
-                        : "bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-600 border border-slate-200 dark:border-slate-600"
+                        ? "bg-blue-600 text-white shadow-sm" 
+                        : "bg-white dark:bg-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-500 border border-gray-200 dark:border-gray-500"
                     }`}
                   >
                     <type.icon className="h-4 w-4" />
@@ -170,20 +170,20 @@ export default function ChartTab({
                 type="checkbox"
                 checked={showVolume}
                 onChange={(e) => setShowVolume(e.target.checked)}
-                className="w-4 h-4 text-emerald-600 dark:text-pearto-green bg-gray-100  dark:bg-pearto-surface border-gray-300 dark:border-pearto-border rounded focus:ring-emerald-500 transition-colors duration-300"
+                className="w-4 h-4 text-emerald-600 bg-gray-100 dark:bg-gray-600 border-gray-300 dark:border-gray-500 rounded focus:ring-emerald-500 transition-colors duration-300"
               />
-              <span className="text-sm text-gray-700  dark:text-gray-300 transition-colors duration-300">Show Volume</span>
+              <span className="text-sm text-gray-700 dark:text-gray-300 transition-colors duration-300">Show Volume</span>
             </label>
           </div>
         </div>
 
         {/* Main Chart Container */}
-        <div className="h-[500px] lg:h-[600px] relative bg-white  dark:bg-slate-50  rounded-xl border border-slate-200 dark:border-slate-700 transition-colors duration-300">
+        <div className="h-[500px] lg:h-[600px] relative bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 transition-colors duration-300">
           {chartLoading ? (
-            <div className="absolute inset-0 flex items-center justify-center bg-white dark:bg-pearto-card dark:bg-pearto-card/50 z-10 transition-colors duration-300">
+            <div className="absolute inset-0 flex items-center justify-center bg-white dark:bg-gray-800/50 z-10 transition-colors duration-300">
               <div className="text-center">
-                <Activity className="h-12 w-12 text-emerald-600 dark:text-pearto-green animate-spin mx-auto mb-4 transition-colors duration-300" />
-                <p className="text-gray-600  dark:text-pearto-cloud font-medium transition-colors duration-300">Loading chart data...</p>
+                <Activity className="h-12 w-12 text-emerald-600 animate-spin mx-auto mb-4 transition-colors duration-300" />
+                <p className="text-gray-600 dark:text-gray-400 font-medium transition-colors duration-300">Loading chart data...</p>
               </div>
             </div>
           ) : null}
@@ -207,9 +207,9 @@ export default function ChartTab({
           ) : (
             <div className="flex items-center justify-center h-full">
               <div className="text-center">
-                <BarChart3 className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500  dark:text-pearto-gray text-lg font-medium transition-colors duration-300">No chart data available</p>
-                <p className="text-gray-400 text-sm mt-2">Try selecting a different time period</p>
+                <BarChart3 className="h-16 w-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+                <p className="text-gray-500 dark:text-gray-400 text-lg font-medium transition-colors duration-300">No chart data available</p>
+                <p className="text-gray-400 dark:text-gray-500 text-sm mt-2">Try selecting a different time period</p>
               </div>
             </div>
           )}
@@ -244,20 +244,20 @@ export default function ChartTab({
             color: 'purple'
           },
         ].map((item, i) => (
-          <div key={i} className="bg-emerald-50 dark:bg-slate-800 p-4 rounded-xl border border-emerald-100 dark:border-slate-700">
+          <div key={i} className={`bg-${item.color}-50 dark:bg-gray-800 p-4 rounded-xl border border-${item.color}-100 dark:border-gray-700`}>
             <div className="flex items-center gap-2 mb-2">
-              <item.icon className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-              <span className="text-sm font-medium text-emerald-700 dark:text-emerald-300">{item.label}</span>
+              <item.icon className={`h-4 w-4 text-${item.color}-600 dark:text-${item.color}-400`} />
+              <span className={`text-sm font-medium text-${item.color}-700 dark:text-${item.color}-300`}>{item.label}</span>
             </div>
-            <p className="text-lg font-bold text-emerald-900 dark:text-white">{item.value}</p>
+            <p className="text-lg font-bold text-gray-900 dark:text-white">{item.value}</p>
           </div>
         ))}
       </div>
 
       {/* Volume Analysis */}
       {showVolume && historicalData.length > 0 && (
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-6 transition-colors duration-300">
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 transition-colors duration-300">Volume Analysis</h3>
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 lg:p-6 transition-colors duration-300">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 transition-colors duration-300">Volume Analysis</h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {[
               { 
@@ -279,12 +279,12 @@ export default function ChartTab({
                 color: 'purple'
               },
             ].map((item, i) => (
-              <div key={i} className="bg-blue-50 dark:bg-slate-800 p-4 rounded-xl border border-blue-100 dark:border-slate-700">
+              <div key={i} className={`bg-${item.color}-50 dark:bg-gray-800 p-4 rounded-xl border border-${item.color}-100 dark:border-gray-700`}>
                 <div className="flex items-center gap-2 mb-2">
-                  <item.icon className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                  <span className="text-sm font-medium text-blue-700 dark:text-blue-300">{item.label}</span>
+                  <item.icon className={`h-4 w-4 text-${item.color}-600 dark:text-${item.color}-400`} />
+                  <span className={`text-sm font-medium text-${item.color}-700 dark:text-${item.color}-300`}>{item.label}</span>
                 </div>
-                <p className="text-lg font-bold text-blue-900 dark:text-white">{item.value}</p>
+                <p className="text-lg font-bold text-gray-900 dark:text-white">{item.value}</p>
               </div>
             ))}
           </div>

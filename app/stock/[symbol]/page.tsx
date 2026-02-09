@@ -666,17 +666,17 @@ export default function StockDetailPage({ params }: PageProps) {
 
       case 'chart':
         return (
-          <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-5">
-            <div className="mb-4 lg:mb-6 p-3 lg:p-4 bg-slate-50/50 rounded-xl border border-slate-100">
+          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 lg:p-5">
+            <div className="mb-4 lg:mb-6 p-3 lg:p-4 bg-gray-50 dark:bg-gray-700 rounded-xl border border-gray-100 dark:border-gray-600">
               <div className="flex flex-col gap-3 mb-3">
-                <span className="text-sm font-semibold text-gray-700 dark:text-pearto-luna transition-colors duration-300">Duration</span>
-                <div className="flex bg-white dark:bg-pearto-card rounded-lg p-1 border border-slate-200 dark:border-pearto-border transition-colors duration-300 overflow-x-auto scrollbar-hide">
+                <span className="text-sm font-semibold text-gray-700 dark:text-gray-300 transition-colors duration-300">Duration</span>
+                <div className="flex bg-white dark:bg-gray-600 rounded-lg p-1 border border-gray-200 dark:border-gray-500 transition-colors duration-300 overflow-x-auto scrollbar-hide">
                   {periods.map((p) => (
                     <button
                       key={p}
                       onClick={() => handlePeriodChange(p)}
                       className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all whitespace-nowrap ${
-                        chartPeriod === p ? "bg-gray-900 dark:bg-pearto-green text-white shadow-sm" : "text-gray-600 dark:text-pearto-cloud hover:bg-gray-100 dark:hover:bg-pearto-surface"
+                        chartPeriod === p ? "bg-gray-900 dark:bg-emerald-600 text-white shadow-sm" : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-500"
                       }`}
                     >
                       {p}
@@ -685,14 +685,14 @@ export default function StockDetailPage({ params }: PageProps) {
                 </div>
               </div>
               <div className="flex flex-col gap-3">
-                <span className="text-sm font-semibold text-gray-700 dark:text-pearto-luna transition-colors duration-300">Type</span>
-                <div className="flex bg-white dark:bg-pearto-card rounded-lg p-1 border border-slate-200 dark:border-pearto-border transition-colors duration-300 overflow-x-auto scrollbar-hide">
+                <span className="text-sm font-semibold text-gray-700 dark:text-gray-300 transition-colors duration-300">Type</span>
+                <div className="flex bg-white dark:bg-gray-600 rounded-lg p-1 border border-gray-200 dark:border-gray-500 transition-colors duration-300 overflow-x-auto scrollbar-hide">
                   {chartTypes.map((type) => (
                     <button
                       key={type.key}
                       onClick={() => setChartType(type.key)}
                       className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-md transition-all whitespace-nowrap ${
-                        chartType === type.key ? "bg-blue-600 dark:bg-pearto-pink text-white shadow-sm" : "text-gray-600 dark:text-pearto-cloud hover:bg-gray-100 dark:hover:bg-pearto-surface"
+                        chartType === type.key ? "bg-blue-600 text-white shadow-sm" : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-500"
                       }`}
                     >
                       <type.icon className="h-3.5 w-3.5" />
@@ -704,14 +704,14 @@ export default function StockDetailPage({ params }: PageProps) {
             </div>
             <div className="h-64 lg:h-[500px] relative">
               {chartLoading ? (
-                <div className="absolute inset-0 flex items-center justify-center bg-white/50 z-10">
+                <div className="absolute inset-0 flex items-center justify-center bg-white/50 dark:bg-gray-800/50 z-10">
                   <Activity className="h-8 w-8 text-blue-600 animate-spin" />
                 </div>
               ) : null}
               {historicalData.length > 0 ? (
                 <StockChart data={historicalData} isPositive={stock.change >= 0} height={window.innerWidth < 1024 ? 256 : 500} chartType={chartType} />
               ) : (
-                <div className="flex items-center justify-center h-full bg-gray-50 dark:bg-pearto-surface rounded-lg text-gray-400">
+                <div className="flex items-center justify-center h-full bg-gray-50 dark:bg-gray-700 rounded-lg text-gray-400 dark:text-gray-500">
                   No data available for this period.
                 </div>
               )}

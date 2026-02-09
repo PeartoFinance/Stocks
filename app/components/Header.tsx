@@ -59,8 +59,8 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
   const userMenuRef = useRef<HTMLDivElement>(null);
   const countryMenuRef = useRef<HTMLDivElement>(null);
 
-  const mainAppUrl = process.env.NEXT_PUBLIC_MAIN_APP_URL || 'http://localhost:5173';
-  const authRedirectBase = process.env.NEXT_PUBLIC_AUTH_REDIRECT || 'http://test.pearto.com';
+  const mainAppUrl = process.env.NEXT_PUBLIC_MAIN_APP_URL || 'https://pearto.com';
+  const authRedirectBase = process.env.NEXT_PUBLIC_AUTH_REDIRECT || 'https://pearto.com';
 
   // Handle scroll for secondary navbar hiding
   useEffect(() => {
@@ -364,7 +364,7 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
       </nav>
 
       {/* SECONDARY NAVBAR - Fixed below primary navbar, always visible */}
-      <div className="fixed top-24 left-0 right-0 z-30 bg-white dark:bg-pearto-card/95 dark:bg-gray-900/95 backdrop-blur border-b border-gray-200 dark:border-pearto-border/30 dark:border-gray-800/30 hidden md:block transition-colors duration-300">
+      <div className="fixed top-24 left-0 right-0 z-30 bg-white dark:bg-gray-900 backdrop-blur border-b border-gray-200 dark:border-gray-800/50 hidden md:block transition-colors duration-300">
         <div className="container mx-auto px-4 md:px-6">
           <div className="flex items-center justify-center gap-2 py-2.5">
             {/* Pillars Dropdown */}

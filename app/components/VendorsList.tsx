@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Star, ExternalLink, Phone, Mail, Globe, Building2, TrendingUp } from 'lucide-react';
+import { Star, ExternalLink, Phone, Mail, Globe, Building2, TrendingUp, Router } from 'lucide-react';
 import { vendorAPI, Vendor } from '../utils/vendors';
 import { motion } from 'framer-motion';
-
+import Link from 'next/link';
 interface VendorsListProps {
   className?: string;
   limit?: number;
@@ -15,7 +15,6 @@ export default function VendorsList({ className = '', limit = 10, category }: Ve
   const [vendors, setVendors] = useState<Vendor[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
   useEffect(() => {
     const fetchVendors = async () => {
       try {
@@ -230,13 +229,13 @@ export default function VendorsList({ className = '', limit = 10, category }: Ve
 
       {/* View More Link */}
       <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 transition-colors duration-300">
-        <a
-          href="/vendors"
-          className="flex items-center justify-center gap-2 text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium transition-colors"
-        >
-          View All Vendors
-          <ExternalLink className="h-3 w-3" />
-        </a>
+        <Link
+  href="/vendors"
+  className="flex items-center justify-center gap-2 text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium transition-colors"
+>
+  View All Vendors
+  <ExternalLink className="h-3 w-3" />
+</Link>
       </div>
     </div>
   );

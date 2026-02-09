@@ -250,7 +250,7 @@ export default function VendorDetailPage() {
                       <div className="flex items-center gap-4 flex-wrap">
                         <div className="flex items-center gap-1">
                           {renderStars(vendor.rating)}
-                          <span className="text-sm text-gray-600 ml-1">
+                          <span className="text-sm text-gray-600 dark:text-gray-400 ml-1">
                             {vendor.rating.toFixed(1)} ({vendor.reviewCount} reviews)
                           </span>
                         </div>
@@ -273,7 +273,7 @@ export default function VendorDetailPage() {
                         onClick={() => setIsFavorited(!isFavorited)}
                         className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
                       >
-                        <Heart className={`h-5 w-5 ${isFavorited ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
+                        <Heart className={`h-5 w-5 ${isFavorited ? 'fill-red-500 text-red-500' : 'text-gray-400 dark:text-gray-500'}`} />
                       </button>
                       <button className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors">
                         <Share2 className="h-5 w-5 text-gray-400 dark:text-slate-400" />
@@ -388,7 +388,7 @@ export default function VendorDetailPage() {
                       <span className="text-xs text-green-600 dark:text-green-400 font-medium">{stat.trend}</span>
                     </div>
                     <p className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
-                    <p className="text-sm text-gray-600 dark:text-slate-400">{stat.label}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">{stat.label}</p>
                   </div>
                 ))}
               </div>
@@ -403,7 +403,7 @@ export default function VendorDetailPage() {
                       <Building2 className="h-5 w-5 text-blue-600" />
                       About {vendor?.name}
                     </h2>
-                    <p className="text-gray-600 leading-relaxed mb-4">
+                    <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
                       {vendor?.description || 'No description available.'}
                     </p>
                     
@@ -414,7 +414,7 @@ export default function VendorDetailPage() {
                           {vendor.services.map((service, index) => (
                             <span
                               key={index}
-                              className="px-3 py-1 text-sm bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-800 rounded-full border border-blue-200"
+                              className="px-3 py-1 text-sm bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-800 rounded-full border border-blue-200 dark:from-blue-900/30 dark:to-indigo-900/30 dark:text-blue-300 dark:border-blue-700"
                             >
                               {service}
                             </span>
@@ -454,14 +454,14 @@ export default function VendorDetailPage() {
                                   {renderStars(parseInt(rating))}
                                   <span className="text-sm text-gray-600 dark:text-slate-400 ml-1">{rating}</span>
                                 </div>
-                                <div className="flex-1 bg-gray-200 dark:bg-slate-700 rounded-full h-2">
+                                <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                                   <div
                                     className="bg-gradient-to-r from-blue-500 to-indigo-500 h-2 rounded-full transition-all duration-500"
                                     style={{ width: `${(count / stats.totalReviews) * 100}%` }}
                                   />
                                 </div>
-                                <span className="text-sm text-gray-600 w-8 text-right">{count}</span>
-                                <span className="text-xs text-gray-500 w-12 text-right">
+                                <span className="text-sm text-gray-600 dark:text-gray-400 w-8 text-right">{count}</span>
+                                <span className="text-xs text-gray-500 dark:text-gray-500 w-12 text-right">
                                   {((count / stats.totalReviews) * 100).toFixed(0)}%
                                 </span>
                               </div>
@@ -511,11 +511,11 @@ export default function VendorDetailPage() {
                             </div>
                           ))
                         ) : (
-                          <p className="text-center text-gray-500 py-4">No reviews yet.</p>
+                          <p className="text-center text-gray-500 dark:text-gray-400 py-4">No reviews yet.</p>
                         )}
                       </div>
                       {reviews.length > 3 && (
-                        <button className="mt-3 text-sm text-blue-600 hover:text-blue-700 font-medium">
+                        <button className="mt-3 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium">
                           View all {reviews.length} reviews →
                         </button>
                       )}
@@ -537,7 +537,7 @@ export default function VendorDetailPage() {
                           <span className="text-gray-600 dark:text-slate-400">Rating Score</span>
                           <span className="font-medium dark:text-white">{((vendor?.rating || 0) / 5 * 100).toFixed(0)}%</span>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                           <div
                             className="bg-gradient-to-r from-green-500 to-emerald-500 h-2 rounded-full transition-all duration-500"
                             style={{ width: `${((vendor?.rating || 0) / 5 * 100)}%` }}
@@ -549,7 +549,7 @@ export default function VendorDetailPage() {
                           <span className="text-gray-600 dark:text-slate-400">Review Count</span>
                           <span className="font-medium dark:text-white">{Math.min((vendor?.reviewCount || 0) / 2, 100)}%</span>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                           <div
                             className="bg-gradient-to-r from-blue-500 to-indigo-500 h-2 rounded-full transition-all duration-500"
                             style={{ width: `${Math.min((vendor?.reviewCount || 0) / 2, 100)}%` }}
@@ -561,7 +561,7 @@ export default function VendorDetailPage() {
                           <span className="text-gray-600 dark:text-slate-400">Service Coverage</span>
                           <span className="font-medium dark:text-white">{Math.min((vendor?.services?.length || 0) * 20, 100)}%</span>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                           <div
                             className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full transition-all duration-500"
                             style={{ width: `${Math.min((vendor?.services?.length || 0) * 20, 100)}%` }}
@@ -586,13 +586,13 @@ export default function VendorDetailPage() {
                       ].map((metric, index) => (
                         <div key={metric.label} className="flex items-center gap-3">
                           <span className="text-xs text-gray-600 dark:text-slate-400 w-16">{metric.label}</span>
-                          <div className="flex-1 bg-gray-200 dark:bg-slate-700 rounded-full h-3 relative">
+                          <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-3 relative">
                             <div
                               className={`bg-gradient-to-r ${metric.color} h-3 rounded-full transition-all duration-500`}
                               style={{ width: `${(metric.value / metric.max) * 100}%` }}
                             />
                           </div>
-                          <span className="text-xs text-gray-600 dark:text-slate-400 w-12 text-right">
+                          <span className="text-xs text-gray-600 dark:text-gray-400 w-12 text-right">
                             {metric.label === 'Rating' ? metric.value.toFixed(1) : 
                              metric.label === 'Experience' ? `${metric.value}y` : 
                              metric.value}
