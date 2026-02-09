@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Building2, ExternalLink } from 'lucide-react';
 import { vendorAPI, Vendor } from '../utils/vendors';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 interface VendorsListSimpleProps {
   className?: string;
@@ -141,13 +142,13 @@ export default function VendorsListSimple({ className = '', limit = 8, category 
 
       {/* View More Link */}
       <div className="mt-2 pt-2 border-t border-slate-100 dark:border-slate-800 transition-colors duration-300">
-        <a
-          href="/vendors"
-          className="flex items-center justify-center gap-1 text-[11px] text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium transition-colors"
-        >
-          View All Vendors
-          <ExternalLink className="h-2.5 w-2.5" />
-        </a>
+      <Link
+  href="/vendors"
+  className="flex items-center justify-center gap-1 text-[11px] text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium transition-colors"
+>
+  View All Vendors
+  <ExternalLink className="h-2.5 w-2.5" />
+</Link>
       </div>
     </div>
   );

@@ -85,7 +85,7 @@ export default function MetricsTab({ stock }: MetricsTabProps) {
 
   if (loading) {
     return (
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-8 transition-colors duration-300">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-8">
         <div className="flex items-center justify-center">
           <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
         </div>
@@ -95,8 +95,8 @@ export default function MetricsTab({ stock }: MetricsTabProps) {
 
   if (!metrics) {
     return (
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-8 transition-colors duration-300">
-        <p className="text-center text-slate-500 dark:text-slate-400 transition-colors duration-300">Failed to load metrics data</p>
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-8">
+        <p className="text-center text-slate-500 dark:text-slate-400">Failed to load metrics data</p>
       </div>
     );
   }
@@ -126,8 +126,8 @@ export default function MetricsTab({ stock }: MetricsTabProps) {
   return (
     <div className="space-y-6">
       {/* Valuation Metrics */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 transition-colors duration-300">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
           <PieChart className="h-5 w-5 text-blue-500" />
           Valuation Metrics
         </h3>
@@ -160,8 +160,8 @@ export default function MetricsTab({ stock }: MetricsTabProps) {
       </div>
 
       {/* Trading Metrics */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 transition-colors duration-300">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
           <BarChart3 className="h-5 w-5 text-green-500" />
           Trading Information
         </h3>
@@ -194,8 +194,8 @@ export default function MetricsTab({ stock }: MetricsTabProps) {
       </div>
 
       {/* Financial Metrics */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 transition-colors duration-300">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
           <Target className="h-5 w-5 text-purple-500" />
           Financial Metrics
         </h3>
@@ -228,38 +228,38 @@ export default function MetricsTab({ stock }: MetricsTabProps) {
       </div>
 
       {/* Additional Statistics */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 transition-colors duration-300">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 transition-colors duration-300">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
           Additional Statistics
         </h3>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-3">
-            <h4 className="font-medium text-slate-700 dark:text-slate-300 transition-colors duration-300">Share Information</h4>
+            <h4 className="font-medium text-slate-700 dark:text-slate-300">Share Information</h4>
             {[
               { label: 'Shares Outstanding', value: formatLargeNumber(metrics.sharesOutstanding) },
               { label: 'Float Shares', value: formatLargeNumber(metrics.floatShares) },
               { label: 'Short Ratio', value: formatRatio(metrics.shortRatio) },
               { label: 'Dividend Rate', value: metrics.dividendRate ? `$${formatRatio(metrics.dividendRate)}` : '-' },
             ].map((item, i) => (
-              <div key={i} className="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800 transition-colors duration-300">
-                <span className="text-sm text-slate-500 dark:text-slate-400 transition-colors duration-300">{item.label}</span>
-                <span className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">{item.value}</span>
+              <div key={i} className="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800">
+                <span className="text-sm text-slate-500 dark:text-slate-400">{item.label}</span>
+                <span className="text-sm font-medium text-slate-900 dark:text-white">{item.value}</span>
               </div>
             ))}
           </div>
           
           <div className="space-y-3">
-            <h4 className="font-medium text-slate-700 dark:text-slate-300 transition-colors duration-300">Performance Metrics</h4>
+            <h4 className="font-medium text-slate-700 dark:text-slate-300">Performance Metrics</h4>
             {[
               { label: 'Current Price', value: `$${stock.price.toFixed(2)}` },
               { label: '52W High Distance', value: metrics.high52w ? `${(((stock.price - metrics.high52w) / metrics.high52w) * 100).toFixed(1)}%` : '-' },
               { label: '52W Low Distance', value: metrics.low52w ? `${(((stock.price - metrics.low52w) / metrics.low52w) * 100).toFixed(1)}%` : '-' },
               { label: 'Market Cap Rank', value: metrics.marketCap && metrics.marketCap > 100e9 ? 'Large Cap' : metrics.marketCap && metrics.marketCap > 10e9 ? 'Mid Cap' : 'Small Cap' },
             ].map((item, i) => (
-              <div key={i} className="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800 transition-colors duration-300">
-                <span className="text-sm text-slate-500 dark:text-slate-400 transition-colors duration-300">{item.label}</span>
-                <span className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">{item.value}</span>
+              <div key={i} className="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800">
+                <span className="text-sm text-slate-500 dark:text-slate-400">{item.label}</span>
+                <span className="text-sm font-medium text-slate-900 dark:text-white">{item.value}</span>
               </div>
             ))}
           </div>

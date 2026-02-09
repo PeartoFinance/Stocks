@@ -185,13 +185,13 @@ export default function VendorsPage() {
               <div className="flex flex-col lg:flex-row gap-3">
                 {/* Search Bar */}
                 <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500" />
                   <input
                     type="text"
                     placeholder="Search vendors by name, description, or services..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 sm:py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base bg-white/50 backdrop-blur-sm"
+                    className="w-full pl-10 pr-4 py-2 sm:py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
                   />
                 </div>
 
@@ -320,7 +320,7 @@ export default function VendorsPage() {
             {/* Vendors Grid */}
             {loading ? (
               <div className="flex items-center justify-center py-12 sm:py-16">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gradient-to-r from-blue-600 to-indigo-600"></div>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
               </div>
             ) : filteredVendors.length === 0 ? (
               <div className="text-center py-12 sm:py-16">
@@ -406,7 +406,7 @@ export default function VendorsPage() {
                                 />
                               ))}
                             </div>
-                            <span className="text-xs text-gray-600">
+                            <span className="text-xs text-gray-600 dark:text-gray-400">
                               {vendor.rating.toFixed(1)} ({vendor.reviewCount})
                             </span>
                           </div>
@@ -424,13 +424,13 @@ export default function VendorsPage() {
                               {vendor.services.slice(0, 3).map((service, idx) => (
                                 <span
                                   key={idx}
-                                  className="px-1.5 py-0.5 text-xs bg-gradient-to-r from-gray-50 to-gray-100 text-gray-700 rounded-full border border-gray-200"
+                                  className="px-1.5 py-0.5 text-xs bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600 text-gray-700 dark:text-gray-300 rounded-full border border-gray-200 dark:border-gray-600"
                                 >
                                   {service}
                                 </span>
                               ))}
                               {vendor.services.length > 3 && (
-                                <span className="px-1.5 py-0.5 text-xs text-gray-500 dark:text-slate-500">
+                                <span className="px-1.5 py-0.5 text-xs text-gray-500 dark:text-gray-500">
                                   +{vendor.services.length - 3}
                                 </span>
                               )}
@@ -504,12 +504,12 @@ export default function VendorsPage() {
             <div className="xl:hidden fixed inset-0 z-50 bg-black bg-opacity-50" onClick={() => setShowAIPanel(false)}>
               <motion.div
                 initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }}
-                className="absolute bottom-0 left-0 right-0 bg-white rounded-t-2xl max-h-[85vh] overflow-hidden"
+                className="absolute bottom-0 left-0 right-0 bg-white dark:bg-gray-800 rounded-t-2xl max-h-[85vh] overflow-hidden"
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className="p-4 border-b flex justify-between">
-                  <h3 className="font-semibold">AI Insights</h3>
-                  <button onClick={() => setShowAIPanel(false)}><X className="h-5 w-5" /></button>
+                <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between">
+                  <h3 className="font-semibold text-gray-900 dark:text-white">AI Insights</h3>
+                  <button onClick={() => setShowAIPanel(false)}><X className="h-5 w-5 text-gray-500 dark:text-gray-400" /></button>
                 </div>
                 <div className="overflow-y-auto p-4" style={{ maxHeight: 'calc(85vh - 60px)' }}>
                   <AIAnalysisPanel
