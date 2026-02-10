@@ -91,6 +91,39 @@ export const cryptoService = {
       }>;
     }>(`/crypto/history/${symbol.toUpperCase()}?${params.toString()}`);
   },
+
+  /**
+   * Get cryptocurrency news for a specific symbol
+   * Uses Flask backend news search API with crypto symbol as query
+   */
+  async getNews(symbol: string, limit = 20) {
+    const params = new URLSearchParams({ 
+      q: symbol.toLowerCase(), // Search for the crypto symbol
+      limit: String(limit) 
+    });
+    return apiRequest<{
+      q: string;
+      items: Array<{
+        id: number;
+        title: string;
+        summary: string;
+        full_content?: string;
+        url?: string;
+        canonical_url?: string;
+        source: string;
+        source_type?: string;
+        author?: string;
+        image?: string;
+        category?: string;
+        featured?: boolean;
+        published_at: string;
+        slug?: string;
+        country_code?: string;
+        related_symbol?: string;
+      }>;
+      total: number;
+    }>(`/news/search?${params.toString()}`);
+  },
 };
 
 export default cryptoService;

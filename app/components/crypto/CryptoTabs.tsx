@@ -8,10 +8,11 @@ import {
   Clock, 
   Calendar, 
   Building2, 
+  Newspaper,
   LucideIcon
 } from 'lucide-react';
 
-export type TabId = 'overview' | 'statistics' | 'chart' | 'history' | 'profile';
+export type TabId = 'overview' | 'statistics' | 'chart' | 'history' | 'profile' | 'news';
 
 interface Tab {
   id: TabId;
@@ -25,6 +26,7 @@ const tabs: Tab[] = [
   { id: 'chart', label: 'Chart', icon: Clock },
   { id: 'history', label: 'History', icon: Calendar },
   { id: 'profile', label: 'Profile', icon: Building2 },
+  { id: 'news', label: 'News', icon: Newspaper },
 ];
 
 interface CryptoTabsProps {
@@ -63,8 +65,8 @@ export default function CryptoTabs({ activeTab, onTabChange }: CryptoTabsProps) 
                 onClick={() => onTabChange(tab.id)}
                 className={`
                   flex-shrink-0 snap-center transition-all flex
-                  /* MOBILE: 20% width (5 tabs visible), vertical stack */
-                  w-1/5 flex-col items-center justify-center gap-1 py-3 px-1
+                  /* MOBILE: 16.67% width (6 tabs visible), vertical stack */
+                  w-1/6 flex-col items-center justify-center gap-1 py-3 px-1
                   /* DESKTOP (lg): natural width, horizontal row */
                   lg:w-auto lg:flex-row lg:px-4 lg:py-2.5 lg:gap-2
                   ${isActive

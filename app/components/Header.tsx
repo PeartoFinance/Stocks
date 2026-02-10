@@ -485,6 +485,17 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
             exit={{ opacity: 0, height: 0 }}
             className="md:hidden fixed inset-x-0 top-12 sm:top-14 z-40 bg-white dark:bg-gray-900 overflow-auto max-h-[calc(100vh-3.5rem)] transition-colors duration-300"
           >
+            {/* Close Button at Top */}
+            <div className="sticky top-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 p-2 flex justify-end z-10">
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300"
+                aria-label="Close menu"
+              >
+                <X size={18} className="text-gray-600 dark:text-gray-400" />
+              </button>
+            </div>
+            
             <div className="p-3 sm:p-4 space-y-3 pb-20">
               {/* Mobile Search */}
               <div className="relative">
