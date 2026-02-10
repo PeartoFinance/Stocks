@@ -7,6 +7,7 @@ import { useAuth } from '@/app/context/AuthContext';
 import { useCountry } from '@/app/context/CountryContext';
 import { stockAPI } from '@/app/utils/api';
 import { debounce } from '@/lib/utils';
+import { fetchNavigation, getSection, NavigationItem } from '@/app/services/navigationService';
 import {
   Search,
   Menu,
@@ -133,29 +134,82 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
     ? user.name.split(/[\s@._-]+/).filter(Boolean).slice(0, 2).map(s => s[0]?.toUpperCase()).join('')
     : 'U';
 
-  // Menu items - linking back to core app
-  const pillarsItems = [
+
+
+  // ... imports
+
+  const [pillarsItems, setPillarsItems] = useState<any[]>([
     { label: 'Markets', href: `${mainAppUrl}/markets` },
     { label: 'Crypto', href: `${mainAppUrl}/crypto` },
     { label: 'News', href: `${mainAppUrl}/news` },
     { label: 'Analysis', href: `${mainAppUrl}/analysis` },
-  ];
+  ]);
 
-  const toolsItems = [
+  const [toolsItems, setToolsItems] = useState<any[]>([
     { label: 'Stock Screener', href: '/screener' },
     { label: 'Technical Chart', href: '/chart' },
     { label: 'Portfolio Tracker', href: '/profile/portfolio' },
     { label: 'Watchlist', href: '/watchlist' },
     { label: 'Compare Stocks', href: '/stocks/comparison' },
     { label: 'All Tools', href: `${mainAppUrl}/tools` },
-  ];
+  ]);
 
-  const resourcesItems = [
+  const [resourcesItems, setResourcesItems] = useState<any[]>([
     { label: 'Articles', href: '/articles' },
     { label: 'Newsletter', href: '/newsletter' },
     { label: 'About Us', href: `${mainAppUrl}/about` },
     { label: 'Contact', href: `${mainAppUrl}/contact` },
-  ];
+  ]);
+
+  // Fetch dynamic navigation on mount
+  useEffect(() => {
+    const loadNavigation = async () => {
+      try {
+        const navData = await fetchNavigation();
+
+        if (navData && navData.navigation) {
+          // Helper to map API items to UI format
+          const mapItems = (items: NavigationItem[]) => items.map(item => ({
+            label: item.label,
+            href: item.url.startsWith('http') ? item.url : `${mainAppUrl}${item.url.startsWith('/') ? '' : '/'}${item.url}`,
+            icon: item.icon // We might need to map icons string to components if needed, or just pass string
+          }));
+
+          const pillars = getSection(navData, 'pillars');
+          if (pillars && pillars.length > 0) {
+            // For pillars, we might want to keep local Stocks app specific links if API returns general ones
+            // But goal is to match frontend. 
+            // Let's check if we should map them or use as is.
+            // The frontend just links them.
+            setPillarsItems(pillars.map((p: NavigationItem) => ({
+              label: p.label,
+              href: p.url.startsWith('http') ? p.url : `${mainAppUrl}/${p.url.replace(/^\//, '')}`
+            })));
+          }
+
+          const tools = getSection(navData, 'tools');
+          if (tools && tools.length > 0) {
+            setToolsItems(tools.map((t: NavigationItem) => ({
+              label: t.label,
+              href: t.url.startsWith('http') ? t.url : (t.url.includes('screener') || t.url.includes('chart') || t.url.includes('watchlist') ? t.url : `${mainAppUrl}/${t.url.replace(/^\//, '')}`)
+            })));
+          }
+
+          const resources = getSection(navData, 'resources');
+          if (resources && resources.length > 0) {
+            setResourcesItems(resources.map((r: NavigationItem) => ({
+              label: r.label,
+              href: r.url.startsWith('http') ? r.url : `${mainAppUrl}/${r.url.replace(/^\//, '')}`
+            })));
+          }
+        }
+      } catch (error) {
+        console.warn('Failed to load dynamic navigation, using fallbacks', error);
+      }
+    };
+
+    loadNavigation();
+  }, [mainAppUrl]);
 
   return (
     <>
