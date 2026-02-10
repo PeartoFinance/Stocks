@@ -8,14 +8,14 @@ export default function SignupPage() {
     const searchParams = useSearchParams();
 
     useEffect(() => {
-        const authRedirectBase = process.env.NEXT_PUBLIC_AUTH_REDIRECT || 'http://test.pearto.com';
+        const authRedirectBase = process.env.NEXT_PUBLIC_AUTH_REDIRECT || 'http://pearto.com';
         const redirectParam = searchParams.get('redirect');
-        
+
         let redirectUrl = `${authRedirectBase}/signup?redirect=true`;
         if (redirectParam) {
             redirectUrl += `&redirectTo=${encodeURIComponent(redirectParam)}`;
         }
-        
+
         // Immediate redirect logic
         window.location.href = redirectUrl;
     }, [searchParams]);

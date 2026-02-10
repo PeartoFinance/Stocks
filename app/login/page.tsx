@@ -8,14 +8,14 @@ export default function LoginPage() {
     const searchParams = useSearchParams();
 
     useEffect(() => {
-        const authRedirectBase = process.env.NEXT_PUBLIC_AUTH_REDIRECT || 'http://test.pearto.com';
+        const authRedirectBase = process.env.NEXT_PUBLIC_AUTH_REDIRECT || 'http://pearto.com';
         const redirectParam = searchParams.get('redirect');
-        
+
         let redirectUrl = `${authRedirectBase}/login?redirect=true`;
         if (redirectParam) {
             redirectUrl += `&redirectTo=${encodeURIComponent(redirectParam)}`;
         }
-        
+
         // Short delay to ensure the user sees the "Secure" branding before jumping
         const timer = setTimeout(() => {
             window.location.href = redirectUrl;

@@ -3,7 +3,7 @@
  * Matches frontend-Pearto-new API structure for Cryptocurrency
  */
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://api.pearto.com/api';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://apipearto.ashlya.com/api';
 
 // Helper to make API requests (Matches your existing utility)
 async function apiRequest<T>(endpoint: string, options?: RequestInit): Promise<T> {
