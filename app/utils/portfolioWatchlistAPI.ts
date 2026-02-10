@@ -2,7 +2,7 @@
 
 import { authenticatedFetch } from './auth';
 
-const RAW = process.env.NEXT_PUBLIC_API_URL || 'https://api.pearto.com/api';
+const RAW = process.env.NEXT_PUBLIC_API_URL || 'https://apipearto.ashlya.com/api';
 const API_BASE = RAW.replace(/\/$/, '');
 const WATCHLIST = `${API_BASE}/portfolio/watchlist`;
 

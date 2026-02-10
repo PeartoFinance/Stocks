@@ -7,6 +7,7 @@ import { useAuth } from '@/app/context/AuthContext';
 import { useCountry } from '@/app/context/CountryContext';
 import { stockAPI } from '@/app/utils/api';
 import { debounce } from '@/lib/utils';
+import { fetchNavigation, getSection, NavigationItem } from '@/app/services/navigationService';
 import {
   Search,
   Menu,
@@ -37,7 +38,8 @@ interface SearchResult {
   name: string;
 }
 
-export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void }) {  const { user, isAuthenticated, logout } = useAuth();
+export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void }) {
+  const { user, isAuthenticated, logout } = useAuth();
   const { country, countries, setCountry } = useCountry();
   const { theme, toggleTheme } = useTheme();
   const router = useRouter();
@@ -59,8 +61,8 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
   const userMenuRef = useRef<HTMLDivElement>(null);
   const countryMenuRef = useRef<HTMLDivElement>(null);
 
-  const mainAppUrl = process.env.NEXT_PUBLIC_MAIN_APP_URL || 'https://pearto.com';
-  const authRedirectBase = process.env.NEXT_PUBLIC_AUTH_REDIRECT || 'https://pearto.com';
+  const mainAppUrl = process.env.NEXT_PUBLIC_MAIN_APP_URL || 'http://localhost:5173';
+  const authRedirectBase = process.env.NEXT_PUBLIC_AUTH_REDIRECT || 'http://pearto.com';
 
   // Handle scroll for secondary navbar hiding
   useEffect(() => {
@@ -132,29 +134,82 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
     ? user.name.split(/[\s@._-]+/).filter(Boolean).slice(0, 2).map(s => s[0]?.toUpperCase()).join('')
     : 'U';
 
-  // Menu items - linking back to core app
-  const pillarsItems = [
+
+
+  // ... imports
+
+  const [pillarsItems, setPillarsItems] = useState<any[]>([
     { label: 'Markets', href: `${mainAppUrl}/markets` },
     { label: 'Crypto', href: `${mainAppUrl}/crypto` },
     { label: 'News', href: `${mainAppUrl}/news` },
     { label: 'Analysis', href: `${mainAppUrl}/analysis` },
-  ];
+  ]);
 
-  const toolsItems = [
+  const [toolsItems, setToolsItems] = useState<any[]>([
     { label: 'Stock Screener', href: '/screener' },
     { label: 'Technical Chart', href: '/chart' },
     { label: 'Portfolio Tracker', href: '/profile/portfolio' },
     { label: 'Watchlist', href: '/watchlist' },
     { label: 'Compare Stocks', href: '/stocks/comparison' },
     { label: 'All Tools', href: `${mainAppUrl}/tools` },
-  ];
+  ]);
 
-  const resourcesItems = [
+  const [resourcesItems, setResourcesItems] = useState<any[]>([
     { label: 'Articles', href: '/articles' },
     { label: 'Newsletter', href: '/newsletter' },
     { label: 'About Us', href: `${mainAppUrl}/about` },
     { label: 'Contact', href: `${mainAppUrl}/contact` },
-  ];
+  ]);
+
+  // Fetch dynamic navigation on mount
+  useEffect(() => {
+    const loadNavigation = async () => {
+      try {
+        const navData = await fetchNavigation();
+
+        if (navData && navData.navigation) {
+          // Helper to map API items to UI format
+          const mapItems = (items: NavigationItem[]) => items.map(item => ({
+            label: item.label,
+            href: item.url.startsWith('http') ? item.url : `${mainAppUrl}${item.url.startsWith('/') ? '' : '/'}${item.url}`,
+            icon: item.icon // We might need to map icons string to components if needed, or just pass string
+          }));
+
+          const pillars = getSection(navData, 'pillars');
+          if (pillars && pillars.length > 0) {
+            // For pillars, we might want to keep local Stocks app specific links if API returns general ones
+            // But goal is to match frontend. 
+            // Let's check if we should map them or use as is.
+            // The frontend just links them.
+            setPillarsItems(pillars.map((p: NavigationItem) => ({
+              label: p.label,
+              href: p.url.startsWith('http') ? p.url : `${mainAppUrl}/${p.url.replace(/^\//, '')}`
+            })));
+          }
+
+          const tools = getSection(navData, 'tools');
+          if (tools && tools.length > 0) {
+            setToolsItems(tools.map((t: NavigationItem) => ({
+              label: t.label,
+              href: t.url.startsWith('http') ? t.url : (t.url.includes('screener') || t.url.includes('chart') || t.url.includes('watchlist') ? t.url : `${mainAppUrl}/${t.url.replace(/^\//, '')}`)
+            })));
+          }
+
+          const resources = getSection(navData, 'resources');
+          if (resources && resources.length > 0) {
+            setResourcesItems(resources.map((r: NavigationItem) => ({
+              label: r.label,
+              href: r.url.startsWith('http') ? r.url : `${mainAppUrl}/${r.url.replace(/^\//, '')}`
+            })));
+          }
+        }
+      } catch (error) {
+        console.warn('Failed to load dynamic navigation, using fallbacks', error);
+      }
+    };
+
+    loadNavigation();
+  }, [mainAppUrl]);
 
   return (
     <>
@@ -167,9 +222,9 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
       <nav className="fixed top-8 left-0 right-0 z-40 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-pearto-border/50 dark:border-gray-800/50 transition-colors duration-300">
         <div className="container mx-auto px-2 sm:px-4 md:px-6">
           <div className="flex items-center justify-between h-12 sm:h-14 md:h-16 gap-2 sm:gap-4">
-            
+
             {/* Mobile Menu Trigger - ONLY visible on sm/md screens */}
-            <button 
+            <button
               onClick={onOpenSidebar}
               className="lg:hidden p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
             >
@@ -256,9 +311,9 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                   onClick={() => setCountryMenuOpen(!countryMenuOpen)}
                   className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-sm transition"
                 >
-{countries.find(c => c.code === country)?.flagEmoji || '🌐'}                  <span className="text-gray-700 dark:text-gray-300 transition-colors duration-300">{country}</span>
+                  {countries.find(c => c.code === country)?.flagEmoji || '🌐'}                  <span className="text-gray-700 dark:text-gray-300 transition-colors duration-300">{country}</span>
                   <ChevronDown size={14} className="text-gray-400" />
-                </button>
+                </button >
 
                 {countryMenuOpen && (
                   <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 py-2 max-h-80 overflow-y-auto z-50 transition-colors duration-300">
@@ -280,11 +335,12 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                       </>
                     )}
                   </div>
-                )}
-              </div>
+                )
+                }
+              </div >
 
               {/* AI Button */}
-              <a
+              < a
                 href={`${mainAppUrl}/ai`}
                 className="hidden md:flex px-3 py-2 rounded-lg font-semibold text-sm text-white bg-gradient-to-br from-purple-500 via-blue-500 to-cyan-500 shadow hover:shadow-md transition items-center gap-1.5"
               >
@@ -292,64 +348,66 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                   <path d="M12 3l1.912 5.813a2 2 0 001.276 1.276L21 12l-5.812 1.912a2 2 0 00-1.276 1.276L12 21l-1.912-5.812a2 2 0 00-1.276-1.276L3 12l5.812-1.912a2 2 0 001.276-1.276L12 3z" />
                 </svg>
                 AI
-              </a>
+              </a >
 
               {/* Auth buttons */}
-              {!isAuthenticated ? (
-                <div className="hidden md:flex items-center gap-2">
-                  <a href={`${authRedirectBase}/login?redirect=true`} className="px-3 py-2 text-sm font-medium hover:text-emerald-600 dark:text-pearto-green transition">
-                    Sign In
-                  </a>
-                  <a href={`${authRedirectBase}/signup?redirect=true`} className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-emerald-600 via-emerald-500 to-cyan-500 rounded-lg shadow hover:shadow-md transition">
-                    Sign Up
-                  </a>
-                </div>
-              ) : (
-                <div className="hidden md:block relative" ref={userMenuRef}>
-                  <button
-                    onClick={() => setUserMenuOpen(!userMenuOpen)}
-                    className="flex items-center gap-2 p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition"
-                  >
-                    {user?.avatarUrl ? (
-                      <img src={user.avatarUrl} alt="" className="h-8 w-8 rounded-full object-cover" />
-                    ) : (
-                      <div className="h-8 w-8 rounded-full bg-emerald-500 flex items-center justify-center text-white text-sm font-medium">
-                        {initials}
+              {
+                !isAuthenticated ? (
+                  <div className="hidden md:flex items-center gap-2">
+                    <a href={`${authRedirectBase}/login?redirect=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : mainAppUrl)}`} className="px-3 py-2 text-sm font-medium hover:text-emerald-600 dark:text-pearto-green transition">
+                      Sign In
+                    </a>
+                    <a href={`${authRedirectBase}/signup?redirect=true`} className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-emerald-600 via-emerald-500 to-cyan-500 rounded-lg shadow hover:shadow-md transition">
+                      Sign Up
+                    </a>
+                  </div>
+                ) : (
+                  <div className="hidden md:block relative" ref={userMenuRef}>
+                    <button
+                      onClick={() => setUserMenuOpen(!userMenuOpen)}
+                      className="flex items-center gap-2 p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+                    >
+                      {user?.avatarUrl ? (
+                        <img src={user.avatarUrl} alt="" className="h-8 w-8 rounded-full object-cover" />
+                      ) : (
+                        <div className="h-8 w-8 rounded-full bg-emerald-500 flex items-center justify-center text-white text-sm font-medium">
+                          {initials}
+                        </div>
+                      )}
+                      <span className="text-sm text-gray-700 dark:text-gray-300 max-w-[100px] truncate transition-colors duration-300">{user?.name || 'Account'}</span>
+                      <ChevronDown size={14} className="text-gray-400" />
+                    </button>
+
+                    {userMenuOpen && (
+                      <div className="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50 transition-colors duration-300">
+                        <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-700 transition-colors duration-300">
+                          <p className="font-medium text-gray-900 dark:text-white transition-colors duration-300">{user?.name || user?.email}</p>
+                          <p className="text-sm text-gray-500 dark:text-pearto-gray transition-colors duration-300">{user?.email}</p>
+                        </div>
+                        <div className="py-2">
+                          <Link href="/profile" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300">
+                            <User size={16} className="text-gray-400" /> Profile
+                          </Link>
+                          <Link href="/profile/portfolio" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300">
+                            <Briefcase size={16} className="text-gray-400" /> Portfolio
+                          </Link>
+                          <Link href="/profile/watchlist" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300">
+                            <Star size={16} className="text-gray-400" /> Watchlist
+                          </Link>
+                          <Link href="/profile/settings" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300">
+                            <Settings size={16} className="text-gray-400" /> Settings
+                          </Link>
+                        </div>
+                        <div className="border-t border-gray-100 dark:border-gray-700 py-2 transition-colors duration-300">
+                          <button onClick={handleLogout} className="flex items-center gap-3 px-4 py-2 text-sm text-red-600 dark:text-pearto-pink hover:bg-red-50 dark:hover:bg-red-900/20 w-full transition-colors duration-300">
+                            <LogOut size={16} /> Sign out
+                          </button>
+                        </div>
                       </div>
                     )}
-                    <span className="text-sm text-gray-700 dark:text-gray-300 max-w-[100px] truncate transition-colors duration-300">{user?.name || 'Account'}</span>
-                    <ChevronDown size={14} className="text-gray-400" />
-                  </button>
-
-                  {userMenuOpen && (
-                    <div className="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50 transition-colors duration-300">
-                      <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-700 transition-colors duration-300">
-                        <p className="font-medium text-gray-900 dark:text-white transition-colors duration-300">{user?.name || user?.email}</p>
-                        <p className="text-sm text-gray-500 dark:text-pearto-gray transition-colors duration-300">{user?.email}</p>
-                      </div>
-                      <div className="py-2">
-                        <Link href="/profile" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300">
-                          <User size={16} className="text-gray-400" /> Profile
-                        </Link>
-                        <Link href="/profile/portfolio" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300">
-                          <Briefcase size={16} className="text-gray-400" /> Portfolio
-                        </Link>
-                        <Link href="/profile/watchlist" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300">
-                          <Star size={16} className="text-gray-400" /> Watchlist
-                        </Link>
-                        <Link href="/profile/settings" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300">
-                          <Settings size={16} className="text-gray-400" /> Settings
-                        </Link>
-                      </div>
-                      <div className="border-t border-gray-100 dark:border-gray-700 py-2 transition-colors duration-300">
-                        <button onClick={handleLogout} className="flex items-center gap-3 px-4 py-2 text-sm text-red-600 dark:text-pearto-pink hover:bg-red-50 dark:hover:bg-red-900/20 w-full transition-colors duration-300">
-                          <LogOut size={16} /> Sign out
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
+                  </div>
+                )
+              }
 
               {/* Mobile burger */}
               <button
@@ -358,13 +416,13 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
               >
                 {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
               </button>
-            </div>
-          </div>
-        </div>
-      </nav>
+            </div >
+          </div >
+        </div >
+      </nav >
 
       {/* SECONDARY NAVBAR - Fixed below primary navbar, always visible */}
-      <div className="fixed top-24 left-0 right-0 z-30 bg-white dark:bg-gray-900 backdrop-blur border-b border-gray-200 dark:border-gray-800/50 hidden md:block transition-colors duration-300">
+      < div className="fixed top-24 left-0 right-0 z-30 bg-white dark:bg-gray-900 backdrop-blur border-b border-gray-200 dark:border-gray-800/50 hidden md:block transition-colors duration-300" >
         <div className="container mx-auto px-4 md:px-6">
           <div className="flex items-center justify-center gap-2 py-2.5">
             {/* Pillars Dropdown */}
@@ -474,144 +532,135 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
             </div>
           </div>
         </div>
-      </div>
+      </div >
 
       {/* Mobile Menu */}
       <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden fixed inset-x-0 top-12 sm:top-14 z-40 bg-white dark:bg-gray-900 overflow-auto max-h-[calc(100vh-3.5rem)] transition-colors duration-300"
-          >
-            {/* Close Button at Top */}
-            <div className="sticky top-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 p-2 flex justify-end z-10">
-              <button
-                onClick={() => setMobileMenuOpen(false)}
-                className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300"
-                aria-label="Close menu"
-              >
-                <X size={18} className="text-gray-600 dark:text-gray-400" />
-              </button>
-            </div>
-            
-            <div className="p-3 sm:p-4 space-y-3 pb-20">
-              {/* Mobile Search */}
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search stocks..."
-                  className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white transition-colors duration-300"
-                />
-              </div>
+        {
+          mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="md:hidden fixed inset-x-0 top-12 sm:top-14 z-40 bg-white dark:bg-gray-900 overflow-auto max-h-[calc(100vh-3.5rem)] transition-colors duration-300"
+            >
+              <div className="p-3 sm:p-4 space-y-3 pb-20">
+                {/* Mobile Search */}
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search stocks..."
+                    className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white transition-colors duration-300"
+                  />
+                </div>
 
-              {/* AI Button */}
-              <a
-                href={`${mainAppUrl}/ai`}
-                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-bold text-white bg-gradient-to-br from-purple-500 via-blue-500 to-cyan-500 shadow-md"
-              >
-                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 3l1.912 5.813a2 2 0 001.276 1.276L21 12l-5.812 1.912a2 2 0 00-1.276 1.276L12 21l-1.912-5.812a2 2 0 00-1.276-1.276L3 12l5.812-1.912a2 2 0 001.276-1.276L12 3z" />
-                </svg>
-                AI Assistant
-              </a>
+                {/* AI Button */}
+                <a
+                  href={`${mainAppUrl}/ai`}
+                  className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-bold text-white bg-gradient-to-br from-purple-500 via-blue-500 to-cyan-500 shadow-md"
+                >
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 3l1.912 5.813a2 2 0 001.276 1.276L21 12l-5.812 1.912a2 2 0 00-1.276 1.276L12 21l-1.912-5.812a2 2 0 00-1.276-1.276L3 12l5.812-1.912a2 2 0 001.276-1.276L12 3z" />
+                  </svg>
+                  AI Assistant
+                </a>
 
-              {/* Booyah */}
-              <a
-                href={`${mainAppUrl}/booyah`}
-                className="flex items-center justify-center w-full py-3 rounded-xl font-bold text-white bg-gradient-to-br from-green-500 via-emerald-500 to-green-600 shadow-md"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Booyah
-              </a>
+                {/* Booyah */}
+                <a
+                  href={`${mainAppUrl}/booyah`}
+                  className="flex items-center justify-center w-full py-3 rounded-xl font-bold text-white bg-gradient-to-br from-green-500 via-emerald-500 to-green-600 shadow-md"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Booyah
+                </a>
 
-              {/* Menu Sections */}
-              <div className="space-y-4">
-                {/* Pillars */}
-                <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 transition-colors duration-300">
-                  <div className="text-xs uppercase tracking-wide text-gray-500 dark:text-pearto-gray mb-3 flex items-center gap-2 transition-colors duration-300">
-                    <Layers size={14} /> Pillars
+                {/* Menu Sections */}
+                <div className="space-y-4">
+                  {/* Pillars */}
+                  <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 transition-colors duration-300">
+                    <div className="text-xs uppercase tracking-wide text-gray-500 dark:text-pearto-gray mb-3 flex items-center gap-2 transition-colors duration-300">
+                      <Layers size={14} /> Pillars
+                    </div>
+                    <div className="space-y-1">
+                      {pillarsItems.map((item) => (
+                        <a key={item.label} href={item.href} className="block py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-colors duration-300" onClick={() => setMobileMenuOpen(false)}>
+                          {item.label}
+                        </a>
+                      ))}
+                    </div>
                   </div>
-                  <div className="space-y-1">
-                    {pillarsItems.map((item) => (
-                      <a key={item.label} href={item.href} className="block py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-colors duration-300" onClick={() => setMobileMenuOpen(false)}>
-                        {item.label}
+
+                  {/* Tools */}
+                  <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 transition-colors duration-300">
+                    <div className="text-xs uppercase tracking-wide text-gray-500 dark:text-pearto-gray mb-3 flex items-center gap-2 transition-colors duration-300">
+                      <Wrench size={14} /> Tools
+                    </div>
+                    <div className="space-y-1">
+                      {toolsItems.map((item) => (
+                        item.href.startsWith('http') || item.href.startsWith(mainAppUrl) ? (
+                          <a key={item.label} href={item.href} className="block py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-colors duration-300" onClick={() => setMobileMenuOpen(false)}>
+                            {item.label}
+                          </a>
+                        ) : (
+                          <Link key={item.label} href={item.href} className="block py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-colors duration-300" onClick={() => setMobileMenuOpen(false)}>
+                            {item.label}
+                          </Link>
+                        )
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Resources */}
+                  <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 transition-colors duration-300">
+                    <div className="text-xs uppercase tracking-wide text-gray-500 dark:text-pearto-gray mb-3 flex items-center gap-2 transition-colors duration-300">
+                      <BookOpen size={14} /> Resources
+                    </div>
+                    <div className="space-y-1">
+                      {resourcesItems.map((item) => (
+                        item.href.startsWith('http') || item.href.startsWith(mainAppUrl) ? (
+                          <a key={item.label} href={item.href} className="block py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-colors duration-300" onClick={() => setMobileMenuOpen(false)}>
+                            {item.label}
+                          </a>
+                        ) : (
+                          <Link key={item.label} href={item.href} className="block py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-colors duration-300" onClick={() => setMobileMenuOpen(false)}>
+                            {item.label}
+                          </Link>
+                        )
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Auth Section */}
+                <div className="pt-4 border-t border-gray-200 dark:border-gray-700 transition-colors duration-300">
+                  {!isAuthenticated ? (
+                    <div className="flex gap-3">
+                      <a href={`${authRedirectBase}/login?redirect=true`} className="flex-1 py-3 text-center rounded-xl border border-gray-200 dark:border-gray-700 font-medium transition-colors duration-300" onClick={() => setMobileMenuOpen(false)}>
+                        Sign In
                       </a>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Tools */}
-                <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 transition-colors duration-300">
-                  <div className="text-xs uppercase tracking-wide text-gray-500 dark:text-pearto-gray mb-3 flex items-center gap-2 transition-colors duration-300">
-                    <Wrench size={14} /> Tools
-                  </div>
-                  <div className="space-y-1">
-                    {toolsItems.map((item) => (
-                      item.href.startsWith('http') || item.href.startsWith(mainAppUrl) ? (
-                        <a key={item.label} href={item.href} className="block py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-colors duration-300" onClick={() => setMobileMenuOpen(false)}>
-                          {item.label}
-                        </a>
-                      ) : (
-                        <Link key={item.label} href={item.href} className="block py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-colors duration-300" onClick={() => setMobileMenuOpen(false)}>
-                          {item.label}
-                        </Link>
-                      )
-                    ))}
-                  </div>
-                </div>
-
-                {/* Resources */}
-                <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 transition-colors duration-300">
-                  <div className="text-xs uppercase tracking-wide text-gray-500 dark:text-pearto-gray mb-3 flex items-center gap-2 transition-colors duration-300">
-                    <BookOpen size={14} /> Resources
-                  </div>
-                  <div className="space-y-1">
-                    {resourcesItems.map((item) => (
-                      item.href.startsWith('http') || item.href.startsWith(mainAppUrl) ? (
-                        <a key={item.label} href={item.href} className="block py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-colors duration-300" onClick={() => setMobileMenuOpen(false)}>
-                          {item.label}
-                        </a>
-                      ) : (
-                        <Link key={item.label} href={item.href} className="block py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-colors duration-300" onClick={() => setMobileMenuOpen(false)}>
-                          {item.label}
-                        </Link>
-                      )
-                    ))}
-                  </div>
+                      <a href={`${authRedirectBase}/signup?redirect=true`} className="flex-1 py-3 text-center rounded-xl text-white bg-gradient-to-r from-emerald-600 via-emerald-500 to-cyan-500 font-medium" onClick={() => setMobileMenuOpen(false)}>
+                        Sign Up
+                      </a>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <Link href="/profile" onClick={() => setMobileMenuOpen(false)} className="block py-3 px-4 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300">Profile</Link>
+                      <Link href="/profile/portfolio" onClick={() => setMobileMenuOpen(false)} className="block py-3 px-4 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300">Portfolio</Link>
+                      <Link href="/profile/settings" onClick={() => setMobileMenuOpen(false)} className="block py-3 px-4 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300">Settings</Link>
+                      <button onClick={() => { handleLogout(); setMobileMenuOpen(false); }} className="w-full py-3 rounded-xl bg-red-50 dark:bg-pearto-pink/100/10 text-red-600 dark:text-pearto-pink font-medium transition-colors duration-300">
+                        Sign out
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
-
-              {/* Auth Section */}
-              <div className="pt-4 border-t border-gray-200 dark:border-gray-700 transition-colors duration-300">
-                {!isAuthenticated ? (
-                  <div className="flex gap-3">
-                    <a href={`${authRedirectBase}/login?redirect=true`} className="flex-1 py-3 text-center rounded-xl border border-gray-200 dark:border-gray-700 font-medium transition-colors duration-300" onClick={() => setMobileMenuOpen(false)}>
-                      Sign In
-                    </a>
-                    <a href={`${authRedirectBase}/signup?redirect=true`} className="flex-1 py-3 text-center rounded-xl text-white bg-gradient-to-r from-emerald-600 via-emerald-500 to-cyan-500 font-medium" onClick={() => setMobileMenuOpen(false)}>
-                      Sign Up
-                    </a>
-                  </div>
-                ) : (
-                  <div className="space-y-2">
-                    <Link href="/profile" onClick={() => setMobileMenuOpen(false)} className="block py-3 px-4 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300">Profile</Link>
-                    <Link href="/profile/portfolio" onClick={() => setMobileMenuOpen(false)} className="block py-3 px-4 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300">Portfolio</Link>
-                    <Link href="/profile/settings" onClick={() => setMobileMenuOpen(false)} className="block py-3 px-4 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300">Settings</Link>
-                    <button onClick={() => { handleLogout(); setMobileMenuOpen(false); }} className="w-full py-3 rounded-xl bg-red-50 dark:bg-pearto-pink/100/10 text-red-600 dark:text-pearto-pink font-medium transition-colors duration-300">
-                      Sign out
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </motion.div>
+          )
+        }
+      </AnimatePresence >
     </>
   );
 }
