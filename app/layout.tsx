@@ -14,6 +14,8 @@ export const metadata: Metadata = {
   description: 'Real-time stock data and investment insights.',
 };
 
+import AuthSync from './components/AuthSync';
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="scroll-smooth">
@@ -22,6 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <AuthProvider>
             <CountryProvider>
               <LayoutWrapper>
+                <AuthSync />
                 {children}
               </LayoutWrapper>
               <Toaster position="top-right" />
