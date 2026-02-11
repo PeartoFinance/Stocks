@@ -596,7 +596,7 @@ export default function DetailedChartPage() {
   const intervalOptions: Interval[] = ['1m', '5m', '15m', '30m', '1h', '4h', '1d', '1w', '1mo'];
 
   return (
-    <main className={`min-h-screen bg-gray-50 dark:bg-slate-900 ${isFullscreen ? 'fixed inset-0 z-50' : ''}`}>
+    <main className={`min-h-screen bg-gray-50 dark:bg-slate-900 mt-4 ${isFullscreen ? 'fixed inset-0 z-50 mt-0' : ''}`}>
       {/* Header */}
       <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-3 mt-2">
         <div className="flex items-center justify-between">

@@ -39,12 +39,12 @@ export default function CryptoTableView({ cryptoData, loading = false, viewMode 
 
   const getChangeColor = (change: number) => {
     if (change >= 5) return 'text-emerald-700 bg-emerald-50 border-emerald-200';
-    if (change >= 2) return 'text-emerald-600 dark:text-pearto-green bg-emerald-50 border-emerald-200';
-    if (change > 0) return 'text-emerald-500 bg-emerald-50 border-emerald-200';
-    if (change === 0) return 'text-gray-500 dark:text-pearto-gray bg-gray-50 dark:bg-pearto-surface border-gray-200 dark:border-pearto-border';
-    if (change > -2) return 'text-rose-500 bg-rose-50 border-rose-200';
-    if (change >= -5) return 'text-rose-600 bg-rose-50 border-rose-200';
-    return 'text-rose-700 bg-rose-50 border-rose-200';
+    if (change >= 2) return 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 border-emerald-200';
+    if (change > 0) return 'text-emerald-500 dark:text-emerald-400 bg-emerald-50 border-emerald-200';
+    if (change === 0) return 'text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-600';
+    if (change > -2) return 'text-rose-500 dark:text-rose-400 bg-rose-50 border-rose-200';
+    if (change >= -5) return 'text-rose-600 dark:text-rose-400 bg-rose-50 border-rose-200';
+    return 'text-rose-700 dark:text-rose-400 bg-rose-50 border-rose-200';
   };
 
   const getHeatmapColor = (change: number) => {
