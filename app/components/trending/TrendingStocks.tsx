@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useTheme } from '@/app/context/ThemeContext';
 import {
   TrendingUp,
   TrendingDown,
@@ -59,6 +60,8 @@ interface TrendingStocksProps {
 }
 
 export default function TrendingStocks({ className = '' }: TrendingStocksProps) {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   const { formatPrice } = useCurrency();
   const formatPercentage = (value: number) => `${value.toFixed(2)}%`;
   const [stocks, setStocks] = useState<TrendingStock[]>([]);
@@ -432,10 +435,17 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
                               size: 12,
                               weight: 500
                             },
-                            color: '#374151'
+                            color: isDark ? '#e2e8f0' : '#374151'
                           }
                         },
                         tooltip: {
+                          backgroundColor: isDark ? 'rgba(30, 41, 59, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+                          titleColor: isDark ? '#f1f5f9' : '#111827',
+                          bodyColor: isDark ? '#cbd5e1' : '#4b5563',
+                          borderColor: isDark ? '#334155' : '#e5e7eb',
+                          borderWidth: 1,
+                          padding: 12,
+                          cornerRadius: 8,
                           bodyFont: {
                             size: 13,
                             weight: 500
@@ -443,9 +453,7 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
                           titleFont: {
                             size: 14,
                             weight: 600
-                          },
-                          padding: 12,
-                          cornerRadius: 8
+                          }
                         }
                       }
                     }}
@@ -471,10 +479,17 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
                               size: 12,
                               weight: 500
                             },
-                            color: '#374151'
+                            color: isDark ? '#e2e8f0' : '#374151'
                           }
                         },
                         tooltip: {
+                          backgroundColor: isDark ? 'rgba(30, 41, 59, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+                          titleColor: isDark ? '#f1f5f9' : '#111827',
+                          bodyColor: isDark ? '#cbd5e1' : '#4b5563',
+                          borderColor: isDark ? '#334155' : '#e5e7eb',
+                          borderWidth: 1,
+                          padding: 12,
+                          cornerRadius: 8,
                           bodyFont: {
                             size: 13,
                             weight: 500
@@ -482,9 +497,7 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
                           titleFont: {
                             size: 14,
                             weight: 600
-                          },
-                          padding: 12,
-                          cornerRadius: 8
+                          }
                         }
                       }
                     }}
@@ -510,10 +523,17 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
                               size: 12,
                               weight: 500
                             },
-                            color: '#374151'
+                            color: isDark ? '#e2e8f0' : '#374151'
                           }
                         },
                         tooltip: {
+                          backgroundColor: isDark ? 'rgba(30, 41, 59, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+                          titleColor: isDark ? '#f1f5f9' : '#111827',
+                          bodyColor: isDark ? '#cbd5e1' : '#4b5563',
+                          borderColor: isDark ? '#334155' : '#e5e7eb',
+                          borderWidth: 1,
+                          padding: 12,
+                          cornerRadius: 8,
                           bodyFont: {
                             size: 13,
                             weight: 500
@@ -521,9 +541,7 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
                           titleFont: {
                             size: 14,
                             weight: 600
-                          },
-                          padding: 12,
-                          cornerRadius: 8
+                          }
                         }
                       }
                     }}
@@ -707,7 +725,7 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
               </div>
               <button
                 onClick={() => setIsAIPanelOpen(false)}
-                className="p-1 text-gray-500 dark:text-pearto-gray hover:text-gray-700 dark:text-pearto-cloud hover:bg-gray-200 rounded-lg transition-colors"
+                className="p-1 text-gray-500 hover:text-gray-700 dark:text-pearto-cloud hover:bg-gray-200 rounded-lg transition-colors"
               >
                 <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

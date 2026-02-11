@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Activity, Brain, Maximize2 } from 'lucide-react';
+import { Activity, Brain } from 'lucide-react';
 import StockChart from '../StockChart';
 import { HistoricalData } from '../../types';
 
@@ -23,7 +23,6 @@ interface ChartDisplayProps {
   priceGapsData: any[];
   formatPrice: (price: number) => string;
   onToggleFullscreen: () => void;
-  onOpenDetailed: () => void;
   className?: string;
 }
 
@@ -45,7 +44,6 @@ export default function ChartDisplay({
   priceGapsData,
   formatPrice,
   onToggleFullscreen,
-  onOpenDetailed,
   className = ''
 }: ChartDisplayProps) {
   if (loading) {
@@ -143,17 +141,6 @@ export default function ChartDisplay({
             <div className="absolute top-2 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white px-2 py-1 rounded text-xs font-medium">
               Percentage Mode (%)
             </div>
-          )}
-
-          {/* Open Detailed Chart Button */}
-          {!isFullscreen && data.length > 0 && (
-            <button
-              onClick={onOpenDetailed}
-              className="absolute top-2 right-2 p-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors shadow-lg"
-              title="Open Detailed Chart"
-            >
-              <Maximize2 className="h-4 w-4" />
-            </button>
           )}
         </div>
       </div>
