@@ -2,6 +2,7 @@
 
 import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
+import { useTheme } from '../../context/ThemeContext';
 import { Stock } from '../../types';
 import {
   Chart as ChartJS,
@@ -30,6 +31,9 @@ interface ChartAnalysisProps {
 }
 
 export default function ChartAnalysis({ stocks, title, type }: ChartAnalysisProps) {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+
   const formatMarketCap = (value: number | undefined): string => {
     if (!value) return '—';
     if (value >= 1e12) return `${(value / 1e12).toFixed(1)}T`;
@@ -118,6 +122,7 @@ export default function ChartAnalysis({ stocks, title, type }: ChartAnalysisProp
             size: 11,
           },
           padding: 10,
+          color: isDark ? '#e2e8f0' : '#374151',
         },
       },
       title: {
@@ -129,8 +134,16 @@ export default function ChartAnalysis({ stocks, title, type }: ChartAnalysisProp
         padding: {
           bottom: 15,
         },
+        color: isDark ? '#f1f5f9' : '#111827',
       },
       tooltip: {
+        backgroundColor: isDark ? 'rgba(30, 41, 59, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+        titleColor: isDark ? '#f1f5f9' : '#111827',
+        bodyColor: isDark ? '#cbd5e1' : '#4b5563',
+        borderColor: isDark ? '#334155' : '#e5e7eb',
+        borderWidth: 1,
+        padding: 12,
+        cornerRadius: 8,
         callbacks: {
           label: function(context: any) {
             const label = context.label || '';
@@ -155,6 +168,7 @@ export default function ChartAnalysis({ stocks, title, type }: ChartAnalysisProp
             size: 10,
           },
           padding: 8,
+          color: isDark ? '#e2e8f0' : '#374151',
         },
       },
     },
