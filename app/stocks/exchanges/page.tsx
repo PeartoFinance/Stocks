@@ -6,7 +6,8 @@ import {
   Building2, Globe, Clock, TrendingUp, TrendingDown, Activity,
   Search, MapPin, Users, DollarSign, Calendar, Info
 } from 'lucide-react';
-import { formatNumber, formatPrice } from '@/lib/utils';
+import { formatNumber } from '@/lib/utils';
+import { useCurrency } from '../../context/CurrencyContext';
 import toast from 'react-hot-toast';
 
 interface Exchange {
@@ -35,6 +36,7 @@ interface Exchange {
 }
 
 export default function StockExchanges() {
+  const { formatPrice } = useCurrency();
   const [exchanges, setExchanges] = useState<Exchange[]>([]);
   const [filteredExchanges, setFilteredExchanges] = useState<Exchange[]>([]);
   const [loading, setLoading] = useState(true);
@@ -315,8 +317,7 @@ export default function StockExchanges() {
                 <button
                   key={region.value}
                   onClick={() => setSelectedRegion(region.value)}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                    selectedRegion === region.value
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${selectedRegion === region.value
                       ? 'bg-blue-600 dark:bg-blue-500 text-white'
                       : 'bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-600'
                     }`}

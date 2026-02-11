@@ -6,6 +6,7 @@ import { toast } from 'react-hot-toast';
 import { Search, Brain, RefreshCw, Activity, Maximize2, AreaChart, BarChart3, LineChart } from 'lucide-react';
 import { marketService } from '../utils/marketService';
 import { HistoricalData } from '../types';
+import { useCurrency } from '../context/CurrencyContext';
 import {
   StockSearch,
   ChartHeader,
@@ -22,6 +23,7 @@ export default function TechnicalChartPage() {
   // --- Refs ---
   const searchInputRef = useRef<HTMLInputElement>(null);
   const sparklineRefs = useRef<{ [key: string]: HTMLCanvasElement | null }>({});
+  const { formatPrice } = useCurrency();
 
   // --- Core state ---
   const [symbol, setSymbol] = useState('AAPL');
@@ -62,7 +64,7 @@ export default function TechnicalChartPage() {
 
   const calculateVolumeProfile = useCallback((data: HistoricalData[]) => {
     const priceRanges: { [key: string]: number } = {};
-    const rangeSize = 1; 
+    const rangeSize = 1;
     data.forEach(d => {
       const priceRange = Math.floor(d.close / rangeSize) * rangeSize;
       priceRanges[priceRange] = (priceRanges[priceRange] || 0) + (d.volume || 0);
@@ -102,17 +104,17 @@ export default function TechnicalChartPage() {
   }, [data, percentMode]);
 
   // --- Memoized Values ---
-  const movingAveragesData = useMemo(() => 
-    showMovingAverages && data.length ? calculateMovingAverages(data, [8, 13, 21, 55]) : [], 
-  [showMovingAverages, data, calculateMovingAverages]);
+  const movingAveragesData = useMemo(() =>
+    showMovingAverages && data.length ? calculateMovingAverages(data, [8, 13, 21, 55]) : [],
+    [showMovingAverages, data, calculateMovingAverages]);
 
-  const volumeProfileData = useMemo(() => 
-    showVolumeProfile && data.length ? calculateVolumeProfile(data) : [], 
-  [showVolumeProfile, data, calculateVolumeProfile]);
+  const volumeProfileData = useMemo(() =>
+    showVolumeProfile && data.length ? calculateVolumeProfile(data) : [],
+    [showVolumeProfile, data, calculateVolumeProfile]);
 
-  const priceGapsData = useMemo(() => 
-    showGaps && data.length ? detectPriceGaps(data) : [], 
-  [showGaps, data, detectPriceGaps]);
+  const priceGapsData = useMemo(() =>
+    showGaps && data.length ? detectPriceGaps(data) : [],
+    [showGaps, data, detectPriceGaps]);
 
   // --- Data Loading ---
 
@@ -124,14 +126,14 @@ export default function TechnicalChartPage() {
       };
       const mappedPeriod = periodMap[period] || '1mo';
       const interval = period === '1D' ? '1m' : '1d';
-      
+
       const [profileResponse, historyResponse] = await Promise.all([
         marketService.getStockProfile(symbol),
         marketService.getStockHistory(symbol, mappedPeriod, interval)
       ]);
-      
+
       if (profileResponse) setStockInfo(profileResponse);
-      
+
       if ((historyResponse as any)?.data) {
         setData((historyResponse as any).data);
       }
@@ -153,7 +155,7 @@ export default function TechnicalChartPage() {
 
   // --- Effects ---
   useEffect(() => { loadData(); }, [loadData]);
-  
+
   useEffect(() => {
     loadMostActive();
     const interval = setInterval(loadMostActive, 60000);
@@ -167,7 +169,7 @@ export default function TechnicalChartPage() {
   }, [autoRefresh, loadData]);
 
   const handleSelectStock = (stock: any) => setSymbol(stock.symbol);
-  const formatPrice = (price: number) => `$${price.toFixed(2)}`;
+
   const isPositive = stockInfo ? (stockInfo.change || 0) >= 0 : true;
 
   return (
@@ -210,27 +212,27 @@ export default function TechnicalChartPage() {
               onToggleCorrelation={() => setShowCorrelation(!showCorrelation)}
               onTogglePercentMode={() => setPercentMode(!percentMode)}
             />
-            
+
             <div className="p-4">
               <ChartDisplay
-  data={data}
-  processedData={getProcessedChartData()}
-  loading={loading}
-  symbol={symbol}
-  chartType={chartType}
-  isPositive={isPositive}
-  isFullscreen={isFullscreen}
-  showVolumeProfile={showVolumeProfile}
-  showMovingAverages={showMovingAverages}
-  showGaps={showGaps}
-  showCorrelation={showCorrelation} // <--- ADD THIS LINE
-  percentMode={percentMode}
-  movingAveragesData={movingAveragesData}
-  volumeProfileData={volumeProfileData}
-  priceGapsData={priceGapsData}
-  formatPrice={formatPrice}
-  onToggleFullscreen={() => setIsFullscreen(!isFullscreen)}
-/>
+                data={data}
+                processedData={getProcessedChartData()}
+                loading={loading}
+                symbol={symbol}
+                chartType={chartType}
+                isPositive={isPositive}
+                isFullscreen={isFullscreen}
+                showVolumeProfile={showVolumeProfile}
+                showMovingAverages={showMovingAverages}
+                showGaps={showGaps}
+                showCorrelation={showCorrelation} // <--- ADD THIS LINE
+                percentMode={percentMode}
+                movingAveragesData={movingAveragesData}
+                volumeProfileData={volumeProfileData}
+                priceGapsData={priceGapsData}
+                formatPrice={formatPrice}
+                onToggleFullscreen={() => setIsFullscreen(!isFullscreen)}
+              />
 
               <QuickStats data={data} formatPrice={formatPrice} />
 

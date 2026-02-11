@@ -3,12 +3,14 @@
 import React, { useState, useEffect } from 'react';
 import { worldIndicesService, ETFData } from '../../utils/worldIndicesService';
 import { TrendingUp, TrendingDown, BarChart3, Building } from 'lucide-react';
+import { useCurrency } from '../../context/CurrencyContext';
 
 interface ETFsMutualFundsProps {
   className?: string;
 }
 
 export default function ETFsMutualFunds({ className = '' }: ETFsMutualFundsProps) {
+  const { formatPrice } = useCurrency();
   const [data, setData] = useState<{
     etfs: { mostActive: ETFData[]; topGainers: ETFData[]; topLosers: ETFData[] };
     mutualFunds: { mostActive: ETFData[]; topGainers: ETFData[]; topLosers: ETFData[] };
@@ -45,7 +47,7 @@ export default function ETFsMutualFunds({ className = '' }: ETFsMutualFundsProps
 
   const getCurrentData = () => {
     const source = activeTab === 'etfs' ? data.etfs : data.mutualFunds;
-    
+
     switch (activeSubTab) {
       case 'most-active': return source.mostActive;
       case 'gainers': return source.topGainers;
@@ -105,16 +107,14 @@ export default function ETFsMutualFunds({ className = '' }: ETFsMutualFundsProps
                   {item.name}
                 </td>
                 <td className="px-4 py-3 text-sm text-gray-900 dark:text-pearto-luna text-right transition-colors duration-300">
-                  ${item.price.toFixed(2)}
+                  {formatPrice(item.price)}
                 </td>
-                <td className={`px-4 py-3 text-sm text-right font-medium ${
-                  item.change >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
-                }`}>
+                <td className={`px-4 py-3 text-sm text-right font-medium ${item.change >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
+                  }`}>
                   {item.change >= 0 ? '+' : ''}{item.change.toFixed(2)}
                 </td>
-                <td className={`px-4 py-3 text-sm text-right font-medium ${
-                  item.changePercent >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
-                }`}>
+                <td className={`px-4 py-3 text-sm text-right font-medium ${item.changePercent >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
+                  }`}>
                   {item.changePercent >= 0 ? '+' : ''}{item.changePercent.toFixed(2)}%
                 </td>
                 <td className="px-4 py-3 text-sm text-gray-900 dark:text-pearto-luna text-right transition-colors duration-300">
@@ -143,22 +143,20 @@ export default function ETFsMutualFunds({ className = '' }: ETFsMutualFundsProps
         <div className="flex border-b border-gray-200 dark:border-pearto-border transition-colors duration-300">
           <button
             onClick={() => setActiveTab('etfs')}
-            className={`flex items-center gap-2 px-6 py-3 font-medium transition-colors ${
-              activeTab === 'etfs'
+            className={`flex items-center gap-2 px-6 py-3 font-medium transition-colors ${activeTab === 'etfs'
                 ? 'text-indigo-600 border-b-2 border-indigo-600 bg-indigo-50'
                 : 'text-gray-600 dark:text-pearto-cloud hover:text-gray-900 dark:text-pearto-luna hover:bg-gray-50 dark:bg-pearto-surface'
-            }`}
+              }`}
           >
             <BarChart3 className="h-4 w-4" />
             <span>ETFs</span>
           </button>
           <button
             onClick={() => setActiveTab('mutual-funds')}
-            className={`flex items-center gap-2 px-6 py-3 font-medium transition-colors ${
-              activeTab === 'mutual-funds'
+            className={`flex items-center gap-2 px-6 py-3 font-medium transition-colors ${activeTab === 'mutual-funds'
                 ? 'text-indigo-600 border-b-2 border-indigo-600 bg-indigo-50'
                 : 'text-gray-600 dark:text-pearto-cloud hover:text-gray-900 dark:text-pearto-luna hover:bg-gray-50 dark:bg-pearto-surface'
-            }`}
+              }`}
           >
             <Building className="h-4 w-4" />
             <span>Mutual Funds</span>
@@ -171,11 +169,10 @@ export default function ETFsMutualFunds({ className = '' }: ETFsMutualFundsProps
             <button
               key={subTab}
               onClick={() => setActiveSubTab(subTab as any)}
-              className={`px-4 py-2 text-sm font-medium transition-colors ${
-                activeSubTab === subTab
+              className={`px-4 py-2 text-sm font-medium transition-colors ${activeSubTab === subTab
                   ? 'text-indigo-600 border-b-2 border-indigo-600 bg-white dark:bg-pearto-card'
                   : 'text-gray-600 dark:text-pearto-cloud hover:text-gray-900 dark:text-pearto-luna hover:bg-white dark:bg-pearto-card'
-              }`}
+                }`}
             >
               {subTab.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
             </button>
@@ -193,7 +190,7 @@ export default function ETFsMutualFunds({ className = '' }: ETFsMutualFundsProps
           {activeTab === 'etfs' && activeSubTab === 'losers' && (
             <DataTable data={data.etfs.topLosers} title="Top Losing ETFs" />
           )}
-          
+
           {activeTab === 'mutual-funds' && activeSubTab === 'most-active' && (
             <DataTable data={data.mutualFunds.mostActive} title="Most Active Mutual Funds" />
           )}

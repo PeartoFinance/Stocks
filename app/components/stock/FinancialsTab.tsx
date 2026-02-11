@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TrendingUp, TrendingDown, DollarSign, BarChart3, Loader2 } from 'lucide-react';
 import { marketService } from '../../utils/marketService';
+import { useCurrency } from '../../context/CurrencyContext';
 
 interface FinancialData {
   id: number;
@@ -22,6 +23,7 @@ interface FinancialsTabProps {
 }
 
 export default function FinancialsTab({ symbol }: FinancialsTabProps) {
+  const { formatPrice } = useCurrency();
   const [financials, setFinancials] = useState<FinancialData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -44,10 +46,7 @@ export default function FinancialsTab({ symbol }: FinancialsTabProps) {
   }, [symbol]);
 
   const formatNumber = (num: number) => {
-    if (num >= 1e12) return `$${(num / 1e12).toFixed(2)}T`;
-    if (num >= 1e9) return `$${(num / 1e9).toFixed(2)}B`;
-    if (num >= 1e6) return `$${(num / 1e6).toFixed(2)}M`;
-    return `$${num.toLocaleString()}`;
+    return formatPrice(num, 2, 2, { notation: "compact", compactDisplay: "short" });
   };
 
   const calculateGrowth = (current: number | null, previous: number | null) => {
@@ -93,7 +92,7 @@ export default function FinancialsTab({ symbol }: FinancialsTabProps) {
           ].map((item, index) => {
             const growth = calculateGrowth(item.current, item.previous);
             const isPositive = growth >= 0;
-            
+
             return (
               <div key={index} className="bg-slate-50 dark:bg-slate-800 rounded-lg p-4">
                 <p className="text-sm text-slate-500 dark:text-slate-400 mb-1">{item.label}</p>
@@ -128,12 +127,12 @@ export default function FinancialsTab({ symbol }: FinancialsTabProps) {
           ].map((item, index) => {
             const growth = calculateGrowth(item.current, item.previous);
             const isPositive = growth >= 0;
-            
+
             return (
               <div key={index} className="bg-slate-50 dark:bg-slate-800 rounded-lg p-4">
                 <p className="text-sm text-slate-500 dark:text-slate-400 mb-1">{item.label}</p>
                 <p className="text-xl font-bold text-slate-900 dark:text-white">
-                  {item.label === 'EPS (Actual)' ? `$${(item.current || 0).toFixed(2)}` : formatNumber(item.current || 0)}
+                  {item.label === 'EPS (Actual)' ? formatPrice(item.current || 0) : formatNumber(item.current || 0)}
                 </p>
                 {item.previous && (
                   <div className={`flex items-center gap-1 mt-1 ${isPositive ? 'text-green-600' : 'text-red-600'}`}>

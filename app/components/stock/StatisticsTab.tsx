@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { TrendingUp, TrendingDown, BarChart3, PieChart, Activity, Loader2 } from 'lucide-react';
 import { Stock } from '../../types';
 import { marketService } from '../../utils/marketService';
+import { useCurrency } from '../../context/CurrencyContext';
 
 interface StatisticsData {
   symbol: string;
@@ -27,6 +28,7 @@ interface StatisticsTabProps {
 }
 
 export default function StatisticsTab({ stock }: StatisticsTabProps) {
+  const { formatPrice } = useCurrency();
   const [statistics, setStatistics] = useState<StatisticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -106,8 +108,8 @@ export default function StatisticsTab({ stock }: StatisticsTabProps) {
       <div className="flex items-center justify-center py-12">
         <div className="text-center text-slate-500 dark:text-pearto-gray transition-colors duration-300">
           <p className="mb-2">{error}</p>
-          <button 
-            onClick={() => window.location.reload()} 
+          <button
+            onClick={() => window.location.reload()}
             className="text-blue-600 hover:text-blue-500 text-sm transition-colors duration-300"
           >
             Try again
@@ -121,34 +123,34 @@ export default function StatisticsTab({ stock }: StatisticsTabProps) {
   const data = statistics || stock;
 
   const valuationMetrics = [
-    { label: 'Market Cap', value: formatLargeNumber(data.marketCap), icon: PieChart, color: 'blue' },
+    { label: 'Market Cap', value: data.marketCap ? formatPrice(data.marketCap, 2, 2, { notation: 'compact' }) : '-', icon: PieChart, color: 'blue' },
     { label: 'P/E Ratio (TTM)', value: formatNumber(data.peRatio), icon: BarChart3, color: 'green' },
-    { label: 'EPS (TTM)', value: data.eps ? `$${formatNumber(data.eps)}` : '-', icon: TrendingUp, color: 'purple' },
+    { label: 'EPS (TTM)', value: data.eps ? formatPrice(data.eps) : '-', icon: TrendingUp, color: 'purple' },
     { label: 'Beta', value: formatNumber(data.beta), icon: Activity, color: 'orange' },
   ];
 
   const tradingMetrics = [
     { label: 'Volume', value: formatLargeNumber(stock.volume), icon: BarChart3, color: 'blue' },
-    { label: '52W High', value: data.high52w ? `$${formatNumber(data.high52w)}` : '-', icon: TrendingUp, color: 'green' },
-    { label: '52W Low', value: data.low52w ? `$${formatNumber(data.low52w)}` : '-', icon: TrendingDown, color: 'red' },
+    { label: '52W High', value: data.high52w ? formatPrice(data.high52w) : '-', icon: TrendingUp, color: 'green' },
+    { label: '52W Low', value: data.low52w ? formatPrice(data.low52w) : '-', icon: TrendingDown, color: 'red' },
     { label: 'Dividend Yield', value: data.dividendYield ? formatPercent(data.dividendYield) : '-', icon: PieChart, color: 'purple' },
   ];
 
   const performanceMetrics = [
-    { 
-      label: '1 Day Change', 
-      value: `${stock.change >= 0 ? '+' : ''}${formatNumber(stock.change)} (${stock.changePercent >= 0 ? '+' : ''}${formatNumber(stock.changePercent)}%)`,
+    {
+      label: '1 Day Change',
+      value: `${stock.change >= 0 ? '+' : ''}${formatPrice(stock.change)} (${stock.changePercent >= 0 ? '+' : ''}${formatNumber(stock.changePercent)}%)`,
       icon: stock.change >= 0 ? TrendingUp : TrendingDown,
       color: stock.change >= 0 ? 'green' : 'red'
     },
-    { 
-      label: 'Distance from 52W High', 
+    {
+      label: 'Distance from 52W High',
       value: data.high52w && stock.price ? `${(((stock.price - data.high52w) / data.high52w) * 100).toFixed(1)}%` : '-',
       icon: TrendingDown,
       color: 'orange'
     },
-    { 
-      label: 'Distance from 52W Low', 
+    {
+      label: 'Distance from 52W Low',
       value: data.low52w && stock.price ? `${(((stock.price - data.low52w) / data.low52w) * 100).toFixed(1)}%` : '-',
       icon: TrendingUp,
       color: 'green'
@@ -218,7 +220,7 @@ export default function StatisticsTab({ stock }: StatisticsTabProps) {
               { label: 'Sector', value: stock.sector || '-' },
               { label: 'Industry', value: stock.industry || '-' },
               { label: 'Symbol', value: data.symbol },
-              { label: 'Current Price', value: `$${formatNumber(stock.price)}` },
+              { label: 'Current Price', value: formatPrice(stock.price) },
             ].map((item, i) => (
               <div key={i} className="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800 transition-colors duration-300">
                 <span className="text-sm text-slate-500 dark:text-slate-400 transition-colors duration-300">{item.label}</span>
@@ -226,7 +228,7 @@ export default function StatisticsTab({ stock }: StatisticsTabProps) {
               </div>
             ))}
           </div>
-          
+
           <div className="space-y-3">
             <h4 className="font-medium text-slate-700 dark:text-slate-300 transition-colors duration-300">Risk Metrics</h4>
             {[

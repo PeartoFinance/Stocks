@@ -84,7 +84,7 @@ export default function ChartDisplay({
             </button>
           </div>
         )}
-        
+
         <div className={`${isFullscreen ? 'h-[calc(100vh-120px)]' : 'h-96 md:h-[500px]'} relative`}>
           <StockChart
             data={processedData}
@@ -92,38 +92,37 @@ export default function ChartDisplay({
             height={isFullscreen ? window.innerHeight - 120 : 384}
             chartType={chartType}
           />
-          
+
           {/* Moving Averages Overlay */}
           {showMovingAverages && movingAveragesData.length > 0 && (
             <div className="absolute top-2 left-2 bg-white dark:bg-gray-800 bg-opacity-90 dark:bg-opacity-90 p-2 rounded text-xs">
               <div className="font-semibold mb-1 text-gray-900 dark:text-gray-100">MA Ribbon</div>
               {movingAveragesData.map((ma: any) => (
                 <div key={ma.period} className="flex items-center gap-2">
-                  <div className={`w-3 h-0.5 ${
-                    ma.period === 8 ? 'bg-blue-500' :
-                    ma.period === 13 ? 'bg-green-500' :
-                    ma.period === 21 ? 'bg-orange-500' :
-                    'bg-red-500'
-                  }`} />
+                  <div className={`w-3 h-0.5 ${ma.period === 8 ? 'bg-blue-500' :
+                      ma.period === 13 ? 'bg-green-500' :
+                        ma.period === 21 ? 'bg-orange-500' :
+                          'bg-red-500'
+                    }`} />
                   <span className="text-gray-700 dark:text-gray-300">MA{ma.period}: {ma.data.length > 0 ? formatPrice(ma.data[ma.data.length - 1].value) : 'N/A'}</span>
                 </div>
               ))}
             </div>
           )}
-          
+
           {/* Volume Profile Overlay */}
           {showVolumeProfile && volumeProfileData.length > 0 && (
             <div className="absolute top-2 right-12 bg-white dark:bg-gray-800 bg-opacity-90 dark:bg-opacity-90 p-2 rounded text-xs max-w-32">
               <div className="font-semibold mb-1 text-gray-900 dark:text-gray-100">Volume Profile</div>
               {volumeProfileData.slice(-5).map((vp: any, i: number) => (
                 <div key={i} className="flex justify-between gap-2 text-gray-700 dark:text-gray-300">
-                  <span>${vp.price}</span>
+                  <span>{formatPrice(vp.price)}</span>
                   <span>{(vp.volume / 1e6).toFixed(1)}M</span>
                 </div>
               ))}
             </div>
           )}
-          
+
           {/* Price Gaps Overlay */}
           {showGaps && priceGapsData.length > 0 && (
             <div className="absolute bottom-2 left-2 bg-white dark:bg-gray-800 bg-opacity-90 dark:bg-opacity-90 p-2 rounded text-xs">
@@ -136,7 +135,7 @@ export default function ChartDisplay({
               ))}
             </div>
           )}
-          
+
           {/* Percent Mode Indicator */}
           {percentMode && (
             <div className="absolute top-2 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white px-2 py-1 rounded text-xs font-medium">

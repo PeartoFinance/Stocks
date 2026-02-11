@@ -3,12 +3,14 @@
 import React, { useState, useEffect } from 'react';
 import { worldIndicesService, PrivateCompany } from '../../utils/worldIndicesService';
 import { TrendingUp, TrendingDown } from 'lucide-react';
+import { useCurrency } from '../../context/CurrencyContext';
 
 interface PrivateCompaniesProps {
   className?: string;
 }
 
 export default function PrivateCompanies({ className = '' }: PrivateCompaniesProps) {
+  const { formatPrice } = useCurrency();
   const [companies, setCompanies] = useState<PrivateCompany[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -30,17 +32,12 @@ export default function PrivateCompanies({ className = '' }: PrivateCompaniesPro
 
   const formatValuation = (value: number | undefined) => {
     if (!value) return '—';
-    if (value >= 1e12) return `$${(value / 1e12).toFixed(1)}T`;
-    if (value >= 1e9) return `$${(value / 1e9).toFixed(1)}B`;
-    if (value >= 1e6) return `$${(value / 1e6).toFixed(1)}M`;
-    return `$${value.toLocaleString()}`;
+    return formatPrice(value, 2, 2, { notation: 'compact' });
   };
 
   const formatFunding = (value: number | undefined) => {
     if (!value) return '—';
-    if (value >= 1e9) return `$${(value / 1e9).toFixed(1)}B`;
-    if (value >= 1e6) return `$${(value / 1e6).toFixed(1)}M`;
-    return `$${value.toLocaleString()}`;
+    return formatPrice(value, 2, 2, { notation: 'compact' });
   };
 
   if (loading) {
@@ -92,11 +89,10 @@ export default function PrivateCompanies({ className = '' }: PrivateCompaniesPro
                   {company.name}
                 </td>
                 <td className="px-3 py-2 text-sm text-gray-900 dark:text-pearto-luna text-right transition-colors duration-300">
-                  ${company.price.toLocaleString()}
+                  {formatPrice(company.price)}
                 </td>
-                <td className={`px-3 py-2 text-sm text-right font-medium ${
-                  company.changePercent >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
-                }`}>
+                <td className={`px-3 py-2 text-sm text-right font-medium ${company.changePercent >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
+                  }`}>
                   <div className="flex items-center justify-end gap-1">
                     {company.changePercent >= 0 ? (
                       <TrendingUp className="h-3 w-3" />

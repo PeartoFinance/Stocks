@@ -1,17 +1,18 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import { 
-  createChart, 
-  ColorType, 
-  AreaSeries, 
-  CandlestickSeries, 
-  LineSeries, 
+import {
+  createChart,
+  ColorType,
+  AreaSeries,
+  CandlestickSeries,
+  LineSeries,
   IChartApi,
   Time
 } from 'lightweight-charts';
 import { HistoricalData } from '../types';
 import { useTheme } from '../context/ThemeContext';
+import { useCurrency } from '../context/CurrencyContext';
 
 type ChartType = 'area' | 'candlestick' | 'line' | 'mountain';
 
@@ -29,6 +30,7 @@ export default function StockChart({ data, compareData, isPositive, height = 400
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
   const { theme } = useTheme();
+  const { convertPrice, currency } = useCurrency();
   const isDark = theme === 'dark';
 
   useEffect(() => {
@@ -38,7 +40,7 @@ export default function StockChart({ data, compareData, isPositive, height = 400
       layout: {
         background: { type: ColorType.Solid, color: 'transparent' },
         textColor: isDark ? '#dadada' : '#6b7280',
-        attributionLogo: false, 
+        attributionLogo: false,
       },
       width: chartContainerRef.current.clientWidth,
       height,
@@ -53,6 +55,8 @@ export default function StockChart({ data, compareData, isPositive, height = 400
       },
       rightPriceScale: {
         borderVisible: false,
+        // Optional: add currency formatting to axis
+        // localization: { priceFormatter: ... }
       },
     });
 
@@ -88,12 +92,12 @@ export default function StockChart({ data, compareData, isPositive, height = 400
       });
       series.setData(data.map(item => ({
         time: formatTime(item.date),
-        open: item.open,
-        high: item.high,
-        low: item.low,
-        close: item.close,
+        open: convertPrice(item.open),
+        high: convertPrice(item.high),
+        low: convertPrice(item.low),
+        close: convertPrice(item.close),
       })));
-      
+
       if (showComparison && compareData && compareData.length > 0) {
         const compareSeries = chart.addSeries(CandlestickSeries, {
           upColor: isDark ? '#00c2ff' : '#ea580c',
@@ -104,51 +108,51 @@ export default function StockChart({ data, compareData, isPositive, height = 400
         });
         compareSeries.setData(compareData.map(item => ({
           time: formatTime(item.date),
-          open: item.open,
-          high: item.high,
-          low: item.low,
-          close: item.close,
+          open: convertPrice(item.open),
+          high: convertPrice(item.high),
+          low: convertPrice(item.low),
+          close: convertPrice(item.close),
         })));
       }
-    } 
+    }
     else if (chartType === 'line') {
       const series = chart.addSeries(LineSeries, {
         color: showComparison ? (isDark ? '#00c2ff' : '#2563eb') : mainColor,
         lineWidth: showComparison ? 3 : 2,
       });
-      series.setData(data.map(item => ({ 
-        time: formatTime(item.date), 
-        value: item.close 
+      series.setData(data.map(item => ({
+        time: formatTime(item.date),
+        value: convertPrice(item.close)
       })));
-      
+
       if (showComparison && compareData && compareData.length > 0) {
         const compareSeries = chart.addSeries(LineSeries, {
           color: isDark ? '#ffc857' : '#ea580c',
           lineWidth: 3,
         });
-        compareSeries.setData(compareData.map(item => ({ 
-          time: formatTime(item.date), 
-          value: item.close 
+        compareSeries.setData(compareData.map(item => ({
+          time: formatTime(item.date),
+          value: convertPrice(item.close)
         })));
       }
-    } 
+    }
     else {
       const isMountain = chartType === 'mountain';
       const primaryColor = showComparison ? (isDark ? '#00c2ff' : '#2563eb') : mainColor;
       const primaryTopColor = showComparison ? (isDark ? 'rgba(0, 194, 255, 0.4)' : 'rgba(37, 99, 235, 0.4)') : topGradient;
       const primaryBottomColor = showComparison ? (isDark ? 'rgba(0, 194, 255, 0.05)' : 'rgba(37, 99, 235, 0.05)') : bottomGradient;
-      
+
       const series = chart.addSeries(AreaSeries, {
         lineColor: primaryColor,
         topColor: isMountain ? (isDark ? 'rgba(0, 194, 255, 0.6)' : 'rgba(37, 99, 235, 0.6)') : primaryTopColor,
         bottomColor: isMountain ? (isDark ? 'rgba(0, 194, 255, 0)' : 'rgba(37, 99, 235, 0)') : primaryBottomColor,
         lineWidth: isMountain ? 3 : 2,
       });
-      series.setData(data.map(item => ({ 
-        time: formatTime(item.date), 
-        value: item.close 
+      series.setData(data.map(item => ({
+        time: formatTime(item.date),
+        value: convertPrice(item.close)
       })));
-      
+
       if (showComparison && compareData && compareData.length > 0) {
         const compareSeries = chart.addSeries(AreaSeries, {
           lineColor: isDark ? '#ffc857' : '#ea580c',
@@ -156,9 +160,9 @@ export default function StockChart({ data, compareData, isPositive, height = 400
           bottomColor: isMountain ? (isDark ? 'rgba(255, 200, 87, 0)' : 'rgba(234, 88, 12, 0)') : (isDark ? 'rgba(255, 200, 87, 0.05)' : 'rgba(234, 88, 12, 0.05)'),
           lineWidth: isMountain ? 3 : 2,
         });
-        compareSeries.setData(compareData.map(item => ({ 
-          time: formatTime(item.date), 
-          value: item.close 
+        compareSeries.setData(compareData.map(item => ({
+          time: formatTime(item.date),
+          value: convertPrice(item.close)
         })));
       }
     }
@@ -178,7 +182,7 @@ export default function StockChart({ data, compareData, isPositive, height = 400
       resizeObserver.disconnect();
       chart.remove();
     };
-  }, [data, compareData, isPositive, height, chartType, color, showComparison, isDark, theme]);
+  }, [data, compareData, isPositive, height, chartType, color, showComparison, isDark, theme, convertPrice, currency]);
 
   return (
     <div className="w-full overflow-hidden relative">

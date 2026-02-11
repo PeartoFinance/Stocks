@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { DollarSign, Calendar, Percent, TrendingUp, Loader2 } from 'lucide-react';
 import { marketService } from '../../utils/marketService';
+import { useCurrency } from '../../context/CurrencyContext';
 
 interface DividendRecord {
   id: number;
@@ -23,6 +24,7 @@ interface DividendsTabProps {
 }
 
 export default function DividendsTab({ symbol }: DividendsTabProps) {
+  const { formatPrice } = useCurrency();
   const [dividends, setDividends] = useState<DividendRecord[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -32,7 +34,7 @@ export default function DividendsTab({ symbol }: DividendsTabProps) {
         setLoading(true);
         // Cast the response to the expected type to satisfy the compiler
         const data = await marketService.getStockDividends(symbol) as DividendRecord[];
-        
+
         // Safety check: Ensure data is an array before setting state
         setDividends(Array.isArray(data) ? data : []);
       } catch (error) {
@@ -96,11 +98,11 @@ export default function DividendsTab({ symbol }: DividendsTabProps) {
 
   // Calculate stats from dividend data safely
   const totalDividendAmount = dividends.reduce((sum, div) => sum + (div.dividendAmount || 0), 0);
-  const avgCashPercent = dividends.length > 0 
-    ? dividends.reduce((sum, div) => sum + (div.cashPercent || 0), 0) / dividends.length 
+  const avgCashPercent = dividends.length > 0
+    ? dividends.reduce((sum, div) => sum + (div.cashPercent || 0), 0) / dividends.length
     : 0;
-  const avgBonusPercent = dividends.length > 0 
-    ? dividends.reduce((sum, div) => sum + (div.bonusPercent || 0), 0) / dividends.length 
+  const avgBonusPercent = dividends.length > 0
+    ? dividends.reduce((sum, div) => sum + (div.bonusPercent || 0), 0) / dividends.length
     : 0;
 
   return (
@@ -111,7 +113,7 @@ export default function DividendsTab({ symbol }: DividendsTabProps) {
           <DollarSign className="h-5 w-5 text-green-500" />
           Dividend Overview
         </h3>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4 transition-colors duration-300">
             <div className="flex items-center justify-between mb-2">
@@ -119,7 +121,7 @@ export default function DividendsTab({ symbol }: DividendsTabProps) {
               <DollarSign className="h-4 w-4 text-green-600 dark:text-green-400 transition-colors duration-300" />
             </div>
             <p className="text-2xl font-bold text-green-900 dark:text-green-100 transition-colors duration-300">
-              ${totalDividendAmount.toFixed(2)}
+              {formatPrice(totalDividendAmount)}
             </p>
           </div>
 
@@ -161,7 +163,7 @@ export default function DividendsTab({ symbol }: DividendsTabProps) {
           <Calendar className="h-5 w-5 text-blue-500" />
           Dividend History
         </h3>
-        
+
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
@@ -182,13 +184,12 @@ export default function DividendsTab({ symbol }: DividendsTabProps) {
                     {dividend.fiscalYear}
                   </td>
                   <td className="py-3 px-4">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      dividend.dividendType === 'cash' 
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${dividend.dividendType === 'cash'
                         ? 'bg-green-100 dark:bg-pearto-green/10 text-green-700 dark:bg-green-900/20 dark:text-green-300'
                         : dividend.dividendType === 'bonus'
-                        ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/20 dark:text-blue-300'
-                        : 'bg-purple-100 text-purple-700 dark:bg-purple-900/20 dark:text-purple-300'
-                    }`}>
+                          ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/20 dark:text-blue-300'
+                          : 'bg-purple-100 text-purple-700 dark:bg-purple-900/20 dark:text-purple-300'
+                      }`}>
                       {dividend.dividendType}
                     </span>
                   </td>
@@ -199,7 +200,7 @@ export default function DividendsTab({ symbol }: DividendsTabProps) {
                     {dividend.bonusPercent}%
                   </td>
                   <td className="py-3 px-4 text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">
-                    {dividend.dividendAmount ? `$${dividend.dividendAmount.toFixed(2)}` : 'N/A'}
+                    {dividend.dividendAmount ? formatPrice(dividend.dividendAmount) : 'N/A'}
                   </td>
                   <td className="py-3 px-4 text-sm text-slate-600 dark:text-slate-400 transition-colors duration-300">
                     {formatDate(dividend.exDividendDate)}
@@ -221,24 +222,24 @@ export default function DividendsTab({ symbol }: DividendsTabProps) {
         <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 transition-colors duration-300">
           Dividend Analysis
         </h3>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-3 transition-colors duration-300">Distribution Summary</h4>
             <div className="space-y-3">
               {[
-                { 
-                  label: 'Cash Dividends', 
+                {
+                  label: 'Cash Dividends',
                   value: `${avgCashPercent.toFixed(1)}%`,
                   description: 'Average cash dividend percentage'
                 },
-                { 
-                  label: 'Bonus Shares', 
+                {
+                  label: 'Bonus Shares',
                   value: `${avgBonusPercent.toFixed(1)}%`,
                   description: 'Average bonus share percentage'
                 },
-                { 
-                  label: 'Total Records', 
+                {
+                  label: 'Total Records',
                   value: dividends.length.toString(),
                   description: 'Number of dividend records'
                 },
@@ -267,7 +268,7 @@ export default function DividendsTab({ symbol }: DividendsTabProps) {
                 • {dividends.filter(d => d.dividendType === 'cash').length} cash dividends and {dividends.filter(d => d.dividendType === 'bonus').length} bonus distributions
               </p>
               <p>
-                • Total dividend amount distributed: ${totalDividendAmount.toFixed(2)}
+                • Total dividend amount distributed: {formatPrice(totalDividendAmount)}
               </p>
             </div>
           </div>

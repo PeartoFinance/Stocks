@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
+import { CurrencyProvider } from './context/CurrencyContext';
 import { CountryProvider } from './context/CountryContext';
 import { ThemeProvider } from './context/ThemeContext';
 import LayoutWrapper from './components/layoutWrapper';
@@ -22,13 +23,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${inter.className} antialiased`}>
         <ThemeProvider>
           <AuthProvider>
-            <CountryProvider>
-              <LayoutWrapper>
-                <AuthSync />
-                {children}
-              </LayoutWrapper>
-              <Toaster position="top-right" />
-            </CountryProvider>
+            <CurrencyProvider>
+              <CountryProvider>
+                <LayoutWrapper>
+                  <AuthSync />
+                  {children}
+                </LayoutWrapper>
+                <Toaster position="top-right" />
+              </CountryProvider>
+            </CurrencyProvider>
           </AuthProvider>
         </ThemeProvider>
       </body>

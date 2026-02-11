@@ -8,6 +8,7 @@ import {
 import { stockAPI } from '../../utils/api';
 import { Stock } from '../../types';
 import Link from 'next/link';
+import PriceDisplay from '../common/PriceDisplay';
 
 interface AllStocksProps {
   className?: string;
@@ -118,7 +119,7 @@ export default function AllStocks({ className = '' }: AllStocksProps) {
     setSearchTerm('');
   };
 
-  const hasActiveFilters = filters.sector !== 'all' || filters.exchange !== 'all' || 
+  const hasActiveFilters = filters.sector !== 'all' || filters.exchange !== 'all' ||
     filters.minPrice || filters.maxPrice || filters.minVolume || searchTerm;
 
   return (
@@ -138,11 +139,10 @@ export default function AllStocks({ className = '' }: AllStocksProps) {
           </div>
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className={`flex items-center gap-2 px-3 sm:px-4 py-2 border rounded-lg transition-colors text-sm sm:text-base whitespace-nowrap ${
-              showFilters || hasActiveFilters
-                ? 'bg-blue-50 border-blue-300 text-blue-700'
-                : 'bg-white dark:bg-pearto-card border-gray-300 dark:border-pearto-border text-gray-700 dark:text-pearto-cloud hover:bg-gray-50 dark:bg-pearto-surface'
-            }`}
+            className={`flex items-center gap-2 px-3 sm:px-4 py-2 border rounded-lg transition-colors text-sm sm:text-base whitespace-nowrap ${showFilters || hasActiveFilters
+              ? 'bg-blue-50 border-blue-300 text-blue-700'
+              : 'bg-white dark:bg-pearto-card border-gray-300 dark:border-pearto-border text-gray-700 dark:text-pearto-cloud hover:bg-gray-50 dark:bg-pearto-surface'
+              }`}
           >
             <Filter className="h-4 w-4" />
             <span className="hidden sm:inline">Filters</span>
@@ -261,7 +261,7 @@ export default function AllStocks({ className = '' }: AllStocksProps) {
                   <Link href={`/stock/${stock.symbol.toLowerCase()}`}>
                     <div className="flex justify-between mb-2">
                       <span className="font-bold">{stock.symbol}</span>
-                      <span className="font-bold">${stock.price.toFixed(2)}</span>
+                      <PriceDisplay amount={stock.price} className="font-bold" />
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-500 dark:text-pearto-gray truncate max-w-[150px] transition-colors duration-300">{stock.name}</span>
@@ -297,7 +297,10 @@ export default function AllStocks({ className = '' }: AllStocksProps) {
                           <div className="text-xs text-gray-500 dark:text-pearto-gray truncate max-w-[120px] transition-colors duration-300">{stock.name}</div>
                         </Link>
                       </td>
-                      <td className="px-4 py-2 text-sm font-medium text-gray-900 dark:text-pearto-luna transition-colors duration-300">${stock.price.toFixed(2)}</td>
+
+                      <td className="px-4 py-2 text-sm font-medium text-gray-900 dark:text-pearto-luna transition-colors duration-300">
+                        <PriceDisplay amount={stock.price} />
+                      </td>
                       <td className={`px-4 py-2 text-sm font-medium ${stock.change >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'}`}>
                         {stock.changePercent.toFixed(2)}%
                       </td>
@@ -315,6 +318,6 @@ export default function AllStocks({ className = '' }: AllStocksProps) {
           </>
         )}
       </div>
-    </div>
+    </div >
   );
 }

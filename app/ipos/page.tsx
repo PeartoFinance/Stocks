@@ -16,7 +16,8 @@ import {
   ArrowUpDown,
   ExternalLink
 } from 'lucide-react';
-import { formatPrice, formatNumber } from '@/lib/utils';
+import { formatNumber } from '@/lib/utils';
+import { useCurrency } from '../context/CurrencyContext';
 import toast from 'react-hot-toast';
 import AIAnalysisPanel from '../components/ai/AIAnalysisPanel';
 import { stockAPI } from '../utils/api';
@@ -43,6 +44,7 @@ interface IPO {
 }
 
 export default function IPOsPage() {
+  const { formatPrice } = useCurrency();
   const [ipos, setIpos] = useState<IPO[]>([]);
   const [filteredIpos, setFilteredIpos] = useState<IPO[]>([]);
   const [loading, setLoading] = useState(true);
@@ -57,7 +59,7 @@ export default function IPOsPage() {
       try {
         setLoading(true);
         const data = await stockAPI.getStockOffers();
-        
+
         const mappedIpos: IPO[] = data.map((item: any) => ({
           id: item.id,
           company: item.companyName || 'Unknown Company',
@@ -76,10 +78,10 @@ export default function IPOsPage() {
           underwriters: [],
           description: `${item.offerType || 'IPO'} offering for ${item.companyName || item.symbol}`
         }));
-        
+
         setIpos(mappedIpos);
         setFilteredIpos(mappedIpos);
-        
+
         const upcoming = mappedIpos.filter(i => i.status === 'upcoming').length;
         const pricing = mappedIpos.filter(i => i.status === 'pricing').length;
         setStats({ total: mappedIpos.length, upcoming, pricing, totalValue: 0 });
@@ -386,7 +388,7 @@ export default function IPOsPage() {
                 pageData={{
                   upcomingCount: ipos.filter(i => i.status === 'upcoming').length,
                   pricingCount: ipos.filter(i => i.status === 'pricing').length,
-                  totalValue: ipos.reduce((sum, i) => sum + (i.estimatedValue ?? 0), 0),                  sectors: Array.from(new Set(ipos.map(i => i.sector))),
+                  totalValue: ipos.reduce((sum, i) => sum + (i.estimatedValue ?? 0), 0), sectors: Array.from(new Set(ipos.map(i => i.sector))),
                   topIPOs: ipos.slice(0, 3).map(i => ({
                     company: i.company,
                     symbol: i.symbol,

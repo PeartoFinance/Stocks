@@ -6,6 +6,7 @@ import { Activity, RefreshCw, TrendingUp } from 'lucide-react';
 import { stockAPI } from '../../utils/api';
 import { Stock } from '../../types';
 import Link from 'next/link';
+import PriceDisplay from '../common/PriceDisplay';
 
 interface TrendingProps {
   className?: string;
@@ -109,7 +110,7 @@ export default function Trending({ className = '' }: TrendingProps) {
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="font-bold text-lg">${stock.price.toFixed(2)}</div>
+                        <PriceDisplay amount={stock.price} className="font-bold text-lg" />
                         <div className={stock.change >= 0 ? 'text-green-600 dark:text-pearto-green font-medium' : 'text-red-600 dark:text-pearto-pink font-medium'}>
                           {stock.change >= 0 ? '+' : ''}{stock.changePercent.toFixed(2)}%
                         </div>
@@ -174,7 +175,7 @@ export default function Trending({ className = '' }: TrendingProps) {
                           </Link>
                         </td>
                         <td className="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-pearto-luna transition-colors duration-300">
-                          ${stock.price.toFixed(2)}
+                          <PriceDisplay amount={stock.price} />
                         </td>
                         <td className="px-4 py-2 whitespace-nowrap">
                           <div className="flex items-center">
@@ -182,7 +183,7 @@ export default function Trending({ className = '' }: TrendingProps) {
                               {stock.change >= 0 ? '+' : ''}{stock.changePercent.toFixed(2)}%
                             </div>
                             <div className={`text-sm ml-2 ${stock.change >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'}`}>
-                              {stock.change >= 0 ? '+' : ''}${Math.abs(stock.change).toFixed(2)}
+                              <PriceDisplay amount={stock.change} showSign />
                             </div>
                           </div>
                         </td>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Activity, TrendingUp, BarChart3, PieChart, Target, Loader2 } from 'lucide-react';
 import { Stock } from '../../types';
 import { marketService } from '../../utils/marketService';
+import { useCurrency } from '../../context/CurrencyContext';
 
 interface AdvancedMetrics {
   symbol: string;
@@ -27,6 +28,7 @@ interface MetricsTabProps {
 }
 
 export default function MetricsTab({ stock }: MetricsTabProps) {
+  const { formatPrice } = useCurrency();
   const [metrics, setMetrics] = useState<AdvancedMetrics | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -101,16 +103,16 @@ export default function MetricsTab({ stock }: MetricsTabProps) {
     );
   }
 
-  const MetricCard = ({ 
-    label, 
-    value, 
-    icon: Icon, 
-    color 
-  }: { 
-    label: string; 
-    value: string; 
-    icon: any; 
-    color: string; 
+  const MetricCard = ({
+    label,
+    value,
+    icon: Icon,
+    color
+  }: {
+    label: string;
+    value: string;
+    icon: any;
+    color: string;
   }) => (
     <div className={`bg-${color}-50 dark:bg-${color}-900/20 border border-${color}-200 dark:border-${color}-800 rounded-lg p-4`}>
       <div className="flex items-center justify-between mb-2">
@@ -134,7 +136,7 @@ export default function MetricsTab({ stock }: MetricsTabProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <MetricCard
             label="Market Cap"
-            value={formatLargeNumber(metrics.marketCap)}
+            value={metrics.marketCap ? formatPrice(metrics.marketCap, 2, 2, { notation: 'compact' }) : '-'}
             icon={PieChart}
             color="blue"
           />
@@ -174,13 +176,13 @@ export default function MetricsTab({ stock }: MetricsTabProps) {
           />
           <MetricCard
             label="52W High"
-            value={metrics.high52w ? `$${formatRatio(metrics.high52w)}` : '-'}
+            value={metrics.high52w ? formatPrice(metrics.high52w) : '-'}
             icon={TrendingUp}
             color="green"
           />
           <MetricCard
             label="52W Low"
-            value={metrics.low52w ? `$${formatRatio(metrics.low52w)}` : '-'}
+            value={metrics.low52w ? formatPrice(metrics.low52w) : '-'}
             icon={TrendingUp}
             color="red"
           />
@@ -202,7 +204,7 @@ export default function MetricsTab({ stock }: MetricsTabProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <MetricCard
             label="EPS (TTM)"
-            value={metrics.eps ? `$${formatRatio(metrics.eps)}` : '-'}
+            value={metrics.eps ? formatPrice(metrics.eps) : '-'}
             icon={Target}
             color="green"
           />
@@ -214,7 +216,7 @@ export default function MetricsTab({ stock }: MetricsTabProps) {
           />
           <MetricCard
             label="Book Value"
-            value={metrics.bookValue ? `$${formatRatio(metrics.bookValue)}` : '-'}
+            value={metrics.bookValue ? formatPrice(metrics.bookValue) : '-'}
             icon={Target}
             color="purple"
           />
@@ -232,7 +234,7 @@ export default function MetricsTab({ stock }: MetricsTabProps) {
         <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
           Additional Statistics
         </h3>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-3">
             <h4 className="font-medium text-slate-700 dark:text-slate-300">Share Information</h4>
@@ -240,7 +242,7 @@ export default function MetricsTab({ stock }: MetricsTabProps) {
               { label: 'Shares Outstanding', value: formatLargeNumber(metrics.sharesOutstanding) },
               { label: 'Float Shares', value: formatLargeNumber(metrics.floatShares) },
               { label: 'Short Ratio', value: formatRatio(metrics.shortRatio) },
-              { label: 'Dividend Rate', value: metrics.dividendRate ? `$${formatRatio(metrics.dividendRate)}` : '-' },
+              { label: 'Dividend Rate', value: metrics.dividendRate ? formatPrice(metrics.dividendRate) : '-' },
             ].map((item, i) => (
               <div key={i} className="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800">
                 <span className="text-sm text-slate-500 dark:text-slate-400">{item.label}</span>
@@ -248,11 +250,11 @@ export default function MetricsTab({ stock }: MetricsTabProps) {
               </div>
             ))}
           </div>
-          
+
           <div className="space-y-3">
             <h4 className="font-medium text-slate-700 dark:text-slate-300">Performance Metrics</h4>
             {[
-              { label: 'Current Price', value: `$${stock.price.toFixed(2)}` },
+              { label: 'Current Price', value: formatPrice(stock.price) },
               { label: '52W High Distance', value: metrics.high52w ? `${(((stock.price - metrics.high52w) / metrics.high52w) * 100).toFixed(1)}%` : '-' },
               { label: '52W Low Distance', value: metrics.low52w ? `${(((stock.price - metrics.low52w) / metrics.low52w) * 100).toFixed(1)}%` : '-' },
               { label: 'Market Cap Rank', value: metrics.marketCap && metrics.marketCap > 100e9 ? 'Large Cap' : metrics.marketCap && metrics.marketCap > 10e9 ? 'Mid Cap' : 'Small Cap' },

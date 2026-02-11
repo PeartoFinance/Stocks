@@ -61,19 +61,19 @@ export default function MarketMovers({
 }: MarketMoversProps) {
   // Calculate real market analysis data from actual stocks
   const allStocks = [...topGainers, ...topLosers, ...trendingStocks];
-  
+
   // Calculate real performance metrics
-  const avgGain = topGainers.length > 0 
-    ? topGainers.reduce((sum, stock) => sum + stock.changePercent, 0) / topGainers.length 
+  const avgGain = topGainers.length > 0
+    ? topGainers.reduce((sum, stock) => sum + stock.changePercent, 0) / topGainers.length
     : 0;
-  const avgLoss = topLosers.length > 0 
-    ? topLosers.reduce((sum, stock) => sum + Math.abs(stock.changePercent), 0) / topLosers.length 
+  const avgLoss = topLosers.length > 0
+    ? topLosers.reduce((sum, stock) => sum + Math.abs(stock.changePercent), 0) / topLosers.length
     : 0;
   const totalVolume = allStocks.reduce((sum, stock) => sum + (stock.volume || 0), 0);
-  const avgPrice = allStocks.length > 0 
-    ? allStocks.reduce((sum, stock) => sum + stock.price, 0) / allStocks.length 
+  const avgPrice = allStocks.length > 0
+    ? allStocks.reduce((sum, stock) => sum + stock.price, 0) / allStocks.length
     : 0;
-  
+
   // Real sector performance analysis from actual stock data
   const sectorPerformance = allStocks.reduce((acc, stock) => {
     if (stock.sector) {
@@ -222,7 +222,7 @@ export default function MarketMovers({
           size: 12
         },
         callbacks: {
-          label: function(context: any) {
+          label: function (context: any) {
             const label = context.label || '';
             const value = context.parsed || 0;
             const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);
@@ -262,7 +262,7 @@ export default function MarketMovers({
           size: 12
         },
         callbacks: {
-          label: function(context: any) {
+          label: function (context: any) {
             const label = context.label || '';
             const value = context.parsed || 0;
             const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);
@@ -462,7 +462,7 @@ export default function MarketMovers({
                     <div className="text-green-500 dark:text-pearto-green transition-colors duration-300">Avg Gain</div>
                   </div>
                   <div className="text-center p-2 bg-white dark:bg-pearto-card rounded-lg transition-colors duration-300">
-                    <div className="text-lg font-bold text-blue-600 dark:text-blue-400 transition-colors duration-300">${avgPrice.toFixed(0)}</div>
+                    <div className="text-lg font-bold text-blue-600 dark:text-blue-400 transition-colors duration-300">{formatPrice(avgPrice)}</div>
                     <div className="text-blue-500 dark:text-blue-400 transition-colors duration-300">Avg Price</div>
                   </div>
                   <div className="text-center p-2 bg-white dark:bg-pearto-card rounded-lg transition-colors duration-300">

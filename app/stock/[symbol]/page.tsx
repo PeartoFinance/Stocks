@@ -1,15 +1,15 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { 
-  Activity, 
-  TrendingUp, 
-  TrendingDown, 
-  BarChart3, 
-  AreaChart, 
-  CandlestickChart, 
-  LineChart, 
-  ArrowLeft, 
+import {
+  Activity,
+  TrendingUp,
+  TrendingDown,
+  BarChart3,
+  AreaChart,
+  CandlestickChart,
+  LineChart,
+  ArrowLeft,
   Star,
   Share2,
   Bell,
@@ -36,7 +36,8 @@ import StockRiskAnalysisChart from "../../components/stock/StockRiskAnalysisChar
 import AIAnalysisPanel from "../../components/ai/AIAnalysisPanel";
 import VendorsList from "../../components/VendorsList";
 import VendorsListSimple from "../../components/VendorsListSimple";
-import HistoricalDataTable from "../../components/stock/HistoricalDataTable";
+import { useCurrency } from "../../context/CurrencyContext";
+import PriceDisplay from "../../components/common/PriceDisplay";
 import {
   StockTabs,
   FinancialsTab,
@@ -46,7 +47,8 @@ import {
   ProfileTab,
   NewsTab,
   MetricsTab,
-  type TabId
+  type TabId,
+  HistoricalDataTable
 } from "../../components/stock";
 
 interface PageProps {
@@ -56,7 +58,7 @@ interface PageProps {
 export default function StockDetailPage({ params }: PageProps) {
   const { symbol } = params;
   const router = useRouter();
-  
+
   // State
   const [stock, setStock] = useState<Stock | null>(null);
   const [historicalData, setHistoricalData] = useState<HistoricalData[]>([]);
@@ -80,14 +82,21 @@ export default function StockDetailPage({ params }: PageProps) {
     { key: "line", label: "Line", icon: LineChart },
     { key: "mountain", label: "Mountain", icon: AreaChart },
   ] as const;
-  
+
   const minuteIntervals = ["1m", "5m", "15m", "30m", "1h"];
   const [selectedInterval, setSelectedInterval] = useState("1m");
 
-  const formatPrice = (price: number) => `$${price.toFixed(2)}`;
-  const formatChange = (change: number, percent: number) =>
-    `${change >= 0 ? "+" : ""}${change.toFixed(2)} (${percent >= 0 ? "+" : ""}${percent.toFixed(2)}%)`;
-  
+  const { formatPrice, currency } = useCurrency();
+
+  const formatChange = (change: number, percent: number) => {
+    return (
+      <span className="flex items-center gap-1">
+        <PriceDisplay amount={change} coloredChange showSign />
+        <span>({percent >= 0 ? "+" : ""}{percent.toFixed(2)}%)</span>
+      </span>
+    );
+  };
+
   const formatNumber = (num: number | undefined | null, decimals = 2): string => {
     if (num == null) return '-';
     return num.toLocaleString(undefined, {
@@ -114,7 +123,7 @@ export default function StockDetailPage({ params }: PageProps) {
       };
       const mappedPeriod = periodMap[period] || "1d";
       const dataInterval = period === "1D" && interval ? interval : "1d";
-      
+
       const historyResponse = await marketService.getStockHistory(symbol, mappedPeriod, dataInterval);
       if ((historyResponse as any)?.data) {
         const transformedData: HistoricalData[] = (historyResponse as any).data.map((item: any) => ({
@@ -208,7 +217,7 @@ export default function StockDetailPage({ params }: PageProps) {
           };
           setStock(transformedStock);
         }
-        
+
         if ((historyResponse as any)?.data) {
           const transformedData: HistoricalData[] = (historyResponse as any).data.map((item: any) => ({
             date: item.date,
@@ -219,7 +228,7 @@ export default function StockDetailPage({ params }: PageProps) {
             volume: item.volume || 0,
           }));
           setHistoricalData(transformedData);
-          
+
           if (transformedData.length > 0) {
             setTodayData(transformedData[transformedData.length - 1]);
           }
@@ -263,7 +272,7 @@ export default function StockDetailPage({ params }: PageProps) {
                         <span className="text-xs text-slate-500 dark:text-slate-400">{item.label}</span>
                       </div>
                       <p className="text-base font-bold text-slate-900 dark:text-white">
-                        {typeof item.val === 'number' ? formatPrice(item.val) : 'N/A'}
+                        {typeof item.val === 'number' ? <PriceDisplay amount={item.val} /> : 'N/A'}
                       </p>
                     </div>
                   ))}
@@ -295,7 +304,7 @@ export default function StockDetailPage({ params }: PageProps) {
                   <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300">Key Metrics</h3>
                   {showStatsExpanded ? <ChevronUp className="h-5 w-5 text-slate-400" /> : <ChevronDown className="h-5 w-5 text-slate-400" />}
                 </button>
-                
+
                 <AnimatePresence>
                   {showStatsExpanded && (
                     <motion.div
@@ -306,9 +315,9 @@ export default function StockDetailPage({ params }: PageProps) {
                     >
                       <div className="px-4 pb-4 space-y-2">
                         {[
-                          { label: 'Market Cap', value: formatLargeNumber(stock.marketCap) },
+                          { label: 'Market Cap', value: stock.marketCap ? <span className="flex items-center gap-0.5"><PriceDisplay amount={stock.marketCap / (stock.marketCap >= 1e12 ? 1e12 : (stock.marketCap >= 1e9 ? 1e9 : 1e6))} maximumFractionDigits={2} />{stock.marketCap >= 1e12 ? 'T' : (stock.marketCap >= 1e9 ? 'B' : 'M')}</span> : '-' },
                           { label: 'P/E Ratio', value: formatNumber(stock.peRatio) },
-                          { label: 'EPS', value: stock.eps ? `$${formatNumber(stock.eps)}` : '-' },
+                          { label: 'EPS', value: stock.eps ? <PriceDisplay amount={stock.eps} /> : '-' },
                           { label: 'Beta', value: formatNumber(stock.beta) },
                           { label: 'Div Yield', value: stock.dividendYield ? `${(stock.dividendYield * 100).toFixed(2)}%` : '-' },
                         ].map((item, i) => (
@@ -333,15 +342,15 @@ export default function StockDetailPage({ params }: PageProps) {
                 </h3>
                 <div className="space-y-1">
                   {[
-                    { label: 'Market Cap', value: formatLargeNumber(stock.marketCap) },
+                    { label: 'Market Cap', value: stock.marketCap ? <span className="flex items-center gap-0.5"><PriceDisplay amount={stock.marketCap / (stock.marketCap >= 1e12 ? 1e12 : (stock.marketCap >= 1e9 ? 1e9 : 1e6))} maximumFractionDigits={2} />{stock.marketCap >= 1e12 ? 'T' : (stock.marketCap >= 1e9 ? 'B' : 'M')}</span> : '-' },
                     { label: 'P/E Ratio', value: formatNumber(stock.peRatio) },
                     { label: 'Forward P/E', value: formatNumber(stock.forwardPe) },
-                    { label: 'EPS', value: stock.eps ? `$${formatNumber(stock.eps)}` : '-' },
+                    { label: 'EPS', value: stock.eps ? <PriceDisplay amount={stock.eps} /> : '-' },
                     { label: 'Beta', value: formatNumber(stock.beta) },
-                    { label: 'Book Value', value: stock.bookValue ? `$${formatNumber(stock.bookValue)}` : '-' },
+                    { label: 'Book Value', value: stock.bookValue ? <PriceDisplay amount={stock.bookValue} /> : '-' },
                     { label: 'P/B Ratio', value: formatNumber(stock.priceToBook) },
                     { label: 'Div Yield', value: stock.dividendYield ? `${(stock.dividendYield * 100).toFixed(2)}%` : '-' },
-                    { label: 'Div Rate', value: stock.dividendRate ? `$${formatNumber(stock.dividendRate)}` : '-' },
+                    { label: 'Div Rate', value: stock.dividendRate ? <PriceDisplay amount={stock.dividendRate} /> : '-' },
                     { label: 'Short Ratio', value: formatNumber(stock.shortRatio) },
                   ].map((item, i) => (
                     <div key={i} className="flex justify-between py-1 border-b border-slate-100 dark:border-slate-800 last:border-b-0">
@@ -365,9 +374,8 @@ export default function StockDetailPage({ params }: PageProps) {
                             <button
                               key={p}
                               onClick={() => handlePeriodChange(p)}
-                              className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
-                                chartPeriod === p ? "bg-gray-900 dark:bg-pearto-green text-white shadow-sm" : "text-gray-600 dark:text-pearto-cloud hover:bg-gray-100 dark:hover:bg-pearto-surface"
-                              }`}
+                              className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${chartPeriod === p ? "bg-gray-900 dark:bg-pearto-green text-white shadow-sm" : "text-gray-600 dark:text-pearto-cloud hover:bg-gray-100 dark:hover:bg-pearto-surface"
+                                }`}
                             >
                               {p}
                             </button>
@@ -375,9 +383,8 @@ export default function StockDetailPage({ params }: PageProps) {
                         </div>
                       </div>
 
-                      <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-bold ${
-                        stock.change >= 0 ? "text-green-700 bg-green-50 dark:bg-pearto-green/10" : "text-red-700 bg-red-50 dark:bg-pearto-pink/10"
-                      }`}>
+                      <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-bold ${stock.change >= 0 ? "text-green-700 bg-green-50 dark:bg-pearto-green/10" : "text-red-700 bg-red-50 dark:bg-pearto-pink/10"
+                        }`}>
                         {stock.change >= 0 ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
                         {formatChange(stock.change, stock.changePercent)}
                       </div>
@@ -390,9 +397,8 @@ export default function StockDetailPage({ params }: PageProps) {
                           <button
                             key={type.key}
                             onClick={() => setChartType(type.key)}
-                            className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
-                              chartType === type.key ? "bg-blue-600 dark:bg-pearto-pink text-white shadow-sm" : "text-gray-600 dark:text-pearto-cloud hover:bg-gray-100 dark:hover:bg-pearto-surface"
-                            }`}
+                            className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${chartType === type.key ? "bg-blue-600 dark:bg-pearto-pink text-white shadow-sm" : "text-gray-600 dark:text-pearto-cloud hover:bg-gray-100 dark:hover:bg-pearto-surface"
+                              }`}
                           >
                             <type.icon className="h-3.5 w-3.5" />
                             <span className="hidden sm:inline">{type.label}</span>
@@ -439,9 +445,8 @@ export default function StockDetailPage({ params }: PageProps) {
               <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4">
                 {/* Mobile Chart Header */}
                 <div className="flex items-center justify-between mb-3">
-                  <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-bold ${
-                    stock.change >= 0 ? "text-green-700 bg-green-50 dark:bg-pearto-green/10" : "text-red-700 bg-red-50 dark:bg-pearto-pink/10"
-                  }`}>
+                  <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-bold ${stock.change >= 0 ? "text-green-700 bg-green-50 dark:bg-pearto-green/10" : "text-red-700 bg-red-50 dark:bg-pearto-pink/10"
+                    }`}>
                     {stock.change >= 0 ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
                     {formatChange(stock.change, stock.changePercent)}
                   </div>
@@ -460,11 +465,10 @@ export default function StockDetailPage({ params }: PageProps) {
                       <button
                         key={p}
                         onClick={() => handlePeriodChange(p)}
-                        className={`px-4 py-2 text-sm font-medium rounded-lg whitespace-nowrap transition-all ${
-                          chartPeriod === p 
-                            ? "bg-blue-600 dark:bg-pearto-pink text-white shadow-sm" 
-                            : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300"
-                        }`}
+                        className={`px-4 py-2 text-sm font-medium rounded-lg whitespace-nowrap transition-all ${chartPeriod === p
+                          ? "bg-blue-600 dark:bg-pearto-pink text-white shadow-sm"
+                          : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300"
+                          }`}
                       >
                         {p}
                       </button>
@@ -486,11 +490,10 @@ export default function StockDetailPage({ params }: PageProps) {
                           <button
                             key={type.key}
                             onClick={() => setChartType(type.key)}
-                            className={`flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg transition-all ${
-                              chartType === type.key 
-                                ? "bg-blue-600 text-white" 
-                                : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300"
-                            }`}
+                            className={`flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg transition-all ${chartType === type.key
+                              ? "bg-blue-600 text-white"
+                              : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300"
+                              }`}
                           >
                             <type.icon className="h-4 w-4" />
                             <span>{type.label}</span>
@@ -529,6 +532,8 @@ export default function StockDetailPage({ params }: PageProps) {
               <VendorsListSimple limit={8} />
             </div>
 
+
+
             {/* Quick Stats Row - Desktop Only */}
             <div className="hidden lg:grid lg:grid-cols-6 gap-3 mb-5">
               {[
@@ -545,7 +550,7 @@ export default function StockDetailPage({ params }: PageProps) {
                     <item.Icon className={`h-3 w-3 text-${item.color}-600 dark:text-pearto-green`} />
                   </div>
                   <p className={`text-sm font-bold text-${item.color}-900 dark:text-pearto-luna`}>
-                    {typeof item.val === 'number' ? formatPrice(item.val) : item.val}
+                    {typeof item.val === 'number' ? <PriceDisplay amount={item.val} /> : item.val}
                   </p>
                 </div>
               ))}
@@ -561,7 +566,7 @@ export default function StockDetailPage({ params }: PageProps) {
                   About {stock.name}
                 </h3>
               </div>
-              
+
               {/* Company Info Grid */}
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
                 {/* Description */}
@@ -575,7 +580,7 @@ export default function StockDetailPage({ params }: PageProps) {
                     <p className="text-sm text-slate-400">No description available.</p>
                   )}
                 </div>
-                
+
                 {/* Company Details */}
                 <div>
                   <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">Company Details</h4>
@@ -585,7 +590,7 @@ export default function StockDetailPage({ params }: PageProps) {
                       { label: 'Industry', value: stock.industry },
                       { label: 'Exchange', value: stock.exchange },
                       { label: 'Currency', value: stock.currency },
-                      { label: '52W Range', value: stock.low52w && stock.high52w ? `$${formatNumber(stock.low52w)} - $${formatNumber(stock.high52w)}` : '-' },
+                      { label: '52W Range', value: stock.low52w && stock.high52w ? `${formatPrice(stock.low52w)} - ${formatPrice(stock.high52w)}` : '-' },
                       { label: 'Shares Out', value: stock.sharesOutstanding ? formatLargeNumber(stock.sharesOutstanding) : '-' },
                       { label: 'Website', value: stock.website ? 'Available' : '-' },
                     ].map((item, i) => (
@@ -675,9 +680,8 @@ export default function StockDetailPage({ params }: PageProps) {
                     <button
                       key={p}
                       onClick={() => handlePeriodChange(p)}
-                      className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all whitespace-nowrap ${
-                        chartPeriod === p ? "bg-gray-900 dark:bg-emerald-600 text-white shadow-sm" : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-500"
-                      }`}
+                      className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all whitespace-nowrap ${chartPeriod === p ? "bg-gray-900 dark:bg-emerald-600 text-white shadow-sm" : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-500"
+                        }`}
                     >
                       {p}
                     </button>
@@ -691,9 +695,8 @@ export default function StockDetailPage({ params }: PageProps) {
                     <button
                       key={type.key}
                       onClick={() => setChartType(type.key)}
-                      className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-md transition-all whitespace-nowrap ${
-                        chartType === type.key ? "bg-blue-600 text-white shadow-sm" : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-500"
-                      }`}
+                      className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-md transition-all whitespace-nowrap ${chartType === type.key ? "bg-blue-600 text-white shadow-sm" : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-500"
+                        }`}
                     >
                       <type.icon className="h-3.5 w-3.5" />
                       <span>{type.label}</span>
@@ -721,11 +724,11 @@ export default function StockDetailPage({ params }: PageProps) {
 
       case 'history':
         return (
-          <HistoricalDataTable 
-            data={historicalData} 
+          <HistoricalDataTable
+            data={historicalData}
             symbol={symbol}
-            onDataUpdate={(newData) => setHistoricalData(newData)}
-            onLoadingChange={(loading) => setChartLoading(loading)}
+            onDataUpdate={(newData: HistoricalData[]) => setHistoricalData(newData)}
+            onLoadingChange={(loading: boolean) => setChartLoading(loading)}
           />
         );
 
@@ -779,15 +782,14 @@ export default function StockDetailPage({ params }: PageProps) {
             <div className="flex items-center gap-2">
               <button
                 onClick={toggleWatchlist}
-                className={`p-2 rounded-lg transition ${
-                  isWatchlisted 
-                    ? 'bg-blue-600 text-white' 
-                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
-                }`}
+                className={`p-2 rounded-lg transition ${isWatchlisted
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                  }`}
               >
                 <Star className="h-5 w-5" fill={isWatchlisted ? 'currentColor' : 'none'} />
               </button>
-              <button 
+              <button
                 onClick={() => router.push(`/stocks/comparison?stocks=${stock.symbol}`)}
                 className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg transition text-sm font-medium"
               >
@@ -803,14 +805,13 @@ export default function StockDetailPage({ params }: PageProps) {
               <span className="text-sm text-slate-500 dark:text-slate-400">{stock.exchange}</span>
             </div>
             <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">{stock.name}</p>
-            
+
             <div className="flex items-baseline gap-3">
               <span className="text-2xl font-bold text-slate-900 dark:text-white">
                 ${formatNumber(stock.price)}
               </span>
-              <div className={`flex items-center gap-1 text-sm font-semibold ${
-                isPositive ? 'text-emerald-600' : 'text-red-500'
-              }`}>
+              <div className={`flex items-center gap-1 text-sm font-semibold ${isPositive ? 'text-emerald-600' : 'text-red-500'
+                }`}>
                 {isPositive ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
                 <span>
                   {isPositive ? '+' : ''}{formatNumber(stock.change)} ({isPositive ? '+' : ''}{formatNumber(stock.changePercent)}%)
@@ -849,9 +850,8 @@ export default function StockDetailPage({ params }: PageProps) {
                 <span className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">
                   ${formatNumber(stock.price)}
                 </span>
-                <div className={`flex items-center gap-1 text-base sm:text-lg font-semibold ${
-                  isPositive ? 'text-emerald-600' : 'text-red-500'
-                }`}>
+                <div className={`flex items-center gap-1 text-base sm:text-lg font-semibold ${isPositive ? 'text-emerald-600' : 'text-red-500'
+                  }`}>
                   {isPositive ? <TrendingUp size={18} className="sm:w-5 sm:h-5" /> : <TrendingDown size={18} className="sm:w-5 sm:h-5" />}
                   <span>
                     {isPositive ? '+' : ''}{formatNumber(stock.change)} ({isPositive ? '+' : ''}{formatNumber(stock.changePercent)}%)
@@ -865,18 +865,17 @@ export default function StockDetailPage({ params }: PageProps) {
 
             {/* Right: Action Buttons */}
             <div className="flex gap-2">
-              <button 
+              <button
                 onClick={toggleWatchlist}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition text-sm font-medium ${
-                  isWatchlisted 
-                    ? 'bg-blue-600 hover:bg-blue-700 text-white' 
-                    : 'bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300'
-                }`}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition text-sm font-medium ${isWatchlisted
+                  ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                  : 'bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300'
+                  }`}
               >
                 <Star size={16} fill={isWatchlisted ? 'currentColor' : 'none'} />
                 Watchlist
               </button>
-              <button 
+              <button
                 onClick={() => router.push(`/stocks/comparison?stocks=${stock.symbol}`)}
                 className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg transition text-sm font-medium"
               >

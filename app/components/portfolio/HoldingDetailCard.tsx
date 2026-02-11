@@ -15,6 +15,7 @@ import {
     RadialLinearScale
 } from 'chart.js';
 import { Line, Pie, Bar } from 'react-chartjs-2';
+import { useCurrency } from '../../context/CurrencyContext';
 
 // Register Chart.js components
 ChartJS.register(
@@ -37,15 +38,16 @@ interface HoldingDetailCardProps {
     className?: string;
 }
 
-export default function HoldingDetailCard({ 
-    holding, 
-    portfolioName, 
-    marketData, 
+export default function HoldingDetailCard({
+    holding,
+    portfolioName,
+    marketData,
     transactions = [],
-    className = '' 
+    className = ''
 }: HoldingDetailCardProps) {
+    const { formatPrice } = useCurrency();
     const [showDetails, setShowDetails] = useState(false);
-    
+
     // Calculate additional metrics
     const totalCost = holding.avgCost * holding.shares;
     const totalValue = holding.totalValue || (holding.currentPrice * holding.shares);
@@ -53,13 +55,13 @@ export default function HoldingDetailCard({
     const gainPercent = totalCost > 0 ? (totalGain / totalCost) * 100 : 0;
     const dayChange = marketData?.dayChange || 0;
     const dayChangePercent = marketData?.dayChangePercent || 0;
-    
+
     // Generate mock historical data for charts
     const generateHistoricalData = () => {
         const days = 30;
         const data = [];
         const basePrice = holding.currentPrice || holding.avgCost;
-        
+
         for (let i = days; i >= 0; i--) {
             const randomChange = (Math.random() - 0.5) * 0.1;
             const price = basePrice * (1 + randomChange * (days - i) / days);
@@ -70,9 +72,9 @@ export default function HoldingDetailCard({
         }
         return data;
     };
-    
+
     const historicalData = generateHistoricalData();
-    
+
     // Chart data for price history
     const priceChartData = {
         labels: historicalData.map(d => d.date),
@@ -86,7 +88,7 @@ export default function HoldingDetailCard({
             }
         ]
     };
-    
+
     // Chart data for portfolio allocation
     const allocationData = {
         labels: [holding.symbol, 'Other Holdings'],
@@ -105,7 +107,7 @@ export default function HoldingDetailCard({
             }
         ]
     };
-    
+
     // Chart options
     const chartOptions = {
         responsive: true,
@@ -119,14 +121,14 @@ export default function HoldingDetailCard({
             y: {
                 beginAtZero: false,
                 ticks: {
-                    callback: function(value: any) {
-                        return '$' + value.toFixed(2);
+                    callback: function (value: any) {
+                        return formatPrice(value);
                     }
                 }
             }
         }
     };
-    
+
     const pieOptions = {
         responsive: true,
         maintainAspectRatio: false,
@@ -162,7 +164,7 @@ export default function HoldingDetailCard({
                     </button>
                 </div>
             </div>
-            
+
             {/* Key Metrics */}
             <div className="p-6">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -172,15 +174,14 @@ export default function HoldingDetailCard({
                             <span className="text-sm text-blue-600 font-semibold">Current Price</span>
                         </div>
                         <div className="text-2xl font-bold text-slate-900 dark:text-pearto-luna transition-colors duration-300">
-                            ${holding.currentPrice?.toFixed(2) || '0.00'}
+                            {formatPrice(holding.currentPrice || 0)}
                         </div>
-                        <div className={`text-sm font-semibold mt-1 ${
-                            dayChange >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
-                        }`}>
+                        <div className={`text-sm font-semibold mt-1 ${dayChange >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
+                            }`}>
                             {dayChange >= 0 ? '+' : ''}{dayChange.toFixed(2)} ({dayChangePercent >= 0 ? '+' : ''}{dayChangePercent.toFixed(2)}%)
                         </div>
                     </div>
-                    
+
                     <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-4 border border-purple-200">
                         <div className="flex items-center gap-2 mb-2">
                             <BarChart3 className="h-5 w-5 text-purple-600" />
@@ -190,48 +191,44 @@ export default function HoldingDetailCard({
                             {holding.shares.toLocaleString()}
                         </div>
                         <div className="text-sm text-slate-600 dark:text-pearto-cloud mt-1 transition-colors duration-300">
-                            Avg Cost: ${holding.avgCost?.toFixed(2) || '0.00'}
+                            Avg Cost: {formatPrice(holding.avgCost || 0)}
                         </div>
                     </div>
-                    
+
                     <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl p-4 border border-emerald-200">
                         <div className="flex items-center gap-2 mb-2">
                             <TrendingUp className="h-5 w-5 text-emerald-600 dark:text-pearto-green transition-colors duration-300" />
                             <span className="text-sm text-emerald-600 dark:text-pearto-green font-semibold transition-colors duration-300">Total Value</span>
                         </div>
                         <div className="text-2xl font-bold text-slate-900 dark:text-pearto-luna transition-colors duration-300">
-                            ${totalValue.toFixed(2)}
+                            {formatPrice(totalValue)}
                         </div>
                         <div className="text-sm text-slate-600 dark:text-pearto-cloud mt-1 transition-colors duration-300">
-                            Cost: ${totalCost.toFixed(2)}
+                            Cost: {formatPrice(totalCost)}
                         </div>
                     </div>
-                    
-                    <div className={`rounded-xl p-4 border ${
-                        totalGain >= 0 
-                            ? 'bg-gradient-to-br from-green-50 to-green-100 border-green-200' 
+
+                    <div className={`rounded-xl p-4 border ${totalGain >= 0
+                            ? 'bg-gradient-to-br from-green-50 to-green-100 border-green-200'
                             : 'bg-gradient-to-br from-red-50 to-red-100 border-red-200'
-                    }`}>
+                        }`}>
                         <div className="flex items-center gap-2 mb-2">
                             {totalGain >= 0 ? <TrendingUp className="h-5 w-5 text-green-600 dark:text-pearto-green transition-colors duration-300" /> : <TrendingDown className="h-5 w-5 text-red-600 dark:text-pearto-pink transition-colors duration-300" />}
-                            <span className={`text-sm font-semibold ${
-                                totalGain >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
-                            }`}>Total Gain</span>
+                            <span className={`text-sm font-semibold ${totalGain >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
+                                }`}>Total Gain</span>
                         </div>
-                        <div className={`text-2xl font-bold ${
-                            totalGain >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
-                        }`}>
-                            {totalGain >= 0 ? '+' : ''}${totalGain.toFixed(2)}
+                        <div className={`text-2xl font-bold ${totalGain >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
+                            }`}>
+                            {totalGain >= 0 ? '+' : ''}{formatPrice(Math.abs(totalGain))}
                         </div>
-                        <div className={`text-sm font-semibold mt-1 ${
-                            totalGain >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
-                        }`}>
+                        <div className={`text-sm font-semibold mt-1 ${totalGain >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
+                            }`}>
                             ({gainPercent >= 0 ? '+' : ''}{gainPercent.toFixed(2)}%)
                         </div>
                     </div>
                 </div>
             </div>
-            
+
             {/* Detailed Information */}
             {showDetails && (
                 <div className="border-t border-slate-100 bg-gradient-to-br from-slate-50 to-slate-100">
@@ -252,7 +249,7 @@ export default function HoldingDetailCard({
                                     <Line data={priceChartData} options={chartOptions} />
                                 </div>
                             </div>
-                            
+
                             {/* Portfolio Allocation */}
                             <div className="bg-white dark:bg-pearto-card rounded-xl p-6 shadow-sm border border-slate-200 dark:border-pearto-border transition-colors duration-300">
                                 <h5 className="text-base font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -265,7 +262,7 @@ export default function HoldingDetailCard({
                             </div>
                         </div>
                     </div>
-                    
+
                     {/* Additional Details */}
                     <div className="p-6 border-t border-slate-200 dark:border-pearto-border bg-white dark:bg-pearto-card transition-colors duration-300">
                         <h4 className="text-xl font-bold text-slate-900 dark:text-pearto-luna mb-6 flex items-center gap-2 transition-colors duration-300">
@@ -283,13 +280,13 @@ export default function HoldingDetailCard({
                                     <div className="flex justify-between items-center p-3 bg-white dark:bg-pearto-card rounded-lg transition-colors duration-300">
                                         <span className="text-sm font-medium text-slate-600 dark:text-pearto-cloud transition-colors duration-300">52W High:</span>
                                         <span className="font-bold text-slate-900 dark:text-pearto-luna transition-colors duration-300">
-                                            ${marketData?.high52w?.toFixed(2) || 'N/A'}
+                                            {marketData?.high52w ? formatPrice(marketData.high52w) : 'N/A'}
                                         </span>
                                     </div>
                                     <div className="flex justify-between items-center p-3 bg-white dark:bg-pearto-card rounded-lg transition-colors duration-300">
                                         <span className="text-sm font-medium text-slate-600 dark:text-pearto-cloud transition-colors duration-300">52W Low:</span>
                                         <span className="font-bold text-slate-900 dark:text-pearto-luna transition-colors duration-300">
-                                            ${marketData?.low52w?.toFixed(2) || 'N/A'}
+                                            {marketData?.low52w ? formatPrice(marketData.low52w) : 'N/A'}
                                         </span>
                                     </div>
                                     <div className="flex justify-between items-center p-3 bg-white dark:bg-pearto-card rounded-lg transition-colors duration-300">
@@ -301,8 +298,8 @@ export default function HoldingDetailCard({
                                     <div className="flex justify-between items-center p-3 bg-white dark:bg-pearto-card rounded-lg transition-colors duration-300">
                                         <span className="text-sm font-medium text-slate-600 dark:text-pearto-cloud transition-colors duration-300">Market Cap:</span>
                                         <span className="font-bold text-slate-900 dark:text-pearto-luna transition-colors duration-300">
-                                            {marketData?.marketCap ? 
-                                                `$${(marketData.marketCap / 1000000000).toFixed(1)}B` : 
+                                            {marketData?.marketCap ?
+                                                formatPrice(marketData.marketCap / 1000000000) + 'B' :
                                                 'N/A'
                                             }
                                         </span>
@@ -315,7 +312,7 @@ export default function HoldingDetailCard({
                                     </div>
                                 </div>
                             </div>
-                            
+
                             {/* Investment Metrics */}
                             <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-200">
                                 <h5 className="text-base font-semibold text-purple-800 mb-4 flex items-center gap-2">
@@ -331,9 +328,8 @@ export default function HoldingDetailCard({
                                     </div>
                                     <div className="flex justify-between items-center p-3 bg-white dark:bg-pearto-card rounded-lg transition-colors duration-300">
                                         <span className="text-sm font-medium text-slate-600 dark:text-pearto-cloud transition-colors duration-300">Daily Return:</span>
-                                        <span className={`font-bold ${
-                                            dayChange >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
-                                        }`}>
+                                        <span className={`font-bold ${dayChange >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
+                                            }`}>
                                             {dayChange >= 0 ? '+' : ''}{dayChange.toFixed(2)}%
                                         </span>
                                     </div>
@@ -351,7 +347,7 @@ export default function HoldingDetailCard({
                                     </div>
                                 </div>
                             </div>
-                            
+
                             {/* Transaction Summary */}
                             <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl p-6 border border-emerald-200">
                                 <h5 className="text-base font-semibold text-emerald-800 mb-4 flex items-center gap-2">
@@ -368,8 +364,8 @@ export default function HoldingDetailCard({
                                     <div className="flex justify-between items-center p-3 bg-white dark:bg-pearto-card rounded-lg transition-colors duration-300">
                                         <span className="text-sm font-medium text-slate-600 dark:text-pearto-cloud transition-colors duration-300">First Purchase:</span>
                                         <span className="font-bold text-slate-900 dark:text-pearto-luna transition-colors duration-300">
-                                            {transactions.length > 0 ? 
-                                                new Date(transactions[0].date).toLocaleDateString() : 
+                                            {transactions.length > 0 ?
+                                                new Date(transactions[0].date).toLocaleDateString() :
                                                 'N/A'
                                             }
                                         </span>
@@ -377,8 +373,8 @@ export default function HoldingDetailCard({
                                     <div className="flex justify-between items-center p-3 bg-white dark:bg-pearto-card rounded-lg transition-colors duration-300">
                                         <span className="text-sm font-medium text-slate-600 dark:text-pearto-cloud transition-colors duration-300">Last Transaction:</span>
                                         <span className="font-bold text-slate-900 dark:text-pearto-luna transition-colors duration-300">
-                                            {transactions.length > 0 ? 
-                                                new Date(transactions[transactions.length - 1].date).toLocaleDateString() : 
+                                            {transactions.length > 0 ?
+                                                new Date(transactions[transactions.length - 1].date).toLocaleDateString() :
                                                 'N/A'
                                             }
                                         </span>

@@ -5,22 +5,22 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import {
-  Search, 
-  TrendingUp, 
-  TrendingDown, 
-  Activity, 
-  DollarSign, 
-  Star, 
-  ArrowUpDown, 
-  X, 
+  Search,
+  TrendingUp,
+  TrendingDown,
+  Activity,
+  DollarSign,
+  Star,
+  ArrowUpDown,
+  X,
   Plus,
   Brain,
   Maximize2,
   Minimize2,
   BarChart3,
-  Users, 
-  Zap, 
-  LineChart, 
+  Users,
+  Zap,
+  LineChart,
   Download
 } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -29,6 +29,8 @@ import { Stock, HistoricalData } from '../../types';
 import StockChart from '../../components/StockChart';
 import MultiStockChart from '../../components/MultiStockChart';
 import AIAnalysisPanel from '../../components/ai/AIAnalysisPanel';
+import { useCurrency } from '../../context/CurrencyContext';
+import PriceDisplay from '../../components/common/PriceDisplay';
 
 interface ComparisonStock extends Stock {
   color: string;
@@ -57,6 +59,8 @@ export default function StockComparison() {
   const [isAIPanelOpen, setIsAIPanelOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
+  const { formatPrice, currency } = useCurrency();
+
   const periods = ['1D', '5D', '1M', '3M', '6M', '1Y'];
 
   const categories = [
@@ -67,7 +71,10 @@ export default function StockComparison() {
     { key: 'trading', label: 'Trading Data', icon: Zap }
   ];
 
-  const formatPrice = (price: number) => `$${price.toFixed(2)}`;
+
+  // formatPrice from context is used for string formatting (export etc)
+  // For UI, we use PriceDisplay component where possible
+
   const formatNumber = (num: number | undefined | null, decimals = 2): string => {
     if (num == null) return '-';
     return num.toLocaleString(undefined, {
@@ -134,7 +141,7 @@ export default function StockComparison() {
       const stocksParam = searchParams.get('stocks');
       if (stocksParam) {
         const stockSymbols = stocksParam.split('.').filter(symbol => symbol.trim());
-        
+
         if (stockSymbols.length > 0 && stockSymbols.length <= 5) {
           try {
             setLoading(true);
@@ -175,19 +182,19 @@ export default function StockComparison() {
             });
 
             const validStocks = (await Promise.all(stockPromises)).filter(stock => stock !== null);
-            
+
             if (validStocks.length > 0) {
               // Assign colors to stocks
               const stocksWithColors = validStocks.map((stock, index) => ({
                 ...stock,
                 color: STOCK_COLORS[index]
               }));
-              
+
               setComparedStocks(stocksWithColors);
-              
+
               // Load historical data for all stocks
               await loadHistoricalData(stocksWithColors, chartPeriod);
-              
+
               toast.success(`Loaded ${stocksWithColors.length} stocks for comparison`);
             }
           } catch (error) {
@@ -250,14 +257,14 @@ export default function StockComparison() {
   // For other periods, uses daily data (1d interval)
   const loadHistoricalData = async (stocks: ComparisonStock[], period: string) => {
     if (stocks.length === 0) return;
-    
+
     try {
       setChartLoading(true);
       const periodMap: Record<string, string> = {
         '1D': '1d', '5D': '5d', '1M': '1mo', '3M': '3mo', '6M': '6mo', '1Y': '1y'
       };
       const mappedPeriod = periodMap[period] || '1mo';
-      
+
       // Use minute interval for 1D period, daily interval for others
       const interval = period === '1D' ? '1m' : '1d';
 
@@ -266,7 +273,7 @@ export default function StockComparison() {
           try {
             // Fetch data from backend API with appropriate interval
             const historyResponse = await marketService.getStockHistory(stock.symbol, mappedPeriod, interval);
-            
+
             if ((historyResponse as any)?.data && Array.isArray((historyResponse as any).data)) {
               // Transform data and ensure proper date formatting for minute-wise data
               const transformedData: HistoricalData[] = (historyResponse as any).data
@@ -282,7 +289,7 @@ export default function StockComparison() {
                   // Sort by date to ensure chronological order (important for minute data)
                   return new Date(a.date).getTime() - new Date(b.date).getTime();
                 });
-              
+
               return { ...stock, historicalData: transformedData };
             }
             return stock;
@@ -318,7 +325,7 @@ export default function StockComparison() {
       setLoading(true);
       // Get full stock profile
       const profileResponse = await marketService.getStockProfile(stock.symbol);
-      
+
       if (profileResponse) {
         const apiResponse = profileResponse as any;
         const fullStock: ComparisonStock = {
@@ -352,10 +359,10 @@ export default function StockComparison() {
 
         const newStocks = [...comparedStocks, fullStock];
         setComparedStocks(newStocks);
-        
+
         // Load historical data for all stocks
         await loadHistoricalData(newStocks, chartPeriod);
-        
+
         setSearchTerm('');
         setSearchResults([]);
         toast.success(`${stock.symbol} added to comparison`);
@@ -396,10 +403,10 @@ export default function StockComparison() {
 
   const exportToCSV = () => {
     if (comparedStocks.length === 0) return;
-    
+
     const headers = ['Metric', ...comparedStocks.map(s => s.symbol)];
     const metrics = getMetricsForExport();
-    
+
     const csvContent = [
       headers.join(','),
       ...metrics.map(metric => [
@@ -410,7 +417,7 @@ export default function StockComparison() {
         })
       ].join(','))
     ].join('\n');
-    
+
     const blob = new Blob([csvContent], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -441,7 +448,7 @@ export default function StockComparison() {
 
   const formatValueForExport = (value: any, format: string) => {
     if (value == null || value === undefined) return '';
-    
+
     switch (format) {
       case 'currency':
         return Number(value).toFixed(2);
@@ -517,10 +524,10 @@ export default function StockComparison() {
 
     const formatValue = (value: any, format: string) => {
       if (value == null || value === undefined) return '-';
-      
+
       switch (format) {
         case 'currency':
-          return formatPrice(Number(value));
+          return <PriceDisplay amount={Number(value)} />;
         case 'percentage':
           return `${Number(value).toFixed(2)}%`;
         case 'number':
@@ -557,8 +564,8 @@ export default function StockComparison() {
                 <th key={stock.symbol} className="text-center py-2 px-3">
                   <div className="flex flex-col items-center space-y-0.5">
                     <div className="flex items-center gap-2">
-                      <div 
-                        className="w-4 h-4 rounded-full shadow-md dark:shadow-pearto-border border-2 border-white" 
+                      <div
+                        className="w-4 h-4 rounded-full shadow-md dark:shadow-pearto-border border-2 border-white"
                         style={{ backgroundColor: stock.color }}
                       />
                       <Link href={`/stock/${stock.symbol.toLowerCase()}`} className="text-sm font-semibold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna hover:text-blue-600 dark:text-pearto-green dark:hover:text-pearto-green transition-colors">
@@ -566,11 +573,10 @@ export default function StockComparison() {
                       </Link>
                     </div>
                     <span className="text-xs text-gray-500 dark:text-pearto-gray dark:text-pearto-gray text-center truncate max-w-20">{stock.name}</span>
-                    <div className={`text-xs px-2 py-1 rounded-full font-medium ${
-                      stock.changePercent >= 0 
-                        ? 'bg-green-50 dark:bg-pearto-green/10 text-green-700 dark:text-pearto-green border border-green-200 dark:border-pearto-green/30' 
-                        : 'bg-red-50 dark:bg-pearto-pink/10 text-red-700 dark:text-pearto-pink border border-red-200 dark:border-pearto-pink/30'
-                    }`}>
+                    <div className={`text-xs px-2 py-1 rounded-full font-medium ${stock.changePercent >= 0
+                      ? 'bg-green-50 dark:bg-pearto-green/10 text-green-700 dark:text-pearto-green border border-green-200 dark:border-pearto-green/30'
+                      : 'bg-red-50 dark:bg-pearto-pink/10 text-red-700 dark:text-pearto-pink border border-red-200 dark:border-pearto-pink/30'
+                      }`}>
                       {stock.changePercent >= 0 ? '+' : ''}{stock.changePercent.toFixed(2)}%
                     </div>
                   </div>
@@ -585,11 +591,10 @@ export default function StockComparison() {
               const numValues = values.filter(v => v != null && v !== undefined && !isNaN(Number(v))).map(Number);
               const maxValue = numValues.length > 0 ? Math.max(...numValues) : 0;
               const minValue = numValues.length > 0 ? Math.min(...numValues) : 0;
-              
+
               return (
-                <tr key={metric.key} className={`hover:bg-gray-50 dark:hover:bg-pearto-surface dark:hover:bg-pearto-surface transition-colors ${
-                  index % 2 === 0 ? 'bg-white dark:bg-pearto-card' : 'bg-gray-50/50 dark:bg-pearto-surface/50'
-                }`}>
+                <tr key={metric.key} className={`hover:bg-gray-50 dark:hover:bg-pearto-surface dark:hover:bg-pearto-surface transition-colors ${index % 2 === 0 ? 'bg-white dark:bg-pearto-card' : 'bg-gray-50/50 dark:bg-pearto-surface/50'
+                  }`}>
                   <td className="py-2 px-3 font-medium text-gray-700 dark:text-pearto-cloud dark:text-pearto-cloud">
                     <button
                       onClick={() => handleSort(metric.key)}
@@ -607,7 +612,7 @@ export default function StockComparison() {
                     const isNegative = metric.format === 'percentage' && numValue < 0;
                     const isBest = shouldHighlight && numValue === maxValue && numValue > 0;
                     const isWorst = shouldHighlight && numValue === minValue && numValue > 0;
-                    
+
                     let cellClass = 'font-medium text-sm py-1 px-3 text-center ';
                     if (metric.key === 'change' || metric.key === 'changePercent') {
                       cellClass += isNegative ? 'text-red-600 dark:text-pearto-pink' : 'text-green-600 dark:text-pearto-green';
@@ -618,7 +623,7 @@ export default function StockComparison() {
                     } else {
                       cellClass += 'text-gray-700 dark:text-pearto-cloud';
                     }
-                    
+
                     return (
                       <td key={`${stock.symbol}-${metric.key}`} className={cellClass}>
                         <div className="flex items-center justify-center">
@@ -642,7 +647,7 @@ export default function StockComparison() {
     if (comparedStocks.length === 0) return null;
 
     const stocksWithData = comparedStocks.filter(stock => stock.historicalData && stock.historicalData.length > 0);
-    
+
     if (stocksWithData.length === 0) {
       return (
         <div className="bg-white dark:bg-pearto-card rounded-lg p-6 shadow-sm dark:shadow-pearto-border border border-gray-200 dark:border-pearto-border">
@@ -671,24 +676,22 @@ export default function StockComparison() {
                     // Clear loading after a short delay since chart type change doesn't require data fetching
                     setTimeout(() => setChartLoading(false), 500);
                   }}
-                  className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
-                    chartType === type.key ? "bg-white dark:bg-pearto-card text-gray-900 dark:text-pearto-luna shadow-sm dark:shadow-pearto-border" : "text-gray-600 dark:text-pearto-cloud hover:text-gray-900 dark:hover:text-pearto-luna"
-                  }`}
+                  className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${chartType === type.key ? "bg-white dark:bg-pearto-card text-gray-900 dark:text-pearto-luna shadow-sm dark:shadow-pearto-border" : "text-gray-600 dark:text-pearto-cloud hover:text-gray-900 dark:hover:text-pearto-luna"
+                    }`}
                 >
                   {type.label}
                 </button>
               ))}
             </div>
-            
+
             {/* Period Selector */}
             <div className="flex bg-gray-100 dark:bg-pearto-surface rounded-lg p-0.5">
               {periods.map((period) => (
                 <button
                   key={period}
                   onClick={() => handlePeriodChange(period)}
-                  className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
-                    chartPeriod === period ? "bg-white dark:bg-pearto-card text-gray-900 dark:text-pearto-luna shadow-sm dark:shadow-pearto-border" : "text-gray-600 dark:text-pearto-cloud hover:text-gray-900 dark:hover:text-pearto-luna"
-                  }`}
+                  className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${chartPeriod === period ? "bg-white dark:bg-pearto-card text-gray-900 dark:text-pearto-luna shadow-sm dark:shadow-pearto-border" : "text-gray-600 dark:text-pearto-cloud hover:text-gray-900 dark:hover:text-pearto-luna"
+                    }`}
                 >
                   {period}
                 </button>
@@ -713,13 +716,12 @@ export default function StockComparison() {
               const isPositive = stock.change >= 0;
               const color = index === 0 ? '#16a34a' : stock.color;
               return (
-                <div key={stock.symbol} className={`bg-white dark:bg-pearto-card rounded-lg p-3 border-2 shadow-sm dark:shadow-pearto-border transition-all hover:shadow-md ${
-                  isPositive ? 'border-green-200 dark:border-pearto-green/30 bg-gradient-to-br from-green-50 to-white dark:from-pearto-green/10 dark:to-pearto-card' : 'border-red-200 dark:border-pearto-pink/30 bg-gradient-to-br from-red-50 to-white dark:from-pearto-pink/10 dark:to-pearto-card'
-                }`}>
+                <div key={stock.symbol} className={`bg-white dark:bg-pearto-card rounded-lg p-3 border-2 shadow-sm dark:shadow-pearto-border transition-all hover:shadow-md ${isPositive ? 'border-green-200 dark:border-pearto-green/30 bg-gradient-to-br from-green-50 to-white dark:from-pearto-green/10 dark:to-pearto-card' : 'border-red-200 dark:border-pearto-pink/30 bg-gradient-to-br from-red-50 to-white dark:from-pearto-pink/10 dark:to-pearto-card'
+                  }`}>
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
-                      <div 
-                        className="w-4 h-4 rounded-full shadow-md dark:shadow-pearto-border border-2 border-white dark:border-pearto-card" 
+                      <div
+                        className="w-4 h-4 rounded-full shadow-md dark:shadow-pearto-border border-2 border-white dark:border-pearto-card"
                         style={{ backgroundColor: color }}
                       />
                       <Link href={`/stock/${stock.symbol.toLowerCase()}`} className="text-sm font-bold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna hover:text-blue-600 dark:text-pearto-green dark:hover:text-pearto-green hover:underline dark:hover:text-pearto-green">
@@ -736,15 +738,13 @@ export default function StockComparison() {
                   <div className="space-y-1">
                     <div className="flex justify-between items-center">
                       <span className="text-xs text-gray-600 dark:text-pearto-cloud dark:text-pearto-cloud">Price</span>
-                      <span className="text-sm font-semibold dark:text-pearto-luna">{formatPrice(stock.price)}</span>
+                      <PriceDisplay amount={stock.price} className="text-sm font-semibold dark:text-pearto-luna" />
                     </div>
-                    <div className={`flex justify-between items-center p-1 rounded ${
-                      isPositive ? 'bg-green-100 dark:bg-pearto-green/20 dark:bg-pearto-green/20' : 'bg-red-100 dark:bg-pearto-pink/20 dark:bg-pearto-pink/20'
-                    }`}>
-                      <span className="text-xs text-gray-700 dark:text-pearto-cloud dark:text-pearto-cloud">Change</span>
-                      <span className={`text-sm font-bold ${
-                        isPositive ? 'text-green-700 dark:text-pearto-green' : 'text-red-700 dark:text-pearto-pink'
+                    <div className={`flex justify-between items-center p-1 rounded ${isPositive ? 'bg-green-100 dark:bg-pearto-green/20 dark:bg-pearto-green/20' : 'bg-red-100 dark:bg-pearto-pink/20 dark:bg-pearto-pink/20'
                       }`}>
+                      <span className="text-xs text-gray-700 dark:text-pearto-cloud dark:text-pearto-cloud">Change</span>
+                      <span className={`text-sm font-bold ${isPositive ? 'text-green-700 dark:text-pearto-green' : 'text-red-700 dark:text-pearto-pink'
+                        }`}>
                         {isPositive ? '+' : ''}{stock.changePercent.toFixed(2)}%
                       </span>
                     </div>
@@ -753,7 +753,7 @@ export default function StockComparison() {
               );
             })}
           </div>
-          
+
           {/* Fullscreen Button */}
           <button
             onClick={enterFullscreen}
@@ -765,22 +765,20 @@ export default function StockComparison() {
         </div>
 
         {/* Chart Container */}
-        <div 
-          id="chart-container" 
-          className={`relative bg-gray-50 dark:bg-pearto-blockchain ${
-            isFullscreen 
-              ? 'fixed inset-0 w-screen h-screen z-[9999] overflow-hidden' 
-              : 'h-[32rem] rounded-lg p-3'
-          }`}
+        <div
+          id="chart-container"
+          className={`relative bg-gray-50 dark:bg-pearto-blockchain ${isFullscreen
+            ? 'fixed inset-0 w-screen h-screen z-[9999] overflow-hidden'
+            : 'h-[32rem] rounded-lg p-3'
+            }`}
         >
           {chartLoading && (
-            <div className={`absolute inset-0 flex items-center justify-center bg-white/50 dark:bg-pearto-blockchain/50 z-10 ${
-              isFullscreen ? '' : 'rounded-lg'
-            }`}>
+            <div className={`absolute inset-0 flex items-center justify-center bg-white/50 dark:bg-pearto-blockchain/50 z-10 ${isFullscreen ? '' : 'rounded-lg'
+              }`}>
               <Activity className="h-6 w-6 text-blue-600 dark:text-pearto-green animate-spin" />
             </div>
           )}
-          
+
           {/* Fullscreen Close Button - Only visible in fullscreen */}
           {isFullscreen && (
             <button
@@ -791,7 +789,7 @@ export default function StockComparison() {
               <Minimize2 className="h-6 w-6 text-gray-700 dark:text-pearto-cloud" />
             </button>
           )}
-          
+
           {/* Fullscreen Controls - Only visible in fullscreen */}
           {isFullscreen && (
             <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-[10000] flex items-center gap-3 bg-white dark:bg-pearto-card/95 backdrop-blur-sm rounded-full shadow-xl dark:shadow-pearto-border px-6 py-3">
@@ -832,7 +830,7 @@ export default function StockComparison() {
               </div>
             </div>
           )}
-          
+
           <div className={`w-full h-full ${isFullscreen ? 'absolute inset-0' : ''}`}>
             <MultiStockChart
               stocks={stocksWithData.map(stock => ({
@@ -922,10 +920,9 @@ export default function StockComparison() {
                     </div>
                     <div className="flex items-center space-x-2">
                       <div className="text-right">
-                        <p className="text-xs font-semibold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna">{formatPrice(stock.price)}</p>
-                        <p className={`text-xs font-medium ${
-                          stock.change >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
-                        }`}>
+                        <PriceDisplay amount={stock.price} className="text-xs font-semibold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna" />
+                        <p className={`text-xs font-medium ${stock.change >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
+                          }`}>
                           {stock.change >= 0 ? '+' : ''}{stock.changePercent.toFixed(2)}%
                         </p>
                       </div>
@@ -990,7 +987,7 @@ export default function StockComparison() {
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                       {/* Best Performer */}
                       {(() => {
-                        const bestPerformer = comparedStocks.reduce((best, current) => 
+                        const bestPerformer = comparedStocks.reduce((best, current) =>
                           current.changePercent > best.changePercent ? current : best
                         );
                         return (
@@ -1004,10 +1001,10 @@ export default function StockComparison() {
                           </div>
                         );
                       })()}
-                      
+
                       {/* Worst Performer */}
                       {(() => {
-                        const worstPerformer = comparedStocks.reduce((worst, current) => 
+                        const worstPerformer = comparedStocks.reduce((worst, current) =>
                           current.changePercent < worst.changePercent ? current : worst
                         );
                         return (
@@ -1021,10 +1018,10 @@ export default function StockComparison() {
                           </div>
                         );
                       })()}
-                      
+
                       {/* Highest Volume */}
                       {(() => {
-                        const highestVolume = comparedStocks.reduce((highest, current) => 
+                        const highestVolume = comparedStocks.reduce((highest, current) =>
                           (current.volume || 0) > (highest.volume || 0) ? current : highest
                         );
                         return (
@@ -1038,10 +1035,10 @@ export default function StockComparison() {
                           </div>
                         );
                       })()}
-                      
+
                       {/* Largest Market Cap */}
                       {(() => {
-                        const largestCap = comparedStocks.reduce((largest, current) => 
+                        const largestCap = comparedStocks.reduce((largest, current) =>
                           (current.marketCap || 0) > (largest.marketCap || 0) ? current : largest
                         );
                         return (
@@ -1075,8 +1072,8 @@ export default function StockComparison() {
                       <span className="text-xs text-gray-500 dark:text-pearto-gray dark:text-pearto-gray">Hover to scroll</span>
                     </div>
                   </div>
-                  
-                  <div 
+
+                  <div
                     className="overflow-x-auto scrollbar-hide"
                     onMouseEnter={(e) => {
                       const element = e.currentTarget;
@@ -1091,11 +1088,10 @@ export default function StockComparison() {
                           <button
                             key={category.key}
                             onClick={() => setActiveCategory(category.key)}
-                            className={`flex items-center gap-1 px-2 py-2 rounded-lg text-xs font-medium transition-all flex-shrink-0 min-w-fit ${
-                              isActive
-                                ? 'bg-gradient-to-r from-blue-600 to-purple-600 dark:from-pearto-green dark:to-pearto-green text-white shadow-sm dark:shadow-pearto-border scale-105'
-                                : 'bg-gradient-to-r from-gray-50 to-gray-100 dark:from-pearto-surface dark:to-pearto-surface text-gray-700 dark:text-pearto-cloud hover:from-gray-100 hover:to-gray-200 dark:hover:from-pearto-surface dark:hover:to-pearto-card border border-gray-200 dark:border-pearto-border'
-                            }`}
+                            className={`flex items-center gap-1 px-2 py-2 rounded-lg text-xs font-medium transition-all flex-shrink-0 min-w-fit ${isActive
+                              ? 'bg-gradient-to-r from-blue-600 to-purple-600 dark:from-pearto-green dark:to-pearto-green text-white shadow-sm dark:shadow-pearto-border scale-105'
+                              : 'bg-gradient-to-r from-gray-50 to-gray-100 dark:from-pearto-surface dark:to-pearto-surface text-gray-700 dark:text-pearto-cloud hover:from-gray-100 hover:to-gray-200 dark:hover:from-pearto-surface dark:hover:to-pearto-card border border-gray-200 dark:border-pearto-border'
+                              }`}
                           >
                             <Icon className={`h-3 w-3 ${isActive ? 'text-white' : 'text-gray-600 dark:text-pearto-cloud'}`} />
                             <span className="whitespace-nowrap">{category.label}</span>
@@ -1127,9 +1123,8 @@ export default function StockComparison() {
       </main>
 
       {/* Sliding AI Panel */}
-      <div className={`fixed top-0 right-0 h-full w-96 bg-white dark:bg-pearto-card shadow-2xl dark:shadow-pearto-border transform transition-transform duration-300 ease-in-out z-50 ${
-        isAIPanelOpen ? 'translate-x-0' : 'translate-x-full'
-      }`}>
+      <div className={`fixed top-0 right-0 h-full w-96 bg-white dark:bg-pearto-card shadow-2xl dark:shadow-pearto-border transform transition-transform duration-300 ease-in-out z-50 ${isAIPanelOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}>
         <div className="h-full flex flex-col">
           {/* AI Panel Header */}
           <div className="px-4 py-3 border-b border-gray-200 dark:border-pearto-border dark:border-pearto-border bg-gradient-to-r from-blue-50 to-purple-50 dark:from-pearto-surface dark:to-pearto-card">
@@ -1148,7 +1143,7 @@ export default function StockComparison() {
               </button>
             </div>
           </div>
-          
+
           {/* AI Panel Content */}
           <div className="flex-1 overflow-y-auto">
             <AIAnalysisPanel
@@ -1185,7 +1180,7 @@ export default function StockComparison() {
 
       {/* Overlay */}
       {isAIPanelOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black bg-opacity-50 dark:bg-pearto-blockchain dark:bg-opacity-80 z-40"
           onClick={() => setIsAIPanelOpen(false)}
         />

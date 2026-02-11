@@ -5,12 +5,14 @@ import { worldIndicesService, WorldIndex } from '../../utils/worldIndicesService
 import { cryptoService } from '../../utils/cryptoService';
 import { TrendingUp, TrendingDown, Globe, RefreshCcw } from 'lucide-react';
 import Link from 'next/link';
+import { useCurrency } from '../../context/CurrencyContext';
 
 interface WorldIndicesProps {
   className?: string;
 }
 
 export default function WorldIndices({ className = '' }: WorldIndicesProps) {
+  const { formatPrice } = useCurrency();
   const [indices, setIndices] = useState<{ americas: WorldIndex[]; europe: WorldIndex[]; asiaPacific: WorldIndex[]; crypto: any[] }>({
     americas: [],
     europe: [],
@@ -24,10 +26,10 @@ export default function WorldIndices({ className = '' }: WorldIndicesProps) {
     const fetchData = async () => {
       try {
         setLoading(true);
-        
+
         // Fetch world indices
         const worldData = await worldIndicesService.getWorldIndices();
-        
+
         // Fetch crypto data
         let cryptoData: any[] = [];
         try {
@@ -38,7 +40,7 @@ export default function WorldIndices({ className = '' }: WorldIndicesProps) {
         } catch (cryptoError) {
           console.error('Error fetching crypto data:', cryptoError);
         }
-        
+
         setIndices({
           americas: worldData.americas,
           europe: worldData.europe,
@@ -73,7 +75,7 @@ export default function WorldIndices({ className = '' }: WorldIndicesProps) {
   const renderTabContent = () => {
     const data = getTabData();
     console.log(`Rendering ${activeTab} tab with data:`, data); // Debug log
-    
+
     if (loading) {
       return (
         <div className="space-y-3">
@@ -104,7 +106,7 @@ export default function WorldIndices({ className = '' }: WorldIndicesProps) {
 
     const displayData = data.slice(0, 5);
     console.log(`Displaying ${displayData.length} items for ${activeTab}`); // Debug log
-    
+
     return (
       <div className="space-y-3">
         {activeTab === 'CRYPTO' && (
@@ -119,7 +121,7 @@ export default function WorldIndices({ className = '' }: WorldIndicesProps) {
           </div>
         )}
         <div className="space-y-3">
-          {activeTab === 'CRYPTO' 
+          {activeTab === 'CRYPTO'
             ? displayData.map(renderCryptoCard)
             : displayData.map(renderIndexCard)
           }
@@ -147,12 +149,12 @@ export default function WorldIndices({ className = '' }: WorldIndicesProps) {
   const renderCryptoCard = (crypto: any) => {
     console.log('Rendering crypto card:', crypto); // Debug log
     const cryptoSymbol = crypto.symbol?.toLowerCase() || crypto.id?.toLowerCase();
-    
+
     return (
       <div key={crypto.id || crypto.symbol} className="flex justify-between items-center p-3 bg-white dark:bg-pearto-card border border-gray-200 dark:border-pearto-border rounded-lg shadow-sm hover:shadow-md transition-shadow">
         <div className="flex-1">
           {cryptoSymbol ? (
-            <Link 
+            <Link
               href={`/crypto/${cryptoSymbol}`}
               className="text-left hover:text-emerald-600 dark:text-pearto-green transition-colors group block"
             >
@@ -173,12 +175,11 @@ export default function WorldIndices({ className = '' }: WorldIndicesProps) {
         </div>
         <div className="text-right">
           <div className="text-sm font-semibold text-gray-900 dark:text-pearto-luna transition-colors duration-300">
-            {crypto.current_price ? `$${crypto.current_price.toFixed(2)}` : 
-             crypto.price ? `$${crypto.price.toFixed(2)}` : '$0.00'}
+            {crypto.current_price ? formatPrice(crypto.current_price) :
+              crypto.price ? formatPrice(crypto.price) : formatPrice(0)}
           </div>
-          <div className={`text-xs font-medium flex items-center justify-end ${
-            (crypto.price_change_percentage_24h || crypto.changePercent) >= 0 ? 'text-emerald-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
-          }`}>
+          <div className={`text-xs font-medium flex items-center justify-end ${(crypto.price_change_percentage_24h || crypto.changePercent) >= 0 ? 'text-emerald-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
+            }`}>
             {(crypto.price_change_percentage_24h || crypto.changePercent) >= 0 ? <TrendingUp className="h-3 w-3 mr-1" /> : <TrendingDown className="h-3 w-3 mr-1" />}
             {(crypto.price_change_percentage_24h || crypto.changePercent) >= 0 ? '+' : ''}
             {(crypto.price_change_percentage_24h || crypto.changePercent)?.toFixed(2) || '0.00'}%
@@ -205,7 +206,7 @@ export default function WorldIndices({ className = '' }: WorldIndicesProps) {
           <span className="w-2 h-6 bg-emerald-600 dark:bg-pearto-pink rounded-full mr-3 transition-colors duration-300"></span>
           Quick Markets
         </h2>
-        <button 
+        <button
           onClick={() => window.location.reload()}
           className="p-2 text-gray-500 dark:text-pearto-gray hover:text-emerald-600 dark:text-pearto-green hover:bg-emerald-50 rounded-lg transition-colors"
         >
@@ -219,11 +220,10 @@ export default function WorldIndices({ className = '' }: WorldIndicesProps) {
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-              activeTab === tab
+            className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${activeTab === tab
                 ? 'bg-emerald-600 dark:bg-pearto-pink text-white'
                 : 'text-gray-600 dark:text-pearto-cloud hover:text-emerald-600 dark:text-pearto-green hover:bg-emerald-50'
-            }`}
+              }`}
           >
             {tab}
           </button>

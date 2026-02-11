@@ -135,9 +135,6 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
     : 'U';
 
 
-
-  // ... imports
-
   const [pillarsItems, setPillarsItems] = useState<any[]>([
     { label: 'Markets', href: `${mainAppUrl}/markets` },
     { label: 'Crypto', href: `${mainAppUrl}/crypto` },

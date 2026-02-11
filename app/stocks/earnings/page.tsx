@@ -16,7 +16,7 @@ import {
   Bell
 } from 'lucide-react';
 import Link from 'next/link';
-import { formatPrice } from '@/lib/utils';
+import { useCurrency } from '../../context/CurrencyContext';
 
 interface EarningsEvent {
   id: string;
@@ -77,6 +77,7 @@ const generateMockEarnings = (): EarningsEvent[] => {
 };
 
 export default function EarningsCalendar() {
+  const { formatPrice } = useCurrency();
   const [earnings, setEarnings] = useState<EarningsEvent[]>([]);
   const [selectedDate, setSelectedDate] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
@@ -299,10 +300,10 @@ export default function EarningsCalendar() {
                       </span>
                     </td>
                     <td className="py-4 px-6 text-right font-semibold text-gray-900">
-                      ${event.epsEstimate.toFixed(2)}
+                      {formatPrice(event.epsEstimate)}
                     </td>
                     <td className="py-4 px-6 text-right text-gray-600">
-                      ${event.previousEps?.toFixed(2) || 'N/A'}
+                      {event.previousEps !== undefined ? formatPrice(event.previousEps) : 'N/A'}
                     </td>
                     <td className="py-4 px-6 text-right text-gray-600">
                       ${event.revenueEstimate}
@@ -359,7 +360,7 @@ export default function EarningsCalendar() {
                 </div>
                 <p className="text-sm text-gray-500 mb-2">{result.name}</p>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">EPS: <span className="font-semibold text-gray-900">${result.eps}</span></span>
+                  <span className="text-gray-600">EPS: <span className="font-semibold text-gray-900">{formatPrice(result.eps)}</span></span>
                   <span className={result.beat ? 'text-green-600' : 'text-red-600'}>
                     {result.beat ? '+' : ''}{((result.eps - result.estimate) / result.estimate * 100).toFixed(1)}%
                   </span>

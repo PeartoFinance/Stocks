@@ -15,12 +15,14 @@ import {
 } from 'lucide-react';
 import { stockAPI } from '../utils/api';
 import { Stock, ScreenerFilters } from '../types';
-import { formatPrice, formatChange, formatNumber, formatVolume } from '@/lib/utils';
+import { formatChange, formatNumber, formatVolume } from '@/lib/utils';
+import { useCurrency } from '../context/CurrencyContext';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 import AIAnalysisPanel from '../components/ai/AIAnalysisPanel';
 
 export default function ScreenerPage() {
+  const { formatPrice } = useCurrency();
   const [stocks, setStocks] = useState<Stock[]>([]);
   const [filteredStocks, setFilteredStocks] = useState<Stock[]>([]);
   const [loading, setLoading] = useState(true);
@@ -545,7 +547,7 @@ export default function ScreenerPage() {
                   count: filteredStocks.length,
                   totalStocks: stocks.length,
                   criteria: {
-                    priceRange: `$${filters.minPrice || 0} - $${filters.maxPrice || 'Any'}`,
+                    priceRange: `${formatPrice(filters.minPrice || 0)} - ${filters.maxPrice === 10000 ? 'Any' : formatPrice(filters.maxPrice || 0)}`,
                     marketCap: filters.minMarketCap ? `>${(filters.minMarketCap / 1e9).toFixed(1)}B` : 'Any',
                     peRatio: filters.minPE ? `${filters.minPE}-${filters.maxPE}` : 'Any',
                     sectors: (filters.sectors && filters.sectors.length > 0) ? filters.sectors.join(', ') : 'All'

@@ -6,5 +6,6 @@ export { default as DividendsTab } from './DividendsTab';
 export { default as ProfileTab } from './ProfileTab';
 export { default as NewsTab } from './NewsTab';
 export { default as MetricsTab } from './MetricsTab';
+export { default as HistoricalDataTable } from './HistoricalDataTable';
 
 export type { TabId } from './StockTabs';

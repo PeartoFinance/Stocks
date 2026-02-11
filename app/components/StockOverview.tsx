@@ -1,24 +1,56 @@
 import React from "react";
 import { Stock } from "../types";
+import { useCurrency } from "../context/CurrencyContext";
+import PriceDisplay from "./common/PriceDisplay";
 
 interface StockOverviewProps {
   stock: Stock;
 }
 
 export default function StockOverview({ stock }: StockOverviewProps) {
-  const formatPrice = (price: number) => `$${price.toFixed(2)}`;
+  const { formatPrice } = useCurrency();
 
   const metrics = [
-    { label: "Market Cap", value: stock.marketCap ? `$${(stock.marketCap / 1e12).toFixed(2)}T` : "N/A" },
+    { label: "Market Cap", value: stock.marketCap ? formatPrice(stock.marketCap).replace(/[^0-9.,]/g, '') + (stock.marketCap >= 1e12 ? 'T' : (stock.marketCap >= 1e9 ? 'B' : 'M')) : "N/A" }, // Simplified for now, or just use formatPrice directly without T/B if formatPrice doesn't support it yet
+    // Actually formatPrice returns formatted string with symbol.
+    // Let's just use formatPrice for simple prices.
+    // For Market Cap, we might want to keep the T/B/M logic but add symbol.
+    // But formatPrice handles thousands separators.
+    {
+      label: "Market Cap",
+      value: stock.marketCap ? (
+        <span className="flex items-center gap-0.5">
+          <PriceDisplay
+            amount={stock.marketCap / (stock.marketCap >= 1e12 ? 1e12 : (stock.marketCap >= 1e9 ? 1e9 : 1e6))}
+            maximumFractionDigits={2}
+          />
+          {stock.marketCap >= 1e12 ? 'T' : (stock.marketCap >= 1e9 ? 'B' : 'M')}
+        </span>
+      ) : "N/A"
+    },
     { label: "Volume", value: stock.volume?.toLocaleString() || "N/A" },
-    { label: "Open", value: formatPrice(stock.price * 1.01) },
-    { label: "Previous Close", value: formatPrice(stock.price + stock.change) },
-    { label: "Day's Range", value: `${formatPrice(stock.price * 0.99)} - ${formatPrice(stock.price * 1.01)}` },
-    { label: "EPS (ttm)", value: stock.eps?.toFixed(2) || "7.46" },
-    { label: "PE Ratio", value: stock.peRatio?.toFixed(2) || "34.25" },
-    { label: "Beta", value: stock.beta?.toFixed(2) || "1.09" },
-    { label: "Dividend", value: stock.dividendYield ? `${stock.dividendYield.toFixed(2)}%` : "0.41%" },
-    { label: "52-Week Range", value: `${stock.low52Week ? formatPrice(stock.low52Week) : "N/A"} - ${stock.high52Week ? formatPrice(stock.high52Week) : "N/A"}` },
+    { label: "Open", value: stock.price ? <PriceDisplay amount={stock.price * 1.01} /> : "N/A" }, // Mock logic kept
+    { label: "Previous Close", value: stock.previousClose ? <PriceDisplay amount={stock.previousClose} /> : <PriceDisplay amount={stock.price - stock.change} /> },
+    {
+      label: "Day's Range",
+      value: (stock.dayLow || stock.price) && (stock.dayHigh || stock.price) ? (
+        <span className="flex items-center gap-1">
+          <PriceDisplay amount={stock.dayLow || stock.price * 0.99} /> - <PriceDisplay amount={stock.dayHigh || stock.price * 1.01} />
+        </span>
+      ) : "N/A"
+    },
+    { label: "EPS (ttm)", value: stock.eps ? <PriceDisplay amount={stock.eps} /> : "-" },
+    { label: "PE Ratio", value: stock.peRatio?.toFixed(2) || "-" },
+    { label: "Beta", value: stock.beta?.toFixed(2) || "-" },
+    { label: "Dividend", value: stock.dividendYield ? `${(stock.dividendYield * 100).toFixed(2)}%` : "-" },
+    {
+      label: "52-Week Range",
+      value: (stock.week52Low && stock.week52High) ? (
+        <span className="flex items-center gap-1">
+          <PriceDisplay amount={stock.week52Low} /> - <PriceDisplay amount={stock.week52High} />
+        </span>
+      ) : "N/A"
+    },
   ];
 
   return (

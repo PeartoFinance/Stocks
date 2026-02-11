@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { TrendingUp, TrendingDown, Target, Users, Calendar, Loader2 } from 'lucide-react';
 import { marketService } from '../../utils/marketService';
 import toast from 'react-hot-toast';
+import PriceDisplay from '../common/PriceDisplay';
 
 interface AnalystRecommendation {
   firm: string;
@@ -91,37 +92,37 @@ export default function ForecastTab({ symbol, currentPrice }: ForecastTabProps) 
           <Target className="h-5 w-5 text-blue-500" />
           Analyst Price Targets
         </h3>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           <div className="text-center p-4 bg-slate-50 dark:bg-slate-800 rounded-lg transition-colors duration-300">
             <p className="text-sm text-slate-500 dark:text-slate-400 mb-1 transition-colors duration-300">Current Price</p>
-            <p className="text-2xl font-bold text-slate-900 dark:text-white transition-colors duration-300">
-              ${(forecast.currentPrice || currentPrice).toFixed(2)}
-            </p>
+            <div className="text-2xl font-bold text-slate-900 dark:text-white transition-colors duration-300 flex justify-center">
+              <PriceDisplay amount={forecast.currentPrice || currentPrice} />
+            </div>
           </div>
           <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg transition-colors duration-300">
             <p className="text-sm text-green-600 dark:text-green-400 mb-1 transition-colors duration-300">Average Target</p>
-            <p className="text-2xl font-bold text-green-700 dark:text-green-300 transition-colors duration-300">
-              ${(forecast.targetMean || 0).toFixed(2)}
-            </p>
+            <div className="text-2xl font-bold text-green-700 dark:text-green-300 transition-colors duration-300 flex justify-center">
+              <PriceDisplay amount={forecast.targetMean || 0} />
+            </div>
             <p className="text-xs text-green-600 dark:text-green-400 transition-colors duration-300">
               {forecast.targetMean ? `${calculateUpside(forecast.targetMean, currentPrice) > 0 ? '+' : ''}${calculateUpside(forecast.targetMean, currentPrice).toFixed(1)}%` : '-'}
             </p>
           </div>
           <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg transition-colors duration-300">
             <p className="text-sm text-blue-600 dark:text-blue-400 mb-1 transition-colors duration-300">High Target</p>
-            <p className="text-2xl font-bold text-blue-700 dark:text-blue-300 transition-colors duration-300">
-              ${(forecast.targetHigh || 0).toFixed(2)}
-            </p>
+            <div className="text-2xl font-bold text-blue-700 dark:text-blue-300 transition-colors duration-300 flex justify-center">
+              <PriceDisplay amount={forecast.targetHigh || 0} />
+            </div>
             <p className="text-xs text-blue-600 dark:text-blue-400 transition-colors duration-300">
               {forecast.targetHigh ? `+${calculateUpside(forecast.targetHigh, currentPrice).toFixed(1)}%` : '-'}
             </p>
           </div>
           <div className="text-center p-4 bg-red-50 dark:bg-red-900/20 rounded-lg transition-colors duration-300">
             <p className="text-sm text-red-600 dark:text-red-400 mb-1 transition-colors duration-300">Low Target</p>
-            <p className="text-2xl font-bold text-red-700 dark:text-red-300 transition-colors duration-300">
-              ${(forecast.targetLow || 0).toFixed(2)}
-            </p>
+            <div className="text-2xl font-bold text-red-700 dark:text-red-300 transition-colors duration-300 flex justify-center">
+              <PriceDisplay amount={forecast.targetLow || 0} />
+            </div>
             <p className="text-xs text-red-600 dark:text-red-400 transition-colors duration-300">
               {forecast.targetLow ? `${calculateUpside(forecast.targetLow, currentPrice).toFixed(1)}%` : '-'}
             </p>
@@ -132,15 +133,15 @@ export default function ForecastTab({ symbol, currentPrice }: ForecastTabProps) 
         {forecast.targetLow && forecast.targetHigh && (
           <div className="relative">
             <div className="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden transition-colors duration-300">
-              <div 
+              <div
                 className="h-full bg-gradient-to-r from-red-400 via-yellow-400 to-green-400"
                 style={{ width: '100%' }}
               />
             </div>
             <div className="flex justify-between mt-2 text-xs text-slate-500 dark:text-slate-400 transition-colors duration-300">
-              <span>${forecast.targetLow.toFixed(0)}</span>
-              <span className="font-medium">Current: ${currentPrice.toFixed(0)}</span>
-              <span>${forecast.targetHigh.toFixed(0)}</span>
+              <span><PriceDisplay amount={forecast.targetLow} minimumFractionDigits={0} maximumFractionDigits={0} /></span>
+              <span className="font-medium flex gap-1">Current: <PriceDisplay amount={currentPrice} minimumFractionDigits={0} maximumFractionDigits={0} /></span>
+              <span><PriceDisplay amount={forecast.targetHigh} minimumFractionDigits={0} maximumFractionDigits={0} /></span>
             </div>
           </div>
         )}
@@ -153,7 +154,7 @@ export default function ForecastTab({ symbol, currentPrice }: ForecastTabProps) 
             <Users className="h-5 w-5 text-purple-500" />
             Recent Analyst Recommendations
           </h3>
-          
+
           <div className="space-y-4">
             {forecast.recommendations.slice(0, 5).map((rec, index) => (
               <div key={index} className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800 rounded-lg transition-colors duration-300">
@@ -168,7 +169,7 @@ export default function ForecastTab({ symbol, currentPrice }: ForecastTabProps) 
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center gap-4">
                   <span className={`px-3 py-1 rounded-full text-xs font-medium ${getRatingColor(rec.toGrade)}`}>
                     {rec.toGrade}
@@ -186,7 +187,7 @@ export default function ForecastTab({ symbol, currentPrice }: ForecastTabProps) 
         <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 transition-colors duration-300">
           Recommendation Summary
         </h3>
-        
+
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {[
             { label: 'Strong Buy', count: forecast.strongBuy, color: 'green' },
@@ -197,11 +198,11 @@ export default function ForecastTab({ symbol, currentPrice }: ForecastTabProps) 
           ].map((item) => {
             const total = forecast.strongBuy + forecast.buy + forecast.hold + forecast.sell + forecast.strongSell;
             const percentage = total > 0 ? (item.count / total) * 100 : 0;
-            
+
             return (
               <div key={item.label} className="text-center">
                 <div className={`w-full h-2 rounded-full mb-2 bg-${item.color}-100`}>
-                  <div 
+                  <div
                     className={`h-full rounded-full bg-${item.color}-500`}
                     style={{ width: `${percentage}%` }}
                   />

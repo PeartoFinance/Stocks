@@ -17,7 +17,8 @@ import {
   Brain,
   X
 } from 'lucide-react';
-import { formatPrice, formatNumber } from '@/lib/utils';
+import { formatNumber } from '@/lib/utils';
+import { useCurrency } from '../../context/CurrencyContext';
 import { cryptoService } from '../../utils/cryptoService';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
@@ -58,6 +59,7 @@ interface TrendingCryptoProps {
 }
 
 export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) {
+  const { formatPrice } = useCurrency();
   const formatPercentage = (value: number) => `${value.toFixed(2)}%`;
   const [cryptos, setCryptos] = useState<TrendingCrypto[]>([]);
   const [filteredCryptos, setFilteredCryptos] = useState<TrendingCrypto[]>([]);
@@ -79,7 +81,7 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
   const getCryptoCategory = (symbol: string, name: string): string => {
     const lowerName = name.toLowerCase();
     const lowerSymbol = symbol.toLowerCase();
-    
+
     if (lowerSymbol.includes('btc') || lowerName.includes('bitcoin')) return 'Layer 1';
     if (lowerSymbol.includes('eth') || lowerName.includes('ethereum')) return 'Layer 1';
     if (lowerName.includes('defi') || lowerSymbol.includes('uni') || lowerSymbol.includes('aave')) return 'DeFi';
@@ -88,7 +90,7 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
     if (lowerName.includes('privacy') || lowerSymbol.includes('xmr') || lowerSymbol.includes('zec')) return 'Privacy';
     if (lowerName.includes('gaming') || lowerName.includes('game') || lowerSymbol.includes('axs')) return 'Gaming';
     if (lowerName.includes('stable') || lowerSymbol.includes('usd') || lowerSymbol.includes('usdt')) return 'Stablecoin';
-    
+
     return 'Other';
   };
 
@@ -368,13 +370,13 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
                   <span className="text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">Most Mentioned</span>
                 </div>
                 <p className="text-sm font-bold text-gray-900 dark:text-pearto-luna truncate transition-colors duration-300">
-                  {filteredCryptos.length > 0 ? filteredCryptos.reduce((max, crypto) => 
+                  {filteredCryptos.length > 0 ? filteredCryptos.reduce((max, crypto) =>
                     crypto.socialMentions > (max?.socialMentions || 0) ? crypto : max, filteredCryptos[0])?.symbol || 'N/A' : 'N/A'}
                 </p>
                 <p className="text-xs text-orange-600 font-medium">
-                  {filteredCryptos.length > 0 ? 
-                    `${filteredCryptos.reduce((max, crypto) => 
-                      crypto.socialMentions > (max?.socialMentions || 0) ? crypto : max, filteredCryptos[0])?.socialMentions || 0} mentions` : 
+                  {filteredCryptos.length > 0 ?
+                    `${filteredCryptos.reduce((max, crypto) =>
+                      crypto.socialMentions > (max?.socialMentions || 0) ? crypto : max, filteredCryptos[0])?.socialMentions || 0} mentions` :
                     'No data'}
                 </p>
               </div>
@@ -385,13 +387,13 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
                   <span className="text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">Top Gainer</span>
                 </div>
                 <p className="text-sm font-bold text-gray-900 dark:text-pearto-luna truncate transition-colors duration-300">
-                  {filteredCryptos.length > 0 ? 
-                    filteredCryptos.filter(c => c.changePercent > 0).sort((a, b) => b.changePercent - a.changePercent)[0]?.symbol || 'N/A' : 
+                  {filteredCryptos.length > 0 ?
+                    filteredCryptos.filter(c => c.changePercent > 0).sort((a, b) => b.changePercent - a.changePercent)[0]?.symbol || 'N/A' :
                     'No gainers'}
                 </p>
                 <p className="text-xs text-green-600 dark:text-pearto-green font-medium transition-colors duration-300">
-                  {filteredCryptos.length > 0 ? 
-                    `+${Math.max(...filteredCryptos.filter(c => c.changePercent > 0).map(c => c.changePercent)).toFixed(2)}%` : 
+                  {filteredCryptos.length > 0 ?
+                    `+${Math.max(...filteredCryptos.filter(c => c.changePercent > 0).map(c => c.changePercent)).toFixed(2)}%` :
                     '+0.00%'}
                 </p>
               </div>
@@ -402,13 +404,13 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
                   <span className="text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">Highest Volume</span>
                 </div>
                 <p className="text-sm font-bold text-gray-900 dark:text-pearto-luna truncate transition-colors duration-300">
-                  {filteredCryptos.length > 0 ? 
-                    filteredCryptos.sort((a, b) => b.volume - a.volume)[0]?.symbol || 'N/A' : 
+                  {filteredCryptos.length > 0 ?
+                    filteredCryptos.sort((a, b) => b.volume - a.volume)[0]?.symbol || 'N/A' :
                     'No data'}
                 </p>
                 <p className="text-xs text-blue-600 font-medium">
-                  {filteredCryptos.length > 0 ? 
-                    formatNumber(Math.max(...filteredCryptos.map(c => c.volume))) : 
+                  {filteredCryptos.length > 0 ?
+                    formatNumber(Math.max(...filteredCryptos.map(c => c.volume))) :
                     '0'}
                 </p>
               </div>
@@ -419,13 +421,13 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
                   <span className="text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">Breakout Score</span>
                 </div>
                 <p className="text-sm font-bold text-gray-900 dark:text-pearto-luna truncate transition-colors duration-300">
-                  {filteredCryptos.length > 0 ? 
-                    filteredCryptos.sort((a, b) => b.trendScore - a.trendScore)[0]?.symbol || 'N/A' : 
+                  {filteredCryptos.length > 0 ?
+                    filteredCryptos.sort((a, b) => b.trendScore - a.trendScore)[0]?.symbol || 'N/A' :
                     'No data'}
                 </p>
                 <p className="text-xs text-purple-600 font-medium">
-                  {filteredCryptos.length > 0 ? 
-                    Math.max(...filteredCryptos.map(c => c.trendScore)).toFixed(0) : 
+                  {filteredCryptos.length > 0 ?
+                    Math.max(...filteredCryptos.map(c => c.trendScore)).toFixed(0) :
                     '0'}
                 </p>
               </div>
@@ -579,11 +581,11 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
                       >
                         <Icon className="h-3 w-3" />
                         <span className="hidden sm:inline">{filter.label}</span>
-                        <span className="sm:hidden">{filter.key === 'all' ? 'All' : 
+                        <span className="sm:hidden">{filter.key === 'all' ? 'All' :
                           filter.key === 'gainer' ? 'Gainers' :
-                          filter.key === 'loser' ? 'Losers' :
-                          filter.key === 'volume' ? 'Volume' :
-                          filter.key === 'breakout' ? 'Breakout' : 'Momentum'}</span>
+                            filter.key === 'loser' ? 'Losers' :
+                              filter.key === 'volume' ? 'Volume' :
+                                filter.key === 'breakout' ? 'Breakout' : 'Momentum'}</span>
                       </button>
                     );
                   })}
@@ -656,7 +658,7 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
                             <TrendIcon className="h-2 w-2 sm:h-3 sm:w-3 text-white" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <Link 
+                            <Link
                               href={`/crypto/${crypto.symbol.toLowerCase()}`}
                               className="text-[10px] sm:text-xs font-bold text-gray-900 dark:text-pearto-luna hover:text-orange-600 transition-colors block truncate"
                             >
@@ -674,7 +676,7 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
                         {/* Change */}
                         <div className="col-span-2 text-center">
                           <p className={`font-semibold text-[9px] sm:text-xs ${crypto.change >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'} truncate`}>
-                            {crypto.change >= 0 ? '+' : ''}{formatPrice(crypto.change)}
+                            {crypto.change >= 0 ? '+' : ''}{formatPrice(Math.abs(crypto.change))}
                           </p>
                           <p className={`text-[9px] sm:text-xs ${crypto.changePercent >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'} truncate`}>
                             {crypto.changePercent >= 0 ? '+' : ''}{formatPercentage(crypto.changePercent)}
@@ -719,9 +721,8 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
       </main>
 
       {/* Sliding AI Panel */}
-      <div className={`fixed top-0 right-0 h-full w-96 bg-white dark:bg-pearto-card shadow-2xl transform transition-transform duration-300 ease-in-out z-50 ${
-        isAIPanelOpen ? 'translate-x-0' : 'translate-x-full'
-      }`}>
+      <div className={`fixed top-0 right-0 h-full w-96 bg-white dark:bg-pearto-card shadow-2xl transform transition-transform duration-300 ease-in-out z-50 ${isAIPanelOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}>
         <div className="h-full flex flex-col">
           {/* AI Panel Header */}
           <div className="px-4 py-3 border-b border-gray-200 dark:border-pearto-border bg-gradient-to-r from-orange-50 to-pink-50 transition-colors duration-300">
@@ -740,7 +741,7 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
               </button>
             </div>
           </div>
-          
+
           {/* AI Panel Content */}
           <div className="flex-1 overflow-y-auto">
             <AIAnalysisPanel
@@ -774,7 +775,7 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
 
       {/* Overlay */}
       {isAIPanelOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black bg-opacity-50 z-40"
           onClick={() => setIsAIPanelOpen(false)}
         />

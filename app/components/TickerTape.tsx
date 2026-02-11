@@ -4,14 +4,18 @@ import { useState, useEffect } from 'react';
 import { TrendingUp, TrendingDown, Loader2 } from 'lucide-react';
 import { stockAPI } from '../utils/api';
 
+import { useCurrency } from '@/app/context/CurrencyContext';
+import PriceDisplay from './common/PriceDisplay';
+
 interface TickerItem {
     symbol: string;
-    value: string;
+    price: number;
     change: string;
     up: boolean;
 }
 
 export default function TickerTape() {
+    const { formatPrice } = useCurrency(); // Although we use PriceDisplay, logic might need accessing context
     const [tickerData, setTickerData] = useState<TickerItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
@@ -33,7 +37,7 @@ export default function TickerTape() {
                         const changePercent = idx.changePercent || 0;
                         items.push({
                             symbol: idx.name || idx.symbol,
-                            value: (idx.price || 0).toLocaleString(undefined, { maximumFractionDigits: 2 }),
+                            price: idx.price || 0,
                             change: `${changePercent >= 0 ? '+' : ''}${changePercent.toFixed(2)}%`,
                             up: changePercent >= 0
                         });
@@ -46,7 +50,7 @@ export default function TickerTape() {
                         const changePercent = stock.changePercent || 0;
                         items.push({
                             symbol: stock.symbol,
-                            value: `$${stock.price?.toFixed(2) || 0}`,
+                            price: stock.price || 0,
                             change: `${changePercent >= 0 ? '+' : ''}${changePercent.toFixed(2)}%`,
                             up: changePercent >= 0
                         });
@@ -100,7 +104,7 @@ export default function TickerTape() {
                 {tickerData.map((ticker, index) => (
                     <div key={index} className="flex items-center gap-2 flex-shrink-0">
                         <span className="text-gray-600 dark:text-pearto-gray">{ticker.symbol}</span>
-                        <span className="font-semibold">{ticker.value}</span>
+                        <PriceDisplay amount={ticker.price} className="font-semibold" />
                         <span className={`flex items-center gap-0.5 ${ticker.up ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'}`}>
                             {ticker.up ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
                             {ticker.change}
@@ -111,7 +115,7 @@ export default function TickerTape() {
                 {tickerData.map((ticker, index) => (
                     <div key={`dup-${index}`} className="flex items-center gap-2 flex-shrink-0">
                         <span className="text-gray-600 dark:text-pearto-gray">{ticker.symbol}</span>
-                        <span className="font-semibold">{ticker.value}</span>
+                        <PriceDisplay amount={ticker.price} className="font-semibold" />
                         <span className={`flex items-center gap-0.5 ${ticker.up ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'}`}>
                             {ticker.up ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
                             {ticker.change}

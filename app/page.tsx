@@ -12,6 +12,7 @@ import ETFsMutualFunds from './components/mainpage/ETFsMutualFunds';
 import PrivateCompanies from './components/mainpage/PrivateCompanies';
 import MarketSummary from './components/mainpage/MarketSummary';
 import NewsCarousel from './components/mainpage/NewsCarousel';
+import { useCurrency } from './context/CurrencyContext';
 
 interface MarketIndex {
   name: string;
@@ -49,6 +50,7 @@ interface NewsItem {
 
 
 export default function HomePage() {
+  const { formatPrice } = useCurrency();
   const [searchQuery, setSearchQuery] = useState('');
   const [marketData, setMarketData] = useState<MarketIndex[]>([]);
   const [topGainers, setTopGainers] = useState<Stock[]>([]);
@@ -75,11 +77,11 @@ export default function HomePage() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        
+
         // Fetch market overview with real statistics
         try {
           const overviewData: MarketOverviewResponse = await marketService.getMarketOverview();
-          
+
           // Set market statistics
           if (overviewData) {
             setMarketStats({
@@ -92,22 +94,22 @@ export default function HomePage() {
         } catch (marketError) {
           console.error('Error fetching market overview:', marketError);
         }
-        
+
         // Fetch market overview (indices)
         const overviewRes = await stockAPI.getMarketOverview();
         if (overviewRes.success && overviewRes.data && overviewRes.data.length > 0) {
           const indices: MarketIndex[] = overviewRes.data.map((item: any) => ({
             name: item.name || item.symbol || 'Unknown',
             symbol: item.symbol || '',
-            value: item.price ? item.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '—',
+            value: item.price ? formatPrice(item.price) : '—',
             change: item.change ? item.change.toFixed(2) : '0.00',
             changePercent: `${item.changePercent ? item.changePercent.toFixed(2) : '0.00'}%`,
             isPositive: (item.change || 0) >= 0,
             volume: item.volume ? formatVolume(item.volume) : '—',
-            high: item.dayHigh ? item.dayHigh.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 
-                  item.price ? item.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '—',
-            low: item.dayLow ? item.dayLow.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : 
-                 item.price ? item.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '—',
+            high: item.dayHigh ? formatPrice(item.dayHigh) :
+              item.price ? formatPrice(item.price) : '—',
+            low: item.dayLow ? formatPrice(item.dayLow) :
+              item.price ? formatPrice(item.price) : '—',
           }));
           setMarketData(indices);
         } else {
@@ -139,11 +141,11 @@ export default function HomePage() {
             id: item.id || index,
             title: item.title || 'Market Update',
             summary: item.summary || item.excerpt || 'Latest market developments and analysis.',
-            time: item.published_at ? new Date(item.published_at).toLocaleString() : 
-                  item.created_at ? new Date(item.created_at).toLocaleString() : 'Recent',
+            time: item.published_at ? new Date(item.published_at).toLocaleString() :
+              item.created_at ? new Date(item.created_at).toLocaleString() : 'Recent',
             source: item.source || 'Pearto Finance',
-            impact: item.category === 'Breaking' ? 'high' as const : 
-                   item.category === 'Analysis' ? 'medium' as const : 'low' as const
+            impact: item.category === 'Breaking' ? 'high' as const :
+              item.category === 'Analysis' ? 'medium' as const : 'low' as const
           }));
           setMarketNews(news);
         } else {
@@ -156,7 +158,7 @@ export default function HomePage() {
         const now = new Date();
         const hour = now.getHours();
         const isWeekend = now.getDay() === 0 || now.getDay() === 6;
-        
+
         if (isWeekend) {
           setMarketStatus('Closed - Weekend');
         } else if (hour >= 9 && hour < 16) {
@@ -202,7 +204,6 @@ export default function HomePage() {
     ];
   }
 
-  const formatPrice = (price: number) => `$${price.toFixed(2)}`;
   const formatChange = (change: number, percent: number) => ({
     value: `${change >= 0 ? '+' : ''}${change.toFixed(2)} (${percent >= 0 ? '+' : ''}${percent.toFixed(2)}%)`,
     isPositive: change >= 0
@@ -219,11 +220,10 @@ export default function HomePage() {
                 Market Indices - {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
               </h2>
               <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-1">
-                <span className={`px-2 py-1 rounded text-xs font-medium ${
-                  marketStatus.includes('Open') ? 'bg-green-500/20 text-green-200 dark:bg-pearto-green/20 dark:text-pearto-green' :
-                  marketStatus.includes('Pre-Market') || marketStatus.includes('After Hours') ? 'bg-yellow-500/20 text-yellow-200 dark:bg-pearto-amber/20 dark:text-pearto-amber' :
-                  'bg-red-500/20 text-red-200 dark:bg-pearto-pink/20 dark:text-pearto-pink'
-                }`}>
+                <span className={`px-2 py-1 rounded text-xs font-medium ${marketStatus.includes('Open') ? 'bg-green-500/20 text-green-200 dark:bg-pearto-green/20 dark:text-pearto-green' :
+                    marketStatus.includes('Pre-Market') || marketStatus.includes('After Hours') ? 'bg-yellow-500/20 text-yellow-200 dark:bg-pearto-amber/20 dark:text-pearto-amber' :
+                      'bg-red-500/20 text-red-200 dark:bg-pearto-pink/20 dark:text-pearto-pink'
+                  }`}>
                   {marketStatus}
                 </span>
                 {lastUpdate && (
@@ -234,8 +234,8 @@ export default function HomePage() {
               </div>
             </div>
             <div className="flex items-center gap-2 sm:gap-4">
-              <button 
-                onClick={() => window.location.reload()} 
+              <button
+                onClick={() => window.location.reload()}
                 className="flex items-center gap-1 sm:gap-2 text-emerald-100 dark:text-pearto-cloud hover:text-white dark:hover:text-pearto-green text-sm transition-colors px-3 py-2 rounded-lg hover:bg-white/10 dark:hover:bg-pearto-slate/50"
               >
                 <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
@@ -247,10 +247,10 @@ export default function HomePage() {
               </Link>
             </div>
           </div>
-          
+
           {loading && marketData.length === 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
-              {[1,2,3,4].map(i => (
+              {[1, 2, 3, 4].map(i => (
                 <div key={i} className="bg-white/10 dark:bg-pearto-surface/50 backdrop-blur-sm rounded-xl p-3 sm:p-4 border border-white/20 dark:border-pearto-border animate-pulse">
                   <div className="h-4 bg-white/20 dark:bg-pearto-border rounded mb-2"></div>
                   <div className="h-6 bg-white/20 dark:bg-pearto-border rounded mb-2"></div>
@@ -269,9 +269,8 @@ export default function HomePage() {
                     </div>
                     <div className="text-right ml-2">
                       <div className="text-white dark:text-pearto-luna font-bold text-base sm:text-lg lg:text-xl">{index.value}</div>
-                      <div className={`text-xs sm:text-sm font-medium flex items-center justify-end ${
-                        index.isPositive ? 'text-green-300 dark:text-pearto-green' : 'text-red-300 dark:text-pearto-pink'
-                      }`}>
+                      <div className={`text-xs sm:text-sm font-medium flex items-center justify-end ${index.isPositive ? 'text-green-300 dark:text-pearto-green' : 'text-red-300 dark:text-pearto-pink'
+                        }`}>
                         {index.isPositive ? (
                           <TrendingUp className="h-3 w-3 mr-1" />
                         ) : (
@@ -288,10 +287,9 @@ export default function HomePage() {
                     <span>L: {index.low}</span>
                   </div>
                   <div className="mt-2 h-1 bg-white/20 dark:bg-pearto-border rounded-full overflow-hidden">
-                    <div 
-                      className={`h-full rounded-full transition-all duration-1000 ${
-                        index.isPositive ? 'bg-green-400 dark:bg-pearto-green' : 'bg-red-400 dark:bg-pearto-pink'
-                      }`} 
+                    <div
+                      className={`h-full rounded-full transition-all duration-1000 ${index.isPositive ? 'bg-green-400 dark:bg-pearto-green' : 'bg-red-400 dark:bg-pearto-pink'
+                        }`}
                       style={{ width: `${Math.min(Math.abs(parseFloat(index.change)) * 10, 100)}%` }}
                     ></div>
                   </div>
@@ -475,7 +473,7 @@ export default function HomePage() {
               </div>
             </div>
 
-         
+
 
             {/* Mainpage Components Integration */}
             <div className="space-y-8">

@@ -17,7 +17,8 @@ import {
   Brain,
   X
 } from 'lucide-react';
-import { formatPrice, formatNumber } from '@/lib/utils';
+import { formatNumber } from '@/lib/utils';
+import { useCurrency } from '../../context/CurrencyContext';
 import { marketService } from '../../utils/marketService';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
@@ -58,6 +59,7 @@ interface TrendingStocksProps {
 }
 
 export default function TrendingStocks({ className = '' }: TrendingStocksProps) {
+  const { formatPrice } = useCurrency();
   const formatPercentage = (value: number) => `${value.toFixed(2)}%`;
   const [stocks, setStocks] = useState<TrendingStock[]>([]);
   const [filteredStocks, setFilteredStocks] = useState<TrendingStock[]>([]);
@@ -342,13 +344,13 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
                   <span className="text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">Most Mentioned</span>
                 </div>
                 <p className="text-sm font-bold text-gray-900 dark:text-pearto-luna truncate transition-colors duration-300">
-                  {filteredStocks.length > 0 ? filteredStocks.reduce((max, stock) => 
+                  {filteredStocks.length > 0 ? filteredStocks.reduce((max, stock) =>
                     stock.socialMentions > (max?.socialMentions || 0) ? stock : max, filteredStocks[0])?.symbol || 'N/A' : 'N/A'}
                 </p>
                 <p className="text-xs text-green-600 dark:text-pearto-green font-medium transition-colors duration-300">
-                  {filteredStocks.length > 0 ? 
-                    `${filteredStocks.reduce((max, stock) => 
-                      stock.socialMentions > (max?.socialMentions || 0) ? stock : max, filteredStocks[0])?.socialMentions || 0} mentions` : 
+                  {filteredStocks.length > 0 ?
+                    `${filteredStocks.reduce((max, stock) =>
+                      stock.socialMentions > (max?.socialMentions || 0) ? stock : max, filteredStocks[0])?.socialMentions || 0} mentions` :
                     'No data'}
                 </p>
               </div>
@@ -359,13 +361,13 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
                   <span className="text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">Top Gainer</span>
                 </div>
                 <p className="text-sm font-bold text-gray-900 dark:text-pearto-luna truncate transition-colors duration-300">
-                  {filteredStocks.length > 0 ? 
-                    filteredStocks.filter(s => s.changePercent > 0).sort((a, b) => b.changePercent - a.changePercent)[0]?.symbol || 'N/A' : 
+                  {filteredStocks.length > 0 ?
+                    filteredStocks.filter(s => s.changePercent > 0).sort((a, b) => b.changePercent - a.changePercent)[0]?.symbol || 'N/A' :
                     'No gainers'}
                 </p>
                 <p className="text-xs text-green-600 dark:text-pearto-green font-medium transition-colors duration-300">
-                  {filteredStocks.length > 0 ? 
-                    `+${Math.max(...filteredStocks.filter(s => s.changePercent > 0).map(s => s.changePercent)).toFixed(2)}%` : 
+                  {filteredStocks.length > 0 ?
+                    `+${Math.max(...filteredStocks.filter(s => s.changePercent > 0).map(s => s.changePercent)).toFixed(2)}%` :
                     '+0.00%'}
                 </p>
               </div>
@@ -376,13 +378,13 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
                   <span className="text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">Highest Volume</span>
                 </div>
                 <p className="text-sm font-bold text-gray-900 dark:text-pearto-luna truncate transition-colors duration-300">
-                  {filteredStocks.length > 0 ? 
-                    filteredStocks.sort((a, b) => b.volume - a.volume)[0]?.symbol || 'N/A' : 
+                  {filteredStocks.length > 0 ?
+                    filteredStocks.sort((a, b) => b.volume - a.volume)[0]?.symbol || 'N/A' :
                     'No data'}
                 </p>
                 <p className="text-xs text-blue-600 font-medium">
-                  {filteredStocks.length > 0 ? 
-                    formatNumber(Math.max(...filteredStocks.map(s => s.volume))) : 
+                  {filteredStocks.length > 0 ?
+                    formatNumber(Math.max(...filteredStocks.map(s => s.volume))) :
                     '0'}
                 </p>
               </div>
@@ -393,13 +395,13 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
                   <span className="text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">Breakout Score</span>
                 </div>
                 <p className="text-sm font-bold text-gray-900 dark:text-pearto-luna truncate transition-colors duration-300">
-                  {filteredStocks.length > 0 ? 
-                    filteredStocks.sort((a, b) => b.trendScore - a.trendScore)[0]?.symbol || 'N/A' : 
+                  {filteredStocks.length > 0 ?
+                    filteredStocks.sort((a, b) => b.trendScore - a.trendScore)[0]?.symbol || 'N/A' :
                     'No data'}
                 </p>
                 <p className="text-xs text-purple-600 font-medium">
-                  {filteredStocks.length > 0 ? 
-                    Math.max(...filteredStocks.map(s => s.trendScore)).toFixed(0) : 
+                  {filteredStocks.length > 0 ?
+                    Math.max(...filteredStocks.map(s => s.trendScore)).toFixed(0) :
                     '0'}
                 </p>
               </div>
@@ -553,11 +555,11 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
                       >
                         <Icon className="h-3 w-3" />
                         <span className="hidden sm:inline">{filter.label}</span>
-                        <span className="sm:hidden">{filter.key === 'all' ? 'All' : 
+                        <span className="sm:hidden">{filter.key === 'all' ? 'All' :
                           filter.key === 'gainer' ? 'Gainers' :
-                          filter.key === 'loser' ? 'Losers' :
-                          filter.key === 'volume' ? 'Volume' :
-                          filter.key === 'breakout' ? 'Breakout' : 'Momentum'}</span>
+                            filter.key === 'loser' ? 'Losers' :
+                              filter.key === 'volume' ? 'Volume' :
+                                filter.key === 'breakout' ? 'Breakout' : 'Momentum'}</span>
                       </button>
                     );
                   })}
@@ -630,7 +632,7 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
                             <TrendIcon className="h-2 w-2 sm:h-3 sm:w-3 text-white" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <Link 
+                            <Link
                               href={`/stock/${stock.symbol.toLowerCase()}`}
                               className="text-[10px] sm:text-xs font-bold text-gray-900 dark:text-pearto-luna hover:text-blue-600 transition-colors block truncate"
                             >
@@ -648,7 +650,7 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
                         {/* Change */}
                         <div className="col-span-2 text-center">
                           <p className={`font-semibold text-[9px] sm:text-xs ${stock.change >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'} truncate`}>
-                            {stock.change >= 0 ? '+' : ''}{formatPrice(stock.change)}
+                            {stock.change >= 0 ? '+' : ''}{formatPrice(Math.abs(stock.change))}
                           </p>
                           <p className={`text-[9px] sm:text-xs ${stock.changePercent >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'} truncate`}>
                             {stock.changePercent >= 0 ? '+' : ''}{formatPercentage(stock.changePercent)}
@@ -693,9 +695,8 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
       </main>
 
       {/* Sliding AI Panel */}
-      <div className={`fixed top-0 right-0 h-full w-96 bg-white dark:bg-pearto-card shadow-2xl transform transition-transform duration-300 ease-in-out z-50 ${
-        isAIPanelOpen ? 'translate-x-0' : 'translate-x-full'
-      }`}>
+      <div className={`fixed top-0 right-0 h-full w-96 bg-white dark:bg-pearto-card shadow-2xl transform transition-transform duration-300 ease-in-out z-50 ${isAIPanelOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}>
         <div className="h-full flex flex-col">
           {/* AI Panel Header */}
           <div className="px-4 py-3 border-b border-gray-200 dark:border-pearto-border bg-gradient-to-r from-blue-50 to-purple-50 transition-colors duration-300">
@@ -714,7 +715,7 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
               </button>
             </div>
           </div>
-          
+
           {/* AI Panel Content */}
           <div className="flex-1 overflow-y-auto">
             <AIAnalysisPanel
@@ -748,7 +749,7 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
 
       {/* Overlay */}
       {isAIPanelOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black bg-opacity-50 z-40"
           onClick={() => setIsAIPanelOpen(false)}
         />

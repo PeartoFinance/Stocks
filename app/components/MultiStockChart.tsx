@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import { 
-  createChart, 
-  ColorType, 
-  LineSeries, 
+import {
+  createChart,
+  ColorType,
+  LineSeries,
   AreaSeries,
   CandlestickSeries,
   IChartApi,
@@ -12,6 +12,7 @@ import {
 } from 'lightweight-charts';
 import { HistoricalData } from '../types';
 import { useTheme } from '../context/ThemeContext';
+import { useCurrency } from '../context/CurrencyContext';
 
 interface StockChartData {
   symbol: string;
@@ -34,6 +35,7 @@ export default function MultiStockChart({ stocks, height = 300, period, chartTyp
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
   const { theme } = useTheme();
+  const { convertPrice, formatPrice, currency } = useCurrency();
   const isDark = theme === 'dark';
 
   useEffect(() => {
@@ -44,7 +46,7 @@ export default function MultiStockChart({ stocks, height = 300, period, chartTyp
       layout: {
         background: { type: ColorType.Solid, color: 'transparent' },
         textColor: isDark ? '#dadada' : '#6b7280',
-        attributionLogo: false, 
+        attributionLogo: false,
       },
       width: chartContainerRef.current.clientWidth,
       height,
@@ -69,16 +71,16 @@ export default function MultiStockChart({ stocks, height = 300, period, chartTyp
         },
       },
       crosshair: {
-        mode: 1, 
+        mode: 1,
         vertLine: {
           width: 1,
           color: isDark ? 'rgba(218, 218, 218, 0.4)' : 'rgba(107, 114, 128, 0.4)',
-          style: 2, 
+          style: 2,
         },
         horzLine: {
           width: 1,
           color: isDark ? 'rgba(218, 218, 218, 0.4)' : 'rgba(107, 114, 128, 0.4)',
-          style: 2, 
+          style: 2,
         },
       },
       handleScroll: {
@@ -119,10 +121,10 @@ export default function MultiStockChart({ stocks, height = 300, period, chartTyp
     stocks.forEach((stock, index) => {
       if (stock.data && stock.data.length > 0) {
         const color = index === 0 ? '#16a34a' : stock.color; // Use green for first stock
-        
+
         let series;
         const normalizedData = normalizeToActualPrice(stock.data);
-        
+
         if (chartType === 'area') {
           series = chart.addSeries(AreaSeries, {
             topColor: `${color}20`,
@@ -150,12 +152,12 @@ export default function MultiStockChart({ stocks, height = 300, period, chartTyp
               minMove: 0.01,
             },
           });
-          series.setData(normalizedData.map(d => ({ 
-            time: d.time, 
-            open: d.open, 
-            high: d.high, 
-            low: d.low, 
-            close: d.close 
+          series.setData(normalizedData.map(d => ({
+            time: d.time,
+            open: d.open,
+            high: d.high,
+            low: d.low,
+            close: d.close
           })));
         } else {
           series = chart.addSeries(LineSeries, {
@@ -189,20 +191,20 @@ export default function MultiStockChart({ stocks, height = 300, period, chartTyp
       pointerEvents: 'none',
       border: isDark ? '1px solid rgba(44, 44, 44, 0.5)' : '1px solid rgba(229, 231, 235, 0.5)'
     });
-    
+
     const legendContent = stocks.map((stock, index) => {
       const color = index === 0 ? '#16a34a' : stock.color;
       const textColor = isDark ? '#F8E1C3' : '#374151';
       return `<div style="display: flex; align-items: center; margin-bottom: 2px; gap: 4px;">
         <div style="width: 8px; height: 2px; background-color: ${color}; border-radius: 1px;"></div>
         <span style="color: ${textColor}; font-weight: 500; font-size: 9px; line-height: 1.2;">
-          ${stock.symbol}: $${stock.currentPrice.toFixed(2)}
+          ${stock.symbol}: ${formatPrice(stock.currentPrice)}
         </span>
       </div>`;
     }).join('');
-    
+
     legend.innerHTML = legendContent;
-    
+
     chartContainerRef.current.appendChild(legend);
 
     // 5. Finalize view and Resize Handling
@@ -225,7 +227,7 @@ export default function MultiStockChart({ stocks, height = 300, period, chartTyp
       }
       chart.remove();
     };
-  }, [stocks, height, period, isDark, theme]);
+  }, [stocks, height, period, isDark, theme, convertPrice, formatPrice]);
 
   return (
     <div className="w-full overflow-hidden relative border border-gray-200 dark:border-pearto-border rounded-lg bg-white dark:bg-pearto-card transition-colors duration-300">

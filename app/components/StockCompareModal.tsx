@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Search, TrendingUp, TrendingDown, BarChart3 } from 'lucide-react';
 import { Stock } from '../types';
 import { marketService } from '../utils/marketService';
+import { useCurrency } from '../context/CurrencyContext';
 
 interface StockCompareModalProps {
   isOpen: boolean;
@@ -10,12 +11,13 @@ interface StockCompareModalProps {
   initialStock?: Stock | null;
 }
 
-export default function StockCompareModal({ 
-  isOpen, 
-  onClose, 
-  initialSymbol = '', 
-  initialStock = null 
+export default function StockCompareModal({
+  isOpen,
+  onClose,
+  initialSymbol = '',
+  initialStock = null
 }: StockCompareModalProps) {
+  const { formatPrice } = useCurrency();
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState<Stock[]>([]);
   const [selectedStock, setSelectedStock] = useState<Stock | null>(null);
@@ -83,7 +85,7 @@ export default function StockCompareModal({
     const formatValue = (val: any) => {
       if (val == null) return '-';
       switch (format) {
-        case 'currency': return `$${formatNumber(val)}`;
+        case 'currency': return formatPrice(val);
         case 'percent': return `${formatNumber(val)}%`;
         case 'large': return formatLargeNumber(val);
         default: return formatNumber(val);
@@ -162,11 +164,10 @@ export default function StockCompareModal({
                         </div>
                         <div className="text-right">
                           <p className="font-semibold text-slate-900 dark:text-white transition-colors duration-300">
-                            ${formatNumber(stock.price)}
+                            {formatPrice(stock.price)}
                           </p>
-                          <div className={`flex items-center gap-1 text-sm ${
-                            isPositive ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
-                          }`}>
+                          <div className={`flex items-center gap-1 text-sm ${isPositive ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
+                            }`}>
                             {isPositive ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
                             <span>{isPositive ? '+' : ''}{formatNumber(stock.changePercent)}%</span>
                           </div>
@@ -183,7 +184,7 @@ export default function StockCompareModal({
           {selectedStock && initialStock && (
             <div>
               <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 transition-colors duration-300">Comparison</h3>
-              
+
               {/* Stock Headers */}
               <div className="grid grid-cols-3 gap-4 mb-4 p-4 bg-slate-50 dark:bg-slate-800 rounded-lg transition-colors duration-300">
                 <div className="text-sm font-medium text-slate-500 dark:text-slate-400 transition-colors duration-300">Metric</div>
@@ -199,63 +200,63 @@ export default function StockCompareModal({
 
               {/* Comparison Rows */}
               <div className="space-y-1">
-                <ComparisonRow 
-                  label="Current Price" 
-                  value1={initialStock.price} 
-                  value2={selectedStock.price} 
-                  format="currency" 
+                <ComparisonRow
+                  label="Current Price"
+                  value1={initialStock.price}
+                  value2={selectedStock.price}
+                  format="currency"
                 />
-                <ComparisonRow 
-                  label="Change (%)" 
-                  value1={initialStock.changePercent} 
-                  value2={selectedStock.changePercent} 
-                  format="percent" 
+                <ComparisonRow
+                  label="Change (%)"
+                  value1={initialStock.changePercent}
+                  value2={selectedStock.changePercent}
+                  format="percent"
                 />
-                <ComparisonRow 
-                  label="Market Cap" 
-                  value1={initialStock.marketCap} 
-                  value2={selectedStock.marketCap} 
-                  format="large" 
+                <ComparisonRow
+                  label="Market Cap"
+                  value1={initialStock.marketCap}
+                  value2={selectedStock.marketCap}
+                  format="large"
                 />
-                <ComparisonRow 
-                  label="P/E Ratio" 
-                  value1={initialStock.peRatio} 
-                  value2={selectedStock.peRatio} 
+                <ComparisonRow
+                  label="P/E Ratio"
+                  value1={initialStock.peRatio}
+                  value2={selectedStock.peRatio}
                 />
-                <ComparisonRow 
-                  label="Volume" 
-                  value1={initialStock.volume} 
-                  value2={selectedStock.volume} 
-                  format="large" 
+                <ComparisonRow
+                  label="Volume"
+                  value1={initialStock.volume}
+                  value2={selectedStock.volume}
+                  format="large"
                 />
-                <ComparisonRow 
-                  label="EPS" 
-                  value1={initialStock.eps} 
-                  value2={selectedStock.eps} 
-                  format="currency" 
+                <ComparisonRow
+                  label="EPS"
+                  value1={initialStock.eps}
+                  value2={selectedStock.eps}
+                  format="currency"
                 />
-                <ComparisonRow 
-                  label="Beta" 
-                  value1={initialStock.beta} 
-                  value2={selectedStock.beta} 
+                <ComparisonRow
+                  label="Beta"
+                  value1={initialStock.beta}
+                  value2={selectedStock.beta}
                 />
-                <ComparisonRow 
-                  label="Dividend Yield (%)" 
-                  value1={initialStock.dividendYield ? initialStock.dividendYield * 100 : null} 
-                  value2={selectedStock.dividendYield ? selectedStock.dividendYield * 100 : null} 
-                  format="percent" 
+                <ComparisonRow
+                  label="Dividend Yield (%)"
+                  value1={initialStock.dividendYield ? initialStock.dividendYield * 100 : null}
+                  value2={selectedStock.dividendYield ? selectedStock.dividendYield * 100 : null}
+                  format="percent"
                 />
-                <ComparisonRow 
-                  label="52W High" 
-                  value1={initialStock.week52High} 
-                  value2={selectedStock.week52High} 
-                  format="currency" 
+                <ComparisonRow
+                  label="52W High"
+                  value1={initialStock.week52High}
+                  value2={selectedStock.week52High}
+                  format="currency"
                 />
-                <ComparisonRow 
-                  label="52W Low" 
-                  value1={initialStock.week52Low} 
-                  value2={selectedStock.week52Low} 
-                  format="currency" 
+                <ComparisonRow
+                  label="52W Low"
+                  value1={initialStock.week52Low}
+                  value2={selectedStock.week52Low}
+                  format="currency"
                 />
               </div>
 

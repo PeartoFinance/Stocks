@@ -3,7 +3,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowDownRight, ArrowUpRight, Activity, Search } from 'lucide-react';
-import { formatNumber, formatPrice } from '@/lib/utils';
+import { formatNumber } from '@/lib/utils';
+import { useCurrency } from '../context/CurrencyContext';
 import { stockAPI } from '../utils/api';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
@@ -20,6 +21,7 @@ interface Mover {
 }
 
 export default function MarketMoversPage() {
+  const { formatPrice } = useCurrency();
   const [tab, setTab] = useState<'gainers' | 'losers' | 'volume'>('gainers');
   const [search, setSearch] = useState('');
   const [data, setData] = useState<Mover[]>([]);

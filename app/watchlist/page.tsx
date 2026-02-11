@@ -20,7 +20,8 @@ import {
   Filter,
   MoreVertical
 } from 'lucide-react';
-import { formatPrice, formatNumber, formatPercent, formatVolume } from '@/lib/utils';
+import { formatNumber, formatPercent, formatVolume } from '@/lib/utils';
+import { useCurrency } from '../context/CurrencyContext';
 import { stockAPI } from '../utils/api';
 import { watchlistAPI } from '../utils/watchlistAPI';
 import { Stock } from '../types';
@@ -51,6 +52,7 @@ interface WatchlistStock extends Stock {
 }
 
 export default function WatchlistPage() {
+  const { formatPrice } = useCurrency();
   const [stocks, setStocks] = useState<WatchlistStock[]>([]);
   const [activeTab, setActiveTab] = useState('General');
   const [searchTerm, setSearchTerm] = useState('');
@@ -123,7 +125,7 @@ export default function WatchlistPage() {
   const loadWatchlist = async () => {
     try {
       setLoading(true);
-      
+
       try {
         const response = await watchlistAPI.getWatchlistWithPrices();
         if (response.success && response.data.length > 0) {
@@ -146,19 +148,19 @@ export default function WatchlistPage() {
             payoutRatio: Math.random() * 80 + 20,
             buybackYield: Math.random() * 3 + 0.5
           } as WatchlistStock));
-          
+
           setStocks(watchlistStocks);
           return;
         }
       } catch (apiError) {
         console.log('Watchlist API not available, loading default stocks');
       }
-      
+
       const defaultSymbols = ['AAPL', 'GOOGL', 'MSFT', 'TSLA', 'AMZN'];
-      const stockPromises = defaultSymbols.map(symbol => 
+      const stockPromises = defaultSymbols.map(symbol =>
         stockAPI.getStockQuote(symbol).catch(() => null)
       );
-      
+
       const results = await Promise.all(stockPromises);
       const validStocks = results
         .filter(result => result !== null)
@@ -179,7 +181,7 @@ export default function WatchlistPage() {
             buybackYield: Math.random() * 3 + 0.5
           } as WatchlistStock;
         });
-      
+
       setStocks(validStocks);
     } catch (error) {
       console.error('Error loading watchlist:', error);
@@ -319,7 +321,7 @@ export default function WatchlistPage() {
     >
       <div className="flex items-start justify-between mb-3">
         <div className="flex-1">
-          <Link 
+          <Link
             href={`/stock/${stock.symbol.toLowerCase()}`}
             className="text-lg font-bold text-blue-600 dark:text-pearto-green hover:text-emerald-600 dark:hover:text-pearto-green/80 transition-colors duration-300"
             onClick={(e) => e.stopPropagation()}
@@ -349,7 +351,7 @@ export default function WatchlistPage() {
         <div className="w-24 h-12">
           <svg width="96" height="48" viewBox="0 0 96 48" className="w-full h-full">
             <path
-              d={`M0,${24 + Math.random() * 8} ${Array.from({ length: 12 }, (_, i) => 
+              d={`M0,${24 + Math.random() * 8} ${Array.from({ length: 12 }, (_, i) =>
                 `L${i * 8},${24 + (Math.random() - 0.5) * 20}`
               ).join(' ')}`}
               stroke={stock.changePercent >= 0 ? '#22c55e' : '#ef4444'}
@@ -529,9 +531,8 @@ export default function WatchlistPage() {
                                 setActiveWatchlist(list);
                                 setShowWatchlistMenu(false);
                               }}
-                              className={`w-full text-left px-3 py-2 text-sm rounded hover:bg-gray-50 dark:hover:bg-pearto-surface flex items-center justify-between transition-colors duration-300 ${
-                                activeWatchlist === list ? 'bg-blue-50 dark:bg-pearto-green/10 text-blue-700 dark:text-pearto-green' : 'text-gray-700 dark:text-pearto-cloud'
-                              }`}
+                              className={`w-full text-left px-3 py-2 text-sm rounded hover:bg-gray-50 dark:hover:bg-pearto-surface flex items-center justify-between transition-colors duration-300 ${activeWatchlist === list ? 'bg-blue-50 dark:bg-pearto-green/10 text-blue-700 dark:text-pearto-green' : 'text-gray-700 dark:text-pearto-cloud'
+                                }`}
                             >
                               <span>{list}</span>
                               {activeWatchlist === list && <span className="text-blue-600 dark:text-pearto-green">✓</span>}
@@ -602,11 +603,10 @@ export default function WatchlistPage() {
                     <button
                       key={tab}
                       onClick={() => setActiveTab(tab)}
-                      className={`py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
-                        activeTab === tab
+                      className={`py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${activeTab === tab
                           ? 'border-blue-500 dark:border-pearto-green text-blue-600 dark:text-pearto-green'
                           : 'border-transparent text-gray-600 dark:text-pearto-cloud hover:text-gray-800 dark:hover:text-pearto-luna'
-                      }`}
+                        }`}
                     >
                       {tab}
                     </button>
@@ -662,11 +662,10 @@ export default function WatchlistPage() {
                     <button
                       key={tab}
                       onClick={() => setActiveTab(tab)}
-                      className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
-                        activeTab === tab
+                      className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${activeTab === tab
                           ? 'bg-blue-600 dark:bg-pearto-green text-white'
                           : 'bg-white dark:bg-pearto-card text-gray-600 dark:text-pearto-cloud border border-gray-200 dark:border-pearto-border'
-                      }`}
+                        }`}
                     >
                       {tab}
                     </button>
