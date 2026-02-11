@@ -3,6 +3,16 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { getRates, ExchangeRate } from '../services/currencyService';
 import { useAuth } from './AuthContext';
+import { authenticatedFetch } from '../utils/auth';
+
+const API_BASE = (process.env.NEXT_PUBLIC_API_URL || 'https://apipearto.ashlya.com/api').replace(/\/$/, '');
+
+interface UserPreferences {
+    currency: string;
+    taxResidency?: string;
+    languagePref?: string;
+    countryCode?: string;
+}
 
 interface CurrencyContextType {
     currency: string;
@@ -17,16 +27,16 @@ interface CurrencyContextType {
 const CurrencyContext = createContext<CurrencyContextType | undefined>(undefined);
 
 export function CurrencyProvider({ children }: { children: ReactNode }) {
-    const { isAuthenticated, user } = useAuth();
+    const { isAuthenticated } = useAuth();
     const [currency, setCurrencyState] = useState('USD');
     const [rates, setRates] = useState<Record<string, number>>({});
     const [loading, setLoading] = useState(true);
 
-    // Initial load: Fetch rates + user prefs if auth
+    // Initial load: Fetch rates + user prefs if authenticated
     useEffect(() => {
         async function init() {
             try {
-                // Fetch rates
+                // Fetch rates (public endpoint)
                 const ratesData = await getRates();
 
                 // Transform array to map for O(1) lookup
@@ -36,21 +46,32 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
                         rateMap[r.targetCurrency] = r.rate;
                     });
                 }
-
                 // USD is always base 1
                 rateMap['USD'] = 1;
                 setRates(rateMap);
 
-                // If user has a preference in their profile/settings, use it
-                // Note: The AuthContext 'user' object might need to contain currency pref
-                // If not, we might need a separate call to fetch user preferences
-                // For now, check if user object has it, or default to USD
-                if (isAuthenticated && user) {
-                    // Temporarily using 'any' to check for currency property if it exists on user object
-                    // In a real scenario, update User interface in AuthContext
-                    const userCurrency = (user as any).currency || (user as any).settings?.currency;
-                    if (userCurrency && rateMap[userCurrency]) {
-                        setCurrencyState(userCurrency);
+                // Fetch user preferences from backend (same API as core frontend)
+                if (isAuthenticated) {
+                    try {
+                        const prefs = await authenticatedFetch<UserPreferences>(
+                            `${API_BASE}/user/preferences`
+                        );
+                        if (prefs?.currency && rateMap[prefs.currency]) {
+                            setCurrencyState(prefs.currency);
+                        }
+                    } catch (prefsError) {
+                        console.warn('[CurrencyContext] Failed to fetch preferences, checking localStorage:', prefsError);
+                        // Fallback to localStorage
+                        const cached = typeof window !== 'undefined' ? localStorage.getItem('pearto_currency') : null;
+                        if (cached && rateMap[cached]) {
+                            setCurrencyState(cached);
+                        }
+                    }
+                } else {
+                    // Not authenticated — use localStorage cache
+                    const cached = typeof window !== 'undefined' ? localStorage.getItem('pearto_currency') : null;
+                    if (cached && rateMap[cached]) {
+                        setCurrencyState(cached);
                     }
                 }
 
@@ -61,14 +82,24 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
             }
         }
         init();
-    }, [isAuthenticated, user]);
+    }, [isAuthenticated]);
 
     const setCurrency = (code: string) => {
         setCurrencyState(code);
-        // TODO: Persist to backend if authenticated
-        // This would require a userService similar to frontend
+
+        // Always cache in localStorage for fast initial load
         if (typeof window !== 'undefined') {
             localStorage.setItem('pearto_currency', code);
+        }
+
+        // Persist to backend if authenticated (fire-and-forget)
+        if (isAuthenticated) {
+            authenticatedFetch(`${API_BASE}/user/preferences`, {
+                method: 'PUT',
+                body: JSON.stringify({ currency: code }),
+            }).catch((err) => {
+                console.warn('[CurrencyContext] Failed to persist currency preference:', err);
+            });
         }
     };
 
