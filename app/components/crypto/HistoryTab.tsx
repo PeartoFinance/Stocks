@@ -217,39 +217,39 @@ export default function HistoryTab({
         {/* Statistics */}
         {stats && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div className="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-xl border border-emerald-100 dark:border-emerald-800 transition-colors duration-300">
+            <div className="bg-emerald-50 dark:bg-emerald-900/20 p-3 sm:p-4 rounded-xl border border-emerald-100 dark:border-emerald-800 transition-colors duration-300">
               <div className="flex items-center gap-2 mb-2">
                 <TrendingUp className="h-4 w-4 text-emerald-600 dark:text-emerald-400 transition-colors duration-300" />
                 <span className="text-sm font-medium text-emerald-700 dark:text-emerald-300 transition-colors duration-300">High</span>
               </div>
-              <p className="text-lg font-bold text-emerald-900 dark:text-emerald-100 transition-colors duration-300">
+              <p className="text-base sm:text-lg font-bold text-emerald-900 dark:text-emerald-100 transition-colors duration-300">
                 {formatPrice(stats.high)}
               </p>
             </div>
-            <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-xl border border-red-100 dark:border-red-800 transition-colors duration-300">
+            <div className="bg-red-50 dark:bg-red-900/20 p-3 sm:p-4 rounded-xl border border-red-100 dark:border-red-800 transition-colors duration-300">
               <div className="flex items-center gap-2 mb-2">
                 <TrendingDown className="h-4 w-4 text-red-600 dark:text-red-400 transition-colors duration-300" />
                 <span className="text-sm font-medium text-red-700 dark:text-red-300 transition-colors duration-300">Low</span>
               </div>
-              <p className="text-lg font-bold text-red-900 dark:text-red-100 transition-colors duration-300">
+              <p className="text-base sm:text-lg font-bold text-red-900 dark:text-red-100 transition-colors duration-300">
                 {formatPrice(stats.low)}
               </p>
             </div>
-            <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border border-blue-100 dark:border-blue-800 transition-colors duration-300">
+            <div className="bg-blue-50 dark:bg-blue-900/20 p-3 sm:p-4 rounded-xl border border-blue-100 dark:border-blue-800 transition-colors duration-300">
               <div className="flex items-center gap-2 mb-2">
                 <BarChart3 className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                 <span className="text-sm font-medium text-blue-700 dark:text-blue-300 transition-colors duration-300">Average</span>
               </div>
-              <p className="text-lg font-bold text-blue-900 dark:text-blue-100 transition-colors duration-300">
+              <p className="text-base sm:text-lg font-bold text-blue-900 dark:text-blue-100 transition-colors duration-300">
                 {formatPrice(stats.average)}
               </p>
             </div>
-            <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-xl border border-purple-100 dark:border-purple-800 transition-colors duration-300">
+            <div className="bg-purple-50 dark:bg-purple-900/20 p-3 sm:p-4 rounded-xl border border-purple-100 dark:border-purple-800 transition-colors duration-300">
               <div className="flex items-center gap-2 mb-2">
                 <Activity className="h-4 w-4 text-purple-600 dark:text-purple-400" />
                 <span className="text-sm font-medium text-purple-700 dark:text-purple-300 transition-colors duration-300">Data Points</span>
               </div>
-              <p className="text-lg font-bold text-purple-900 dark:text-purple-100 transition-colors duration-300">
+              <p className="text-base sm:text-lg font-bold text-purple-900 dark:text-purple-100 transition-colors duration-300">
                 {stats.dataPoints.toLocaleString()}
               </p>
             </div>
@@ -293,109 +293,109 @@ export default function HistoryTab({
       </div>
 
       {/* Data Table */}
-<div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden transition-colors duration-300">
-  <div className="overflow-x-auto">
-    <table className="w-full border-collapse">
-      <thead className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600 transition-colors duration-300">
-        <tr>
-          {/* Date: Left Aligned */}
-          <th className="px-6 py-4 text-left">
-            <button
-              onClick={() => handleSort('date')}
-              className="flex items-center gap-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider hover:text-emerald-600 dark:text-emerald-400 transition-colors"
-            >
-              Date
-              {sortField === 'date' && (
-                <span className="text-emerald-600 dark:text-emerald-400 transition-colors duration-300">{sortDirection === 'asc' ? '↑' : '↓'}</span>
-              )}
-            </button>
-          </th>
-          
-          {/* Price: Right Aligned */}
-          <th className="px-6 py-4">
-            <button
-              onClick={() => handleSort('price')}
-              className="flex items-center justify-end w-full gap-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider hover:text-emerald-600 dark:text-emerald-400 transition-colors"
-            >
-              Price
-              {sortField === 'price' && (
-                <span className="text-emerald-600 dark:text-emerald-400 transition-colors duration-300">{sortDirection === 'asc' ? '↑' : '↓'}</span>
-              )}
-            </button>
-          </th>
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden transition-colors duration-300">
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse min-w-max">
+            <thead className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600 transition-colors duration-300">
+              <tr>
+                {/* Date: Left Aligned */}
+                <th className="px-2 sm:px-6 py-3 sm:py-4 text-left">
+                  <button
+                    onClick={() => handleSort('date')}
+                    className="flex items-center gap-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                  >
+                    Date
+                    {sortField === 'date' && (
+                      <span className="text-emerald-600 dark:text-emerald-400 transition-colors duration-300">{sortDirection === 'asc' ? '↑' : '↓'}</span>
+                    )}
+                  </button>
+                </th>
+                
+                {/* Price: Right Aligned */}
+                <th className="px-2 sm:px-6 py-3 sm:py-4">
+                  <button
+                    onClick={() => handleSort('price')}
+                    className="flex items-center justify-end w-full gap-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                  >
+                    Price
+                    {sortField === 'price' && (
+                      <span className="text-emerald-600 dark:text-emerald-400 transition-colors duration-300">{sortDirection === 'asc' ? '↑' : '↓'}</span>
+                    )}
+                  </button>
+                </th>
 
-          {/* Change: Right Aligned */}
-          <th className="px-6 py-4">
-            <button
-              onClick={() => handleSort('change')}
-              className="flex items-center justify-end w-full gap-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider hover:text-emerald-600 dark:text-emerald-400 transition-colors"
-            >
-              Change
-              {sortField === 'change' && (
-                <span className="text-emerald-600 dark:text-emerald-400 transition-colors duration-300">{sortDirection === 'asc' ? '↑' : '↓'}</span>
-              )}
-            </button>
-          </th>
+                {/* Change: Right Aligned */}
+                <th className="px-2 sm:px-6 py-3 sm:py-4">
+                  <button
+                    onClick={() => handleSort('change')}
+                    className="flex items-center justify-end w-full gap-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                  >
+                    Change
+                    {sortField === 'change' && (
+                      <span className="text-emerald-600 dark:text-emerald-400 transition-colors duration-300">{sortDirection === 'asc' ? '↑' : '↓'}</span>
+                    )}
+                  </button>
+                </th>
 
-          {/* Volume: Right Aligned */}
-          <th className="px-6 py-4">
-            <button
-              onClick={() => handleSort('volume')}
-              className="flex items-center justify-end w-full gap-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider hover:text-emerald-600 dark:text-emerald-400 transition-colors"
-            >
-              Volume
-              {sortField === 'volume' && (
-                <span className="text-emerald-600 dark:text-emerald-400 transition-colors duration-300">{sortDirection === 'asc' ? '↑' : '↓'}</span>
-              )}
-            </button>
-          </th>
+                {/* Volume: Right Aligned */}
+                <th className="px-2 sm:px-6 py-3 sm:py-4">
+                  <button
+                    onClick={() => handleSort('volume')}
+                    className="flex items-center justify-end w-full gap-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                  >
+                    Volume
+                    {sortField === 'volume' && (
+                      <span className="text-emerald-600 dark:text-emerald-400 transition-colors duration-300">{sortDirection === 'asc' ? '↑' : '↓'}</span>
+                    )}
+                  </button>
+                </th>
 
-          {/* Market Cap: Right Aligned */}
-          <th className="px-6 py-4">
-            <button
-              onClick={() => handleSort('marketCap')}
-              className="flex items-center justify-end w-full gap-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider hover:text-emerald-600 dark:text-emerald-400 transition-colors"
-            >
-              Market Cap
-              {sortField === 'marketCap' && (
-                <span className="text-emerald-600 dark:text-emerald-400 transition-colors duration-300">{sortDirection === 'asc' ? '↑' : '↓'}</span>
-              )}
-            </button>
-          </th>
-        </tr>
-      </thead>
-      <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700 transition-colors duration-300">
-        {filteredAndSortedData.map((item) => {
-          const priceChange = item.change || 0;
-          const isPositive = priceChange >= 0;
+                {/* Market Cap: Right Aligned */}
+                <th className="px-2 sm:px-6 py-3 sm:py-4">
+                  <button
+                    onClick={() => handleSort('marketCap')}
+                    className="flex items-center justify-end w-full gap-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                  >
+                    Market Cap
+                    {sortField === 'marketCap' && (
+                      <span className="text-emerald-600 dark:text-emerald-400 transition-colors duration-300">{sortDirection === 'asc' ? '↑' : '↓'}</span>
+                    )}
+                  </button>
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700 transition-colors duration-300">
+              {filteredAndSortedData.map((item) => {
+                const priceChange = item.change || 0;
+                const isPositive = priceChange >= 0;
 
-          return (
-            <tr key={item.time} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-              <td className="px-6 py-4 text-sm font-medium text-gray-900 dark:text-white transition-colors duration-300">
-                {formatDate(item.time)}
-              </td>
-              <td className="px-6 py-4 text-sm text-right font-semibold text-gray-900 dark:text-white transition-colors duration-300">
-                {formatPrice(item.price)}
-              </td>
-              <td className="px-6 py-4 text-sm text-right">
-                <div className={`flex items-center justify-end gap-1 font-medium ${isPositive ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'}`}>
-                  {isPositive ? <ArrowUpRight className="h-3.5 w-3.5" /> : <ArrowDownRight className="h-3.5 w-3.5" />}
-                  {Math.abs(priceChange) >= 0.01 ? formatPrice(Math.abs(priceChange)) : '< $0.01'}
-                </div>
-              </td>
-              <td className="px-6 py-4 text-sm text-right font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300">
-                {formatVolume(item.volume)}
-              </td>
-              <td className="px-6 py-4 text-sm text-right font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300">
-                {formatMarketCap(item.marketCap)}
-              </td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
-  </div>
-</div>
+                return (
+                  <tr key={item.time} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                    <td className="px-2 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium text-gray-900 dark:text-white transition-colors duration-300">
+                      {formatDate(item.time)}
+                    </td>
+                    <td className="px-2 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-right font-semibold text-gray-900 dark:text-white transition-colors duration-300">
+                      {formatPrice(item.price)}
+                    </td>
+                    <td className="px-2 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-right">
+                      <div className={`flex items-center justify-end gap-1 font-medium ${isPositive ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'}`}>
+                        {isPositive ? <ArrowUpRight className="h-3.5 w-3.5" /> : <ArrowDownRight className="h-3.5 w-3.5" />}
+                        {Math.abs(priceChange) >= 0.01 ? formatPrice(Math.abs(priceChange)) : '< $0.01'}
+                      </div>
+                    </td>
+                    <td className="px-2 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-right font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300">
+                      {formatVolume(item.volume)}
+                    </td>
+                    <td className="px-2 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-right font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300">
+                      {formatMarketCap(item.marketCap)}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 }

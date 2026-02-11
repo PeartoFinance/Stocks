@@ -27,6 +27,7 @@ import {
   ChartTab,
   HistoryTab,
   ProfileTab,
+  CryptoNewsTab,
   type TabId
 } from '@/app/components/crypto';
 
@@ -295,6 +296,9 @@ export default function CryptoDetailPage() {
       case 'profile':
         return <ProfileTab crypto={crypto} />;
 
+      case 'news':
+        return <CryptoNewsTab symbol={crypto.symbol} slug={crypto.symbol} />;
+
       default:
         return null;
     }
@@ -305,7 +309,7 @@ export default function CryptoDetailPage() {
       <div className="min-h-screen p-4 lg:p-8 flex items-center justify-center bg-gray-50 dark:bg-slate-900">
         <div className="text-center">
           <Activity className="h-12 w-12 text-emerald-600 animate-spin mx-auto mb-4" />
-          <p className="text-slate-500">Loading cryptocurrency data...</p>
+          <p className="text-gray-600 dark:text-gray-400">Loading cryptocurrency data...</p>
         </div>
       </div>
     );
