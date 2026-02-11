@@ -239,7 +239,6 @@ export default function TechnicalChartPage() {
                 priceGapsData={priceGapsData}
                 formatPrice={formatPrice}
                 onToggleFullscreen={() => setIsFullscreen(!isFullscreen)}
-                onOpenDetailed={handleOpenDetailedChart}
               />
 
               <QuickStats data={data} formatPrice={formatPrice} />

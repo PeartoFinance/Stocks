@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useTheme } from '@/app/context/ThemeContext';
 import {
   TrendingUp,
   TrendingDown,
@@ -59,6 +60,8 @@ interface TrendingCryptoProps {
 }
 
 export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   const { formatPrice } = useCurrency();
   const formatPercentage = (value: number) => `${value.toFixed(2)}%`;
   const [cryptos, setCryptos] = useState<TrendingCrypto[]>([]);
@@ -303,11 +306,11 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
   const getTrendColor = (trendType: TrendingCrypto['trendType']) => {
     switch (trendType) {
       case 'gainer': return 'bg-orange-100 text-orange-700';
-      case 'loser': return 'bg-red-100 dark:bg-pearto-pink/10 text-red-700';
+      case 'loser': return 'bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400';
       case 'volume': return 'bg-blue-100 text-blue-700';
       case 'breakout': return 'bg-purple-100 text-purple-700';
       case 'momentum': return 'bg-pink-100 text-pink-700';
-      default: return 'bg-gray-100 dark:bg-pearto-surface text-gray-700 dark:text-pearto-cloud';
+      default: return 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300';
     }
   };
 
@@ -318,8 +321,8 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
           <div className="flex items-center justify-center h-96">
             <div className="text-center">
               <Activity className="h-12 w-12 text-orange-600 animate-spin mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-pearto-luna transition-colors duration-300">Loading Trending Cryptocurrencies</h2>
-              <p className="text-gray-600 dark:text-pearto-cloud transition-colors duration-300">Please wait while we fetch the latest crypto trending data...</p>
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white transition-colors duration-300">Loading Trending Cryptocurrencies</h2>
+              <p className="text-gray-600 dark:text-gray-400 transition-colors duration-300">Please wait while we fetch the latest crypto trending data...</p>
             </div>
           </div>
         </main>
@@ -352,7 +355,7 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
                   AI Analysis
                 </button>
               </div>
-              <p className="text-sm text-gray-600 dark:text-pearto-cloud transition-colors duration-300">
+              <p className="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300">
                 Discover the most talked about and actively traded cryptocurrencies
               </p>
             </motion.div>
@@ -458,7 +461,7 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
                               size: 12,
                               weight: 500
                             },
-                            color: '#374151'
+                            color: isDark ? '#d1d5db' : '#374151'
                           }
                         },
                         tooltip: {
@@ -497,7 +500,7 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
                               size: 12,
                               weight: 500
                             },
-                            color: '#374151'
+                            color: isDark ? '#d1d5db' : '#374151'
                           }
                         },
                         tooltip: {
@@ -536,7 +539,7 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
                               size: 12,
                               weight: 500
                             },
-                            color: '#374151'
+                            color: isDark ? '#d1d5db' : '#374151'
                           }
                         },
                         tooltip: {
@@ -733,7 +736,7 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
               </div>
               <button
                 onClick={() => setIsAIPanelOpen(false)}
-                className="p-1 text-gray-500 dark:text-pearto-gray hover:text-gray-700 dark:text-pearto-cloud hover:bg-gray-200 rounded-lg transition-colors"
+                className="p-1 text-gray-500 hover:text-gray-700 dark:text-pearto-cloud hover:bg-gray-200 rounded-lg transition-colors"
               >
                 <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
