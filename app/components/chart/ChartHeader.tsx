@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { RefreshCw, Brain } from 'lucide-react';
+import { RefreshCw, Brain, Maximize2 } from 'lucide-react';
 
 interface ChartHeaderProps {
   symbol: string;
@@ -11,6 +11,7 @@ interface ChartHeaderProps {
   onRefresh: () => void;
   onAIAnalysis: () => void;
   onCompare: () => void;
+  onFullscreen: () => void;
   className?: string;
 }
 
@@ -22,6 +23,7 @@ export default function ChartHeader({
   onRefresh,
   onAIAnalysis,
   onCompare,
+  onFullscreen,
   className = ''
 }: ChartHeaderProps) {
   return (
@@ -50,6 +52,13 @@ export default function ChartHeader({
             title="Refresh"
           >
             <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+          </button>
+          <button
+            onClick={onFullscreen}
+            className="p-1.5 text-gray-500 hover:text-green-600 hover:bg-green-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
+            title="Open Fullscreen Chart"
+          >
+            <Maximize2 className="h-4 w-4" />
           </button>
           <button
             className="px-3 py-1 bg-purple-600 text-white text-xs font-medium rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-1"

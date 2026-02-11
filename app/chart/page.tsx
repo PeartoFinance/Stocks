@@ -3,7 +3,8 @@
 import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { toast } from 'react-hot-toast';
-import { Search, Brain, RefreshCw, Activity, Maximize2, AreaChart, BarChart3, LineChart } from 'lucide-react';
+import { Search, Brain, RefreshCw, Activity, Maximize2, AreaChart, BarChart3, LineChart, Maximize } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { marketService } from '../utils/marketService';
 import { HistoricalData } from '../types';
 import { useCurrency } from '../context/CurrencyContext';
@@ -20,6 +21,7 @@ import {
 } from '../components/chart';
 
 export default function TechnicalChartPage() {
+  const router = useRouter();
   // --- Refs ---
   const searchInputRef = useRef<HTMLInputElement>(null);
   const sparklineRefs = useRef<{ [key: string]: HTMLCanvasElement | null }>({});
@@ -170,6 +172,10 @@ export default function TechnicalChartPage() {
 
   const handleSelectStock = (stock: any) => setSymbol(stock.symbol);
 
+  const handleOpenDetailedChart = () => {
+    router.push(`/chart/${symbol}/detailedChart`);
+  };
+
   const isPositive = stockInfo ? (stockInfo.change || 0) >= 0 : true;
 
   return (
@@ -194,6 +200,7 @@ export default function TechnicalChartPage() {
               onRefresh={loadData}
               onAIAnalysis={() => setIsAIPanelOpen(true)}
               onCompare={() => toast('Compare coming soon!')}
+              onFullscreen={handleOpenDetailedChart}
             />
 
             <ChartControls
@@ -225,13 +232,14 @@ export default function TechnicalChartPage() {
                 showVolumeProfile={showVolumeProfile}
                 showMovingAverages={showMovingAverages}
                 showGaps={showGaps}
-                showCorrelation={showCorrelation} // <--- ADD THIS LINE
+                showCorrelation={showCorrelation}
                 percentMode={percentMode}
                 movingAveragesData={movingAveragesData}
                 volumeProfileData={volumeProfileData}
                 priceGapsData={priceGapsData}
                 formatPrice={formatPrice}
                 onToggleFullscreen={() => setIsFullscreen(!isFullscreen)}
+                onOpenDetailed={handleOpenDetailedChart}
               />
 
               <QuickStats data={data} formatPrice={formatPrice} />
