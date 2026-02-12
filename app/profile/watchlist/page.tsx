@@ -173,12 +173,12 @@ export default function WatchlistPage() {
 
             <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 max-w-4xl">
                 {showSearch && (
-                    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm p-4 sm:p-6 mb-6">
-                        <h3 className="font-semibold text-slate-900 mb-4">Add stock to watchlist</h3>
+                    <div className="bg-white dark:bg-pearto-card rounded-2xl border border-slate-200 dark:border-pearto-border shadow-sm p-4 sm:p-6 mb-6">
+                        <h3 className="font-semibold text-slate-900 dark:text-pearto-luna mb-4">Add stock to watchlist</h3>
                         <div className="relative">
                             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                                 <div className="flex-1 relative">
-                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 dark:text-pearto-gray" />
                                     <input
                                         type="text"
                                         value={symbolToAdd}
@@ -187,7 +187,7 @@ export default function WatchlistPage() {
                                         onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                                         onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
                                         placeholder="Enter stock symbol or name..."
-                                        className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 outline-none bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+                                        className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-pearto-border focus:border-green-500 focus:ring-2 focus:ring-green-500/20 outline-none bg-white dark:bg-pearto-card text-slate-900 dark:text-pearto-luna"
                                     />
                                 </div>
                                 <button
@@ -204,28 +204,28 @@ export default function WatchlistPage() {
                             
                             {/* Stock Suggestions Dropdown */}
                             {showSuggestions && filteredStocks.length > 0 && (
-                                <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg z-10 max-h-64 overflow-y-auto">
+                                <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-pearto-card border border-slate-200 dark:border-pearto-border rounded-xl shadow-lg z-10 max-h-64 overflow-y-auto">
                                     {filteredStocks.map((stock, index) => (
                                         <button
                                             key={index}
                                             onClick={() => handleSuggestionClick(stock)}
-                                            className="w-full px-4 py-3 text-left hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors border-b border-slate-100 dark:border-slate-700 last:border-b-0"
+                                            className="w-full px-4 py-3 text-left hover:bg-slate-50 dark:hover:bg-pearto-surface transition-colors border-b border-slate-100 dark:border-pearto-border last:border-b-0"
                                         >
                                             <div className="flex items-center justify-between">
                                                 <div>
-                                                    <div className="font-semibold text-slate-900">
+                                                    <div className="font-semibold text-slate-900 dark:text-pearto-luna">
                                                         {stock.symbol}
                                                     </div>
-                                                    <div className="text-sm text-slate-500 dark:text-slate-400 truncate">
+                                                    <div className="text-sm text-slate-500 dark:text-pearto-cloud truncate">
                                                         {stock.name}
                                                     </div>
                                                 </div>
                                                 <div className="text-right">
-                                                    <div className="font-semibold text-slate-900">
+                                                    <div className="font-semibold text-slate-900 dark:text-pearto-luna">
                                                         ${stock.price?.toFixed(2) || '0.00'}
                                                     </div>
                                                     <div className={`text-sm font-medium ${
-                                                        stock.change >= 0 ? 'text-emerald-600' : 'text-red-600'
+                                                        stock.change >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'
                                                     }`}>
                                                         {stock.change >= 0 ? '+' : ''}{stock.changePercent?.toFixed(2) || '0.00'}%
                                                     </div>

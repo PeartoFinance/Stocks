@@ -136,7 +136,7 @@ export default function MarketSummary({ className = '' }: MarketSummaryProps) {
 
   if (loading) {
     return (
-      <div className={`bg-white dark:bg-pearto-card rounded-xl shadow-sm border border-gray-200 dark:border-pearto-border p-8 ${className}`}>
+      <div className={`bg-white dark:bg-pearto-card rounded-xl shadow-sm p-8 ${className}`}>
         <div className="flex items-center justify-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
           <span className="ml-3 text-gray-600 dark:text-pearto-cloud transition-colors duration-300">Loading market summary...</span>
