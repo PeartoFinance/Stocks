@@ -2,7 +2,7 @@
 
 /**
  * Profile API Service
- * Fetches profile stats (watchlist count, alerts count, net worth) from backend.
+ * Fetches profile stats and handles profile updates.
  * Uses authenticatedFetch; all routes require JWT.
  */
 
@@ -20,6 +20,18 @@ export interface ProfileStats {
   portfolioCount: number;
 }
 
+// Interface for profile updates
+export interface UpdateProfileData {
+  name?: string;
+  phone?: string;
+  avatarUrl?: string;
+  bio?: string;
+  timezone?: string;
+}
+
+/**
+ * Fetches aggregated stats for the user profile dashboard
+ */
 export async function fetchProfileStats(): Promise<ProfileStats> {
   const defaults: ProfileStats = {
     watchlistCount: 0,
@@ -59,4 +71,26 @@ export async function fetchProfileStats(): Promise<ProfileStats> {
   return defaults;
 }
 
-export default { fetchProfileStats };
+/**
+ * Updates the current user's profile information
+ */
+export async function updateProfile(data: UpdateProfileData): Promise<{ success: boolean; user?: any; error?: string }> {
+  try {
+    const response = await authenticatedFetch<{ success: boolean; user?: any; error?: string }>(
+      `${API_BASE}/user/profile`, 
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      }
+    );
+    return response;
+  } catch (e) {
+    console.error('[profileAPI] updateProfile error:', e);
+    return { success: false, error: 'Failed to update profile' };
+  }
+}
+
+export default { fetchProfileStats, updateProfile };

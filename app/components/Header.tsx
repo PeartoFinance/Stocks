@@ -311,7 +311,6 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
 <<<<<<< Updated upstream
 
                   {countries.find(c => c.code === country)?.flagEmoji || '🌐'}                  <span className="text-gray-700 dark:text-gray-300 transition-colors duration-300">{country}</span>
-                  {countries.find(c => c.code === country)?.flagEmoji || '🌐'}                  <span className="text-gray-700 dark:text-gray-300">{country}</span>
 
 =======
                   {countries.find(c => c.code === country)?.flagEmoji || '🌐'}                  <span className="text-gray-700 dark:text-gray-300">{country}</span>
@@ -549,6 +548,16 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
               className="md:hidden fixed inset-x-0 top-12 sm:top-14 z-40 bg-white dark:bg-gray-900 overflow-auto max-h-[calc(100vh-3.5rem)] transition-colors duration-300"
             >
               <div className="p-3 sm:p-4 space-y-3 pb-20">
+                {/* Close button at the top */}
+                <div className="flex justify-end">
+                  <button
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300"
+                  >
+                    <X size={20} className="text-gray-600 dark:text-gray-300" />
+                  </button>
+                </div>
+
                 {/* Mobile Search */}
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />

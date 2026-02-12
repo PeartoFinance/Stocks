@@ -381,7 +381,7 @@ export default function WatchlistPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-pearto-blockchain transition-colors duration-300">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
       {/* Mobile Header */}
       <div className="lg:hidden bg-white dark:bg-pearto-card border-b border-gray-200 dark:border-pearto-border sticky top-0 z-30 transition-colors duration-300">
         <div className="px-4 py-3">
