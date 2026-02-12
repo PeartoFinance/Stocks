@@ -223,48 +223,9 @@ export default function ChartAnalysis({ stocks, title, type }: ChartAnalysisProp
     }],
   };
 
-  const volumeChartData = {
-    labels: Object.keys(analysisData.volumeCategories),
-    datasets: [{
-      data: Object.values(analysisData.volumeCategories),
-      backgroundColor: [
-        'rgba(239, 68, 68, 0.8)',   // High Volume - Red
-        'rgba(251, 146, 60, 0.8)',  // Medium Volume - Orange
-        'rgba(156, 163, 175, 0.8)', // Low Volume - Gray
-      ],
-      borderColor: [
-        'rgb(239, 68, 68)',
-        'rgb(251, 146, 60)',
-        'rgb(156, 163, 175)',
-      ],
-      borderWidth: 2,
-    }],
-  };
-
-  const priceChartData = {
-    labels: Object.keys(analysisData.priceRanges),
-    datasets: [{
-      data: Object.values(analysisData.priceRanges),
-      backgroundColor: [
-        'rgba(236, 72, 153, 0.8)',  // Premium - Pink
-        'rgba(147, 51, 234, 0.8)',  // High - Purple
-        'rgba(59, 130, 246, 0.8)',  // Medium - Blue
-        'rgba(34, 197, 94, 0.8)',   // Budget - Green
-      ],
-      borderColor: [
-        'rgb(236, 72, 153)',
-        'rgb(147, 51, 234)',
-        'rgb(59, 130, 246)',
-        'rgb(34, 197, 94)',
-      ],
-      borderWidth: 2,
-    }],
-  };
-
   // Calculate key metrics
   const avgChange = stocks.reduce((sum, stock) => sum + stock.changePercent, 0) / stocks.length;
   const totalVolume = stocks.reduce((sum, stock) => sum + (stock.volume || 0), 0);
-  const totalMarketCap = stocks.reduce((sum, stock) => sum + (stock.marketCap || 0), 0);
   const maxChange = Math.max(...stocks.map(s => Math.abs(s.changePercent)));
 
   return (
@@ -277,30 +238,30 @@ export default function ChartAnalysis({ stocks, title, type }: ChartAnalysisProp
       >
         <h3 className="text-base font-bold text-gray-900 dark:text-pearto-luna mb-2 transition-colors duration-300">{title} Analysis</h3>
         <div className="grid grid-cols-2 gap-2 text-xs">
-          <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-2 border border-blue-200">
-            <div className="text-blue-600 font-medium mb-1">Total Stocks</div>
-            <div className="text-blue-900 font-bold text-sm">{stocks.length}</div>
+          <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-2 border border-blue-200 dark:from-blue-900/20 dark:to-blue-800/20 dark:border-blue-800">
+            <div className="text-blue-600 dark:text-blue-400 font-medium mb-1">Total Stocks</div>
+            <div className="text-blue-900 dark:text-blue-100 font-bold text-sm">{stocks.length}</div>
           </div>
-          <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg p-2 border border-purple-200">
-            <div className="text-purple-600 font-medium mb-1">Avg Change</div>
+          <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg p-2 border border-purple-200 dark:from-purple-900/20 dark:to-purple-800/20 dark:border-purple-800">
+            <div className="text-purple-600 dark:text-purple-400 font-medium mb-1">Avg Change</div>
             <div className={`font-bold text-sm ${avgChange >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'}`}>
               {avgChange >= 0 ? '+' : ''}{avgChange.toFixed(2)}%
             </div>
           </div>
-          <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-2 border border-green-200">
+          <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-2 border border-green-200 dark:from-green-900/20 dark:to-green-800/20 dark:border-green-800">
             <div className="text-green-600 dark:text-pearto-green font-medium mb-1 transition-colors duration-300">Total Volume</div>
-            <div className="text-green-900 font-bold text-sm">{formatNumber(totalVolume)}</div>
+            <div className="text-green-900 dark:text-green-100 font-bold text-sm">{formatNumber(totalVolume)}</div>
           </div>
-          <div className="bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-2 border border-orange-200">
-            <div className="text-orange-600 font-medium mb-1">Max Change</div>
-            <div className="text-orange-900 font-bold text-sm">{maxChange.toFixed(1)}%</div>
+          <div className="bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-2 border border-orange-200 dark:from-orange-900/20 dark:to-orange-800/20 dark:border-orange-800">
+            <div className="text-orange-600 dark:text-orange-400 font-medium mb-1">Max Change</div>
+            <div className="text-orange-900 dark:text-orange-100 font-bold text-sm">{maxChange.toFixed(1)}%</div>
           </div>
         </div>
       </motion.div>
 
-      {/* Charts Grid - Optimized Size */}
+      {/* Charts Grid */}
       <div className="space-y-3">
-        {/* Sector Distribution - Medium Pie Chart */}
+        {/* Sector Distribution */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -317,27 +278,22 @@ export default function ChartAnalysis({ stocks, title, type }: ChartAnalysisProp
                   title: {
                     ...pieOptions.plugins.title,
                     text: 'Sectors',
-                    font: {
-                      size: 13,
-                      weight: 'bold' as const,
-                    },
+                    color: isDark ? '#f1f5f9' : '#111827',
                   },
                   legend: {
-                    position: 'bottom' as const,
+                    ...pieOptions.plugins.legend,
                     labels: {
-                      font: {
-                        size: 10,
-                      },
-                      padding: 8,
-                    },
-                  },
+                      ...pieOptions.plugins.legend.labels,
+                      color: isDark ? '#e2e8f0' : '#374151',
+                    }
+                  }
                 }
               }} 
             />
           </div>
         </motion.div>
 
-        {/* Performance Analysis - Medium Doughnut */}
+        {/* Performance Analysis */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -354,27 +310,22 @@ export default function ChartAnalysis({ stocks, title, type }: ChartAnalysisProp
                   title: {
                     ...pieOptions.plugins.title,
                     text: 'Performance',
-                    font: {
-                      size: 13,
-                      weight: 'bold' as const,
-                    },
+                    color: isDark ? '#f1f5f9' : '#111827',
                   },
                   legend: {
-                    position: 'bottom' as const,
+                    ...pieOptions.plugins.legend,
                     labels: {
-                      font: {
-                        size: 10,
-                      },
-                      padding: 8,
-                    },
-                  },
+                      ...pieOptions.plugins.legend.labels,
+                      color: isDark ? '#e2e8f0' : '#374151',
+                    }
+                  }
                 }
               }} 
             />
           </div>
         </motion.div>
 
-        {/* Market Cap Categories - Medium Pie */}
+        {/* Market Cap Categories */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -391,20 +342,15 @@ export default function ChartAnalysis({ stocks, title, type }: ChartAnalysisProp
                   title: {
                     ...pieOptions.plugins.title,
                     text: 'Market Cap',
-                    font: {
-                      size: 13,
-                      weight: 'bold' as const,
-                    },
+                    color: isDark ? '#f1f5f9' : '#111827',
                   },
                   legend: {
-                    position: 'bottom' as const,
+                    ...pieOptions.plugins.legend,
                     labels: {
-                      font: {
-                        size: 10,
-                      },
-                      padding: 8,
-                    },
-                  },
+                      ...pieOptions.plugins.legend.labels,
+                      color: isDark ? '#e2e8f0' : '#374151',
+                    }
+                  }
                 }
               }} 
             />

@@ -258,7 +258,7 @@ export function TableExportButton({
                     disabled={isDisabled}
                     className={`flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg transition whitespace-nowrap ${isDisabled
                         ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
-                        : 'bg-slate-100 text-slate-600 dark:text-pearto-cloud hover:bg-slate-200'
+                        : 'bg-slate-100 dark:bg-pearto-surface text-slate-600 dark:text-pearto-cloud hover:bg-slate-200 dark:hover:bg-pearto-surface/80'
                         } ${className}`}
                 >
                     <Download size={14} />
