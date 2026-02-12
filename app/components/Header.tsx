@@ -308,10 +308,14 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                   onClick={() => setCountryMenuOpen(!countryMenuOpen)}
                   className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-sm transition"
                 >
+<<<<<<< Updated upstream
 
                   {countries.find(c => c.code === country)?.flagEmoji || '🌐'}                  <span className="text-gray-700 dark:text-gray-300 transition-colors duration-300">{country}</span>
                   {countries.find(c => c.code === country)?.flagEmoji || '🌐'}                  <span className="text-gray-700 dark:text-gray-300">{country}</span>
 
+=======
+                  {countries.find(c => c.code === country)?.flagEmoji || '🌐'}                  <span className="text-gray-700 dark:text-gray-300">{country}</span>
+>>>>>>> Stashed changes
                   <ChevronDown size={14} className="text-gray-400" />
                 </button >
 
