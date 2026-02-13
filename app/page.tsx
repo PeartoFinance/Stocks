@@ -482,7 +482,7 @@ export default function HomePage() {
 
             {/* Call to Action */}
             <div className="text-center px-3 sm:px-4">
-              <div className="bg-white dark:bg-[#1a1a1a] rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 border border-gray-200 dark:border-[#2a2a2a] shadow-lg transition-colors duration-300">
+              <div className="bg-white dark:bg-gray-900 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 border border-gray-200 dark:border-gray-800 shadow-xl dark:shadow-2xl transition-colors duration-300">
                 <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4 text-gray-900 dark:text-[#fafafa]">Ready to Start Trading?</h2>
                 <p className="text-sm sm:text-base lg:text-xl text-gray-600 dark:text-gray-400 mb-6 sm:mb-8 max-w-2xl mx-auto px-4">
                   Join thousands of professional traders using our advanced analytics platform to make informed investment decisions.
