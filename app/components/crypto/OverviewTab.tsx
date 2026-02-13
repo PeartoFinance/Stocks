@@ -116,7 +116,7 @@ export default function OverviewTab({
       {/* Mobile Compact Stats */}
       <div className="lg:hidden space-y-3 mb-4">
         {/* Today's Stats */}
-        <div className="bg-white dark:bg-pearto-card dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-3 sm:p-4 transition-colors duration-300">
+        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-3 sm:p-4 transition-colors duration-300">
           <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3 transition-colors duration-300">Today's Stats</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
@@ -139,7 +139,7 @@ export default function OverviewTab({
         </div>
 
         {/* Volume Stats */}
-        <div className="bg-white dark:bg-pearto-card dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-3 sm:p-4 transition-colors duration-300">
+        <div className="bg-white  dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-3 sm:p-4 transition-colors duration-300">
           <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3 transition-colors duration-300">Volume & Supply</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
@@ -155,7 +155,7 @@ export default function OverviewTab({
         </div>
 
         {/* Key Metrics */}
-        <div className="bg-white dark:bg-pearto-card dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-3 sm:p-4 transition-colors duration-300">
+        <div className="bg-white  dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-3 sm:p-4 transition-colors duration-300">
           <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3 transition-colors duration-300">Key Metrics</h3>
           <div className="space-y-2">
             {[
@@ -175,7 +175,7 @@ export default function OverviewTab({
       {/* Desktop Stats + Chart + AI Analysis Grid */}
       <div className="hidden lg:grid lg:grid-cols-5 gap-4 mb-5">
         {/* Key Stats */}
-        <div className="lg:col-span-1 bg-white dark:bg-pearto-card dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-3 transition-colors duration-300">
+        <div className="lg:col-span-1 bg-white  dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-3 transition-colors duration-300">
           <h3 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2 transition-colors duration-300">
             Key Statistics
           </h3>
@@ -200,13 +200,13 @@ export default function OverviewTab({
 
         {/* Chart */}
         <div className="lg:col-span-3">
-          <div className="bg-white dark:bg-pearto-card dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-5 transition-colors duration-300">
+          <div className="bg-white  dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-5 transition-colors duration-300">
             {/* Chart Controls */}
             <div className="mb-4 p-3 bg-slate-50 dark:bg-pearto-surface/50 rounded-xl border border-slate-100 transition-colors duration-300">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
                 <div className="flex items-center gap-3">
-                  <span className="text-sm font-semibold text-gray-700 dark:text-pearto-cloud dark:text-pearto-cloud transition-colors duration-300">Duration</span>
-                  <div className="flex bg-white dark:bg-pearto-card dark:bg-pearto-card rounded-lg p-1 border border-slate-200 dark:border-pearto-border overflow-x-auto transition-colors duration-300">
+                  <span className="text-sm font-semibold text-gray-700  dark:text-pearto-cloud transition-colors duration-300">Duration</span>
+                  <div className="flex bg-white  dark:bg-pearto-card rounded-lg p-1 border border-slate-200 dark:border-pearto-border overflow-x-auto transition-colors duration-300">
                     {periods.map((p) => (
                       <button
                         key={p}
@@ -230,8 +230,8 @@ export default function OverviewTab({
               </div>
 
               <div className="flex items-center gap-3">
-                <span className="text-sm font-semibold text-gray-700 dark:text-pearto-cloud dark:text-pearto-cloud transition-colors duration-300">Type</span>
-                <div className="flex bg-white dark:bg-pearto-card dark:bg-pearto-card rounded-lg p-1 border border-slate-200 dark:border-pearto-border transition-colors duration-300">
+                <span className="text-sm font-semibold text-gray-700  dark:text-pearto-cloud transition-colors duration-300">Type</span>
+                <div className="flex bg-white  dark:bg-pearto-card rounded-lg p-1 border border-slate-200 dark:border-pearto-border transition-colors duration-300">
                   {chartTypes.map((type) => (
                     <button
                       key={type.key}
@@ -270,7 +270,7 @@ export default function OverviewTab({
                   chartType={chartType} 
                 />
               ) : (
-                <div className="flex items-center justify-center h-full bg-gray-50 dark:bg-pearto-surface dark:bg-pearto-surface rounded-lg text-gray-400 transition-colors duration-300">
+                <div className="flex items-center justify-center h-full bg-gray-50 dark:bg-pearto-surface rounded-lg text-gray-400 transition-colors duration-300">
                   No data available for this period.
                 </div>
               )}
@@ -286,7 +286,7 @@ export default function OverviewTab({
 
       {/* Mobile Chart */}
       <div className="lg:hidden">
-        <div className="bg-white dark:bg-pearto-card dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 transition-colors duration-300">
+        <div className="bg-white rounded-xl border border-slate-200 dark:border-slate-700 p-4 transition-colors duration-300">
           {/* Mobile Chart Header */}
           <div className="flex items-center justify-between mb-3">
             <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-bold ${
@@ -338,7 +338,7 @@ export default function OverviewTab({
                 chartType={chartType} 
               />
             ) : (
-              <div className="flex items-center justify-center h-full bg-gray-50 dark:bg-pearto-surface dark:bg-pearto-surface rounded-lg text-gray-400 text-sm transition-colors duration-300">
+              <div className="flex items-center justify-center h-full bg-gray-50  dark:bg-pearto-surface rounded-lg text-gray-400 text-sm transition-colors duration-300">
                 No data available
               </div>
             )}
@@ -352,7 +352,7 @@ export default function OverviewTab({
       </div>
 
       {/* About Section */}
-      <div className="bg-white dark:bg-pearto-card dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-6 transition-colors duration-300">
+      <div className="bg-white  dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-6 transition-colors duration-300">
         <div className="flex items-center gap-3 mb-4">
           <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
             <BarChart3 className="h-4 w-4 text-emerald-600 dark:text-pearto-green transition-colors duration-300" />
