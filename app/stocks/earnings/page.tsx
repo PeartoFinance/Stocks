@@ -120,7 +120,7 @@ export default function EarningsCalendar() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <main className="max-w-7xl mx-auto px-4 py-8">
+        <main className="px-4 py-8">
           <div className="flex items-center justify-center h-96">
             <div className="text-center">
               <Calendar className="h-16 w-16 text-blue-600 animate-pulse mx-auto mb-4" />
@@ -135,7 +135,7 @@ export default function EarningsCalendar() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <main className="max-w-7xl mx-auto px-4 py-8">
+      <main className="px-4 py-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

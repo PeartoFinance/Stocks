@@ -213,7 +213,7 @@ export default function HomePage() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-emerald-50/30 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900 transition-colors duration-300">
       {/* Advanced Market Indices Dashboard - Full Width */}
       <div className="bg-gradient-to-r from-emerald-600 to-teal-700 dark:from-pearto-astronaut dark:to-pearto-puerto-rico border-b border-emerald-700 dark:border-pearto-border transition-colors duration-300">
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6">
+        <div className="px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 mb-4 mt-8 sm:mt-10">
             <div>
               <h2 className="text-base sm:text-lg font-semibold text-emerald-100 dark:text-pearto-luna">
@@ -301,7 +301,7 @@ export default function HomePage() {
       </div>
 
       {/* Main Dashboard Content */}
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
+      <div className="px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
         {/* Market Overview Grid with AI Sidebar */}
         <div className="flex flex-col xl:flex-row gap-4 sm:gap-6 lg:gap-8">
           {/* Main Data Content */}

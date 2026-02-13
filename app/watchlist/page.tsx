@@ -447,7 +447,7 @@ export default function WatchlistPage() {
       {/* Desktop Header */}
       <div className="hidden lg:block bg-white dark:bg-pearto-card border-b border-gray-200 dark:border-pearto-border mb-8 transition-colors duration-300">
         <div className="px-6 py-3">
-          <div className="flex items-center justify-between max-w-7xl mx-auto">
+          <div className="flex items-center justify-between">
             <div className="relative flex-1 max-w-lg">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <input
@@ -460,7 +460,7 @@ export default function WatchlistPage() {
         </div>
       </div>
 
-      <main className="px-4 py-4 lg:px-6 max-w-7xl mx-auto">
+      <main className="px-4 py-4 lg:px-6">
         <div className="flex flex-col xl:flex-row gap-4 lg:gap-6">
           {/* Main Content */}
           <div className="flex-1 min-w-0">
