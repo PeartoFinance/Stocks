@@ -823,7 +823,7 @@ export default function StockDetailPage({ params }: PageProps) {
       </div>
 
       {/* Desktop Layout */}
-      <div className="hidden lg:block p-4 lg:p-6 space-y-5 w-full max-w-7xl mx-auto">
+      <div className="hidden lg:block p-4 lg:p-6 space-y-5 w-full">
         {/* Back Button */}
         <Link
           href="/stocks"
