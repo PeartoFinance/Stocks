@@ -114,7 +114,7 @@ export default function SectorsSection({ className = '' }: SectorsSectionProps) 
   );
 
   return (
-    <div className={`max-w-7xl mx-auto space-y-6 ${className}`}>
+    <div className={`w-full space-y-6 ${className}`}>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -125,10 +125,10 @@ export default function SectorsSection({ className = '' }: SectorsSectionProps) 
         </div>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         
         {/* LEFT: HEATMAP GRID */}
-        <div className="xl:col-span-2 bg-white dark:bg-pearto-card rounded-2xl shadow-sm border border-gray-200 dark:border-pearto-border p-5 transition-colors duration-300">
+        <div className="lg:col-span-3 bg-white dark:bg-pearto-card rounded-2xl shadow-sm border border-gray-200 dark:border-pearto-border p-5 transition-colors duration-300">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
               Market Heatmap <Info size={14} className="opacity-50" />
@@ -139,12 +139,11 @@ export default function SectorsSection({ className = '' }: SectorsSectionProps) 
             </div>
           </div>
 
-          <div className="grid grid-cols-4 md:grid-cols-6 gap-2 auto-rows-[minmax(85px,auto)]">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-2 auto-rows-[minmax(85px,auto)]">
             {sectors.map((sector) => (
               <div
                 key={sector.sector}
                 className={`
-                  ${getWeightClass(sector.weight)}
                   ${getIntensity(sector.avgChangePercent)}
                   group flex flex-col justify-between p-3 rounded-xl border-2 transition-all duration-300 
                   hover:scale-[1.02] hover:shadow-xl cursor-pointer overflow-hidden
@@ -172,7 +171,7 @@ export default function SectorsSection({ className = '' }: SectorsSectionProps) 
         </div>
 
         {/* RIGHT: DISTRIBUTION & DUAL-COLUMN PROGRESS BARS */}
-        <div className="bg-white dark:bg-pearto-card rounded-2xl shadow-sm border border-gray-200 dark:border-pearto-border p-6 flex flex-col transition-colors duration-300">
+        <div className="lg:col-span-2 bg-white dark:bg-pearto-card rounded-2xl shadow-sm border border-gray-200 dark:border-pearto-border p-6 flex flex-col transition-colors duration-300">
           <div className="flex items-center justify-between mb-6">
             <h3 className="font-bold text-gray-900 dark:text-pearto-luna text-lg transition-colors duration-300">Distribution</h3>
             <PieChartIcon className="h-5 w-5 text-indigo-500" />
@@ -185,7 +184,7 @@ export default function SectorsSection({ className = '' }: SectorsSectionProps) 
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-wider rounded-lg transition-all ${
-                  activeTab === tab ? 'bg-white dark:bg-pearto-card text-indigo-600 shadow-sm' : 'text-gray-500 dark:text-pearto-gray hover:text-gray-700 dark:text-pearto-cloud'
+                  activeTab === tab ? 'bg-white dark:bg-pearto-card text-indigo-600 shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:text-pearto-cloud'
                 }`}
               >
                 {tab}
