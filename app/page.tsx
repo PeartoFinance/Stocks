@@ -482,18 +482,18 @@ export default function HomePage() {
 
             {/* Call to Action */}
             <div className="text-center px-3 sm:px-4">
-              <div className="bg-gradient-to-r from-emerald-600 to-teal-800 dark:from-pearto-astronaut dark:to-pearto-slate rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 text-white border border-transparent dark:border-pearto-border transition-colors duration-300">
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4 text-white dark:text-pearto-luna">Ready to Start Trading?</h2>
-                <p className="text-sm sm:text-base lg:text-xl text-emerald-100 dark:text-pearto-cloud mb-6 sm:mb-8 max-w-2xl mx-auto px-4">
+              <div className="bg-white dark:bg-[#1a1a1a] rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 border border-gray-200 dark:border-[#2a2a2a] shadow-lg transition-colors duration-300">
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4 text-gray-900 dark:text-[#fafafa]">Ready to Start Trading?</h2>
+                <p className="text-sm sm:text-base lg:text-xl text-gray-600 dark:text-gray-400 mb-6 sm:mb-8 max-w-2xl mx-auto px-4">
                   Join thousands of professional traders using our advanced analytics platform to make informed investment decisions.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
-                  <Link href="/stocks" className="w-full sm:w-auto inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-white dark:bg-pearto-green text-emerald-600 dark:text-pearto-blockchain rounded-lg sm:rounded-xl hover:bg-emerald-50 dark:hover:bg-pearto-green-hover transition-all font-semibold shadow-lg text-sm sm:text-base">
+                  <Link href="/stocks" className="w-full sm:w-auto inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg sm:rounded-xl transition-all font-semibold shadow-lg text-sm sm:text-base">
                     <BarChart className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                     Start Analyzing
                     <ArrowRight className="ml-2 h-3 w-3 sm:h-4 sm:w-4" />
                   </Link>
-                  <Link href="/pro" className="w-full sm:w-auto inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-emerald-700 dark:bg-pearto-pink text-white rounded-lg sm:rounded-xl hover:bg-emerald-800 dark:hover:bg-pearto-pink-hover transition-all font-semibold border-2 border-emerald-500 dark:border-pearto-pink text-sm sm:text-base">
+                  <Link href="/pro" className="w-full sm:w-auto inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-gray-200 dark:bg-[#2a2a2a] text-gray-900 dark:text-[#fafafa] hover:bg-gray-300 dark:hover:bg-[#333333] rounded-lg sm:rounded-xl transition-all font-semibold border-2 border-gray-300 dark:border-[#3a3a3a] text-sm sm:text-base">
                     <Star className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                     Get Premium Access
                   </Link>

@@ -119,6 +119,7 @@ export default function MarketSummary({ className = '' }: MarketSummaryProps) {
           font: {
             size: 12,
           },
+          color: '#fafafa',
         },
       },
       tooltip: {
