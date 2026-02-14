@@ -102,8 +102,8 @@ export default function StatisticsTab({ comparedStocks, formatLargeNumber }: Sta
     return (
       <div className="text-center py-12">
         <Activity className="h-12 w-12 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-[#fafafa] mb-2">No stocks to compare</h3>
-        <p className="text-sm text-gray-600 dark:text-[#a3a3a3]">Add stocks to see detailed statistics</p>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No stocks to compare</h3>
+        <p className="text-sm text-gray-600 dark:text-gray-400">Add stocks to see detailed statistics</p>
       </div>
     );
   }
@@ -124,7 +124,7 @@ export default function StatisticsTab({ comparedStocks, formatLargeNumber }: Sta
               className={`flex items-center gap-2 px-5 py-3 rounded-lg text-sm font-semibold transition-all flex-shrink-0 ${
                 isActive
                   ? 'bg-gradient-to-r from-blue-600 to-blue-700 dark:from-emerald-600 dark:to-emerald-700 text-white shadow-lg scale-105'
-                  : 'bg-white dark:bg-[#171717] text-gray-700 dark:text-[#a3a3a3] hover:bg-gray-50 dark:hover:bg-[#1a1a1a] border border-gray-200 dark:border-[#262626] hover:border-blue-300 dark:hover:border-emerald-500/50'
+                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#1a1a1a] border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-emerald-500/50'
               }`}
             >
               <Icon className="h-5 w-5" />
@@ -145,10 +145,10 @@ export default function StatisticsTab({ comparedStocks, formatLargeNumber }: Sta
           const MetricIcon = metric.icon;
 
           return (
-            <div key={metric.key} className="bg-white dark:bg-[#171717] rounded-xl p-5 border border-gray-200 dark:border-[#262626] hover:shadow-lg dark:hover:shadow-emerald-500/5 transition-all">
+            <div key={metric.key} className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700 hover:shadow-lg dark:hover:shadow-emerald-500/5 transition-all">
               <div className="flex items-center gap-2 mb-4">
                 {MetricIcon && <MetricIcon className="h-5 w-5 text-blue-600 dark:text-emerald-500" />}
-                <h4 className="text-base font-bold text-gray-900 dark:text-[#fafafa]">{metric.label}</h4>
+                <h4 className="text-base font-bold text-gray-900 dark:text-white">{metric.label}</h4>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
                 {comparedStocks.map((stock) => {
@@ -166,7 +166,7 @@ export default function StatisticsTab({ comparedStocks, formatLargeNumber }: Sta
                           ? 'bg-gradient-to-br from-green-50 to-green-100 dark:from-green-500/10 dark:to-green-500/5 border-green-500 dark:border-green-500/50 shadow-md'
                           : isWorst
                           ? 'bg-gradient-to-br from-red-50 to-red-100 dark:from-red-500/10 dark:to-red-500/5 border-red-500 dark:border-red-500/50 shadow-md'
-                          : 'bg-gray-50 dark:bg-[#0a0a0a] border-gray-200 dark:border-[#262626]'
+                          : 'bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-700'
                       }`}
                     >
                       {isBest && (
@@ -183,7 +183,7 @@ export default function StatisticsTab({ comparedStocks, formatLargeNumber }: Sta
                         <div className="w-3 h-3 rounded-full shadow-sm" style={{ backgroundColor: stock.color }} />
                         <Link
                           href={`/stock/${stock.symbol.toLowerCase()}`}
-                          className="text-sm font-bold text-gray-900 dark:text-[#fafafa] hover:text-blue-600 dark:hover:text-emerald-500 transition-colors"
+                          className="text-sm font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-emerald-500 transition-colors"
                         >
                           {stock.symbol}
                         </Link>
@@ -197,11 +197,11 @@ export default function StatisticsTab({ comparedStocks, formatLargeNumber }: Sta
                           ? 'text-green-600 dark:text-green-400'
                           : isWorst
                           ? 'text-red-600 dark:text-red-400'
-                          : 'text-gray-900 dark:text-[#fafafa]'
+                          : 'text-gray-900 dark:text-white'
                       }`}>
                         {formatValue(value, metric.format)}
                       </div>
-                      <p className="text-xs text-gray-500 dark:text-[#737373] truncate">{stock.name}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{stock.name}</p>
                     </div>
                   );
                 })}

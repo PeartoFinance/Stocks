@@ -246,35 +246,35 @@ export default function StockComparison() {
       <main className="p-4 lg:p-6">
         <div className="max-w-[1600px] mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-4">
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-[#fafafa] mb-1">Stock Comparison</h1>
-            <p className="text-sm text-slate-600 dark:text-[#a3a3a3]">Compare up to 5 stocks side by side</p>
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-1">Stock Comparison</h1>
+            <p className="text-sm text-slate-600 dark:text-gray-400">Compare up to 5 stocks side by side</p>
           </motion.div>
 
           {/* Search Section */}
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white dark:bg-[#171717] rounded-lg p-4 border border-slate-200 dark:border-[#262626] mb-6">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-slate-200 dark:border-gray-700 mb-6">
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-sm font-semibold text-slate-900 dark:text-[#fafafa]">Add Stocks</h2>
-              <span className="text-xs text-gray-500 dark:text-[#737373]">{comparedStocks.length}/5</span>
+              <h2 className="text-sm font-semibold text-slate-900 dark:text-white">Add Stocks</h2>
+              <span className="text-xs text-gray-500 dark:text-gray-400">{comparedStocks.length}/5</span>
             </div>
             <div className="relative mb-3">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-[#737373]" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-400" />
               <input
                 type="text"
                 placeholder="Search stocks..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 text-sm border border-slate-300 dark:border-[#262626] rounded-lg bg-white dark:bg-[#0a0a0a] text-slate-900 dark:text-[#fafafa] focus:ring-2 focus:ring-blue-500 dark:focus:ring-emerald-500"
+                className="w-full pl-10 pr-4 py-2 text-sm border border-slate-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-emerald-500"
               />
               {loading && <Activity className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-blue-600 dark:text-emerald-500 animate-spin" />}
             </div>
 
             {searchResults.length > 0 && (
-              <div className="border border-slate-200 dark:border-[#262626] rounded-lg max-h-48 overflow-y-auto">
+              <div className="border border-slate-200 dark:border-gray-700 rounded-lg max-h-48 overflow-y-auto">
                 {searchResults.map((stock) => (
-                  <div key={stock.symbol} className="flex items-center justify-between p-3 hover:bg-slate-50 dark:hover:bg-[#1a1a1a] border-b border-gray-100 dark:border-[#262626] last:border-b-0">
+                  <div key={stock.symbol} className="flex items-center justify-between p-3 hover:bg-slate-50 dark:hover:bg-[#1a1a1a] border-b border-gray-100 dark:border-gray-700 last:border-b-0">
                     <div className="flex-1">
-                      <h4 className="text-sm font-semibold text-slate-900 dark:text-[#fafafa]">{stock.symbol}</h4>
-                      <p className="text-xs text-slate-600 dark:text-[#a3a3a3] truncate">{stock.name}</p>
+                      <h4 className="text-sm font-semibold text-slate-900 dark:text-white">{stock.symbol}</h4>
+                      <p className="text-xs text-slate-600 dark:text-gray-400 truncate">{stock.name}</p>
                     </div>
                     <div className="flex items-center gap-3">
                       <div className="text-right">
@@ -294,14 +294,14 @@ export default function StockComparison() {
 
             {searchTerm === '' && comparedStocks.length < 5 && (
               <div>
-                <h4 className="text-xs font-medium text-slate-700 dark:text-[#a3a3a3] mb-2">Popular Stocks</h4>
+                <h4 className="text-xs font-medium text-slate-700 dark:text-gray-400 mb-2">Popular Stocks</h4>
                 <div className="flex flex-wrap gap-2">
                   {['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA', 'NVDA'].map((symbol) => (
                     <button
                       key={symbol}
                       onClick={() => setSearchTerm(symbol)}
                       disabled={comparedStocks.some(s => s.symbol === symbol)}
-                      className="px-3 py-1 text-xs font-medium bg-slate-100 dark:bg-[#1a1a1a] hover:bg-gray-200 dark:hover:bg-[#262626] disabled:opacity-50 text-slate-700 dark:text-[#fafafa] rounded-md"
+                      className="px-3 py-1 text-xs font-medium bg-slate-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-[#262626] disabled:opacity-50 text-slate-700 dark:text-white rounded-md"
                     >
                       {symbol}
                     </button>
@@ -314,7 +314,7 @@ export default function StockComparison() {
           {/* Tabs */}
           {comparedStocks.length > 0 && (
             <>
-              <div className="bg-white dark:bg-[#171717] rounded-lg p-1 border border-slate-200 dark:border-[#262626] mb-6">
+              <div className="bg-white dark:bg-gray-800 rounded-lg p-1 border border-slate-200 dark:border-gray-700 mb-6">
                 <div className="flex gap-1 overflow-x-auto">
                   {tabs.map((tab) => {
                     const Icon = tab.icon;
@@ -326,7 +326,7 @@ export default function StockComparison() {
                         className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all flex-shrink-0 ${
                           isActive
                             ? 'bg-blue-600 dark:bg-emerald-600 text-white shadow-sm'
-                            : 'text-slate-700 dark:text-[#a3a3a3] hover:bg-slate-100 dark:hover:bg-[#1a1a1a]'
+                            : 'text-slate-700 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-[#1a1a1a]'
                         }`}
                       >
                         <Icon className="h-4 w-4" />
