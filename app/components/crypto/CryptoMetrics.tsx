@@ -52,10 +52,10 @@ export default function CryptoMetrics({ globalMetrics, loading = false, onRefres
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-slate-200  dark:border-gray-700 p-6 transition-colors duration-300">
         <div className="flex items-center gap-3 mb-4">
-          <div className="p-2 bg-emerald-100 rounded-lg">
-            <BarChart3 className="h-5 w-5 text-emerald-600 dark:text-pearto-green transition-colors duration-300" />
+          <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+            <BarChart3 className="h-5 w-5 text-blue-600 dark:text-blue-400 transition-colors duration-300" />
           </div>
-          <span className="text-sm font-medium text-emerald-600 dark:text-pearto-green transition-colors duration-300">Total Market Cap</span>
+          <span className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">Total Market Cap</span>
         </div>
         <div className="text-2xl font-bold text-slate-900  dark:text-white mb-2 transition-colors duration-300">
           {formatMarketCap(globalMetrics?.totalMarketCap || 0)}
@@ -72,12 +72,12 @@ export default function CryptoMetrics({ globalMetrics, loading = false, onRefres
 
       <div className="bg-white dark:bg-gray-800  rounded-xl shadow-sm border border-slate-200 dark:border-gray-700  p-6 transition-colors duration-300">
         <div className="flex items-center gap-3 mb-4">
-          <div className="p-2 bg-emerald-100 rounded-lg">
-            <Activity className="h-5 w-5 text-emerald-600 dark:text-pearto-green transition-colors duration-300" />
+          <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+            <Activity className="h-5 w-5 text-blue-600 dark:text-blue-400 transition-colors duration-300" />
           </div>
-          <span className="text-sm font-medium text-emerald-600 dark:text-pearto-green transition-colors duration-300">24h Volume</span>
+          <span className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">24h Volume</span>
         </div>
-        <div className="text-2xl font-bold text-slate-900 dark:text-white dark:text-pearto-lun mb-2 transition-colors duration-300">
+        <div className="text-2xl font-bold text-slate-900 dark:text-white mb-2 transition-colors duration-300">
           {formatVolume(globalMetrics?.totalVolume24h || 0)}
         </div>
         <div className="text-sm text-gray-500  dark:text-gray-400 transition-colors duration-300">Last 24 hours</div>
@@ -85,10 +85,10 @@ export default function CryptoMetrics({ globalMetrics, loading = false, onRefres
 
       <div className="bg-white  dark:bg-gray-800 rounded-xl shadow-sm border border-slate-200 dark:border-gray-700  p-6 transition-colors duration-300">
         <div className="flex items-center gap-3 mb-4">
-          <div className="p-2 bg-emerald-100 rounded-lg">
-            <div className="h-5 w-5 text-emerald-600 dark:text-pearto-green font-bold text-center transition-colors duration-300">₿</div>
+          <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+            <div className="h-5 w-5 text-blue-600 dark:text-blue-400 font-bold text-center transition-colors duration-300">₿</div>
           </div>
-          <span className="text-sm font-medium text-emerald-600 dark:text-pearto-green transition-colors duration-300">BTC Dominance</span>
+          <span className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">BTC Dominance</span>
         </div>
         <div className="text-2xl font-bold text-slate-900 dark:text-white  mb-2 transition-colors duration-300">
           {(globalMetrics?.btcDominance || 0).toFixed(1)}%
@@ -98,10 +98,10 @@ export default function CryptoMetrics({ globalMetrics, loading = false, onRefres
 
       <div className="bg-white  dark:bg-gray-800 rounded-xl shadow-sm border border-slate-200  dark:border-gray-700 p-6 transition-colors duration-300">
         <div className="flex items-center gap-3 mb-4">
-          <div className="p-2 bg-emerald-100 rounded-lg">
-            <div className="h-5 w-5 text-emerald-600 dark:text-pearto-green font-bold text-center transition-colors duration-300">#</div>
+          <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+            <div className="h-5 w-5 text-blue-600 dark:text-blue-400 font-bold text-center transition-colors duration-300">#</div>
           </div>
-          <span className="text-sm font-medium text-emerald-600 dark:text-pearto-green transition-colors duration-300">Active Cryptos</span>
+          <span className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">Active Cryptos</span>
         </div>
         <div className="text-2xl font-bold text-slate-900  dark:text-white mb-2 transition-colors duration-300">
           {globalMetrics?.activeCryptos?.toLocaleString() || '0'}
@@ -112,7 +112,7 @@ export default function CryptoMetrics({ globalMetrics, loading = false, onRefres
             <button
               onClick={onRefresh}
               disabled={refreshing}
-              className="p-2 text-gray-500  dark:text-gray-400 hover:text-gray-700   transition-colors disabled:opacity-50"
+              className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors disabled:opacity-50"
             >
               <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
             </button>

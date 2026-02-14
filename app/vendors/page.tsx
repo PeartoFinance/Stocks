@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import { vendorAPI, Vendor } from '../utils/vendors';
 import toast from 'react-hot-toast';
-import AIAnalysisPanel from '../components/ai/AIAnalysisPanel';
+
 
 export default function VendorsPage() {
   const router = useRouter();
@@ -24,7 +24,7 @@ export default function VendorsPage() {
   const [sortBy, setSortBy] = useState<'rating' | 'reviews' | 'name'>('rating');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [showFilters, setShowFilters] = useState(false);
-  const [showAIPanel, setShowAIPanel] = useState(false);
+
 
   // Categories and services for filters
   const categories = [
@@ -150,35 +150,24 @@ export default function VendorsPage() {
     selectedService !== 'all' || showFeaturedOnly;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:bg-gradient-to-br dark:from-slate-900 dark:via-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-slate-50 dark:bg-gray-900">
       <div className="max-w-[2560px] mx-auto px-3 sm:px-4 lg:px-6 xl:px-8 2xl:px-12 py-4 sm:py-6 lg:py-8">
         
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 mb-4 sm:mb-6 lg:mb-8">
           <div>
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-purple-400">Vendors Directory</h1>
-            <p className="text-sm sm:text-base text-gray-600 dark:text-slate-400 mt-1 sm:mt-2">Discover and connect with trusted service providers</p>
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white">Vendors Directory</h1>
+            <p className="text-sm sm:text-base text-slate-600 dark:text-gray-400 mt-1 sm:mt-2">Discover and connect with trusted service providers</p>
           </div>
 
-          <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
-            <button
-              onClick={() => setShowAIPanel(!showAIPanel)}
-              className="xl:hidden flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all shadow-sm flex-1 sm:flex-none text-sm"
-            >
-              <Star className="h-4 w-4" />
-              <span>AI Insights</span>
-            </button>
-            <button className="hidden sm:flex items-center gap-2 px-3 sm:px-4 py-2 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors text-sm text-gray-700 dark:text-slate-300">
-              <Share2 className="h-4 w-4" />
-              <span className="hidden md:inline">Share</span>
-            </button>
-          </div>
+          <button className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm text-gray-700 dark:text-gray-300">
+            <Share2 className="h-4 w-4" />
+            <span className="hidden md:inline">Share</span>
+          </button>
         </div>
 
-        {/* Main Content - Desktop Flex Layout */}
-        <div className="flex flex-col xl:flex-row gap-6 xl:gap-8">
-          {/* Main Content Area */}
-          <div className="flex-1 min-w-0 xl:max-w-[calc(100%-416px)]">
+        {/* Main Content */}
+        <div>
 
         {/* Search and Filters */}
             <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 dark:bg-slate-800/80 dark:border-slate-700/50 p-3 sm:p-4 mb-4 sm:mb-6">
@@ -467,69 +456,7 @@ export default function VendorsPage() {
                 ))}
               </div>
             )}
-          </div>
-
-          {/* AI Analysis Panel - Desktop Sidebar */}
-          <div className="hidden xl:block w-96 flex-shrink-0">
-            <div className="sticky top-8">
-              <AIAnalysisPanel
-                title="AI Vendor Insights"
-                pageType="vendors-directory"
-                pageData={{
-                  count: filteredVendors.length,
-                  filters: {
-                    category: selectedCategory !== 'all' ? selectedCategory : null,
-                    service: selectedService !== 'all' ? selectedService : null,
-                    featured: showFeaturedOnly
-                  },
-                  topVendors: filteredVendors.slice(0, 5).map(v => ({
-                    name: v.name,
-                    rating: v.rating,
-                    category: v.category,
-                    services: v.services.slice(0, 2)
-                  }))
-                }}
-                autoAnalyze={!loading && filteredVendors.length > 0}
-                quickPrompts={['Best rated vendors', 'Top featured providers', 'Vendor recommendations']}
-                maxHeight="calc(100vh - 180px)"
-              />
-            </div>
-          </div>
         </div>
       </div>
-
-        {/* Mobile AI Panel */}
-        <AnimatePresence>
-          {showAIPanel && (
-            <div className="xl:hidden fixed inset-0 z-50 bg-black bg-opacity-50" onClick={() => setShowAIPanel(false)}>
-              <motion.div
-                initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }}
-                className="absolute bottom-0 left-0 right-0 bg-white dark:bg-gray-800 rounded-t-2xl max-h-[85vh] overflow-hidden"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between">
-                  <h3 className="font-semibold text-gray-900 dark:text-white">AI Insights</h3>
-                  <button onClick={() => setShowAIPanel(false)}><X className="h-5 w-5 text-gray-500 dark:text-gray-400" /></button>
-                </div>
-                <div className="overflow-y-auto p-4" style={{ maxHeight: 'calc(85vh - 60px)' }}>
-                  <AIAnalysisPanel
-                    title=""
-                    pageType="vendors-directory"
-                    pageData={{
-                      count: filteredVendors.length,
-                      topVendors: filteredVendors.slice(0, 5).map(v => ({
-                        name: v.name,
-                        rating: v.rating,
-                        category: v.category
-                      }))
-                    }}
-                    autoAnalyze={!loading && filteredVendors.length > 0}
-                  />
-                </div>
-              </motion.div>
-            </div>
-          )}
-        </AnimatePresence>
-      </div>
-  )   
-}
+  </div>
+)};

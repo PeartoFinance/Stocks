@@ -65,13 +65,13 @@ export default function MarketCarousel({ className = '' }: MarketCarouselProps) 
         <div className="flex gap-2">
           <button
             onClick={prevSlide}
-            className="p-2 text-gray-500 dark:text-gray-400 hover:text-emerald-600 dark:text-pearto-green hover:bg-emerald-50 rounded-lg transition-colors"
+            className="p-2 text-gray-500 dark:text-gray-400 hover:text-emerald-600  hover:bg-emerald-50 rounded-lg transition-colors"
           >
             <TrendingUp className="h-4 w-4 rotate-90" />
           </button>
           <button
             onClick={nextSlide}
-            className="p-2 text-gray-500 dark:text-gray-400 hover:text-emerald-600 dark:text-pearto-green hover:bg-emerald-50 rounded-lg transition-colors"
+            className="p-2 text-gray-500 dark:text-gray-400 hover:text-emerald-600  hover:bg-emerald-50 rounded-lg transition-colors"
           >
             <TrendingUp className="h-4 w-4 -rotate-90" />
           </button>
@@ -85,7 +85,7 @@ export default function MarketCarousel({ className = '' }: MarketCarouselProps) 
         >
           {items.map((item, index) => (
             <div key={item.symbol} className="w-full flex-shrink-0 px-2">
-              <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-lg p-4 border border border-emerald-200">
+              <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-lg p-4  border border-emerald-200">
                 <div className="flex justify-between items-start mb-3">
                   <div>
                     <div className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">{item.symbol}</div>

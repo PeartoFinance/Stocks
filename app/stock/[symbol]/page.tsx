@@ -19,7 +19,8 @@ import {
   ChevronUp,
   ExternalLink,
   Info,
-  GitCompare
+  GitCompare,
+  Brain
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -613,41 +614,13 @@ export default function StockDetailPage({ params }: PageProps) {
               </div>
             </div>
 
-            {/* AI Analysis Panel - Desktop */}
-            <div className="hidden lg:block">
-              <AIAnalysisPanel
-                title={`${stock.symbol} Analysis`}
-                pageType="stock-detail"
-                pageData={{
-                  symbol: stock.symbol,
-                  name: stock.name,
-                  price: stock.price,
-                  change: stock.changePercent,
-                  volume: stock.volume,
-                  marketCap: stock.marketCap,
-                  pe: stock.peRatio,
-                  sector: stock.sector,
-                  high: todayData?.high,
-                  low: todayData?.low,
-                  beta: stock.beta,
-                  dividendYield: stock.dividendYield
-                } as any}
-                autoAnalyze={true}
-                quickPrompts={[
-                  `Is ${stock.symbol} undervalued?`,
-                  'Technical analysis',
-                  'Buy or sell recommendation'
-                ]}
-              />
-            </div>
-
             {/* Mobile AI Button */}
             <div className="lg:hidden">
               <button
                 onClick={() => setShowAIPanel(true)}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-xl font-medium shadow-lg hover:bg-blue-700 transition"
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-medium shadow-lg hover:from-blue-700 hover:to-purple-700 transition"
               >
-                <BarChart3 className="h-5 w-5" />
+                <Brain className="h-5 w-5" />
                 Get AI Analysis
               </button>
             </div>
@@ -745,7 +718,7 @@ export default function StockDetailPage({ params }: PageProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen p-4 lg:p-8 flex items-center justify-center bg-gray-50 dark:bg-pearto-surface dark:bg-slate-900">
+      <div className="min-h-screen p-4 lg:p-8 flex items-center justify-center bg-gray-50 e dark:bg-slate-900">
         <div className="text-center">
           <Activity className="h-12 w-12 text-blue-600 animate-spin mx-auto mb-4" />
           <p className="text-slate-500">Loading stock data...</p>
@@ -756,7 +729,7 @@ export default function StockDetailPage({ params }: PageProps) {
 
   if (!stock) {
     return (
-      <div className="min-h-screen p-4 lg:p-8 flex items-center justify-center bg-gray-50 dark:bg-pearto-surface dark:bg-slate-900">
+      <div className="min-h-screen p-4 lg:p-8 flex items-center justify-center bg-gray-50  dark:bg-slate-900">
         <div className="text-center">
           <h1 className="text-xl lg:text-2xl font-bold text-slate-900 dark:text-white mb-2">Stock Not Found</h1>
           <p className="text-slate-500 dark:text-slate-400 mb-4">The symbol "{symbol}" could not be found.</p>
@@ -771,7 +744,7 @@ export default function StockDetailPage({ params }: PageProps) {
   const isPositive = stock.change >= 0;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-pearto-surface dark:bg-slate-900">
+    <div className="min-h-screen bg-gray-50  dark:bg-slate-900">
       {/* Mobile Header - Sticky */}
       <div className="lg:hidden sticky top-0 z-30 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700">
         <div className="px-4 py-3">
@@ -790,11 +763,10 @@ export default function StockDetailPage({ params }: PageProps) {
                 <Star className="h-5 w-5" fill={isWatchlisted ? 'currentColor' : 'none'} />
               </button>
               <button
-                onClick={() => router.push(`/stocks/comparison?stocks=${stock.symbol}`)}
-                className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg transition text-sm font-medium"
+                onClick={() => setShowAIPanel(true)}
+                className="p-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg"
               >
-                <GitCompare size={16} />
-                Compare
+                <Brain className="h-5 w-5" />
               </button>
             </div>
           </div>
@@ -882,6 +854,13 @@ export default function StockDetailPage({ params }: PageProps) {
                 <GitCompare size={16} />
                 Compare
               </button>
+              <button 
+                onClick={() => setShowAIPanel(true)}
+                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition text-sm font-medium"
+              >
+                <Brain size={16} />
+                AI Analysis
+              </button>
             </div>
           </div>
         </div>
@@ -957,6 +936,75 @@ export default function StockDetailPage({ params }: PageProps) {
               </div>
             </motion.div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Desktop AI Panel - Sliding from Right */}
+      <AnimatePresence>
+        {showAIPanel && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="hidden lg:block fixed inset-0 bg-black bg-opacity-50 z-40"
+              onClick={() => setShowAIPanel(false)}
+            />
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              className="hidden lg:block fixed top-0 right-0 h-full w-96 bg-white dark:bg-slate-900 shadow-2xl z-50"
+            >
+              <div className="h-full flex flex-col">
+                <div className="px-4 py-3 border-b border-gray-200 dark:border-slate-700 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Brain className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                      <h3 className="text-sm font-semibold text-gray-900 dark:text-white">AI Stock Analysis</h3>
+                    </div>
+                    <button
+                      onClick={() => setShowAIPanel(false)}
+                      className="p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-200 dark:hover:bg-slate-700 rounded-lg transition-colors"
+                    >
+                      <X className="h-5 w-5" />
+                    </button>
+                  </div>
+                </div>
+                <div className="flex-1 overflow-y-auto">
+                  <AIAnalysisPanel
+                    title=""
+                    pageType="stock-detail"
+                    pageData={{
+                      symbol: stock.symbol,
+                      name: stock.name,
+                      price: stock.price,
+                      change: stock.changePercent,
+                      volume: stock.volume,
+                      marketCap: stock.marketCap,
+                      pe: stock.peRatio,
+                      sector: stock.sector,
+                      high: todayData?.high,
+                      low: todayData?.low,
+                      beta: stock.beta,
+                      dividendYield: stock.dividendYield
+                    } as any}
+                    autoAnalyze={true}
+                    quickPrompts={[
+                      `Is ${stock.symbol} undervalued?`,
+                      'Technical analysis',
+                      'Buy or sell?',
+                      'Risk assessment',
+                      'Price target'
+                    ]}
+                    compact={false}
+                    className="w-full h-full"
+                  />
+                </div>
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </div>
