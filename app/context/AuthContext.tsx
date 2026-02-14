@@ -44,17 +44,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Helper to transform backend data to our User interface
   const mapUserData = useCallback((data: any): User => {
+    console.log('Mapping user data:', data); // Debug log
     return {
       id: data.user_id || data.id,
       email: data.email,
-      //changed this for testing
-      name: data.name || data.email?.split('@')[0] || 'User', // Use email as fallback
-      firstName: data.first_name || data.firstName || data.email?.split('@')[0] || '',
+      name: data.name || `${data.first_name || data.firstName || ''} ${data.last_name || data.lastName || ''}`.trim() || data.email?.split('@')[0] || 'User',
+      firstName: data.first_name || data.firstName || '',
       lastName: data.last_name || data.lastName || '',
       role: data.role || 'user',
       avatarUrl: data.avatar_url || data.avatarUrl,
-      //changed this for testing
-      lastLoginAt: data.lastLoginAt
+      lastLoginAt: data.last_login_at || data.lastLoginAt
     };
   }, []);
 
@@ -62,35 +61,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const initAuth = async () => {
       if (checkAuth()) {
-        const userData = getCurrentUser();
-        if (userData) setUser(mapUserData(userData));
+        // Fetch full profile from API
+        try {
+          const res = await fetch(`${API_BASE}/user/profile`, {
+            headers: getAuthHeaders()
+          });
+          if (res.ok) {
+            const data = await res.json();
+            setUser(mapUserData(data));
+          } else {
+            // Fallback to token data
+            const userData = getCurrentUser();
+            if (userData) setUser(mapUserData(userData));
+          }
+        } catch (err) {
+          // Fallback to token data
+          const userData = getCurrentUser();
+          if (userData) setUser(mapUserData(userData));
+        }
       }
       setIsLoading(false);
     };
     initAuth();
   }, [mapUserData]);
-
-  // Sync Profile (from Old Code) - Keeps avatar updated
-  useEffect(() => {
-    const syncProfile = async () => {
-      if (!user?.email) return;
-      try {
-        const res = await fetch(`${API_BASE}/user/profile`, {
-          headers: {
-            'x-user-email': user.email,
-            'x-user-country': 'NP'
-          }
-        });
-        if (res.ok) {
-          const data = await res.json();
-          if (data.avatar_url && data.avatar_url !== user.avatarUrl) {
-            setUser(prev => prev ? { ...prev, avatarUrl: data.avatar_url } : null);
-          }
-        }
-      } catch (err) { console.error("Profile sync failed", err); }
-    };
-    if (user) syncProfile();
-  }, [user?.email]);
 
   const handleLogin = useCallback(async (email: string, password: string) => {
     const response = await apiLogin({ email, password });
@@ -111,7 +104,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const updateProfile = useCallback(async (updates: Partial<User>) => {
     if (!user) return;
-    setUser(prev => prev ? { ...prev, ...updates } : null);
     try {
       const res = await fetch(`${API_BASE}/user/profile`, {
         method: 'PUT',
@@ -123,9 +115,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
       if (!res.ok) throw new Error('Update failed');
       const data = await res.json();
-      if (data?.user) setUser(mapUserData(data.user));
-    } catch (err) { console.error('Profile update failed', err); throw err; }
+      setUser(mapUserData(data));
+    } catch (err) { 
+      console.error('Profile update failed', err); 
+      throw err; 
+    }
   }, [user, mapUserData]);
+
+  const refreshUser = useCallback(async () => {
+    if (!checkAuth()) return;
+    try {
+      const res = await fetch(`${API_BASE}/user/profile`, {
+        headers: getAuthHeaders()
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setUser(mapUserData(data));
+      }
+    } catch (err) {
+      console.error('Profile refresh failed', err);
+    }
+  }, [mapUserData]);
 
   const value = useMemo(() => ({
     user,
@@ -137,11 +147,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     register: handleRegister,
     logout: handleLogout,
     updateProfile,
-    refreshUser: async () => {
-      const userData = getCurrentUser();
-      if (userData) setUser(mapUserData(userData));
-    }
-  }), [user, isLoading, handleLogin, handleRegister, handleLogout, updateProfile, mapUserData]);
+    refreshUser
+  }), [user, isLoading, handleLogin, handleRegister, handleLogout, updateProfile, refreshUser]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
