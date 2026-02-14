@@ -168,7 +168,7 @@ export default function ETFNewsPage() {
   const categories = ['all', ...Array.from(new Set(articles.map(article => article.category)))];
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-pearto-blockchain dark:bg-pearto-surface">
+    <div className="min-h-screen bg-gray-50 dark:bg-pearto-blockchain dark:bg-gray-700">
 
       <div className="px-4 sm:px-6 lg:px-8 py-8">
         {!selectedArticle ? (
@@ -180,8 +180,8 @@ export default function ETFNewsPage() {
               transition={{ duration: 0.6 }}
               className="mb-8"
             >
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna mb-4">ETF News & Analysis</h1>
-              <p className="text-gray-600 dark:text-pearto-cloud dark:text-pearto-cloud">Stay updated with the latest developments in the ETF market</p>
+              <h1 className="text-3xl font-bold text-slate-900 dark:text-white dark:text-white mb-4">ETF News & Analysis</h1>
+              <p className="text-slate-600 dark:text-gray-400 dark:text-gray-400">Stay updated with the latest developments in the ETF market</p>
             </motion.div>
 
             {/* Search and Filters */}
@@ -189,11 +189,11 @@ export default function ETFNewsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="bg-white dark:bg-pearto-card dark:bg-pearto-card rounded-xl shadow-sm border border-gray-200 dark:border-pearto-border dark:border-pearto-border p-6 mb-8"
+              className="bg-white dark:bg-gray-800 dark:bg-gray-800 rounded-xl shadow-sm border border-slate-200 dark:border-gray-700 dark:border-gray-700 p-6 mb-8"
             >
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-pearto-cloud dark:text-pearto-cloud mb-2">Search News</label>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-gray-400 dark:text-gray-400 mb-2">Search News</label>
                   <div className="relative">
                     <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                     <input
@@ -201,17 +201,17 @@ export default function ETFNewsPage() {
                       placeholder="Search by title, content, or tags..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-pearto-border dark:border-pearto-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full pl-10 pr-4 py-2 border border-slate-300 dark:border-gray-600 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-pearto-cloud dark:text-pearto-cloud mb-2">Category</label>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-gray-400 dark:text-gray-400 mb-2">Category</label>
                   <select
                     value={categoryFilter}
                     onChange={(e) => setCategoryFilter(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-pearto-border dark:border-pearto-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     {categories.map(category => (
                       <option key={category} value={category}>
@@ -241,7 +241,7 @@ export default function ETFNewsPage() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: index * 0.1 }}
-                    className="bg-white dark:bg-pearto-card dark:bg-pearto-card rounded-xl shadow-sm border border-gray-200 dark:border-pearto-border dark:border-pearto-border overflow-hidden hover:shadow-lg transition-all cursor-pointer"
+                    className="bg-white dark:bg-gray-800 dark:bg-gray-800 rounded-xl shadow-sm border border-slate-200 dark:border-gray-700 dark:border-gray-700 overflow-hidden hover:shadow-lg transition-all cursor-pointer"
                     onClick={() => setSelectedArticle(article)}
                   >
                     <div className="h-48 bg-gradient-to-r from-blue-500 to-purple-500"></div>
@@ -253,16 +253,16 @@ export default function ETFNewsPage() {
                         </span>
                         <div className="flex items-center space-x-2">
                           <Clock className="h-4 w-4 text-gray-400" />
-                          <span className="text-xs text-gray-500 dark:text-pearto-gray dark:text-pearto-gray">{article.readTime} min read</span>
+                          <span className="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-400">{article.readTime} min read</span>
                         </div>
                       </div>
 
-                      <h3 className="text-lg font-bold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna mb-2 line-clamp-2">{article.title}</h3>
-                      <p className="text-gray-600 dark:text-pearto-cloud dark:text-pearto-cloud text-sm mb-4 line-clamp-3">{article.summary}</p>
+                      <h3 className="text-lg font-bold text-slate-900 dark:text-white dark:text-white mb-2 line-clamp-2">{article.title}</h3>
+                      <p className="text-slate-600 dark:text-gray-400 dark:text-gray-400 text-sm mb-4 line-clamp-3">{article.summary}</p>
 
                       <div className="flex flex-wrap gap-1 mb-4">
                         {article.tags.slice(0, 3).map((tag) => (
-                          <span key={tag} className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 dark:bg-pearto-surface dark:bg-pearto-surface text-gray-700 dark:text-pearto-cloud dark:text-pearto-cloud">
+                          <span key={tag} className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-slate-100 dark:bg-gray-700 dark:bg-gray-700 text-slate-700 dark:text-gray-400 dark:text-gray-400">
                             {tag}
                           </span>
                         ))}
@@ -271,18 +271,18 @@ export default function ETFNewsPage() {
                       <div className="flex items-center justify-between pt-4 border-t border-gray-100">
                         <div className="flex items-center space-x-2">
                           <div>
-                            <p className="text-sm font-medium text-gray-900 dark:text-pearto-luna dark:text-pearto-luna">{article.source}</p>
+                            <p className="text-sm font-medium text-slate-900 dark:text-white dark:text-white">{article.source}</p>
                             <div className="flex items-center space-x-2">
                               <Calendar className="h-3 w-3 text-gray-400" />
-                              <span className="text-xs text-gray-500 dark:text-pearto-gray dark:text-pearto-gray">{formatDate(article.publishedAt)}</span>
+                              <span className="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-400">{formatDate(article.publishedAt)}</span>
                             </div>
                           </div>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <button className="p-1 text-gray-400 hover:text-gray-600 dark:text-pearto-cloud dark:text-pearto-cloud">
+                          <button className="p-1 text-gray-400 hover:text-slate-600 dark:text-gray-400 dark:text-gray-400">
                             <Bookmark className="h-4 w-4" />
                           </button>
-                          <button className="p-1 text-gray-400 hover:text-gray-600 dark:text-pearto-cloud dark:text-pearto-cloud">
+                          <button className="p-1 text-gray-400 hover:text-slate-600 dark:text-gray-400 dark:text-gray-400">
                             <Share2 className="h-4 w-4" />
                           </button>
                         </div>
@@ -296,8 +296,8 @@ export default function ETFNewsPage() {
             {filteredArticles.length === 0 && !isLoading && (
               <div className="text-center py-16">
                 <Search className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna mb-2">No articles found</h3>
-                <p className="text-gray-600 dark:text-pearto-cloud dark:text-pearto-cloud">Try adjusting your search or filter criteria</p>
+                <h3 className="text-xl font-semibold text-slate-900 dark:text-white dark:text-white mb-2">No articles found</h3>
+                <p className="text-slate-600 dark:text-gray-400 dark:text-gray-400">Try adjusting your search or filter criteria</p>
               </div>
             )}
           </>
@@ -312,13 +312,13 @@ export default function ETFNewsPage() {
                 ← Back to News
               </button>
               <div className="flex items-center space-x-2">
-                <button className="p-2 text-gray-400 hover:text-gray-600 dark:text-pearto-cloud dark:text-pearto-cloud">
+                <button className="p-2 text-gray-400 hover:text-slate-600 dark:text-gray-400 dark:text-gray-400">
                   <Bookmark className="h-5 w-5" />
                 </button>
-                <button className="p-2 text-gray-400 hover:text-gray-600 dark:text-pearto-cloud dark:text-pearto-cloud">
+                <button className="p-2 text-gray-400 hover:text-slate-600 dark:text-gray-400 dark:text-gray-400">
                   <Share2 className="h-5 w-5" />
                 </button>
-                <button className="p-2 text-gray-400 hover:text-gray-600 dark:text-pearto-cloud dark:text-pearto-cloud">
+                <button className="p-2 text-gray-400 hover:text-slate-600 dark:text-gray-400 dark:text-gray-400">
                   <ExternalLink className="h-5 w-5" />
                 </button>
               </div>
@@ -328,7 +328,7 @@ export default function ETFNewsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="bg-white dark:bg-pearto-card dark:bg-pearto-card rounded-xl shadow-sm border border-gray-200 dark:border-pearto-border dark:border-pearto-border overflow-hidden"
+              className="bg-white dark:bg-gray-800 dark:bg-gray-800 rounded-xl shadow-sm border border-slate-200 dark:border-gray-700 dark:border-gray-700 overflow-hidden"
             >
               <div className="h-96 bg-gradient-to-r from-blue-500 to-purple-500"></div>
 
@@ -337,7 +337,7 @@ export default function ETFNewsPage() {
                   <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getImpactColor(selectedArticle.impact)}`}>
                     {selectedArticle.impact.toUpperCase()} IMPACT
                   </span>
-                  <div className="flex items-center space-x-4 text-sm text-gray-500 dark:text-pearto-gray dark:text-pearto-gray">
+                  <div className="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400 dark:text-gray-400">
                     <div className="flex items-center space-x-1">
                       <Clock className="h-4 w-4" />
                       <span>{selectedArticle.readTime} min read</span>
@@ -349,25 +349,25 @@ export default function ETFNewsPage() {
                   </div>
                 </div>
 
-                <h1 className="text-4xl font-bold text-gray-900 dark:text-pearto-luna dark:text-pearto-luna mb-6">{selectedArticle.title}</h1>
+                <h1 className="text-4xl font-bold text-slate-900 dark:text-white dark:text-white mb-6">{selectedArticle.title}</h1>
 
-                <div className="flex items-center space-x-4 mb-8 pb-8 border-b border-gray-200 dark:border-pearto-border dark:border-pearto-border">
+                <div className="flex items-center space-x-4 mb-8 pb-8 border-b border-slate-200 dark:border-gray-700 dark:border-gray-700">
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-pearto-luna dark:text-pearto-luna">{selectedArticle.author}</p>
-                    <p className="text-sm text-gray-500 dark:text-pearto-gray dark:text-pearto-gray">{selectedArticle.source}</p>
+                    <p className="font-medium text-slate-900 dark:text-white dark:text-white">{selectedArticle.author}</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-400">{selectedArticle.source}</p>
                   </div>
                 </div>
 
                 <div className="prose prose-lg max-w-none">
-                  <p className="text-xl text-gray-600 dark:text-pearto-cloud dark:text-pearto-cloud mb-8">{selectedArticle.summary}</p>
-                  <div className="text-gray-900 dark:text-pearto-luna dark:text-pearto-luna leading-relaxed">
+                  <p className="text-xl text-slate-600 dark:text-gray-400 dark:text-gray-400 mb-8">{selectedArticle.summary}</p>
+                  <div className="text-slate-900 dark:text-white dark:text-white leading-relaxed">
                     {selectedArticle.content}
                   </div>
                 </div>
 
-                <div className="mt-8 pt-8 border-t border-gray-200 dark:border-pearto-border dark:border-pearto-border">
+                <div className="mt-8 pt-8 border-t border-slate-200 dark:border-gray-700 dark:border-gray-700">
                   <div className="flex flex-wrap gap-2 mb-4">
-                    <span className="text-sm font-medium text-gray-700 dark:text-pearto-cloud dark:text-pearto-cloud">Related ETFs:</span>
+                    <span className="text-sm font-medium text-slate-700 dark:text-gray-400 dark:text-gray-400">Related ETFs:</span>
                     {selectedArticle.relatedETFs.map((etf) => (
                       <span key={etf} className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800">
                         {etf}
@@ -376,9 +376,9 @@ export default function ETFNewsPage() {
                   </div>
 
                   <div className="flex flex-wrap gap-2">
-                    <span className="text-sm font-medium text-gray-700 dark:text-pearto-cloud dark:text-pearto-cloud">Tags:</span>
+                    <span className="text-sm font-medium text-slate-700 dark:text-gray-400 dark:text-gray-400">Tags:</span>
                     {selectedArticle.tags.map((tag) => (
-                      <span key={tag} className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 dark:bg-pearto-surface dark:bg-pearto-surface text-gray-700 dark:text-pearto-cloud dark:text-pearto-cloud">
+                      <span key={tag} className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-slate-100 dark:bg-gray-700 dark:bg-gray-700 text-slate-700 dark:text-gray-400 dark:text-gray-400">
                         <Tag className="h-3 w-3 mr-1" />
                         {tag}
                       </span>

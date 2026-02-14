@@ -109,7 +109,7 @@ export default function RiskAnalysisChart({ className = '', crypto }: RiskAnalys
       'High': 'text-red-600 dark:text-pearto-pink',
       'Very High': 'text-purple-600'
     };
-    return colors[level as keyof typeof colors] || 'text-gray-600 dark:text-pearto-cloud';
+    return colors[level as keyof typeof colors] || 'text-slate-600 dark:text-gray-400';
   };
 
   const options = {
@@ -173,7 +173,7 @@ export default function RiskAnalysisChart({ className = '', crypto }: RiskAnalys
         
         {/* Center text - positioned absolutely but with better z-index */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
-          <div className="text-center bg-white dark:bg-pearto-card  dark:bg-slate-900/90 px-3 py-2 rounded-lg shadow-sm transition-colors duration-300">
+          <div className="text-center bg-white dark:bg-gray-800  dark:bg-slate-900/90 px-3 py-2 rounded-lg shadow-sm transition-colors duration-300">
             <div className={`text-lg font-bold ${getRiskColor(overallRisk)}`}>
               {overallRisk}
             </div>

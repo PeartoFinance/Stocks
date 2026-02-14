@@ -386,7 +386,7 @@ export default function HistoricalDataTable({ data, symbol, onDataUpdate, onLoad
 
           {filteredData.length === 0 && (
             <div className="text-center py-6 lg:py-10">
-              <BarChart3 className="h-8 w-8 lg:h-10 lg:w-10 text-slate-300 dark:text-slate-600 dark:text-pearto-cloud mx-auto mb-3 lg:mb-4 transition-colors duration-300" />
+              <BarChart3 className="h-8 w-8 lg:h-10 lg:w-10 text-slate-300 dark:text-slate-600 dark:text-gray-400 mx-auto mb-3 lg:mb-4 transition-colors duration-300" />
               <p className="text-xs lg:text-sm text-slate-500 dark:text-slate-400 transition-colors duration-300">No historical data available</p>
             </div>
           )}

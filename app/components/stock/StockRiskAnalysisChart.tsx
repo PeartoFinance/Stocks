@@ -119,7 +119,7 @@ export default function StockRiskAnalysisChart({ className = '', stock }: StockR
       'High': 'text-red-600 dark:text-pearto-pink',
       'Very High': 'text-purple-600'
     };
-    return colors[level as keyof typeof colors] || 'text-gray-600 dark:text-pearto-cloud';
+    return colors[level as keyof typeof colors] || 'text-slate-600 dark:text-gray-400';
   };
 
   const options = {

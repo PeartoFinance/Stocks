@@ -75,7 +75,7 @@ export default function MarketSummary({ className = '' }: MarketSummaryProps) {
     switch (sentiment) {
       case 'bullish': return 'text-green-600 dark:text-pearto-green bg-green-50 dark:bg-pearto-green/10';
       case 'bearish': return 'text-red-600 dark:text-pearto-pink bg-red-50 dark:bg-pearto-pink/10';
-      default: return 'text-gray-600 dark:text-pearto-cloud bg-gray-50 dark:bg-pearto-surface';
+      default: return 'text-slate-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-700';
     }
   };
 
@@ -137,19 +137,19 @@ export default function MarketSummary({ className = '' }: MarketSummaryProps) {
 
   if (loading) {
     return (
-      <div className={`bg-white dark:bg-pearto-card rounded-xl shadow-sm p-8 ${className}`}>
+      <div className={`bg-white dark:bg-gray-800 rounded-xl shadow-sm p-8 ${className}`}>
         <div className="flex items-center justify-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-          <span className="ml-3 text-gray-600 dark:text-pearto-cloud transition-colors duration-300">Loading market summary...</span>
+          <span className="ml-3 text-slate-600 dark:text-gray-400 transition-colors duration-300">Loading market summary...</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className={`bg-white dark:bg-pearto-card rounded-xl shadow-lg border border-gray-200 dark:border-pearto-border p-4 ${className}`}>
+    <div className={`bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-slate-200 dark:border-gray-700 p-4 ${className}`}>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-bold text-gray-900 dark:text-pearto-luna flex items-center transition-colors duration-300">
+        <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center transition-colors duration-300">
           <span className="w-2 h-5 bg-emerald-600 dark:bg-pearto-pink rounded-full mr-2 transition-colors duration-300"></span>
           Market Summary
         </h2>
@@ -169,12 +169,12 @@ export default function MarketSummary({ className = '' }: MarketSummaryProps) {
 
         {/* Market Stats - More Compact */}
         <div className="space-y-3">
-          <div className="bg-gray-50 dark:bg-pearto-surface rounded-lg p-3 transition-colors duration-300">
+          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 transition-colors duration-300">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-medium text-gray-600 dark:text-pearto-cloud transition-colors duration-300">Total Volume</span>
+              <span className="text-xs font-medium text-slate-600 dark:text-gray-400 transition-colors duration-300">Total Volume</span>
               <Volume className="h-3 w-3 text-gray-400" />
             </div>
-            <div className="text-lg font-bold text-gray-900 dark:text-pearto-luna transition-colors duration-300">
+            <div className="text-lg font-bold text-slate-900 dark:text-white transition-colors duration-300">
               {formatVolume(marketStats.totalVolume)}
             </div>
           </div>
@@ -188,9 +188,9 @@ export default function MarketSummary({ className = '' }: MarketSummaryProps) {
               <div className="text-sm font-bold text-red-600 dark:text-pearto-pink transition-colors duration-300">{marketStats.decliners}</div>
               <div className="text-xs text-red-600 dark:text-pearto-pink transition-colors duration-300">Decliners</div>
             </div>
-            <div className="bg-gray-50 dark:bg-pearto-surface rounded-lg p-2 text-center transition-colors duration-300">
-              <div className="text-sm font-bold text-gray-600 dark:text-pearto-cloud transition-colors duration-300">{marketStats.unchanged}</div>
-              <div className="text-xs text-gray-600 dark:text-pearto-cloud transition-colors duration-300">Unchanged</div>
+            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-2 text-center transition-colors duration-300">
+              <div className="text-sm font-bold text-slate-600 dark:text-gray-400 transition-colors duration-300">{marketStats.unchanged}</div>
+              <div className="text-xs text-slate-600 dark:text-gray-400 transition-colors duration-300">Unchanged</div>
             </div>
           </div>
 

@@ -202,7 +202,7 @@ export default function OverviewTab({
         <div className="lg:col-span-3">
           <div className="bg-white  dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-5 transition-colors duration-300">
             {/* Chart Controls */}
-            <div className="mb-4 p-3 bg-slate-50 dark:bg-pearto-surface/50 rounded-xl border border-slate-100 transition-colors duration-300">
+            <div className="mb-4 p-3 bg-slate-50 dark:bg-gray-700/50 rounded-xl border border-slate-100 transition-colors duration-300">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
                 <div className="flex items-center gap-3">
                   <span className="text-sm font-semibold text-gray-700  dark:text-pearto-cloud transition-colors duration-300">Duration</span>
@@ -212,7 +212,7 @@ export default function OverviewTab({
                         key={p}
                         onClick={() => onPeriodChange(p)}
                         className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
-                          chartPeriod === p ? "bg-emerald-600 dark:bg-pearto-pink text-white shadow-sm" : "text-gray-600 dark:text-pearto-cloud hover:bg-gray-100 dark:bg-pearto-surface"
+                          chartPeriod === p ? "bg-emerald-600 dark:bg-pearto-pink text-white shadow-sm" : "text-slate-600 dark:text-gray-400 hover:bg-gray-100 dark:bg-gray-700"
                         }`}
                       >
                         {p}
@@ -237,7 +237,7 @@ export default function OverviewTab({
                       key={type.key}
                       onClick={() => onChartTypeChange(type.key as any)}
                       className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
-                        chartType === type.key ? "bg-blue-600 dark:bg-pearto-blue text-white shadow-sm" : "text-gray-600 dark:text-pearto-cloud hover:bg-gray-100 dark:bg-pearto-surface"
+                        chartType === type.key ? "bg-blue-600 dark:bg-pearto-blue text-white shadow-sm" : "text-slate-600 dark:text-gray-400 hover:bg-gray-100 dark:bg-gray-700"
                       }`}
                     >
                       <type.icon className="h-3.5 w-3.5" />
@@ -251,7 +251,7 @@ export default function OverviewTab({
             {/* Chart Container */}
             <div className="h-80 relative">
               {chartLoading ? (
-                <div className="absolute inset-0 flex items-center justify-center bg-white dark:bg-pearto-card dark:bg-pearto-card/50 z-10 transition-colors duration-300">
+                <div className="absolute inset-0 flex items-center justify-center bg-white dark:bg-gray-800 dark:bg-pearto-card/50 z-10 transition-colors duration-300">
                   <Activity className="h-8 w-8 text-emerald-600 dark:text-pearto-green animate-spin transition-colors duration-300" />
                 </div>
               ) : null}
@@ -270,7 +270,7 @@ export default function OverviewTab({
                   chartType={chartType} 
                 />
               ) : (
-                <div className="flex items-center justify-center h-full bg-gray-50 dark:bg-pearto-surface rounded-lg text-gray-400 transition-colors duration-300">
+                <div className="flex items-center justify-center h-full bg-gray-50 dark:bg-gray-700 rounded-lg text-gray-400 transition-colors duration-300">
                   No data available for this period.
                 </div>
               )}
@@ -319,7 +319,7 @@ export default function OverviewTab({
           {/* Chart */}
           <div className="h-64 relative">
             {chartLoading ? (
-              <div className="absolute inset-0 flex items-center justify-center bg-white dark:bg-pearto-card dark:bg-pearto-card/50 z-10 transition-colors duration-300">
+              <div className="absolute inset-0 flex items-center justify-center bg-white dark:bg-gray-800 dark:bg-pearto-card/50 z-10 transition-colors duration-300">
                 <Activity className="h-6 w-6 text-emerald-600 dark:text-pearto-green animate-spin transition-colors duration-300" />
               </div>
             ) : null}
@@ -338,7 +338,7 @@ export default function OverviewTab({
                 chartType={chartType} 
               />
             ) : (
-              <div className="flex items-center justify-center h-full bg-gray-50  dark:bg-pearto-surface rounded-lg text-gray-400 text-sm transition-colors duration-300">
+              <div className="flex items-center justify-center h-full bg-gray-50  dark:bg-gray-700 rounded-lg text-gray-400 text-sm transition-colors duration-300">
                 No data available
               </div>
             )}
