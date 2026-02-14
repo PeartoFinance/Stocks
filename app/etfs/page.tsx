@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Search, Filter, TrendingUp, TrendingDown, Star, BarChart3, DollarSign } from 'lucide-react';
-import AIAnalysisPanel from '../components/ai/AIAnalysisPanel';
+
 import { stockAPI } from '../utils/api';
 import toast from 'react-hot-toast';
 
@@ -89,9 +89,7 @@ export default function ETFScreener() {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-gray-900">
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col xl:flex-row gap-8">
-          {/* Main Content */}
-          <div className="flex-1">
+        <div>
             {/* Header */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
               <div>
@@ -294,36 +292,6 @@ export default function ETFScreener() {
                 </div>
               )}
             </div>
-          </div>
-
-          {/* AI Analysis Sidebar */}
-          <div className="w-full xl:w-80 flex-shrink-0">
-            <div className="xl:sticky xl:top-4">
-              <AIAnalysisPanel
-                title="ETF Insights"
-                pageType="etf-overview"
-                pageData={{
-                  count: filteredETFs.length,
-                  categories: Array.from(new Set(filteredETFs.map(e => e.category))).slice(0, 5),
-                  topETFs: filteredETFs.slice(0, 5).map(e => ({
-                    symbol: e.symbol,
-                    price: e.price,
-                    yield: e.yield,
-                    expenseRatio: e.expenseRatio
-                  })),
-                  avgExpenseRatio: (filteredETFs.reduce((acc, e) => acc + (e.expenseRatio || 0), 0) / filteredETFs.length || 0).toFixed(2),
-                  avgYield: (filteredETFs.reduce((acc, e) => acc + (e.yield || 0), 0) / filteredETFs.length || 0).toFixed(1)
-                }}
-                autoAnalyze={!isLoading && filteredETFs.length > 0}
-                quickPrompts={[
-                  'Best low-cost ETFs',
-                  'Highest yield options',
-                  'Sector diversification'
-                ]}
-                maxHeight="500px"
-              />
-            </div>
-          </div>
         </div>
       </div>
     </div>

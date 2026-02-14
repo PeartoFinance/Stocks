@@ -19,7 +19,7 @@ import {
 import { formatNumber } from '@/lib/utils';
 import { useCurrency } from '../context/CurrencyContext';
 import toast from 'react-hot-toast';
-import AIAnalysisPanel from '../components/ai/AIAnalysisPanel';
+
 import { stockAPI } from '../utils/api';
 
 interface IPO {
@@ -165,11 +165,9 @@ export default function IPOsPage() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-slate-50 dark:bg-gray-900">
       <main className="p-8">
-        <div className="flex flex-col xl:flex-row gap-8">
-          {/* Main Content */}
-          <div className="flex-1">
+        <div>
             {/* Header */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -177,7 +175,7 @@ export default function IPOsPage() {
               transition={{ duration: 0.6 }}
               className="mb-8"
             >
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
+              <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">
                 Initial Public Offerings
               </h1>
               <p className="text-xl text-slate-600 dark:text-gray-400">
@@ -377,35 +375,6 @@ export default function IPOsPage() {
                 <p className="text-slate-600 dark:text-gray-400">Try adjusting your search or filter criteria</p>
               </div>
             )}
-          </div>
-
-          {/* AI Analysis Sidebar */}
-          <div className="w-full xl:w-80 flex-shrink-0">
-            <div className="xl:sticky xl:top-4">
-              <AIAnalysisPanel
-                title="IPO Insights"
-                pageType="ipos"
-                pageData={{
-                  upcomingCount: ipos.filter(i => i.status === 'upcoming').length,
-                  pricingCount: ipos.filter(i => i.status === 'pricing').length,
-                  totalValue: ipos.reduce((sum, i) => sum + (i.estimatedValue ?? 0), 0), sectors: Array.from(new Set(ipos.map(i => i.sector))),
-                  topIPOs: ipos.slice(0, 3).map(i => ({
-                    company: i.company,
-                    symbol: i.symbol,
-                    value: i.estimatedValue ?? 0,
-                    status: i.status
-                  }))
-                }}
-                autoAnalyze={!loading && ipos.length > 0}
-                quickPrompts={[
-                  'Best IPO opportunities',
-                  'Sector analysis',
-                  'Risk assessment'
-                ]}
-                maxHeight="500px"
-              />
-            </div>
-          </div>
         </div>
       </main>
     </div>

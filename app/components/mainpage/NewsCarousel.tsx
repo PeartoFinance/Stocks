@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { newsAPI } from '../../utils/newsAPI';
 import { Newspaper, Clock, ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -20,6 +21,7 @@ interface NewsCarouselProps {
 }
 
 export default function NewsCarousel({ className = '' }: NewsCarouselProps) {
+  const router = useRouter();
   const [news, setNews] = useState<NewsItem[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -64,9 +66,9 @@ export default function NewsCarousel({ className = '' }: NewsCarouselProps) {
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-      case 'high': return 'bg-red-100 dark:bg-pearto-pink/10 text-red-700 border-red-200';
-      case 'medium': return 'bg-yellow-100 text-yellow-700 border-yellow-200';
-      case 'low': return 'bg-green-100 dark:bg-pearto-green/10 text-green-700 border-green-200';
+      case 'high': return 'bg-red-100 dark:bg-red-500/10 text-red-700 dark:text-red-400 border-red-200 dark:border-red-500/20';
+      case 'medium': return 'bg-yellow-100 dark:bg-yellow-500/10 text-yellow-700 dark:text-yellow-400 border-yellow-200 dark:border-yellow-500/20';
+      case 'low': return 'bg-green-100 dark:bg-green-500/10 text-green-700 dark:text-green-400 border-green-200 dark:border-green-500/20';
       default: return 'bg-gray-100 dark:bg-gray-700 text-slate-700 dark:text-gray-400 border-slate-200 dark:border-gray-700';
     }
   };
@@ -127,56 +129,63 @@ export default function NewsCarousel({ className = '' }: NewsCarouselProps) {
   return (
     <div className={`space-y-6 ${className}`}>
       <div className="flex items-center gap-2 mb-4">
-        <Newspaper className="h-5 w-5 text-blue-600" />
-        <h2 className="text-xl font-bold text-slate-900 dark:text-white transition-colors duration-300">Latest News</h2>
+        <Newspaper className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+        <h2 className="text-xl font-bold text-slate-900 dark:text-white">Latest News</h2>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-slate-200 dark:border-gray-700 overflow-hidden transition-colors duration-300">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-slate-200 dark:border-gray-700 overflow-hidden">
         {currentNews && (
           <div className="relative">
-            <div className="p-6">
-              {/* Added safe optional chaining here */}
-              {currentNews?.image && (
-                <div className="mb-4">
-                  <img 
-                    src={currentNews.image} 
-                    alt={currentNews.title}
-                    className="w-full h-48 object-cover rounded-lg"
-                  />
+            <div className="flex gap-4">
+              {currentNews?.image && currentNews.image.trim() !== '' && (
+                <div className="w-1/3 flex-shrink-0">
+                  <div className="w-full h-full min-h-[200px] bg-gray-100 dark:bg-gray-700">
+                    <img 
+                      src={currentNews.image} 
+                      alt={currentNews.title}
+                      className="w-full h-full object-cover"
+                      onError={(e) => { 
+                        const parent = e.currentTarget.parentElement;
+                        if (parent) parent.style.display = 'none';
+                      }}
+                    />
+                  </div>
                 </div>
               )}
               
-              <div className="flex items-start gap-3 mb-3">
-                <span className={`px-2 py-1 text-xs font-medium rounded-full border ${getImpactColor(currentNews.impact)}`}>
-                  {currentNews.impact.toUpperCase()}
-                </span>
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-slate-900 dark:text-white mb-2 leading-tight transition-colors duration-300">
-                    {currentNews.title}
-                  </h3>
-                  <p className="text-sm text-slate-600 dark:text-gray-400 line-clamp-3 transition-colors duration-300">
-                    {currentNews.summary}
-                  </p>
+              <div className="flex-1 p-6">
+                <div className="flex items-start gap-3 mb-3">
+                  <span className={`px-2 py-1 text-xs font-medium rounded-full border ${getImpactColor(currentNews.impact)}`}>
+                    {currentNews.impact.toUpperCase()}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-slate-900 dark:text-white mb-2 leading-tight">
+                      {currentNews.title}
+                    </h3>
+                    <p className="text-sm text-slate-600 dark:text-gray-400 line-clamp-3">
+                      {currentNews.summary}
+                    </p>
+                  </div>
                 </div>
-              </div>
-              
-              <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300">
-                <div className="flex items-center gap-2">
-                  <Clock className="h-3 w-3" />
-                  <span>{formatTime(currentNews.time)}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span>{currentNews.source}</span>
-                  {currentNews.url && currentNews.url !== '#' && (
-                    <a
-                      href={currentNews.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-700 transition-colors"
-                    >
-                      <ExternalLink className="h-3 w-3" />
-                    </a>
-                  )}
+                
+                <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-3 w-3" />
+                    <span>{formatTime(currentNews.time)}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span>{currentNews.source}</span>
+                    {currentNews.url && currentNews.url !== '#' && (
+                      <a
+                        href={currentNews.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:text-blue-700 transition-colors"
+                      >
+                        <ExternalLink className="h-3 w-3" />
+                      </a>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -184,7 +193,7 @@ export default function NewsCarousel({ className = '' }: NewsCarouselProps) {
             {/* Navigation Controls */}
             <button
               onClick={prevSlide}
-              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white dark:bg-gray-800/90 hover:bg-white dark:bg-gray-800 text-slate-700 dark:text-gray-400 p-2 rounded-full shadow-md transition-all z-10"
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-slate-700 dark:text-gray-300 p-2 rounded-full shadow-md transition-all z-10"
               aria-label="Previous news"
             >
               <ChevronLeft className="h-4 w-4" />
@@ -192,7 +201,7 @@ export default function NewsCarousel({ className = '' }: NewsCarouselProps) {
             
             <button
               onClick={nextSlide}
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white dark:bg-gray-800/90 hover:bg-white dark:bg-gray-800 text-slate-700 dark:text-gray-400 p-2 rounded-full shadow-md transition-all z-10"
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-slate-700 dark:text-gray-300 p-2 rounded-full shadow-md transition-all z-10"
               aria-label="Next news"
             >
               <ChevronRight className="h-4 w-4" />
@@ -201,21 +210,28 @@ export default function NewsCarousel({ className = '' }: NewsCarouselProps) {
         )}
 
         {/* Indicators */}
-        <div className="flex justify-center gap-2 p-4 border-t border-gray-50">
+        <div className="flex justify-center gap-2 p-4 border-t border-gray-100 dark:border-gray-700">
           {news.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}
               className={`w-2 h-2 rounded-full transition-all ${
                 index === currentIndex
-                  ? 'bg-blue-600 dark:bg-pearto-blue w-8'
-                  : 'bg-gray-300 hover:bg-gray-400'
+                  ? 'bg-blue-600 dark:bg-blue-500 w-8'
+                  : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
               }`}
               aria-label={`Go to news ${index + 1}`}
             />
           ))}
         </div>
       </div>
+
+      <button
+        onClick={() => router.push('/news')}
+        className="block w-full mt-4 text-center py-3 bg-blue-600 dark:bg-blue-600 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-700 transition-colors font-medium text-sm"
+      >
+        View All News →
+      </button>
     </div>
   );
 }

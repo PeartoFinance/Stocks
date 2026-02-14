@@ -73,8 +73,8 @@ export default function MarketSummary({ className = '' }: MarketSummaryProps) {
 
   const getSentimentColor = (sentiment: string) => {
     switch (sentiment) {
-      case 'bullish': return 'text-green-600 dark:text-pearto-green bg-green-50 dark:bg-pearto-green/10';
-      case 'bearish': return 'text-red-600 dark:text-pearto-pink bg-red-50 dark:bg-pearto-pink/10';
+      case 'bullish': return 'text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-500/10';
+      case 'bearish': return 'text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-500/10';
       default: return 'text-slate-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-700';
     }
   };
@@ -149,8 +149,8 @@ export default function MarketSummary({ className = '' }: MarketSummaryProps) {
   return (
     <div className={`bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-slate-200 dark:border-gray-700 p-4 ${className}`}>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center transition-colors duration-300">
-          <span className="w-2 h-5 bg-emerald-600 dark:bg-pearto-pink rounded-full mr-2 transition-colors duration-300"></span>
+        <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center">
+          <span className="w-2 h-5 bg-blue-600 dark:bg-blue-600 rounded-full mr-2"></span>
           Market Summary
         </h2>
         <div className={`px-2 py-1 rounded-full text-xs font-medium flex items-center ${getSentimentColor(marketStats.marketSentiment)}`}>
@@ -169,37 +169,37 @@ export default function MarketSummary({ className = '' }: MarketSummaryProps) {
 
         {/* Market Stats - More Compact */}
         <div className="space-y-3">
-          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 transition-colors duration-300">
+          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-medium text-slate-600 dark:text-gray-400 transition-colors duration-300">Total Volume</span>
+              <span className="text-xs font-medium text-slate-600 dark:text-gray-400">Total Volume</span>
               <Volume className="h-3 w-3 text-gray-400" />
             </div>
-            <div className="text-lg font-bold text-slate-900 dark:text-white transition-colors duration-300">
+            <div className="text-lg font-bold text-slate-900 dark:text-white">
               {formatVolume(marketStats.totalVolume)}
             </div>
           </div>
 
           <div className="grid grid-cols-3 gap-2">
-            <div className="bg-green-50 dark:bg-pearto-green/10 rounded-lg p-2 text-center transition-colors duration-300">
-              <div className="text-sm font-bold text-green-600 dark:text-pearto-green transition-colors duration-300">{marketStats.advancers}</div>
-              <div className="text-xs text-green-600 dark:text-pearto-green transition-colors duration-300">Advancers</div>
+            <div className="bg-green-50 dark:bg-green-500/10 rounded-lg p-2 text-center">
+              <div className="text-sm font-bold text-green-600 dark:text-green-400">{marketStats.advancers}</div>
+              <div className="text-xs text-green-600 dark:text-green-400">Advancers</div>
             </div>
-            <div className="bg-red-50 dark:bg-pearto-pink/10 rounded-lg p-2 text-center transition-colors duration-300">
-              <div className="text-sm font-bold text-red-600 dark:text-pearto-pink transition-colors duration-300">{marketStats.decliners}</div>
-              <div className="text-xs text-red-600 dark:text-pearto-pink transition-colors duration-300">Decliners</div>
+            <div className="bg-red-50 dark:bg-red-500/10 rounded-lg p-2 text-center">
+              <div className="text-sm font-bold text-red-600 dark:text-red-400">{marketStats.decliners}</div>
+              <div className="text-xs text-red-600 dark:text-red-400">Decliners</div>
             </div>
-            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-2 text-center transition-colors duration-300">
-              <div className="text-sm font-bold text-slate-600 dark:text-gray-400 transition-colors duration-300">{marketStats.unchanged}</div>
-              <div className="text-xs text-slate-600 dark:text-gray-400 transition-colors duration-300">Unchanged</div>
+            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-2 text-center">
+              <div className="text-sm font-bold text-slate-600 dark:text-gray-400">{marketStats.unchanged}</div>
+              <div className="text-xs text-slate-600 dark:text-gray-400">Unchanged</div>
             </div>
           </div>
 
-          <div className="bg-emerald-50 rounded-lg p-3">
+          <div className="bg-blue-50 dark:bg-blue-500/10 rounded-lg p-3">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-medium text-emerald-700">Market Participation</span>
-              <BarChart3 className="h-3 w-3 text-emerald-600 dark:text-pearto-green transition-colors duration-300" />
+              <span className="text-xs font-medium text-blue-700 dark:text-blue-400">Market Participation</span>
+              <BarChart3 className="h-3 w-3 text-blue-600 dark:text-blue-400" />
             </div>
-            <div className="text-sm font-semibold text-emerald-800 mt-1">
+            <div className="text-sm font-semibold text-blue-800 dark:text-blue-400 mt-1">
               {marketStats.advancers + marketStats.decliners + marketStats.unchanged > 0 
                 ? `${Math.round((marketStats.unchanged / (marketStats.advancers + marketStats.decliners + marketStats.unchanged)) * 100)}% of all stocks`
                 : 'Loading...'
