@@ -58,7 +58,7 @@ export default function ForecastTab({ symbol, currentPrice }: ForecastTabProps) 
     if (normalizedRating.includes('buy')) return 'text-green-600 dark:text-pearto-green bg-green-50 dark:bg-pearto-green/10';
     if (normalizedRating.includes('hold')) return 'text-yellow-600 bg-yellow-50';
     if (normalizedRating.includes('sell')) return 'text-red-600 dark:text-pearto-pink bg-red-50 dark:bg-pearto-pink/10';
-    return 'text-gray-600 dark:text-pearto-cloud bg-gray-50 dark:bg-pearto-surface';
+    return 'text-slate-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-700';
   };
 
   const calculateUpside = (targetPrice: number | null, currentPrice: number) => {
@@ -174,7 +174,7 @@ export default function ForecastTab({ symbol, currentPrice }: ForecastTabProps) 
                   <span className={`px-3 py-1 rounded-full text-xs font-medium ${getRatingColor(rec.toGrade)}`}>
                     {rec.toGrade}
                   </span>
-                  <span className="text-xs text-slate-500 dark:text-pearto-gray transition-colors duration-300">{rec.action}</span>
+                  <span className="text-xs text-slate-500 dark:text-gray-400 transition-colors duration-300">{rec.action}</span>
                 </div>
               </div>
             ))}

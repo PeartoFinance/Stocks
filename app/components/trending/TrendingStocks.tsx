@@ -276,7 +276,7 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
       case 'volume': return 'bg-blue-100 text-blue-700';
       case 'breakout': return 'bg-purple-100 text-purple-700';
       case 'momentum': return 'bg-orange-100 text-orange-700';
-      default: return 'bg-gray-100 dark:bg-pearto-surface text-gray-700 dark:text-pearto-cloud';
+      default: return 'bg-gray-100 dark:bg-gray-700 text-slate-700 dark:text-gray-400';
     }
   };
 
@@ -295,8 +295,8 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
           <div className="flex items-center justify-center h-96">
             <div className="text-center">
               <Activity className="h-12 w-12 text-blue-600 animate-spin mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-pearto-luna transition-colors duration-300">Loading Trending Stocks</h2>
-              <p className="text-gray-600 dark:text-pearto-cloud transition-colors duration-300">Please wait while we fetch the latest trending data...</p>
+              <h2 className="text-xl font-semibold text-slate-900 dark:text-white transition-colors duration-300">Loading Trending Stocks</h2>
+              <p className="text-slate-600 dark:text-gray-400 transition-colors duration-300">Please wait while we fetch the latest trending data...</p>
             </div>
           </div>
         </main>
@@ -329,7 +329,7 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
                   AI Analysis
                 </button>
               </div>
-              <p className="text-sm text-gray-600 dark:text-pearto-cloud transition-colors duration-300">
+              <p className="text-sm text-slate-600 dark:text-gray-400 transition-colors duration-300">
                 Discover the most talked about and actively traded stocks
               </p>
             </motion.div>
@@ -341,12 +341,12 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
               transition={{ duration: 0.6, delay: 0.1 }}
               className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-4"
             >
-              <div className="bg-white dark:bg-pearto-card rounded-lg p-3 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
+              <div className="bg-white dark:bg-gray-800 rounded-lg p-3 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
                 <div className="flex items-center justify-between mb-2">
                   <Flame className="h-5 w-5 text-orange-600" />
-                  <span className="text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">Most Mentioned</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300">Most Mentioned</span>
                 </div>
-                <p className="text-sm font-bold text-gray-900 dark:text-pearto-luna truncate transition-colors duration-300">
+                <p className="text-sm font-bold text-slate-900 dark:text-white truncate transition-colors duration-300">
                   {filteredStocks.length > 0 ? filteredStocks.reduce((max, stock) =>
                     stock.socialMentions > (max?.socialMentions || 0) ? stock : max, filteredStocks[0])?.symbol || 'N/A' : 'N/A'}
                 </p>
@@ -358,12 +358,12 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
                 </p>
               </div>
 
-              <div className="bg-white dark:bg-pearto-card rounded-lg p-3 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
+              <div className="bg-white dark:bg-gray-800 rounded-lg p-3 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
                 <div className="flex items-center justify-between mb-2">
                   <TrendingUp className="h-5 w-5 text-green-600 dark:text-pearto-green transition-colors duration-300" />
-                  <span className="text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">Top Gainer</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300">Top Gainer</span>
                 </div>
-                <p className="text-sm font-bold text-gray-900 dark:text-pearto-luna truncate transition-colors duration-300">
+                <p className="text-sm font-bold text-slate-900 dark:text-white truncate transition-colors duration-300">
                   {filteredStocks.length > 0 ?
                     filteredStocks.filter(s => s.changePercent > 0).sort((a, b) => b.changePercent - a.changePercent)[0]?.symbol || 'N/A' :
                     'No gainers'}
@@ -375,12 +375,12 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
                 </p>
               </div>
 
-              <div className="bg-white dark:bg-pearto-card rounded-lg p-3 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
+              <div className="bg-white dark:bg-gray-800 rounded-lg p-3 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
                 <div className="flex items-center justify-between mb-2">
                   <Eye className="h-5 w-5 text-blue-600" />
-                  <span className="text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">Highest Volume</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300">Highest Volume</span>
                 </div>
-                <p className="text-sm font-bold text-gray-900 dark:text-pearto-luna truncate transition-colors duration-300">
+                <p className="text-sm font-bold text-slate-900 dark:text-white truncate transition-colors duration-300">
                   {filteredStocks.length > 0 ?
                     filteredStocks.sort((a, b) => b.volume - a.volume)[0]?.symbol || 'N/A' :
                     'No data'}
@@ -392,12 +392,12 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
                 </p>
               </div>
 
-              <div className="bg-white dark:bg-pearto-card rounded-lg p-3 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
+              <div className="bg-white dark:bg-gray-800 rounded-lg p-3 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
                 <div className="flex items-center justify-between mb-2">
                   <Zap className="h-5 w-5 text-purple-600" />
-                  <span className="text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">Breakout Score</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300">Breakout Score</span>
                 </div>
-                <p className="text-sm font-bold text-gray-900 dark:text-pearto-luna truncate transition-colors duration-300">
+                <p className="text-sm font-bold text-slate-900 dark:text-white truncate transition-colors duration-300">
                   {filteredStocks.length > 0 ?
                     filteredStocks.sort((a, b) => b.trendScore - a.trendScore)[0]?.symbol || 'N/A' :
                     'No data'}
@@ -418,8 +418,8 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
               className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4"
             >
               {/* Trend Type Distribution */}
-              <div className="bg-white dark:bg-pearto-card rounded-lg p-4 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
-                <h3 className="text-sm font-semibold text-gray-900 dark:text-pearto-luna mb-3 transition-colors duration-300">Trend Distribution</h3>
+              <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
+                <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-3 transition-colors duration-300">Trend Distribution</h3>
                 <div className="h-56">
                   <Pie
                     data={getTrendTypeDistribution()}
@@ -462,8 +462,8 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
               </div>
 
               {/* Sector Distribution */}
-              <div className="bg-white dark:bg-pearto-card rounded-lg p-4 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
-                <h3 className="text-sm font-semibold text-gray-900 dark:text-pearto-luna mb-3 transition-colors duration-300">Sector Distribution</h3>
+              <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
+                <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-3 transition-colors duration-300">Sector Distribution</h3>
                 <div className="h-56">
                   <Doughnut
                     data={getSectorDistribution()}
@@ -506,8 +506,8 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
               </div>
 
               {/* Performance Distribution */}
-              <div className="bg-white dark:bg-pearto-card rounded-lg p-4 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
-                <h3 className="text-sm font-semibold text-gray-900 dark:text-pearto-luna mb-3 transition-colors duration-300">Performance Overview</h3>
+              <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
+                <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-3 transition-colors duration-300">Performance Overview</h3>
                 <div className="h-56">
                   <Pie
                     data={getPerformanceDistribution()}
@@ -555,7 +555,7 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="bg-white dark:bg-pearto-card rounded-lg p-3 shadow-sm border border-gray-100 dark:border-pearto-border-subtle mb-4 transition-colors duration-300"
+              className="bg-white dark:bg-gray-800 rounded-lg p-3 shadow-sm border border-gray-100 dark:border-pearto-border-subtle mb-4 transition-colors duration-300"
             >
               <div className="flex flex-col gap-3">
                 {/* Filter Buttons */}
@@ -568,7 +568,7 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
                         onClick={() => setActiveFilter(filter.key)}
                         className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${activeFilter === filter.key
                           ? 'bg-blue-600 dark:bg-pearto-blue text-white'
-                          : 'bg-gray-100 dark:bg-pearto-surface text-gray-600 dark:text-pearto-cloud hover:bg-gray-200'
+                          : 'bg-gray-100 dark:bg-gray-700 text-slate-600 dark:text-gray-400 hover:bg-gray-200'
                           }`}
                       >
                         <Icon className="h-3 w-3" />
@@ -588,7 +588,7 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value as any)}
-                    className="flex-1 sm:flex-none px-3 py-1.5 text-xs border border-gray-300 dark:border-pearto-border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-pearto-green bg-white dark:bg-pearto-surface text-gray-900 dark:text-pearto-luna transition-colors duration-300"
+                    className="flex-1 sm:flex-none px-3 py-1.5 text-xs border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-pearto-green bg-white dark:bg-gray-700 text-slate-900 dark:text-white transition-colors duration-300"
                   >
                     <option value="trendScore">Trend Score</option>
                     <option value="changePercent">Change %</option>
@@ -604,7 +604,7 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
                       placeholder="Search stocks..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full pl-8 pr-3 py-1.5 text-xs border border-gray-300 dark:border-pearto-border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-pearto-green bg-white dark:bg-pearto-surface text-gray-900 dark:text-pearto-luna placeholder-gray-400 dark:placeholder-pearto-gray transition-colors duration-300"
+                      className="w-full pl-8 pr-3 py-1.5 text-xs border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-pearto-green bg-white dark:bg-gray-700 text-slate-900 dark:text-white placeholder-gray-400 dark:placeholder-pearto-gray transition-colors duration-300"
                     />
                   </div>
                 </div>
@@ -616,11 +616,11 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="bg-white dark:bg-pearto-card rounded-lg shadow-sm border border-gray-100 dark:border-pearto-border-subtle overflow-hidden transition-colors duration-300"
+              className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-pearto-border-subtle overflow-hidden transition-colors duration-300"
             >
               {/* Table Header */}
-              <div className="bg-gray-50 dark:bg-pearto-surface px-2 sm:px-4 py-1.5 sm:py-2 border-b border-gray-200 dark:border-pearto-border transition-colors duration-300">
-                <div className="grid grid-cols-12 gap-0.5 sm:gap-4 text-[10px] sm:text-xs font-semibold text-gray-700 dark:text-pearto-cloud uppercase tracking-wide transition-colors duration-300">
+              <div className="bg-gray-50 dark:bg-gray-700 px-2 sm:px-4 py-1.5 sm:py-2 border-b border-slate-200 dark:border-gray-700 transition-colors duration-300">
+                <div className="grid grid-cols-12 gap-0.5 sm:gap-4 text-[10px] sm:text-xs font-semibold text-slate-700 dark:text-gray-400 uppercase tracking-wide transition-colors duration-300">
                   <div className="col-span-3 sm:col-span-3">Stock</div>
                   <div className="col-span-2 text-center">Price</div>
                   <div className="col-span-2 text-center">Change</div>
@@ -641,7 +641,7 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.3, delay: index * 0.05 }}
-                      className="px-2 sm:px-4 py-1.5 sm:py-2 hover:bg-gray-50 dark:bg-pearto-surface transition-colors group"
+                      className="px-2 sm:px-4 py-1.5 sm:py-2 hover:bg-gray-50 dark:bg-gray-700 transition-colors group"
                     >
                       <div className="grid grid-cols-12 gap-0.5 sm:gap-4 items-center">
                         {/* Stock Info */}
@@ -652,17 +652,17 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
                           <div className="flex-1 min-w-0">
                             <Link
                               href={`/stock/${stock.symbol.toLowerCase()}`}
-                              className="text-[10px] sm:text-xs font-bold text-gray-900 dark:text-pearto-luna hover:text-blue-600 transition-colors block truncate"
+                              className="text-[10px] sm:text-xs font-bold text-slate-900 dark:text-white hover:text-blue-600 transition-colors block truncate"
                             >
                               {stock.symbol}
                             </Link>
-                            <p className="text-[9px] sm:text-xs text-gray-600 dark:text-pearto-cloud truncate hidden sm:block transition-colors duration-300">{stock.name}</p>
+                            <p className="text-[9px] sm:text-xs text-slate-600 dark:text-gray-400 truncate hidden sm:block transition-colors duration-300">{stock.name}</p>
                           </div>
                         </div>
 
                         {/* Price */}
                         <div className="col-span-2 text-center">
-                          <p className="text-[10px] sm:text-sm font-bold text-gray-900 dark:text-pearto-luna truncate transition-colors duration-300">{formatPrice(stock.price)}</p>
+                          <p className="text-[10px] sm:text-sm font-bold text-slate-900 dark:text-white truncate transition-colors duration-300">{formatPrice(stock.price)}</p>
                         </div>
 
                         {/* Change */}
@@ -677,22 +677,22 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
 
                         {/* Volume */}
                         <div className="col-span-2 text-center">
-                          <p className="text-[9px] sm:text-xs font-medium text-gray-900 dark:text-pearto-luna truncate transition-colors duration-300">{formatNumber(stock.volume)}</p>
+                          <p className="text-[9px] sm:text-xs font-medium text-slate-900 dark:text-white truncate transition-colors duration-300">{formatNumber(stock.volume)}</p>
                         </div>
 
                         {/* Market Cap */}
                         <div className="col-span-1 text-center">
-                          <p className="text-[9px] sm:text-xs font-medium text-gray-900 dark:text-pearto-luna truncate transition-colors duration-300">{formatNumber(stock.marketCap)}</p>
+                          <p className="text-[9px] sm:text-xs font-medium text-slate-900 dark:text-white truncate transition-colors duration-300">{formatNumber(stock.marketCap)}</p>
                         </div>
 
                         {/* Trend Score */}
                         <div className="col-span-1 text-center">
-                          <p className="text-[9px] sm:text-xs font-medium text-gray-900 dark:text-pearto-luna truncate transition-colors duration-300">{stock.trendScore.toFixed(3)}/100</p>
+                          <p className="text-[9px] sm:text-xs font-medium text-slate-900 dark:text-white truncate transition-colors duration-300">{stock.trendScore.toFixed(3)}/100</p>
                         </div>
 
                         {/* Social */}
                         <div className="col-span-1 text-center">
-                          <p className="text-[9px] sm:text-xs font-medium text-gray-900 dark:text-pearto-luna truncate transition-colors duration-300">{formatNumber(stock.socialMentions)}</p>
+                          <p className="text-[9px] sm:text-xs font-medium text-slate-900 dark:text-white truncate transition-colors duration-300">{formatNumber(stock.socialMentions)}</p>
                         </div>
                       </div>
                     </motion.div>
@@ -704,8 +704,8 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
             {filteredStocks.length === 0 && (
               <div className="text-center py-12">
                 <Activity className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-                <h3 className="text-sm font-semibold text-gray-900 dark:text-pearto-luna mb-2 transition-colors duration-300">No trending stocks found</h3>
-                <p className="text-xs text-gray-600 dark:text-pearto-cloud transition-colors duration-300">Try adjusting your search or filter criteria</p>
+                <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-2 transition-colors duration-300">No trending stocks found</h3>
+                <p className="text-xs text-slate-600 dark:text-gray-400 transition-colors duration-300">Try adjusting your search or filter criteria</p>
               </div>
             )}
           </div>
@@ -713,19 +713,19 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
       </main>
 
       {/* Sliding AI Panel */}
-      <div className={`fixed top-0 right-0 h-full w-96 bg-white dark:bg-pearto-card shadow-2xl transform transition-transform duration-300 ease-in-out z-50 ${isAIPanelOpen ? 'translate-x-0' : 'translate-x-full'
+      <div className={`fixed top-0 right-0 h-full w-96 bg-white dark:bg-gray-800 shadow-2xl transform transition-transform duration-300 ease-in-out z-50 ${isAIPanelOpen ? 'translate-x-0' : 'translate-x-full'
         }`}>
         <div className="h-full flex flex-col">
           {/* AI Panel Header */}
-          <div className="px-4 py-3 border-b border-gray-200 dark:border-pearto-border bg-gradient-to-r from-blue-50 to-purple-50 transition-colors duration-300">
+          <div className="px-4 py-3 border-b border-slate-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-purple-50 transition-colors duration-300">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Brain className="h-5 w-5 text-blue-600" />
-                <h3 className="text-sm font-semibold text-gray-900 dark:text-pearto-luna transition-colors duration-300">AI Trend Analysis</h3>
+                <h3 className="text-sm font-semibold text-slate-900 dark:text-white transition-colors duration-300">AI Trend Analysis</h3>
               </div>
               <button
                 onClick={() => setIsAIPanelOpen(false)}
-                className="p-1 text-gray-500 hover:text-gray-700 dark:text-pearto-cloud hover:bg-gray-200 rounded-lg transition-colors"
+                className="p-1 text-gray-500 hover:text-slate-700 dark:text-gray-400 hover:bg-gray-200 rounded-lg transition-colors"
               >
                 <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

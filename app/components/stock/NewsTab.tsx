@@ -54,8 +54,8 @@ export default function NewsTab({ symbol, news: initialNews, loading: initialLoa
     switch (sentiment) {
       case 'positive': return 'text-green-600 dark:text-pearto-green bg-green-100 dark:bg-green-900/20 dark:text-green-400';
       case 'negative': return 'text-red-600 dark:text-pearto-pink bg-red-100 dark:bg-red-900/20 dark:text-red-400';
-      case 'neutral': return 'text-gray-600 dark:text-pearto-cloud bg-gray-100 dark:bg-gray-900/20 dark:text-gray-400';
-      default: return 'text-gray-600 dark:text-pearto-cloud bg-gray-100 dark:bg-gray-900/20 dark:text-gray-400';
+      case 'neutral': return 'text-slate-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-900/20 dark:text-gray-400';
+      default: return 'text-slate-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-900/20 dark:text-gray-400';
     }
   };
 

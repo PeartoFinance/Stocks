@@ -114,12 +114,12 @@ export default function StockRiskAnalysisChart({ className = '', stock }: StockR
 
   const getRiskColor = (level: string) => {
     const colors = {
-      'Low': 'text-green-600 dark:text-pearto-green',
-      'Medium': 'text-yellow-600', 
-      'High': 'text-red-600 dark:text-pearto-pink',
-      'Very High': 'text-purple-600'
+      'Low': 'text-green-600 dark:text-green-400',
+      'Medium': 'text-yellow-600 dark:text-yellow-400', 
+      'High': 'text-red-600 dark:text-red-400',
+      'Very High': 'text-purple-600 dark:text-purple-400'
     };
-    return colors[level as keyof typeof colors] || 'text-gray-600 dark:text-pearto-cloud';
+    return colors[level as keyof typeof colors] || 'text-slate-600 dark:text-gray-400';
   };
 
   const options = {
@@ -186,9 +186,9 @@ export default function StockRiskAnalysisChart({ className = '', stock }: StockR
         <div className="flex items-center justify-between text-xs">
           <span className="text-gray-600 dark:text-gray-400 transition-colors duration-300">Volatility</span>
           <span className={`font-semibold ${
-            Math.abs(stock.changePercent || 0) < 2 ? 'text-green-600 dark:text-pearto-green' :
-            Math.abs(stock.changePercent || 0) < 5 ? 'text-yellow-600' :
-            Math.abs(stock.changePercent || 0) < 10 ? 'text-red-600 dark:text-pearto-pink' : 'text-purple-600'
+            Math.abs(stock.changePercent || 0) < 2 ? 'text-green-600 dark:text-green-400' :
+            Math.abs(stock.changePercent || 0) < 5 ? 'text-yellow-600 dark:text-yellow-400' :
+            Math.abs(stock.changePercent || 0) < 10 ? 'text-red-600 dark:text-red-400' : 'text-purple-600 dark:text-purple-400'
           }`}>
             {Math.abs(stock.changePercent || 0).toFixed(2)}%
           </span>
@@ -197,9 +197,9 @@ export default function StockRiskAnalysisChart({ className = '', stock }: StockR
         <div className="flex items-center justify-between text-xs">
           <span className="text-gray-600 dark:text-gray-400 transition-colors duration-300">P/E Ratio</span>
           <span className={`font-semibold ${
-            (stock.pe || 0) > 0 && (stock.pe || 0) < 15 ? 'text-green-600 dark:text-pearto-green' :
-            (stock.pe || 0) >= 15 && (stock.pe || 0) < 25 ? 'text-yellow-600' :
-            (stock.pe || 0) >= 25 && (stock.pe || 0) < 35 ? 'text-red-600 dark:text-pearto-pink' : 'text-purple-600'
+            (stock.pe || 0) > 0 && (stock.pe || 0) < 15 ? 'text-green-600 dark:text-green-400' :
+            (stock.pe || 0) >= 15 && (stock.pe || 0) < 25 ? 'text-yellow-600 dark:text-yellow-400' :
+            (stock.pe || 0) >= 25 && (stock.pe || 0) < 35 ? 'text-red-600 dark:text-red-400' : 'text-purple-600 dark:text-purple-400'
           }`}>
             {stock.pe ? stock.pe.toFixed(1) : 'N/A'}
           </span>
@@ -208,9 +208,9 @@ export default function StockRiskAnalysisChart({ className = '', stock }: StockR
         <div className="flex items-center justify-between text-xs">
           <span className="text-gray-600 dark:text-gray-400 transition-colors duration-300">Market Cap</span>
           <span className={`font-semibold ${
-            stockMarketCap > 100000000000 ? 'text-green-600 dark:text-pearto-green' :
-            stockMarketCap > 10000000000 ? 'text-yellow-600' :
-            stockMarketCap > 1000000000 ? 'text-red-600 dark:text-pearto-pink' : 'text-purple-600'
+            stockMarketCap > 100000000000 ? 'text-green-600 dark:text-green-400' :
+            stockMarketCap > 10000000000 ? 'text-yellow-600 dark:text-yellow-400' :
+            stockMarketCap > 1000000000 ? 'text-red-600 dark:text-red-400' : 'text-purple-600 dark:text-purple-400'
           }`}>
             {stockMarketCap > 1000000000 
               ? `$${(stockMarketCap / 1000000000).toFixed(1)}B` 

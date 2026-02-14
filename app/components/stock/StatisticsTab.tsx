@@ -95,7 +95,7 @@ export default function StatisticsTab({ stock }: StatisticsTabProps) {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="flex items-center gap-3 text-slate-500 dark:text-pearto-gray transition-colors duration-300">
+        <div className="flex items-center gap-3 text-slate-500 dark:text-gray-400 transition-colors duration-300">
           <Loader2 className="h-6 w-6 animate-spin" />
           <span>Loading statistics...</span>
         </div>
@@ -106,7 +106,7 @@ export default function StatisticsTab({ stock }: StatisticsTabProps) {
   if (error && !statistics) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="text-center text-slate-500 dark:text-pearto-gray transition-colors duration-300">
+        <div className="text-center text-slate-500 dark:text-gray-400 transition-colors duration-300">
           <p className="mb-2">{error}</p>
           <button
             onClick={() => window.location.reload()}

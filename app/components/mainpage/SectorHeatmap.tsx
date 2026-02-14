@@ -34,7 +34,7 @@ export default function SectorHeatmap({ className = '', sectors }: SectorHeatmap
   };
 
   return (
-    <div className={`bg-white dark:bg-pearto-card rounded-2xl border border-slate-200 dark:border-pearto-border p-5 shadow-sm ${className}`}>
+    <div className={`bg-white dark:bg-gray-800 rounded-2xl border border-slate-200 dark:border-gray-700 p-5 shadow-sm ${className}`}>
       {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-2.5">
@@ -42,11 +42,11 @@ export default function SectorHeatmap({ className = '', sectors }: SectorHeatmap
             <Activity className="h-4 w-4 text-emerald-600 dark:text-pearto-green transition-colors duration-300" />
           </div>
           <div>
-            <h2 className="text-slate-900 dark:text-pearto-luna text-sm font-bold tracking-tight leading-none transition-colors duration-300">Market Heatmap</h2>
-            <p className="text-[10px] text-slate-500 dark:text-pearto-gray mt-1 font-medium transition-colors duration-300">Performance by Sector Weight</p>
+            <h2 className="text-slate-900 dark:text-white text-sm font-bold tracking-tight leading-none transition-colors duration-300">Market Heatmap</h2>
+            <p className="text-[10px] text-slate-500 dark:text-gray-400 mt-1 font-medium transition-colors duration-300">Performance by Sector Weight</p>
           </div>
         </div>
-        <button className="text-slate-400 hover:text-slate-600 dark:text-pearto-cloud transition-colors">
+        <button className="text-slate-400 hover:text-slate-600 dark:text-gray-400 transition-colors">
           <Info className="h-4 w-4" />
         </button>
       </div>

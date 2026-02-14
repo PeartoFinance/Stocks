@@ -125,7 +125,7 @@ export default function AllStocks({ className = '' }: AllStocksProps) {
   return (
     <div className={`space-y-4 sm:space-y-6 ${className}`}>
       {/* Search Bar */}
-      <div className="bg-white dark:bg-pearto-card rounded-xl shadow-sm border border-gray-200 dark:border-pearto-border p-3 sm:p-4 transition-colors duration-300">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-slate-200 dark:border-gray-700 p-3 sm:p-4 transition-colors duration-300">
         <div className="flex gap-2">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-pearto-gray" />
@@ -134,14 +134,14 @@ export default function AllStocks({ className = '' }: AllStocksProps) {
               placeholder="Search by symbol or company..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 sm:py-2.5 border border-gray-300 dark:border-pearto-border rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-pearto-green focus:border-blue-500 dark:focus:border-pearto-green bg-white dark:bg-pearto-surface text-gray-900 dark:text-pearto-luna placeholder-gray-400 dark:placeholder-pearto-gray text-sm sm:text-base transition-colors duration-300"
+              className="w-full pl-10 pr-4 py-2 sm:py-2.5 border border-slate-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-pearto-green focus:border-blue-500 dark:focus:border-pearto-green bg-white dark:bg-gray-700 text-slate-900 dark:text-white placeholder-gray-400 dark:placeholder-pearto-gray text-sm sm:text-base transition-colors duration-300"
             />
           </div>
           <button
             onClick={() => setShowFilters(!showFilters)}
             className={`flex items-center gap-2 px-3 sm:px-4 py-2 border rounded-lg transition-colors text-sm sm:text-base whitespace-nowrap ${showFilters || hasActiveFilters
               ? 'bg-blue-50 border-blue-300 text-blue-700'
-              : 'bg-white dark:bg-pearto-card border-gray-300 dark:border-pearto-border text-gray-700 dark:text-pearto-cloud hover:bg-gray-50 dark:bg-pearto-surface'
+              : 'bg-white dark:bg-gray-800 border-slate-300 dark:border-gray-600 text-slate-700 dark:text-gray-400 hover:bg-gray-50 dark:bg-gray-700'
               }`}
           >
             <Filter className="h-4 w-4" />
@@ -162,10 +162,10 @@ export default function AllStocks({ className = '' }: AllStocksProps) {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="bg-white dark:bg-pearto-card rounded-xl shadow-sm border border-gray-200 dark:border-pearto-border p-3 sm:p-4 lg:p-6 overflow-hidden transition-colors duration-300"
+            className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-slate-200 dark:border-gray-700 p-3 sm:p-4 lg:p-6 overflow-hidden transition-colors duration-300"
           >
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-pearto-luna transition-colors duration-300">Advanced Filters</h3>
+              <h3 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-white transition-colors duration-300">Advanced Filters</h3>
               {hasActiveFilters && (
                 <button onClick={clearFilters} className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1 transition-colors duration-300">
                   <X className="h-4 w-4" /> Clear All
@@ -175,11 +175,11 @@ export default function AllStocks({ className = '' }: AllStocksProps) {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
               <div>
-                <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-pearto-cloud mb-1.5 transition-colors duration-300">Sector</label>
+                <label className="block text-xs sm:text-sm font-medium text-slate-700 dark:text-gray-400 mb-1.5 transition-colors duration-300">Sector</label>
                 <select
                   value={filters.sector}
                   onChange={(e) => setFilters({ ...filters, sector: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-pearto-border rounded-lg text-sm appearance-none bg-white dark:bg-pearto-card transition-colors duration-300"
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg text-sm appearance-none bg-white dark:bg-gray-800 transition-colors duration-300"
                 >
                   <option value="all">All Sectors</option>
                   <option value="Technology">Technology</option>
@@ -191,11 +191,11 @@ export default function AllStocks({ className = '' }: AllStocksProps) {
                 </select>
               </div>
               <div>
-                <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-pearto-cloud mb-1.5 transition-colors duration-300">Exchange</label>
+                <label className="block text-xs sm:text-sm font-medium text-slate-700 dark:text-gray-400 mb-1.5 transition-colors duration-300">Exchange</label>
                 <select
                   value={filters.exchange}
                   onChange={(e) => setFilters({ ...filters, exchange: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-pearto-border rounded-lg text-sm appearance-none bg-white dark:bg-pearto-card transition-colors duration-300"
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg text-sm appearance-none bg-white dark:bg-gray-800 transition-colors duration-300"
                 >
                   <option value="all">All Exchanges</option>
                   <option value="NASDAQ">NASDAQ</option>
@@ -204,23 +204,23 @@ export default function AllStocks({ className = '' }: AllStocksProps) {
                 </select>
               </div>
               <div>
-                <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-pearto-cloud mb-1.5 transition-colors duration-300">Min Price</label>
+                <label className="block text-xs sm:text-sm font-medium text-slate-700 dark:text-gray-400 mb-1.5 transition-colors duration-300">Min Price</label>
                 <input
                   type="number"
                   placeholder="$0"
                   value={filters.minPrice}
                   onChange={(e) => setFilters({ ...filters, minPrice: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-pearto-border rounded-lg text-sm transition-colors duration-300"
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg text-sm transition-colors duration-300"
                 />
               </div>
               <div>
-                <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-pearto-cloud mb-1.5 transition-colors duration-300">Max Price</label>
+                <label className="block text-xs sm:text-sm font-medium text-slate-700 dark:text-gray-400 mb-1.5 transition-colors duration-300">Max Price</label>
                 <input
                   type="number"
                   placeholder="$∞"
                   value={filters.maxPrice}
                   onChange={(e) => setFilters({ ...filters, maxPrice: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-pearto-border rounded-lg text-sm transition-colors duration-300"
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg text-sm transition-colors duration-300"
                 />
               </div>
             </div>
@@ -229,9 +229,9 @@ export default function AllStocks({ className = '' }: AllStocksProps) {
       </AnimatePresence>
 
       {/* Results Table */}
-      <div className="bg-white dark:bg-pearto-card rounded-xl shadow-sm border border-gray-200 dark:border-pearto-border overflow-hidden transition-colors duration-300">
-        <div className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 border-b border-gray-200 dark:border-pearto-border flex items-center justify-between transition-colors duration-300">
-          <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-pearto-luna transition-colors duration-300">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-slate-200 dark:border-gray-700 overflow-hidden transition-colors duration-300">
+        <div className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 border-b border-slate-200 dark:border-gray-700 flex items-center justify-between transition-colors duration-300">
+          <h3 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-white transition-colors duration-300">
             {isLoading ? 'Loading...' : `${filteredStocks.length} Stock${filteredStocks.length !== 1 ? 's' : ''} Found`}
           </h3>
           <button
@@ -249,7 +249,7 @@ export default function AllStocks({ className = '' }: AllStocksProps) {
           </div>
         ) : filteredStocks.length === 0 ? (
           <div className="text-center py-12 sm:py-16">
-            <p className="text-gray-500 dark:text-pearto-gray transition-colors duration-300">No stocks found matching your criteria.</p>
+            <p className="text-gray-500 dark:text-gray-400 transition-colors duration-300">No stocks found matching your criteria.</p>
             <button onClick={clearFilters} className="mt-4 text-blue-600 font-medium text-sm">Clear all filters</button>
           </div>
         ) : (
@@ -264,7 +264,7 @@ export default function AllStocks({ className = '' }: AllStocksProps) {
                       <PriceDisplay amount={stock.price} className="font-bold" />
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-500 dark:text-pearto-gray truncate max-w-[150px] transition-colors duration-300">{stock.name}</span>
+                      <span className="text-gray-500 dark:text-gray-400 truncate max-w-[150px] transition-colors duration-300">{stock.name}</span>
                       <span className={stock.change >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'}>
                         {stock.changePercent.toFixed(2)}%
                       </span>
@@ -277,36 +277,36 @@ export default function AllStocks({ className = '' }: AllStocksProps) {
             {/* Desktop View */}
             <div className="hidden lg:block overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200 dark:divide-pearto-border dark:divide-pearto-border text-sm transition-colors duration-300">
-                <thead className="bg-gray-50 dark:bg-pearto-surface transition-colors duration-300">
+                <thead className="bg-gray-50 dark:bg-gray-700 transition-colors duration-300">
                   <tr>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-pearto-gray uppercase transition-colors duration-300">Stock</th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase transition-colors duration-300">Stock</th>
                     {['Price', 'Change', 'Volume', 'MarketCap', 'PE'].map((key) => (
-                      <th key={key} onClick={() => handleSort(key === 'MarketCap' ? 'marketCap' : key.toLowerCase())} className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-pearto-gray uppercase cursor-pointer hover:bg-gray-100 dark:bg-pearto-surface transition-colors duration-300">
+                      <th key={key} onClick={() => handleSort(key === 'MarketCap' ? 'marketCap' : key.toLowerCase())} className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase cursor-pointer hover:bg-gray-100 dark:bg-gray-700 transition-colors duration-300">
                         <div className="flex items-center gap-1">{key} <ArrowUpDown className="h-3 w-3" /></div>
                       </th>
                     ))}
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-pearto-gray uppercase transition-colors duration-300">Sector</th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase transition-colors duration-300">Sector</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white dark:bg-pearto-card divide-y divide-gray-200 dark:divide-pearto-border transition-colors duration-300">
+                <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-pearto-border transition-colors duration-300">
                   {filteredStocks.map((stock) => (
-                    <tr key={stock.symbol} className="hover:bg-gray-50 dark:bg-pearto-surface transition-colors">
+                    <tr key={stock.symbol} className="hover:bg-gray-50 dark:bg-gray-700 transition-colors">
                       <td className="px-4 py-2 whitespace-nowrap">
                         <Link href={`/stock/${stock.symbol.toLowerCase()}`}>
-                          <div className="text-sm font-semibold text-gray-900 dark:text-pearto-luna transition-colors duration-300">{stock.symbol}</div>
-                          <div className="text-xs text-gray-500 dark:text-pearto-gray truncate max-w-[120px] transition-colors duration-300">{stock.name}</div>
+                          <div className="text-sm font-semibold text-slate-900 dark:text-white transition-colors duration-300">{stock.symbol}</div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-[120px] transition-colors duration-300">{stock.name}</div>
                         </Link>
                       </td>
 
-                      <td className="px-4 py-2 text-sm font-medium text-gray-900 dark:text-pearto-luna transition-colors duration-300">
+                      <td className="px-4 py-2 text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">
                         <PriceDisplay amount={stock.price} />
                       </td>
                       <td className={`px-4 py-2 text-sm font-medium ${stock.change >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'}`}>
                         {stock.changePercent.toFixed(2)}%
                       </td>
-                      <td className="px-4 py-2 text-sm text-gray-900 dark:text-pearto-luna transition-colors duration-300">{formatNumber(stock.volume || 0)}</td>
-                      <td className="px-4 py-2 text-sm text-gray-900 dark:text-pearto-luna transition-colors duration-300">{formatMarketCap(stock.marketCap)}</td>
-                      <td className="px-4 py-2 text-sm text-gray-900 dark:text-pearto-luna transition-colors duration-300">{stock.peRatio?.toFixed(2) || '—'}</td>
+                      <td className="px-4 py-2 text-sm text-slate-900 dark:text-white transition-colors duration-300">{formatNumber(stock.volume || 0)}</td>
+                      <td className="px-4 py-2 text-sm text-slate-900 dark:text-white transition-colors duration-300">{formatMarketCap(stock.marketCap)}</td>
+                      <td className="px-4 py-2 text-sm text-slate-900 dark:text-white transition-colors duration-300">{stock.peRatio?.toFixed(2) || '—'}</td>
                       <td className="px-4 py-2">
                         <span className="px-2 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-medium">{stock.sector || 'Unknown'}</span>
                       </td>

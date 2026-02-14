@@ -56,15 +56,15 @@ export default function Trending({ className = '' }: TrendingProps) {
   return (
     <div className={`space-y-4 sm:space-y-6 ${className}`}>
       {/* Header */}
-      <div className="bg-white dark:bg-pearto-card rounded-xl shadow-sm border border-gray-200 dark:border-pearto-border p-4 sm:p-6 transition-colors duration-300">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-slate-200 dark:border-gray-700 p-4 sm:p-6 transition-colors duration-300">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-purple-100 rounded-lg">
               <Activity className="h-6 w-6 text-purple-600" />
             </div>
             <div>
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-pearto-luna transition-colors duration-300">Trending Stocks</h2>
-              <p className="text-sm text-gray-600 dark:text-pearto-cloud mt-1 transition-colors duration-300">Most talked about and actively traded stocks</p>
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white transition-colors duration-300">Trending Stocks</h2>
+              <p className="text-sm text-slate-600 dark:text-gray-400 mt-1 transition-colors duration-300">Most talked about and actively traded stocks</p>
             </div>
           </div>
           <button
@@ -77,14 +77,14 @@ export default function Trending({ className = '' }: TrendingProps) {
         </div>
       </div>
 
-      <div className="bg-white dark:bg-pearto-card rounded-xl shadow-sm border border-gray-200 dark:border-pearto-border overflow-hidden transition-colors duration-300">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-slate-200 dark:border-gray-700 overflow-hidden transition-colors duration-300">
         {isLoading ? (
           <div className="flex items-center justify-center py-12 sm:py-16">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
           </div>
         ) : trendingStocks.length === 0 ? (
           <div className="text-center py-12 sm:py-16">
-            <p className="text-gray-500 dark:text-pearto-gray transition-colors duration-300">No trending stocks data available at the moment.</p>
+            <p className="text-gray-500 dark:text-gray-400 transition-colors duration-300">No trending stocks data available at the moment.</p>
           </div>
         ) : (
           <>
@@ -101,7 +101,7 @@ export default function Trending({ className = '' }: TrendingProps) {
                   <Link href={`/stock/${stock.symbol.toLowerCase()}`}>
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-3">
-                        <div className="text-lg font-bold text-gray-900 dark:text-pearto-luna transition-colors duration-300">{stock.symbol}</div>
+                        <div className="text-lg font-bold text-slate-900 dark:text-white transition-colors duration-300">{stock.symbol}</div>
                         <div className="flex items-center gap-1">
                           <TrendingUp className="h-4 w-4 text-purple-600" />
                           <div className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full font-medium">
@@ -116,8 +116,8 @@ export default function Trending({ className = '' }: TrendingProps) {
                         </div>
                       </div>
                     </div>
-                    <div className="text-sm text-gray-600 dark:text-pearto-cloud mb-2 transition-colors duration-300">{stock.name}</div>
-                    <div className="flex items-center justify-between text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">
+                    <div className="text-sm text-slate-600 dark:text-gray-400 mb-2 transition-colors duration-300">{stock.name}</div>
+                    <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300">
                       <span>Vol: {formatNumber(stock.volume || 0)}</span>
                       <span>MCap: {formatMarketCap(stock.marketCap)}</span>
                     </div>
@@ -128,53 +128,53 @@ export default function Trending({ className = '' }: TrendingProps) {
 
             {/* Desktop View */}
             <div className="hidden lg:block">
-              <div className="px-6 py-4 bg-gray-50 dark:bg-pearto-surface border-b border-gray-200 dark:border-pearto-border transition-colors duration-300">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-pearto-luna transition-colors duration-300">
+              <div className="px-6 py-4 bg-gray-50 dark:bg-gray-700 border-b border-slate-200 dark:border-gray-700 transition-colors duration-300">
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-white transition-colors duration-300">
                   {trendingStocks.length} Trending Stocks
                 </h3>
               </div>
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200 dark:divide-pearto-border text-sm">
-                  <thead className="bg-gray-50 dark:bg-pearto-surface transition-colors duration-300">
+                  <thead className="bg-gray-50 dark:bg-gray-700 transition-colors duration-300">
                     <tr>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-pearto-gray uppercase transition-colors duration-300">Trending</th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-pearto-gray uppercase transition-colors duration-300">Stock</th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-pearto-gray uppercase transition-colors duration-300">Price</th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-pearto-gray uppercase transition-colors duration-300">Change</th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-pearto-gray uppercase transition-colors duration-300">Volume</th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-pearto-gray uppercase transition-colors duration-300">Market Cap</th>
-                      <th className="px-4 py-2 text-center text-xs font-medium text-gray-500 dark:text-pearto-gray uppercase transition-colors duration-300">Sector</th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase transition-colors duration-300">Trending</th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase transition-colors duration-300">Stock</th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase transition-colors duration-300">Price</th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase transition-colors duration-300">Change</th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase transition-colors duration-300">Volume</th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase transition-colors duration-300">Market Cap</th>
+                      <th className="px-4 py-2 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase transition-colors duration-300">Sector</th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white dark:bg-pearto-card divide-y divide-gray-200 dark:divide-pearto-border transition-colors duration-300">
+                  <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-pearto-border transition-colors duration-300">
                     {trendingStocks.map((stock, index) => (
                       <motion.tr
                         key={stock.symbol}
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.03 }}
-                        className="hover:bg-gray-50 dark:bg-pearto-surface transition-colors"
+                        className="hover:bg-gray-50 dark:bg-gray-700 transition-colors"
                       >
                         <td className="px-4 py-2 whitespace-nowrap">
                           <div className="flex items-center gap-2">
                             <TrendingUp className="h-4 w-4 text-purple-600" />
-                            <div className="text-sm font-medium text-gray-900 dark:text-pearto-luna transition-colors duration-300">#{index + 1}</div>
+                            <div className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">#{index + 1}</div>
                           </div>
                         </td>
                         <td className="px-4 py-2 whitespace-nowrap">
                           {/* UPDATED: Link wraps the stacked info */}
                           <Link href={`/stock/${stock.symbol.toLowerCase()}`} className="group block">
                             <div className="flex flex-col items-start">
-                              <div className="text-sm font-bold text-gray-900 dark:text-pearto-luna group-hover:text-purple-600 transition-colors leading-tight">
+                              <div className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-purple-600 transition-colors leading-tight">
                                 {stock.symbol}
                               </div>
-                              <div className="text-xs text-gray-500 dark:text-pearto-gray truncate max-w-[160px] leading-tight mt-0.5 transition-colors duration-300">
+                              <div className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-[160px] leading-tight mt-0.5 transition-colors duration-300">
                                 {stock.name}
                               </div>
                             </div>
                           </Link>
                         </td>
-                        <td className="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-pearto-luna transition-colors duration-300">
+                        <td className="px-4 py-2 whitespace-nowrap text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">
                           <PriceDisplay amount={stock.price} />
                         </td>
                         <td className="px-4 py-2 whitespace-nowrap">
@@ -187,10 +187,10 @@ export default function Trending({ className = '' }: TrendingProps) {
                             </div>
                           </div>
                         </td>
-                        <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-900 dark:text-pearto-luna transition-colors duration-300">
+                        <td className="px-4 py-2 whitespace-nowrap text-sm text-slate-900 dark:text-white transition-colors duration-300">
                           {formatNumber(stock.volume || 0)}
                         </td>
-                        <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-900 dark:text-pearto-luna transition-colors duration-300">
+                        <td className="px-4 py-2 whitespace-nowrap text-sm text-slate-900 dark:text-white transition-colors duration-300">
                           {formatMarketCap(stock.marketCap)}
                         </td>
                         <td className="px-4 py-2 whitespace-nowrap text-center">

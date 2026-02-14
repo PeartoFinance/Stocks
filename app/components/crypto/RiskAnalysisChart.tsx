@@ -104,12 +104,12 @@ export default function RiskAnalysisChart({ className = '', crypto }: RiskAnalys
 
   const getRiskColor = (level: string) => {
     const colors = {
-      'Low': 'text-green-600 dark:text-pearto-green',
-      'Medium': 'text-yellow-600', 
-      'High': 'text-red-600 dark:text-pearto-pink',
+      'Low': 'text-green-600 dark:text-green-400',
+      'Medium': 'text-yellow-600 dark:text-yellow-400', 
+      'High': 'text-red-600 dark:text-red-400',
       'Very High': 'text-purple-600'
     };
-    return colors[level as keyof typeof colors] || 'text-gray-600 dark:text-pearto-cloud';
+    return colors[level as keyof typeof colors] || 'text-slate-600 dark:text-gray-400';
   };
 
   const options = {
@@ -117,40 +117,31 @@ export default function RiskAnalysisChart({ className = '', crypto }: RiskAnalys
     maintainAspectRatio: false,
     layout: {
       padding: {
-        top: 10,
-        bottom: 10,
-        left: 10,
-        right: 10
+        top: 5,
+        bottom: 5,
+        left: 5,
+        right: 5
       }
     },
     plugins: {
       legend: {
-        position: 'bottom' as const,
-        labels: {
-          padding: 20,
-          font: {
-            size: 10,
-            weight: 500 as const
-          },
-          color: '#374151 dark:text-gray-300',
-          boxWidth: 12,
-          boxHeight: 12
-        }
+        display: false
       },
       tooltip: {
+        enabled: true,
         bodyFont: {
-          size: 11,
+          size: 10,
           weight: 500 as const
         },
         titleFont: {
-          size: 12,
+          size: 11,
           weight: 600 as const
         },
-        padding: 10,
-        cornerRadius: 6
+        padding: 6,
+        cornerRadius: 4
       }
     },
-    cutout: '70%',
+    cutout: '65%',
     animation: {
       animateScale: true,
       animateRotate: true
@@ -160,36 +151,33 @@ export default function RiskAnalysisChart({ className = '', crypto }: RiskAnalys
   const overallRisk = getOverallRiskLevel();
 
   return (
-    <div className={`bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 ${className}`}>
-      <div className="mb-3">
-        <h3 className="text-sm font-semibold text-gray-900  dark:text-white mb-1 transition-colors duration-300">Risk Analysis</h3>
-        <p className="text-xs text-gray-600  dark:text-gray-400 transition-colors duration-300">
-          Based on {crypto.symbol} market metrics
+    <div className={`bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-3 ${className}`}>
+      <div className="mb-2">
+        <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-1 transition-colors duration-300">Risk Analysis</h3>
+        <p className="text-xs text-gray-600 dark:text-gray-400 transition-colors duration-300">
+          Based on {crypto.symbol} metrics
         </p>
       </div>
       
-      <div className="h-40 relative mb-4">
+      <div className="h-20 relative mb-2">
         <Doughnut data={riskData} options={options} />
-        
-        {/* Center text - positioned absolutely but with better z-index */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
-          <div className="text-center bg-white dark:bg-pearto-card  dark:bg-slate-900/90 px-3 py-2 rounded-lg shadow-sm transition-colors duration-300">
-            <div className={`text-lg font-bold ${getRiskColor(overallRisk)}`}>
-              {overallRisk}
-            </div>
-            <div className="text-xs text-gray-500  dark:text-gray-400 transition-colors duration-300">Risk</div>
-          </div>
+      </div>
+      
+      {/* Risk Level Text Below Chart */}
+      <div className="text-center mb-3">
+        <div className={`text-lg font-bold ${getRiskColor(overallRisk)}`}>
+          {overallRisk} Risk
         </div>
       </div>
       
-      {/* Risk Factors */}
-      <div className="space-y-2">
+      {/* Key Metrics - 3 rows */}
+      <div className="space-y-1.5 pt-2 border-t border-slate-200 dark:border-slate-700 transition-colors duration-300">
         <div className="flex items-center justify-between text-xs">
           <span className="text-gray-600  dark:text-gray-400 transition-colors duration-300">Volatility</span>
           <span className={`font-medium ${
-            Math.abs(crypto.changePercent || 0) < 2 ? 'text-green-600 dark:text-pearto-green' :
-            Math.abs(crypto.changePercent || 0) < 5 ? 'text-yellow-600' :
-            Math.abs(crypto.changePercent || 0) < 10 ? 'text-red-600 dark:text-pearto-pink' : 'text-purple-600'
+            Math.abs(crypto.changePercent || 0) < 2 ? 'text-green-600 dark:text-green-400' :
+            Math.abs(crypto.changePercent || 0) < 5 ? 'text-yellow-600 dark:text-yellow-400' :
+            Math.abs(crypto.changePercent || 0) < 10 ? 'text-red-600 dark:text-red-400' : 'text-purple-600 dark:text-purple-400'
           }`}>
             {Math.abs(crypto.changePercent || 0).toFixed(2)}%
           </span>
@@ -197,9 +185,9 @@ export default function RiskAnalysisChart({ className = '', crypto }: RiskAnalys
         <div className="flex items-center justify-between text-xs">
           <span className="text-gray-600  dark:text-gray-400 transition-colors duration-300">Market Cap</span>
           <span className={`font-medium ${
-            (crypto.marketCap || 0) > 10000000000 ? 'text-green-600 dark:text-pearto-green' :
-            (crypto.marketCap || 0) > 1000000000 ? 'text-yellow-600' :
-            (crypto.marketCap || 0) > 100000000 ? 'text-red-600 dark:text-pearto-pink' : 'text-purple-600'
+            (crypto.marketCap || 0) > 10000000000 ? 'text-green-600 dark:text-green-400' :
+            (crypto.marketCap || 0) > 1000000000 ? 'text-yellow-600 dark:text-yellow-400' :
+            (crypto.marketCap || 0) > 100000000 ? 'text-red-600 dark:text-red-400' : 'text-purple-600 dark:text-purple-400'
           }`}>
             {(crypto.marketCap || 0) > 1000000000 
               ? `$${((crypto.marketCap || 0) / 1000000000).toFixed(1)}B`
@@ -210,9 +198,9 @@ export default function RiskAnalysisChart({ className = '', crypto }: RiskAnalys
         <div className="flex items-center justify-between text-xs">
           <span className="text-gray-600  dark:text-gray-400 transition-colors duration-300">Volume/Cap</span>
           <span className={`font-medium ${
-            ((crypto.volume || 0) / (crypto.marketCap || 1)) > 0.1 ? 'text-green-600 dark:text-pearto-green' :
-            ((crypto.volume || 0) / (crypto.marketCap || 1)) > 0.05 ? 'text-yellow-600' :
-            ((crypto.volume || 0) / (crypto.marketCap || 1)) > 0.01 ? 'text-red-600 dark:text-pearto-pink' : 'text-purple-600'
+            ((crypto.volume || 0) / (crypto.marketCap || 1)) > 0.1 ? 'text-green-600 dark:text-green-400' :
+            ((crypto.volume || 0) / (crypto.marketCap || 1)) > 0.05 ? 'text-yellow-600 dark:text-yellow-400' :
+            ((crypto.volume || 0) / (crypto.marketCap || 1)) > 0.01 ? 'text-red-600 dark:text-red-400' : 'text-purple-600 dark:text-purple-400'
           }`}>
             {(((crypto.volume || 0) / (crypto.marketCap || 1)) * 100).toFixed(2)}%
           </span>
