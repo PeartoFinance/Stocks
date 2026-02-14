@@ -184,7 +184,7 @@ export default function VendorsList({ className = '', limit = 10, category }: Ve
                   </span>
                 ))}
                 {vendor.services.length > 3 && (
-                  <span className="px-2 py-0.5 text-xs text-slate-500 dark:text-slate-500 dark:text-pearto-gray transition-colors duration-300">
+                  <span className="px-2 py-0.5 text-xs text-slate-500 dark:text-slate-500  transition-colors duration-300">
                     +{vendor.services.length - 3}
                   </span>
                 )}

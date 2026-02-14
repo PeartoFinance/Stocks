@@ -158,7 +158,7 @@ export default function WorldIndices({ className = '' }: WorldIndicesProps) {
               href={`/crypto/${cryptoSymbol}`}
               className="text-left hover:text-emerald-600 dark:text-pearto-green transition-colors group block"
             >
-              <div className="text-sm font-medium text-slate-900 dark:text-white group-hover:text-emerald-600 dark:text-pearto-green transition-colors duration-300">
+              <div className="text-sm font-medium text-slate-900 dark:text-white group-hover:text-emerald-600  transition-colors duration-300">
                 {crypto.name || 'Unknown'}
                 <span className="ml-1 text-xs text-gray-400 group-hover:text-emerald-500 transition-colors duration-300">→</span>
               </div>
@@ -208,7 +208,7 @@ export default function WorldIndices({ className = '' }: WorldIndicesProps) {
         </h2>
         <button
           onClick={() => window.location.reload()}
-          className="p-2 text-gray-500 dark:text-gray-400 hover:text-emerald-600 dark:text-pearto-green hover:bg-emerald-50 rounded-lg transition-colors"
+          className="p-2 text-gray-500 dark:text-gray-400 hover:text-emerald-600  hover:bg-emerald-50 rounded-lg transition-colors"
         >
           <RefreshCcw className="h-4 w-4" />
         </button>
@@ -222,7 +222,7 @@ export default function WorldIndices({ className = '' }: WorldIndicesProps) {
             onClick={() => setActiveTab(tab)}
             className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${activeTab === tab
                 ? 'bg-emerald-600 dark:bg-pearto-pink text-white'
-                : 'text-slate-600 dark:text-gray-400 hover:text-emerald-600 dark:text-pearto-green hover:bg-emerald-50'
+                : 'text-slate-600 dark:text-gray-400 hover:text-emerald-600  hover:bg-emerald-50'
               }`}
           >
             {tab}
