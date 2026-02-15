@@ -47,9 +47,9 @@ export default function ChartControls({
   className = ''
 }: ChartControlsProps) {
   return (
-    <div className={`px-4 py-3 border-b border-gray-200 dark:border-gray-700 ${className}`}>
+    <div className={`px-3 sm:px-4 py-3 border-b border-gray-200 dark:border-gray-700 ${className}`}>
       {/* Period and Chart Type Filters */}
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap gap-2 sm:gap-3">
         {/* Period Selector */}
         <div className="flex items-center gap-2">
           <span className="text-xs font-medium text-gray-700 dark:text-gray-300">Period:</span>
@@ -58,7 +58,7 @@ export default function ChartControls({
               <button
                 key={p}
                 onClick={() => onPeriodChange(p)}
-                className={`px-3 py-1 text-xs font-medium rounded-md transition-colors ${
+                className={`px-2 sm:px-3 py-1 text-xs font-medium rounded-md transition-colors ${
                   period === p
                     ? 'bg-blue-600 text-white'
                     : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
@@ -78,14 +78,14 @@ export default function ChartControls({
               <button
                 key={type.key}
                 onClick={() => onChartTypeChange(type.key)}
-                className={`px-3 py-1 text-xs font-medium rounded-md transition-colors flex items-center gap-1 ${
+                className={`px-2 sm:px-3 py-1 text-xs font-medium rounded-md transition-colors flex items-center gap-1 ${
                   chartType === type.key
                     ? 'bg-blue-600 text-white'
                     : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                 }`}
               >
                 <type.icon className="h-3 w-3" />
-                {type.label}
+                <span className="hidden sm:inline">{type.label}</span>
               </button>
             ))}
           </div>

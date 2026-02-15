@@ -111,7 +111,7 @@ export default function ETFScreener() {
                       placeholder="Search by symbol or name..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full pl-10 pr-4 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-slate-900 dark:text-white placeholder:text-gray-400"
                     />
                   </div>
                 </div>
@@ -122,7 +122,7 @@ export default function ETFScreener() {
                   <select
                     value={filters.category}
                     onChange={(e) => setFilters({ ...filters, category: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-slate-900 dark:text-white"
                   >
                     <option value="all">All Categories</option>
                     <option value="Technology">Technology</option>
@@ -143,7 +143,7 @@ export default function ETFScreener() {
                     placeholder="e.g. 1"
                     value={filters.minAUM}
                     onChange={(e) => setFilters({ ...filters, minAUM: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-slate-900 dark:text-white placeholder:text-gray-400"
                   />
                 </div>
 
@@ -156,7 +156,7 @@ export default function ETFScreener() {
                     placeholder="e.g. 0.5"
                     value={filters.maxExpenseRatio}
                     onChange={(e) => setFilters({ ...filters, maxExpenseRatio: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-slate-900 dark:text-white placeholder:text-gray-400"
                   />
                 </div>
               </div>

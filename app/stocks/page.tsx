@@ -51,8 +51,8 @@ export default function StockScreener() {
         </div>
 
         {/* Tab Navigation */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-slate-200 dark:border-gray-700 p-1 mb-4 sm:mb-6 transition-colors duration-300">
-          <div className="flex flex-col sm:flex-row gap-1">
+        <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-lg border border-blue-200 dark:border-gray-700 p-1 mb-3 sm:mb-4 md:mb-6 transition-colors duration-300">
+          <div className="flex gap-1">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -61,9 +61,9 @@ export default function StockScreener() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all duration-300 text-sm sm:text-base ${
+                  className={`flex-1 flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2.5 rounded-lg font-semibold transition-all duration-300 text-[10px] sm:text-sm md:text-base ${
                     isActive
-                      ? `text-white shadow-sm`
+                      ? `text-white shadow-md`
                       : 'text-slate-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-pearto-luna hover:bg-slate-50 dark:hover:bg-gray-700'
                   }`}
                   style={{
@@ -74,8 +74,9 @@ export default function StockScreener() {
                        tab.color === 'purple' ? '#9333ea' : undefined) : undefined
                   }}
                 >
-                  <Icon className="h-4 w-4" />
-                  <span>{tab.label}</span>
+                  <Icon className="h-3 w-3 sm:h-4 sm:w-4" />
+                  <span className="hidden xs:inline">{tab.label}</span>
+                  <span className="xs:hidden truncate">{tab.label.split(' ')[0]}</span>
                 </button>
               );
             })}

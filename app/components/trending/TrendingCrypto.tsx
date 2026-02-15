@@ -566,56 +566,90 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="bg-white dark:bg-gray-800 rounded-lg p-3 shadow-sm border border-gray-100 dark:border-pearto-border-subtle mb-4 transition-colors duration-300"
+              className="bg-white dark:bg-gray-800 rounded-lg p-2 sm:p-4 shadow-sm border border-gray-100 dark:border-pearto-border-subtle mb-4 transition-colors duration-300"
             >
-              <div className="flex flex-col gap-3">
-                {/* Filter Buttons */}
-                <div className="flex flex-wrap gap-1.5">
+              {/* Mobile Layout */}
+              <div className="flex flex-col gap-2 sm:hidden">
+                <div className="flex flex-wrap gap-1">
                   {filterTypes.map((filter) => {
                     const Icon = filter.icon;
                     return (
                       <button
                         key={filter.key}
                         onClick={() => setActiveFilter(filter.key)}
-                        className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${activeFilter === filter.key
+                        className={`flex items-center space-x-1 px-2 py-1 rounded-md text-[10px] font-medium transition-all ${activeFilter === filter.key
                           ? 'bg-orange-600 text-white'
                           : 'bg-gray-100 dark:bg-gray-700 text-slate-600 dark:text-gray-400 hover:bg-gray-200'
                           }`}
                       >
                         <Icon className="h-3 w-3" />
-                        <span className="hidden sm:inline">{filter.label}</span>
-                        <span className="sm:hidden">{filter.key === 'all' ? 'All' :
-                          filter.key === 'gainer' ? 'Gainers' :
-                            filter.key === 'loser' ? 'Losers' :
-                              filter.key === 'volume' ? 'Volume' :
-                                filter.key === 'breakout' ? 'Breakout' : 'Momentum'}</span>
                       </button>
                     );
                   })}
                 </div>
-
-                <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
-                  {/* Sort */}
+                <div className="flex gap-2">
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value as any)}
-                    className="flex-1 sm:flex-none px-3 py-1.5 text-xs border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-pearto-pink bg-white dark:bg-gray-700 text-slate-900 dark:text-white transition-colors duration-300"
+                    className="px-2 py-1 text-[10px] border border-slate-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 dark:focus:ring-pearto-pink bg-white dark:bg-gray-700 text-slate-900 dark:text-white transition-colors duration-300"
+                  >
+                    <option value="trendScore">Score</option>
+                    <option value="changePercent">Change</option>
+                    <option value="volume">Volume</option>
+                    <option value="marketCap">MCap</option>
+                  </select>
+                  <div className="relative flex-1">
+                    <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-3 w-3 text-gray-400 dark:text-pearto-gray" />
+                    <input
+                      type="text"
+                      placeholder="Search..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="w-full pl-7 pr-2 py-1 text-[10px] border border-slate-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 dark:focus:ring-pearto-pink bg-white dark:bg-gray-700 text-slate-900 dark:text-white placeholder-gray-400 dark:placeholder-pearto-gray transition-colors duration-300"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Desktop Layout */}
+              <div className="hidden sm:flex items-center justify-between gap-4">
+                <div className="flex flex-wrap gap-2">
+                  {filterTypes.map((filter) => {
+                    const Icon = filter.icon;
+                    return (
+                      <button
+                        key={filter.key}
+                        onClick={() => setActiveFilter(filter.key)}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${activeFilter === filter.key
+                          ? 'bg-orange-600 text-white shadow-md'
+                          : 'bg-gray-100 dark:bg-gray-700 text-slate-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
+                          }`}
+                      >
+                        <Icon className="h-4 w-4" />
+                        <span>{filter.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+                <div className="flex items-center gap-3">
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value as any)}
+                    className="px-4 py-2 text-sm border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-pearto-pink bg-white dark:bg-gray-700 text-slate-900 dark:text-white transition-colors duration-300"
                   >
                     <option value="trendScore">Trend Score</option>
                     <option value="changePercent">Change %</option>
                     <option value="volume">Volume</option>
                     <option value="marketCap">Market Cap</option>
                   </select>
-
-                  {/* Search */}
-                  <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-3 w-3 text-gray-400 dark:text-pearto-gray" />
+                  <div className="relative w-64">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-pearto-gray" />
                     <input
                       type="text"
                       placeholder="Search cryptocurrencies..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full pl-8 pr-3 py-1.5 text-xs border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-pearto-pink bg-white dark:bg-gray-700 text-slate-900 dark:text-white placeholder-gray-400 dark:placeholder-pearto-gray transition-colors duration-300"
+                      className="w-full pl-10 pr-4 py-2 text-sm border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-pearto-pink bg-white dark:bg-gray-700 text-slate-900 dark:text-white placeholder-gray-400 dark:placeholder-pearto-gray transition-colors duration-300"
                     />
                   </div>
                 </div>
@@ -627,88 +661,73 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-pearto-border-subtle overflow-hidden transition-colors duration-300"
+              className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-slate-200 dark:border-gray-700 overflow-hidden transition-all duration-300"
             >
-              {/* Table Header */}
-              <div className="bg-gray-50 dark:bg-gray-700 px-2 sm:px-4 py-1.5 sm:py-2 border-b border-slate-200 dark:border-gray-700 transition-colors duration-300">
-                <div className="grid grid-cols-12 gap-0.5 sm:gap-4 text-[10px] sm:text-xs font-semibold text-slate-700 dark:text-gray-400 uppercase tracking-wide transition-colors duration-300">
-                  <div className="col-span-3 sm:col-span-3">Crypto</div>
-                  <div className="col-span-2 text-center">Price</div>
-                  <div className="col-span-2 text-center">Change</div>
-                  <div className="col-span-2 text-center">Volume</div>
-                  <div className="col-span-1 text-center">Mkt Cap</div>
-                  <div className="col-span-1 text-center">Score</div>
-                  <div className="col-span-1 text-center">Social</div>
-                </div>
-              </div>
-
-              {/* Table Rows */}
-              <div className="divide-y divide-gray-100 dark:divide-pearto-border-subtle transition-colors duration-300">
-                {filteredCryptos.map((crypto, index) => {
-                  const TrendIcon = getTrendIcon(crypto.trendType);
-                  return (
-                    <motion.div
-                      key={crypto.id}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.3, delay: index * 0.05 }}
-                      className="px-2 sm:px-4 py-1.5 sm:py-2 hover:bg-gray-50 dark:bg-gray-700 transition-colors group"
-                    >
-                      <div className="grid grid-cols-12 gap-0.5 sm:gap-4 items-center">
-                        {/* Crypto Info */}
-                        <div className="col-span-3 flex items-center space-x-1 sm:space-x-2 min-w-0">
-                          <div className="w-4 h-4 sm:w-6 sm:h-6 bg-gradient-to-r from-orange-500 to-pink-500 rounded flex items-center justify-center flex-shrink-0">
-                            <TrendIcon className="h-2 w-2 sm:h-3 sm:w-3 text-white" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <Link
-                              href={`/crypto/${crypto.symbol.toLowerCase()}`}
-                              className="text-[10px] sm:text-xs font-bold text-slate-900 dark:text-white hover:text-orange-600 transition-colors block truncate"
-                            >
-                              {crypto.symbol}
-                            </Link>
-                            <p className="text-[9px] sm:text-xs text-slate-600 dark:text-gray-400 truncate hidden sm:block transition-colors duration-300">{crypto.name}</p>
-                          </div>
-                        </div>
-
-                        {/* Price */}
-                        <div className="col-span-2 text-center">
-                          <p className="text-[10px] sm:text-sm font-bold text-slate-900 dark:text-white truncate transition-colors duration-300">{formatPrice(crypto.price)}</p>
-                        </div>
-
-                        {/* Change */}
-                        <div className="col-span-2 text-center">
-                          <p className={`font-semibold text-[9px] sm:text-xs ${crypto.change >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'} truncate`}>
-                            {crypto.change >= 0 ? '+' : ''}{formatPrice(Math.abs(crypto.change))}
-                          </p>
-                          <p className={`text-[9px] sm:text-xs ${crypto.changePercent >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'} truncate`}>
-                            {crypto.changePercent >= 0 ? '+' : ''}{formatPercentage(crypto.changePercent)}
-                          </p>
-                        </div>
-
-                        {/* Volume */}
-                        <div className="col-span-2 text-center">
-                          <p className="text-[9px] sm:text-xs font-medium text-slate-900 dark:text-white truncate transition-colors duration-300">{formatNumber(crypto.volume)}</p>
-                        </div>
-
-                        {/* Market Cap */}
-                        <div className="col-span-1 text-center">
-                          <p className="text-[9px] sm:text-xs font-medium text-slate-900 dark:text-white truncate transition-colors duration-300">{formatNumber(crypto.marketCap)}</p>
-                        </div>
-
-                        {/* Trend Score */}
-                        <div className="col-span-1 text-center">
-                          <p className="text-[9px] sm:text-xs font-medium text-slate-900 dark:text-white truncate transition-colors duration-300">{crypto.trendScore.toFixed(3)}/100</p>
-                        </div>
-
-                        {/* Social */}
-                        <div className="col-span-1 text-center">
-                          <p className="text-[9px] sm:text-xs font-medium text-slate-900 dark:text-white truncate transition-colors duration-300">{formatNumber(crypto.socialMentions)}</p>
-                        </div>
-                      </div>
-                    </motion.div>
-                  );
-                })}
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[700px]">
+                  <thead className="bg-gradient-to-r from-orange-50 via-amber-50 to-yellow-50 dark:from-gray-800 dark:via-gray-800 dark:to-gray-700 border-b-2 border-orange-200 dark:border-gray-600">
+                    <tr>
+                      <th className="px-3 sm:px-6 py-4 text-left text-xs font-bold text-orange-700 dark:text-orange-400 uppercase tracking-wider">Crypto</th>
+                      <th className="px-3 sm:px-6 py-4 text-right text-xs font-bold text-orange-700 dark:text-orange-400 uppercase tracking-wider">Price</th>
+                      <th className="px-3 sm:px-6 py-4 text-right text-xs font-bold text-orange-700 dark:text-orange-400 uppercase tracking-wider">Change</th>
+                      <th className="px-3 sm:px-6 py-4 text-right text-xs font-bold text-orange-700 dark:text-orange-400 uppercase tracking-wider">Volume</th>
+                      <th className="px-3 sm:px-6 py-4 text-right text-xs font-bold text-orange-700 dark:text-orange-400 uppercase tracking-wider">Mkt Cap</th>
+                      <th className="px-3 sm:px-6 py-4 text-center text-xs font-bold text-orange-700 dark:text-orange-400 uppercase tracking-wider">Score</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                    {filteredCryptos.map((crypto, index) => {
+                      const TrendIcon = getTrendIcon(crypto.trendType);
+                      return (
+                        <tr
+                          key={crypto.id}
+                          className="hover:bg-gradient-to-r hover:from-orange-50/50 hover:to-transparent dark:hover:from-gray-700/50 dark:hover:to-transparent transition-all duration-200 cursor-pointer group"
+                        >
+                          <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center">
+                              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-orange-500 to-pink-500 rounded-xl flex items-center justify-center mr-3 sm:mr-4 shadow-md ring-2 ring-white dark:ring-gray-700">
+                                <TrendIcon className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+                              </div>
+                              <div className="flex flex-col">
+                                <Link
+                                  href={`/crypto/${crypto.symbol.toLowerCase()}`}
+                                  className="text-sm font-bold text-slate-900 dark:text-white hover:text-orange-600 dark:hover:text-orange-400 transition-colors truncate max-w-[100px] sm:max-w-[150px]"
+                                >
+                                  {crypto.symbol}
+                                </Link>
+                                <p className="text-xs text-slate-600 dark:text-gray-400 truncate max-w-[100px] sm:max-w-[150px]">{crypto.name}</p>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right">
+                            <div className="text-sm font-bold text-slate-900 dark:text-white">{formatPrice(crypto.price)}</div>
+                          </td>
+                          <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right">
+                            <div className="inline-flex flex-col items-end">
+                              <span className={`text-sm font-bold ${crypto.change >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                                {crypto.change >= 0 ? '+' : ''}{formatPrice(Math.abs(crypto.change))}
+                              </span>
+                              <span className={`text-xs ${crypto.changePercent >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                                {crypto.changePercent >= 0 ? '+' : ''}{formatPercentage(crypto.changePercent)}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right">
+                            <div className="text-sm font-bold text-slate-900 dark:text-white">{formatNumber(crypto.volume)}</div>
+                          </td>
+                          <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right">
+                            <div className="text-sm font-bold text-slate-900 dark:text-white">{formatNumber(crypto.marketCap)}</div>
+                          </td>
+                          <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-center">
+                            <div className="inline-flex items-center px-3 py-1.5 rounded-lg bg-gradient-to-r from-orange-50 to-pink-50 dark:from-orange-900/20 dark:to-pink-900/20">
+                              <span className="text-sm font-bold text-orange-700 dark:text-orange-400">{crypto.trendScore.toFixed(0)}</span>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
             </motion.div>
 
