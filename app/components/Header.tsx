@@ -137,9 +137,9 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
 
   const [pillarsItems, setPillarsItems] = useState<any[]>([
     { label: 'Markets', href: `${mainAppUrl}/markets` },
-    { label: 'Crypto', href: `${mainAppUrl}/crypto` },
-    { label: 'News', href: `${mainAppUrl}/news` },
-    { label: 'Analysis', href: `${mainAppUrl}/analysis` },
+    { label: 'Crypto', href: `/crypto` },
+    { label: 'News', href: `/news` },
+    { label: 'Analysis', href: `/analysis` },
   ]);
 
   const [toolsItems, setToolsItems] = useState<any[]>([
@@ -436,13 +436,23 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
               {pillarsOpen && (
                 <div className="absolute left-0 top-full mt-1 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50 transition-colors duration-300">
                   {pillarsItems.map((item) => (
-                    <a
-                      key={item.label}
-                      href={item.href}
-                      className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
-                    >
-                      {item.label}
-                    </a>
+                    item.href.startsWith('http') || item.href.startsWith(mainAppUrl) ? (
+                      <a
+                        key={item.label}
+                        href={item.href}
+                        className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+                      >
+                        {item.label}
+                      </a>
+                    ) : (
+                      <Link
+                        key={item.label}
+                        href={item.href}
+                        className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+                      >
+                        {item.label}
+                      </Link>
+                    )
                   ))}
                 </div>
               )}
@@ -593,9 +603,15 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                     </div>
                     <div className="space-y-1">
                       {pillarsItems.map((item) => (
-                        <a key={item.label} href={item.href} className="block py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-colors duration-300" onClick={() => setMobileMenuOpen(false)}>
-                          {item.label}
-                        </a>
+                        item.href.startsWith('http') || item.href.startsWith(mainAppUrl) ? (
+                          <a key={item.label} href={item.href} className="block py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-colors duration-300" onClick={() => setMobileMenuOpen(false)}>
+                            {item.label}
+                          </a>
+                        ) : (
+                          <Link key={item.label} href={item.href} className="block py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-colors duration-300" onClick={() => setMobileMenuOpen(false)}>
+                            {item.label}
+                          </Link>
+                        )
                       ))}
                     </div>
                   </div>
