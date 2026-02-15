@@ -179,17 +179,17 @@ export default function TechnicalChartPage() {
   const isPositive = stockInfo ? (stockInfo.change || 0) >= 0 : true;
 
   return (
-    <main className="p-4 md:p-8 bg-gray-50 dark:bg-slate-900 min-h-screen">
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
-        <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">
+    <main className="p-3 sm:p-4 md:p-6 lg:p-8 bg-gray-50 dark:bg-slate-900 min-h-screen">
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-4 sm:mb-6">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2 sm:mb-3">
           Technical Analysis
         </h1>
-        <div className="flex flex-col md:flex-row gap-4 items-center">
+        <div className="flex flex-col md:flex-row gap-3 sm:gap-4 items-center">
           <StockSearch onStockSelect={handleSelectStock} />
         </div>
       </motion.div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-3 sm:gap-4">
         <div className="xl:col-span-2">
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700">
             <ChartHeader
@@ -199,7 +199,7 @@ export default function TechnicalChartPage() {
               loading={loading}
               onRefresh={loadData}
               onAIAnalysis={() => setIsAIPanelOpen(true)}
-              onCompare={() => toast('Compare coming soon!')}
+              onCompare={() => router.push(`/stocks/comparison?stocks=${symbol}`)}
               onFullscreen={handleOpenDetailedChart}
             />
 
@@ -220,7 +220,7 @@ export default function TechnicalChartPage() {
               onTogglePercentMode={() => setPercentMode(!percentMode)}
             />
 
-            <div className="p-4">
+            <div className="p-3 sm:p-4">
               <ChartDisplay
                 data={data}
                 processedData={getProcessedChartData()}

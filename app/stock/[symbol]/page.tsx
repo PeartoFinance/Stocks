@@ -613,17 +613,6 @@ export default function StockDetailPage({ params }: PageProps) {
                 </div>
               </div>
             </div>
-
-            {/* Mobile AI Button */}
-            <div className="lg:hidden">
-              <button
-                onClick={() => setShowAIPanel(true)}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-medium shadow-lg hover:from-blue-700 hover:to-purple-700 transition"
-              >
-                <Brain className="h-5 w-5" />
-                Get AI Analysis
-              </button>
-            </div>
           </>
         );
 

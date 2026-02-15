@@ -29,6 +29,7 @@ import {
     Mail,
     Smartphone,
 } from 'lucide-react';
+import { marketService } from '../../utils/marketService';
 import toast from 'react-hot-toast';
 
 export default function AlertsPage() {
@@ -85,32 +86,39 @@ export default function AlertsPage() {
         }
     }, []);
 
-    // Filter stocks based on search input
+    // Search stocks with debounce
     useEffect(() => {
-        if (!searchQuery.trim()) {
+        if (searchQuery.length < 2) {
             setFilteredStocks([]);
-            setShowSuggestions(false);
             return;
         }
 
-        const filtered = availableStocks.filter(stock => 
-            stock.symbol.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            stock.name.toLowerCase().includes(searchQuery.toLowerCase())
-        ).slice(0, 8); // Limit to 8 suggestions
+        const searchStocks = async () => {
+            try {
+                setSearching(true);
+                const response = await marketService.searchStocks(searchQuery, 8);
+                if (Array.isArray(response)) {
+                    setFilteredStocks(response);
+                }
+            } catch (error) {
+                console.error('Search error:', error);
+            } finally {
+                setSearching(false);
+            }
+        };
 
-        setFilteredStocks(filtered);
-        setShowSuggestions(filtered.length > 0);
-    }, [searchQuery, availableStocks]);
+        const debounceTimer = setTimeout(searchStocks, 300);
+        return () => clearTimeout(debounceTimer);
+    }, [searchQuery]);
 
     useEffect(() => {
         if (!isAuthenticated) return;
         loadAlerts();
-        loadAvailableStocks();
-    }, [isAuthenticated, loadAlerts, loadAvailableStocks]);
+    }, [isAuthenticated, loadAlerts]);
 
     const handleSuggestionClick = (stock: any) => {
         setSelectedSymbol({ symbol: stock.symbol, name: stock.name });
-        setSearchQuery(stock.symbol);
+        setSearchQuery('');
         setShowSuggestions(false);
         setFilteredStocks([]);
     };
@@ -195,31 +203,31 @@ export default function AlertsPage() {
 
     if (authLoading || loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-gray-50 dark:bg-slate-900 dark:via-slate-900 dark:to-slate-900">
+            <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-slate-900">
                 <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-gray-50 dark:bg-slate-900 dark:via-slate-900 dark:to-slate-900 pb-20">
+        <div className="min-h-screen bg-gray-50 dark:bg-slate-900 pb-20">
             {/* Header */}
-            <div className="bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-700">
+            <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
                 <div className="container mx-auto px-4 py-6">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
                             <Link
                                 href="/profile"
-                                className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition"
+                                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition"
                             >
-                                <ArrowLeft className="h-5 w-5 text-gray-600 dark:text-slate-400" />
+                                <ArrowLeft className="h-5 w-5 text-gray-600 dark:text-gray-400" />
                             </Link>
                             <div>
                                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
                                     <Bell className="h-6 w-6 text-emerald-600" />
                                     Price Alerts
                                 </h1>
-                                <p className="text-sm text-gray-500 dark:text-slate-400 mt-1">
+                                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                                     {activeAlerts.length} active • {triggeredAlerts.length} triggered
                                 </p>
                             </div>
@@ -238,10 +246,10 @@ export default function AlertsPage() {
             <div className="container mx-auto px-4 py-8 max-w-6xl">
                 {/* Stats Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                    <div className="bg-white dark:bg-slate-900 rounded-xl p-6 border border-gray-200 dark:border-slate-700 shadow-sm">
+                    <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm text-gray-500 dark:text-slate-400 mb-1">Active Alerts</p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Active Alerts</p>
                                 <p className="text-3xl font-bold text-gray-900 dark:text-white">{activeAlerts.length}</p>
                             </div>
                             <div className="h-12 w-12 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center">
@@ -250,10 +258,10 @@ export default function AlertsPage() {
                         </div>
                     </div>
 
-                    <div className="bg-white dark:bg-slate-900 rounded-xl p-6 border border-gray-200 dark:border-slate-700 shadow-sm">
+                    <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm text-gray-500 dark:text-slate-400 mb-1">Triggered</p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Triggered</p>
                                 <p className="text-3xl font-bold text-gray-900 dark:text-white">{triggeredAlerts.length}</p>
                             </div>
                             <div className="h-12 w-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
@@ -262,10 +270,10 @@ export default function AlertsPage() {
                         </div>
                     </div>
 
-                    <div className="bg-white dark:bg-slate-900 rounded-xl p-6 border border-gray-200 dark:border-slate-700 shadow-sm">
+                    <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm text-gray-500 dark:text-slate-400 mb-1">Total Alerts</p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Total Alerts</p>
                                 <p className="text-3xl font-bold text-gray-900 dark:text-white">{alerts.length}</p>
                             </div>
                             <div className="h-12 w-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
@@ -277,10 +285,10 @@ export default function AlertsPage() {
 
                 {/* Alerts List */}
                 {alerts.length === 0 ? (
-                    <div className="bg-white dark:bg-slate-900 rounded-xl p-12 text-center border border-gray-200 dark:border-slate-700">
-                        <Bell className="h-16 w-16 text-gray-300 dark:text-slate-600 mx-auto mb-4" />
+                    <div className="bg-white dark:bg-gray-800 rounded-xl p-12 text-center border border-gray-200 dark:border-gray-700">
+                        <Bell className="h-16 w-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No alerts yet</h3>
-                        <p className="text-gray-500 dark:text-slate-400 mb-6">
+                        <p className="text-gray-500 dark:text-gray-400 mb-6">
                             Create your first price alert to get notified when stocks hit your target price
                         </p>
                         <button
@@ -350,38 +358,38 @@ export default function AlertsPage() {
             {/* Create Alert Modal */}
             {showCreateAlert && (
                 <div className="fixed inset-0 bg-black/50 dark:bg-black/70 flex items-center justify-center p-4 z-50">
-                    <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
-                        <div className="p-6 border-b border-gray-200 dark:border-slate-700 flex items-center justify-between sticky top-0 bg-white dark:bg-slate-900">
+                    <div className="bg-white dark:bg-gray-800 rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-xl">
+                        <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between sticky top-0 bg-white dark:bg-gray-800 z-10">
                             <h2 className="text-xl font-bold text-gray-900 dark:text-white">Create Price Alert</h2>
                             <button
                                 onClick={() => {
                                     setShowCreateAlert(false);
                                     resetForm();
                                 }}
-                                className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition"
+                                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition"
                             >
-                                <X className="h-5 w-5 text-gray-500 dark:text-slate-400" />
+                                <X className="h-5 w-5 text-gray-500 dark:text-gray-400" />
                             </button>
                         </div>
 
                         <div className="p-6 space-y-6">
                             {/* Search Stock */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                     Select Stock
                                 </label>
                                 {selectedSymbol ? (
                                     <div className="flex items-center justify-between p-4 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-xl">
                                         <div>
                                             <p className="font-semibold text-gray-900 dark:text-white">{selectedSymbol.symbol}</p>
-                                            <p className="text-sm text-gray-600 dark:text-slate-400">{selectedSymbol.name}</p>
+                                            <p className="text-sm text-gray-600 dark:text-gray-400">{selectedSymbol.name}</p>
                                         </div>
                                         <button
                                             onClick={() => {
                                                 setSelectedSymbol(null);
                                                 setSearchResults([]);
                                             }}
-                                            className="text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200"
+                                            className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-slate-200"
                                         >
                                             <X className="h-5 w-5" />
                                         </button>
@@ -396,27 +404,28 @@ export default function AlertsPage() {
                                                     value={searchQuery}
                                                     onChange={(e) => setSearchQuery(e.target.value)}
                                                     onFocus={() => setShowSuggestions(true)}
-                                                    onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-                                                    placeholder="Search stocks by symbol or name..."
-                                                    className="w-full pl-10 pr-4 py-3 border border-gray-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+                                                    onBlur={() => setTimeout(() => setShowSuggestions(false), 300)}
+                                                    placeholder="Search stocks..."
+                                                    className="w-full pl-10 pr-10 py-3 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                                                 />
+                                                {searching && <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-emerald-600 animate-spin" />}
                                             </div>
                                             
                                             {/* Stock Suggestions Dropdown */}
                                             {showSuggestions && filteredStocks.length > 0 && (
-                                                <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl shadow-lg z-10 max-h-64 overflow-y-auto">
+                                                <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-10 max-h-64 overflow-y-auto">
                                                     {filteredStocks.map((stock, index) => (
                                                         <button
                                                             key={index}
                                                             onClick={() => handleSuggestionClick(stock)}
-                                                            className="w-full px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors border-b border-gray-100 dark:border-slate-700 last:border-b-0"
+                                                            className="w-full px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors border-b border-gray-100 dark:border-gray-700 last:border-b-0"
                                                         >
                                                             <div className="flex items-center justify-between">
                                                                 <div>
                                                                     <div className="font-semibold text-gray-900 dark:text-white">
                                                                         {stock.symbol}
                                                                     </div>
-                                                                    <div className="text-sm text-gray-600 dark:text-slate-400 truncate">
+                                                                    <div className="text-sm text-gray-600 dark:text-gray-400 truncate">
                                                                         {stock.name}
                                                                     </div>
                                                                 </div>
@@ -442,7 +451,7 @@ export default function AlertsPage() {
 
                             {/* Alert Type */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                     Alert Type
                                 </label>
                                 <div className="grid grid-cols-3 gap-2">
@@ -453,7 +462,7 @@ export default function AlertsPage() {
                                             className={`py-3 px-4 rounded-xl border-2 font-medium transition capitalize ${
                                                 alertType === type
                                                     ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300'
-                                                    : 'border-gray-200 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:border-gray-300 dark:hover:border-slate-500'
+                                                    : 'border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-gray-300 dark:hover:border-slate-500'
                                             }`}
                                         >
                                             {type}
@@ -465,14 +474,14 @@ export default function AlertsPage() {
                             {/* Condition & Target Value */}
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                         Condition
                                     </label>
                                     <div className="relative">
                                         <select
                                             value={condition}
                                             onChange={(e) => setCondition(e.target.value as 'above' | 'below')}
-                                            className="w-full px-4 py-3 border border-gray-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none appearance-none bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+                                            className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none appearance-none bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                                         >
                                             <option value="above">Above</option>
                                             <option value="below">Below</option>
@@ -481,7 +490,7 @@ export default function AlertsPage() {
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                         Target Value
                                     </label>
                                     <input
@@ -490,18 +499,18 @@ export default function AlertsPage() {
                                         onChange={(e) => setTargetValue(e.target.value)}
                                         placeholder="0.00"
                                         step="0.01"
-                                        className="w-full px-4 py-3 border border-gray-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+                                        className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                                     />
                                 </div>
                             </div>
 
                             {/* Notification Settings */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-3">
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
                                     Notification Channels
                                 </label>
                                 <div className="space-y-3">
-                                    <label className="flex items-center gap-3 p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition">
+                                    <label className="flex items-center gap-3 p-4 border border-gray-200 dark:border-gray-600 rounded-xl cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition">
                                         <input
                                             type="checkbox"
                                             checked={notifyEmail}
@@ -509,9 +518,9 @@ export default function AlertsPage() {
                                             className="h-5 w-5 text-emerald-600 rounded focus:ring-emerald-500"
                                         />
                                         <Mail className="h-5 w-5 text-gray-400" />
-                                        <span className="text-sm text-gray-700 font-medium">Email Notification</span>
+                                        <span className="text-sm text-gray-700 dark:text-gray-300 font-medium">Email Notification</span>
                                     </label>
-                                    <label className="flex items-center gap-3 p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition">
+                                    <label className="flex items-center gap-3 p-4 border border-gray-200 dark:border-gray-600 rounded-xl cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition">
                                         <input
                                             type="checkbox"
                                             checked={notifyPush}
@@ -519,7 +528,7 @@ export default function AlertsPage() {
                                             className="h-5 w-5 text-emerald-600 rounded focus:ring-emerald-500"
                                         />
                                         <Smartphone className="h-5 w-5 text-gray-400" />
-                                        <span className="text-sm text-gray-700 font-medium">Push Notification</span>
+                                        <span className="text-sm text-gray-700 dark:text-gray-300 font-medium">Push Notification</span>
                                     </label>
                                 </div>
                             </div>
@@ -531,7 +540,7 @@ export default function AlertsPage() {
                                         setShowCreateAlert(false);
                                         resetForm();
                                     }}
-                                    className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition font-medium"
+                                    className="flex-1 px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition font-medium"
                                 >
                                     Cancel
                                 </button>
@@ -601,39 +610,39 @@ function AlertCard({
     };
 
     return (
-        <div className={`bg-white rounded-xl p-5 border-2 transition-all ${
+        <div className={`bg-white dark:bg-gray-800 rounded-xl p-5 border-2 transition-all shadow-sm ${
             alert.isTriggered
-                ? 'border-green-200 bg-green-50/30'
+                ? 'border-green-200 dark:border-green-800 bg-green-50/30 dark:bg-green-900/10'
                 : alert.isActive
-                ? 'border-emerald-200 hover:border-emerald-300 hover:shadow-md'
-                : 'border-gray-200'
+                ? 'border-emerald-200 dark:border-emerald-800 hover:border-emerald-300 dark:hover:border-emerald-700 hover:shadow-md'
+                : 'border-gray-200 dark:border-gray-700'
         }`}>
             <div className="flex items-start justify-between gap-4">
                 <div className="flex items-start gap-4 flex-1">
                     <div className={`p-3 rounded-xl ${
                         alert.isTriggered
-                            ? 'bg-green-100'
+                            ? 'bg-green-100 dark:bg-green-900/30'
                             : alert.isActive
-                            ? 'bg-emerald-100'
-                            : 'bg-gray-100'
+                            ? 'bg-emerald-100 dark:bg-emerald-900/30'
+                            : 'bg-gray-100 dark:bg-gray-700'
                     }`}>
                         {getIcon()}
                     </div>
                     <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
-                            <h3 className="font-bold text-gray-900 text-lg">{alert.symbol}</h3>
+                            <h3 className="font-bold text-gray-900 dark:text-white text-lg">{alert.symbol}</h3>
                             {getStatusBadge()}
                         </div>
-                        <p className="text-gray-600 text-sm mb-3">
+                        <p className="text-gray-600 dark:text-gray-400 text-sm mb-3">
                             Alert when {alert.alertType} goes{' '}
                             <span className="font-semibold">{alert.condition}</span>{' '}
                             {alert.targetValue ? (
-                                <span className="font-bold text-gray-900">${alert.targetValue.toFixed(2)}</span>
+                                <span className="font-bold text-gray-900 dark:text-white">${alert.targetValue.toFixed(2)}</span>
                             ) : (
                                 'target'
                             )}
                         </p>
-                        <div className="flex items-center gap-4 text-xs text-gray-500">
+                        <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
                             {alert.notifyEmail && (
                                 <span className="flex items-center gap-1">
                                     <Mail className="h-3.5 w-3.5" />
@@ -660,8 +669,8 @@ function AlertCard({
                         onClick={() => onToggle(alert.id)}
                         className={`p-2 rounded-lg transition ${
                             alert.isActive
-                                ? 'hover:bg-gray-100 text-gray-600'
-                                : 'hover:bg-emerald-100 text-emerald-600'
+                                ? 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400'
+                                : 'hover:bg-emerald-100 dark:hover:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400'
                         }`}
                         title={alert.isActive ? 'Disable alert' : 'Enable alert'}
                     >
@@ -669,7 +678,7 @@ function AlertCard({
                     </button>
                     <button
                         onClick={() => onDelete(alert.id)}
-                        className="p-2 hover:bg-red-50 text-red-600 rounded-lg transition"
+                        className="p-2 hover:bg-red-50 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 rounded-lg transition"
                         title="Delete alert"
                     >
                         <Trash2 className="h-5 w-5" />

@@ -113,13 +113,13 @@ export default function StatisticsTab({ comparedCryptos, formatLargeNumber }: St
             <button
               key={category.key}
               onClick={() => setActiveCategory(category.key)}
-              className={`flex items-center gap-2 px-5 py-3 rounded-lg text-sm font-semibold transition-all flex-shrink-0 ${
+              className={`flex items-center gap-1.5 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all flex-shrink-0 ${
                 isActive
                   ? 'bg-gradient-to-r from-blue-600 to-blue-700 dark:from-emerald-600 dark:to-emerald-700 text-white shadow-lg scale-105'
                   : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#1a1a1a] border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-emerald-500/50'
               }`}
             >
-              <Icon className="h-5 w-5" />
+              <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
               <span>{category.label}</span>
             </button>
           );

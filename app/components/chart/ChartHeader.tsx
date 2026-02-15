@@ -27,24 +27,31 @@ export default function ChartHeader({
   className = ''
 }: ChartHeaderProps) {
   return (
-    <div className={`px-4 py-3 border-b border-gray-200 dark:border-gray-700 ${className}`}>
+    <div className={`px-3 sm:px-4 py-3 border-b border-gray-200 dark:border-gray-700 ${className}`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+          <h3 className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-gray-100">
             {symbol} - {period} Chart
           </h3>
-          <span className="text-xs text-gray-500 dark:text-gray-400">
+          <span className="hidden sm:inline text-xs text-gray-500 dark:text-gray-400">
             {dataLength} points • {period === '1D' ? '1-min' : 'Daily'}
           </span>
           <button
             onClick={onAIAnalysis}
-            className="ml-4 px-3 py-1 bg-blue-600 text-white text-xs font-medium rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-1"
+            className="hidden sm:flex ml-4 px-3 py-1 bg-blue-600 text-white text-xs font-medium rounded-lg hover:bg-blue-700 transition-colors items-center gap-1"
           >
             <Brain className="h-3 w-3" />
             AI Analysis
           </button>
         </div>
         <div className="flex items-center gap-2">
+          <button
+            onClick={onAIAnalysis}
+            className="sm:hidden p-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            title="AI Analysis"
+          >
+            <Brain className="h-4 w-4" />
+          </button>
           <button
             onClick={onRefresh}
             disabled={loading}
@@ -61,7 +68,7 @@ export default function ChartHeader({
             <Maximize2 className="h-4 w-4" />
           </button>
           <button
-            className="px-3 py-1 bg-purple-600 text-white text-xs font-medium rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-1"
+            className="hidden sm:flex px-3 py-1 bg-purple-600 text-white text-xs font-medium rounded-lg hover:bg-purple-700 transition-colors items-center gap-1"
             onClick={onCompare}
             title="Compare"
           >

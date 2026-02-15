@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useSearchParams } from 'next/navigation';
 import { Search, Activity, Plus, BarChart3, User, LineChart } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { cryptoService } from '../../utils/cryptoService';
@@ -36,6 +37,57 @@ export default function CryptoComparison() {
     if (num >= 1e3) return `$${(num / 1e3).toFixed(2)}K`;
     return `$${num.toLocaleString()}`;
   };
+
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    const loadCryptosFromQuery = async () => {
+      const cryptoParam = searchParams.get('crypto');
+      if (cryptoParam) {
+        const cryptoSymbols = cryptoParam.split('.').filter(symbol => symbol.trim());
+        if (cryptoSymbols.length > 0 && cryptoSymbols.length <= 5) {
+          try {
+            setLoading(true);
+            const cryptoPromises = cryptoSymbols.map(async (symbol) => {
+              const details: any = await cryptoService.getCoinDetails(symbol.trim().toUpperCase());
+              if (details) {
+                return {
+                  symbol: details.symbol || symbol.trim().toUpperCase(),
+                  name: details.name || symbol.trim().toUpperCase(),
+                  price: details.price || 0,
+                  change: details.change || 0,
+                  changePercent: details.changePercent || 0,
+                  volume: details.volume || 0,
+                  marketCap: details.marketCap || 0,
+                  rank: details.rank,
+                  circulatingSupply: details.circulatingSupply,
+                  totalSupply: details.totalSupply,
+                  maxSupply: details.maxSupply,
+                  high24h: details.high24h,
+                  low24h: details.low24h,
+                  ath: details.ath,
+                  atl: details.atl,
+                  color: CRYPTO_COLORS[0],
+                };
+              }
+              return null;
+            });
+
+            const validCryptos = (await Promise.all(cryptoPromises)).filter(crypto => crypto !== null);
+            if (validCryptos.length > 0) {
+              const cryptosWithColors = validCryptos.map((crypto, index) => ({ ...crypto, color: CRYPTO_COLORS[index] }));
+              setComparedCryptos(cryptosWithColors);
+              toast.success(`Loaded ${cryptosWithColors.length} cryptocurrencies`);
+            }
+          } catch (error) {
+            toast.error('Failed to load cryptocurrencies');
+          } finally {
+            setLoading(false);
+          }
+        }
+      }
+    };
+    loadCryptosFromQuery();
+  }, [searchParams]);
 
   useEffect(() => {
     const searchCryptos = async () => {

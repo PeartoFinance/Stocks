@@ -596,22 +596,22 @@ export default function DetailedChartPage() {
   const intervalOptions: Interval[] = ['1m', '5m', '15m', '30m', '1h', '4h', '1d', '1w', '1mo'];
 
   return (
-    <main className={`min-h-screen bg-gray-50 dark:bg-slate-900 mt-4 ${isFullscreen ? 'fixed inset-0 z-50 mt-0' : ''}`}>
+    <main className={`min-h-screen bg-gray-50 dark:bg-slate-900 ${isFullscreen ? 'fixed inset-0 z-50' : 'pt-6'}`}>
       {/* Header */}
-      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-3 mt-2">
-        <div className="flex items-center justify-between">
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4 shadow-sm">
+        <div className="flex items-center justify-between max-w-[1600px] mx-auto">
           <div className="flex items-center gap-4">
             <button
               onClick={() => isFullscreen ? setIsFullscreen(false) : router.push('/chart')}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              className="p-2.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-all hover:scale-105"
             >
-              {isFullscreen ? <Minimize2 className="h-5 w-5" /> : <ArrowLeft className="h-5 w-5" />}
+              {isFullscreen ? <Minimize2 className="h-5 w-5 text-gray-700 dark:text-gray-300" /> : <ArrowLeft className="h-5 w-5 text-gray-700 dark:text-gray-300" />}
             </button>
             <div>
-              <h1 className="text-xl font-bold text-gray-900 dark:text-white">{symbol}</h1>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">{symbol}</h1>
               {stockInfo && (
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  {stockInfo.name || symbol} • {formatPrice(stockInfo.price || 0)}
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-0.5">
+                  {stockInfo.name || symbol} • <span className="font-semibold">{formatPrice(stockInfo.price || 0)}</span>
                 </p>
               )}
             </div>
@@ -621,15 +621,21 @@ export default function DetailedChartPage() {
             {/* Fullscreen toggle */}
             <button
               onClick={() => setIsFullscreen(!isFullscreen)}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              className="p-2.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-all hover:scale-105"
+              title="Toggle Fullscreen"
             >
-              {isFullscreen ? <Minimize2 className="h-5 w-5" /> : <Maximize2 className="h-5 w-5" />}
+              {isFullscreen ? <Minimize2 className="h-5 w-5 text-gray-700 dark:text-gray-300" /> : <Maximize2 className="h-5 w-5 text-gray-700 dark:text-gray-300" />}
             </button>
 
             {/* Settings toggle */}
             <button
               onClick={() => setShowSettings(!showSettings)}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              className={`p-2.5 rounded-lg transition-all hover:scale-105 ${
+                showSettings 
+                  ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' 
+                  : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
+              }`}
+              title="Settings"
             >
               <Settings className="h-5 w-5" />
             </button>
@@ -637,9 +643,10 @@ export default function DetailedChartPage() {
             {/* Refresh */}
             <button
               onClick={loadData}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              className="p-2.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-all hover:scale-105 hover:rotate-180"
+              title="Refresh Data"
             >
-              <RefreshCw className="h-5 w-5" />
+              <RefreshCw className="h-5 w-5 text-gray-700 dark:text-gray-300" />
             </button>
           </div>
         </div>
@@ -650,23 +657,25 @@ export default function DetailedChartPage() {
         <motion.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
-          className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 mt-2"
+          exit={{ opacity: 0, height: 0 }}
+          className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm"
         >
+          <div className="max-w-[1600px] mx-auto px-6 py-5">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {/* Chart Type */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Chart Type</label>
-              <div className="flex gap-1 bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
+              <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2 uppercase tracking-wide">Chart Type</label>
+              <div className="flex gap-1 bg-gray-100 dark:bg-gray-700/50 rounded-lg p-1">
                 {chartTypeOptions.map(option => {
                   const Icon = option.icon;
                   return (
                     <button
                       key={option.value}
                       onClick={() => setChartType(option.value)}
-                      className={`flex-1 p-2 rounded-md transition-colors ${
+                      className={`flex-1 p-2 rounded-md transition-all ${
                         chartType === option.value
-                          ? 'bg-white dark:bg-gray-600 shadow-sm'
-                          : 'hover:bg-gray-200 dark:hover:bg-gray-600'
+                          ? 'bg-white dark:bg-gray-600 shadow-md scale-105 text-blue-600 dark:text-blue-400'
+                          : 'hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-400'
                       }`}
                       title={option.label}
                     >
@@ -679,16 +688,16 @@ export default function DetailedChartPage() {
 
             {/* Timeframe */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Timeframe</label>
-              <div className="flex gap-1 bg-gray-100 dark:bg-gray-700 rounded-lg p-1 overflow-x-auto">
+              <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2 uppercase tracking-wide">Timeframe</label>
+              <div className="flex gap-1 bg-gray-100 dark:bg-gray-700/50 rounded-lg p-1 overflow-x-auto">
                 {timeframeOptions.map(option => (
                   <button
                     key={option}
                     onClick={() => setTimeframe(option)}
-                    className={`px-3 py-1.5 text-sm rounded-md transition-colors whitespace-nowrap ${
+                    className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all whitespace-nowrap ${
                       timeframe === option
-                        ? 'bg-white dark:bg-gray-600 shadow-sm'
-                        : 'hover:bg-gray-200 dark:hover:bg-gray-600'
+                        ? 'bg-white dark:bg-gray-600 shadow-md scale-105 text-blue-600 dark:text-blue-400'
+                        : 'hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-400'
                     }`}
                   >
                     {option}
@@ -699,11 +708,11 @@ export default function DetailedChartPage() {
 
             {/* Interval */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Interval</label>
+              <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2 uppercase tracking-wide">Interval</label>
               <select
                 value={interval}
                 onChange={(e) => setInterval(e.target.value as Interval)}
-                className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm"
+                className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-all"
               >
                 {intervalOptions.map(option => (
                   <option key={option} value={option}>{option}</option>
@@ -713,13 +722,13 @@ export default function DetailedChartPage() {
 
             {/* Indicators Toggle */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Show Indicators</label>
+              <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2 uppercase tracking-wide">Indicators</label>
               <button
                 onClick={() => setShowIndicators(!showIndicators)}
-                className={`w-full px-3 py-2 rounded-lg text-sm transition-colors ${
+                className={`w-full px-3 py-2 rounded-lg text-sm font-medium transition-all hover:scale-105 ${
                   showIndicators
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600'
+                    ? 'bg-blue-600 dark:bg-blue-600 text-white shadow-md'
+                    : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                 }`}
               >
                 {showIndicators ? <Eye className="h-4 w-4 inline mr-2" /> : <EyeOff className="h-4 w-4 inline mr-2" />}
@@ -730,7 +739,9 @@ export default function DetailedChartPage() {
 
           {/* Individual Indicators */}
           {showIndicators && (
-            <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="mt-5 pt-5 border-t border-gray-200 dark:border-gray-700">
+            <h3 className="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-3 uppercase tracking-wide">Technical Indicators</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
               {[
                 { key: 'sma', label: 'SMA', icon: TrendingUp },
                 { key: 'ema', label: 'EMA', icon: Activity },
@@ -743,53 +754,60 @@ export default function DetailedChartPage() {
                 <button
                   key={key}
                   onClick={() => toggleIndicator(key as keyof IndicatorSettings)}
-                  className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
+                  className={`flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium transition-all hover:scale-105 ${
                     indicators[key as keyof IndicatorSettings].visible
-                      ? 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300'
-                      : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
+                      ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 shadow-md border-2 border-green-500 dark:border-green-600'
+                      : 'bg-gray-100 dark:bg-gray-700/50 text-gray-600 dark:text-gray-400 border-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600'
                   }`}
                 >
                   <Icon className="h-4 w-4" />
                   {label}
                   {indicators[key as keyof IndicatorSettings].visible && (
-                    <span className="ml-auto text-xs">✓</span>
+                    <span className="ml-auto text-xs font-bold">✓</span>
                   )}
                 </button>
               ))}
             </div>
+            </div>
           )}
+          </div>
         </motion.div>
       )}
 
       {/* Chart Area */}
-      <div className={`p-4 ${isFullscreen ? 'h-[calc(100vh-80px)]' : 'mt-2'}`}>
+      <div className={`${isFullscreen ? 'h-[calc(100vh-80px)]' : ''}`}>
+        <div className="max-w-[1600px] mx-auto px-6 py-6">
         {loading ? (
-          <div className="h-full flex items-center justify-center">
-            <RefreshCw className="h-8 w-8 animate-spin text-blue-600" />
+          <div className="h-[600px] flex items-center justify-center bg-white dark:bg-gray-800 rounded-xl shadow-sm">
+            <div className="text-center">
+            <RefreshCw className="h-8 w-8 animate-spin text-blue-600 dark:text-blue-400 mx-auto" />
+            <p className="mt-3 text-sm text-gray-600 dark:text-gray-400">Loading chart data...</p>
+            </div>
           </div>
         ) : data.length === 0 ? (
-          <div className="h-full flex items-center justify-center text-gray-500">
+          <div className="h-[600px] flex items-center justify-center bg-white dark:bg-gray-800 rounded-xl shadow-sm">
             <div className="text-center">
-              <Activity className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-              <h3 className="text-lg font-semibold">No Data Available</h3>
-              <p className="text-sm">Try selecting a different symbol or timeframe</p>
+              <Activity className="h-12 w-12 mx-auto mb-4 text-gray-400 dark:text-gray-500" />
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">No Data Available</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Try selecting a different symbol or timeframe</p>
             </div>
           </div>
         ) : (
-          <div className="h-full flex flex-col">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden">
             {/* Main Chart */}
             <div 
               ref={mainChartRef} 
-              className="flex-1 min-h-[400px]"
-              style={{ height: showIndicators && (indicators.rsi.visible || indicators.macd.visible) ? '60%' : '100%' }}
+              className="min-h-[500px]"
+              style={{ height: showIndicators && (indicators.rsi.visible || indicators.macd.visible) ? '500px' : '700px' }}
             />
 
             {/* Indicator Chart */}
             {showIndicators && (indicators.rsi.visible || indicators.macd.visible) && (
-              <div ref={indicatorChartRef} className="h-[200px] mt-2" />
+              <div ref={indicatorChartRef} className="h-[200px] border-t border-gray-200 dark:border-gray-700" />
             )}
           </div>
         )}
+        </div>
       </div>
     </main>
   );

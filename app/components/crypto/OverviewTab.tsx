@@ -202,17 +202,17 @@ export default function OverviewTab({
         <div className="lg:col-span-3">
           <div className="bg-white  dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-5 transition-colors duration-300">
             {/* Chart Controls */}
-            <div className="mb-4 p-3 bg-slate-50 dark:bg-gray-700/50 rounded-xl border border-slate-100 transition-colors duration-300">
+            <div className="mb-4 p-3 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 transition-colors duration-300">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
-                <div className="flex items-center gap-3">
-                  <span className="text-sm font-semibold text-gray-700  dark:text-pearto-cloud transition-colors duration-300">Duration</span>
-                  <div className="flex bg-white  dark:bg-pearto-card rounded-lg p-1 border border-slate-200 dark:border-pearto-border overflow-x-auto transition-colors duration-300">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 transition-colors duration-300">Duration</span>
+                  <div className="flex bg-white dark:bg-slate-900 rounded-lg p-1 border border-slate-200 dark:border-slate-700 gap-1 overflow-x-auto transition-colors duration-300">
                     {periods.map((p) => (
                       <button
                         key={p}
                         onClick={() => onPeriodChange(p)}
                         className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
-                          chartPeriod === p ? "bg-emerald-600 dark:bg-pearto-pink text-white shadow-sm" : "text-slate-600 dark:text-gray-400 hover:bg-gray-100 dark:bg-gray-700"
+                          chartPeriod === p ? "bg-emerald-600 dark:bg-emerald-600 text-white shadow-sm" : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700"
                         }`}
                       >
                         {p}
@@ -222,22 +222,22 @@ export default function OverviewTab({
                 </div>
 
                 <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-bold ${
-                  isPositive ? "text-emerald-700 bg-emerald-50" : "text-red-700 bg-red-50 dark:bg-pearto-pink/10"
+                  isPositive ? "text-emerald-700 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-900/20" : "text-red-700 bg-red-50 dark:text-red-400 dark:bg-red-900/20"
                 }`}>
                   {isPositive ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
                   {isPositive ? '+' : ''}{formatNumber(crypto.change)} ({isPositive ? '+' : ''}{formatNumber(crypto.changePercent)}%)
                 </div>
               </div>
 
-              <div className="flex items-center gap-3">
-                <span className="text-sm font-semibold text-gray-700  dark:text-pearto-cloud transition-colors duration-300">Type</span>
-                <div className="flex bg-white  dark:bg-pearto-card rounded-lg p-1 border border-slate-200 dark:border-pearto-border transition-colors duration-300">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 transition-colors duration-300">Type</span>
+                <div className="flex bg-white dark:bg-slate-900 rounded-lg p-1 border border-slate-200 dark:border-slate-700 gap-1 transition-colors duration-300">
                   {chartTypes.map((type) => (
                     <button
                       key={type.key}
                       onClick={() => onChartTypeChange(type.key as any)}
                       className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
-                        chartType === type.key ? "bg-blue-600 dark:bg-pearto-blue text-white shadow-sm" : "text-slate-600 dark:text-gray-400 hover:bg-gray-100 dark:bg-gray-700"
+                        chartType === type.key ? "bg-blue-600 dark:bg-blue-600 text-white shadow-sm" : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700"
                       }`}
                     >
                       <type.icon className="h-3.5 w-3.5" />
@@ -286,7 +286,7 @@ export default function OverviewTab({
 
       {/* Mobile Chart */}
       <div className="lg:hidden">
-        <div className="bg-white rounded-xl border border-slate-200 dark:border-slate-700 p-4 transition-colors duration-300">
+        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 transition-colors duration-300">
           {/* Mobile Chart Header */}
           <div className="flex items-center justify-between mb-3">
             <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-bold ${
@@ -404,35 +404,6 @@ export default function OverviewTab({
             </div>
           </div>
         </div>
-      </div>
-
-      {/* AI Analysis Panel - Bottom (Mobile Only) */}
-      <div className="lg:hidden mt-6">
-        <AIAnalysisPanel
-          title={`${crypto.name} AI Analysis`}
-          pageType="crypto-detail"
-          pageData={{
-            symbol: crypto.symbol,
-            name: crypto.name,
-            price: crypto.price,
-            change: crypto.changePercent,
-            volume: crypto.volume,
-            marketCap: crypto.marketCap,
-            assetType: crypto.assetType,
-            high: crypto.dayHigh,
-            low: crypto.dayLow,
-            isFeatured: crypto.isFeatured
-          } as any}
-          autoAnalyze={true}
-          quickPrompts={[
-            `Is ${crypto.symbol} a good investment?`,
-            'Technical analysis and price prediction',
-            'Market sentiment and trends',
-            'Risk assessment and volatility analysis'
-          ]}
-          compact={false}
-          maxHeight="600px"
-        />
       </div>
     </div>
   );
