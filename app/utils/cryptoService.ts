@@ -97,9 +97,9 @@ export const cryptoService = {
    * Uses Flask backend news search API with crypto symbol as query
    */
   async getNews(symbol: string, limit = 20) {
-    const params = new URLSearchParams({ 
+    const params = new URLSearchParams({
       q: symbol.toLowerCase(), // Search for the crypto symbol
-      limit: String(limit) 
+      limit: String(limit)
     });
     return apiRequest<{
       q: string;

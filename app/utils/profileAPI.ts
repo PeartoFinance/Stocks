@@ -77,7 +77,7 @@ export async function fetchProfileStats(): Promise<ProfileStats> {
 export async function updateProfile(data: UpdateProfileData): Promise<{ success: boolean; user?: any; error?: string }> {
   try {
     const response = await authenticatedFetch<{ success: boolean; user?: any; error?: string }>(
-      `${API_BASE}/user/profile`, 
+      `${API_BASE}/user/profile`,
       {
         method: 'PUT',
         headers: {
