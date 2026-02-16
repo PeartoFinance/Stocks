@@ -292,28 +292,30 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                 <Search size={18} />
               </button>
 
-              {/* Theme toggle */}
-              <button
-                className="hidden sm:flex p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-pearto-slate/50 transition-all duration-300"
-                onClick={toggleTheme}
-                title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-              >
-                {theme === 'dark' ? (
-                  <Sun size={18} className="text-pearto-green" />
-                ) : (
-                  <Moon size={18} className="text-gray-600 dark:text-pearto-cloud transition-colors duration-300" />
-                )}
-              </button>
-
-              {/* Country selector */}
-              <div className="relative hidden md:block" ref={countryMenuRef}>
+              {/* Theme, Country, AI Group */}
+              <div className="hidden md:flex items-center gap-2 p-1 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm bg-white dark:bg-gray-800">
+                {/* Theme toggle */}
                 <button
-                  onClick={() => setCountryMenuOpen(!countryMenuOpen)}
-                  className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-sm transition"
+                  className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300"
+                  onClick={toggleTheme}
+                  title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
                 >
-                  {countries.find(c => c.code === country)?.flagEmoji || '🌐'}                  <span className="text-gray-700 dark:text-gray-300">{country}</span>
-                  <ChevronDown size={14} className="text-gray-400" />
-                </button >
+                  {theme === 'dark' ? (
+                    <Sun size={18} className="text-pearto-green" />
+                  ) : (
+                    <Moon size={18} className="text-gray-600 dark:text-pearto-cloud transition-colors duration-300" />
+                  )}
+                </button>
+
+                {/* Country selector */}
+                <div className="relative" ref={countryMenuRef}>
+                  <button
+                    onClick={() => setCountryMenuOpen(!countryMenuOpen)}
+                    className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition"
+                  >
+                    {countries.find(c => c.code === country)?.flagEmoji || '🌐'}                  <span className="text-gray-700 dark:text-gray-300">{country}</span>
+                    <ChevronDown size={14} className="text-gray-400" />
+                  </button >
 
                 {countryMenuOpen && (
                   <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 py-2 max-h-80 overflow-y-auto z-50 transition-colors duration-300">
@@ -335,20 +337,21 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                       </>
                     )}
                   </div>
-                )
-                }
-              </div >
+                  )
+                  }
+                </div >
 
-              {/* AI Button */}
-              < a
-                href={`${mainAppUrl}/ai`}
-                className="hidden md:flex px-3 py-2 rounded-lg font-semibold text-sm text-white bg-gradient-to-br from-purple-500 via-blue-500 to-cyan-500 shadow hover:shadow-md transition items-center gap-1.5"
-              >
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 3l1.912 5.813a2 2 0 001.276 1.276L21 12l-5.812 1.912a2 2 0 00-1.276 1.276L12 21l-1.912-5.812a2 2 0 00-1.276-1.276L3 12l5.812-1.912a2 2 0 001.276-1.276L12 3z" />
-                </svg>
-                AI
-              </a >
+                {/* AI Button */}
+                < a
+                  href={`${mainAppUrl}/ai`}
+                  className="px-3 py-2 rounded-lg font-semibold text-sm text-white bg-gradient-to-br from-purple-500 via-blue-500 to-cyan-500 hover:shadow-md transition flex items-center gap-1.5"
+                >
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 3l1.912 5.813a2 2 0 001.276 1.276L21 12l-5.812 1.912a2 2 0 00-1.276 1.276L12 21l-1.912-5.812a2 2 0 00-1.276-1.276L3 12l5.812-1.912a2 2 0 001.276-1.276L12 3z" />
+                  </svg>
+                  AI
+                </a >
+              </div>
 
               {/* Auth buttons */}
               {
@@ -362,10 +365,10 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                     </a>
                   </div>
                 ) : (
-                  <div className="hidden md:flex items-center gap-3">
+                  <div className="hidden md:flex items-center gap-2 p-1 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm bg-white dark:bg-gray-800">
                     {/* Plan Badge */}
                     <div className={`px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-wider ${isPro
-                      ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-sm'
+                      ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white'
                       : status === 'trialing'
                         ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
                         : 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400'
@@ -376,7 +379,7 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                     <div className="relative" ref={userMenuRef}>
                       <button
                         onClick={() => setUserMenuOpen(!userMenuOpen)}
-                        className="flex items-center gap-2 p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+                        className="flex items-center gap-2 p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition"
                       >
                         {user?.avatarUrl ? (
                           <img src={user.avatarUrl} alt="" className="h-8 w-8 rounded-full object-cover" />

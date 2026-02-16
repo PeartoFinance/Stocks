@@ -17,6 +17,10 @@ import {
     Bell,
     ChevronRight,
     AlertTriangle,
+    Sun,
+    Moon,
+    Monitor,
+    Palette,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -29,6 +33,12 @@ export default function SettingsPage() {
     const [lastName, setLastName] = useState('');
     const [avatarUrl, setAvatarUrl] = useState('');
     const [saving, setSaving] = useState(false);
+    const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('system');
+
+    useEffect(() => {
+        const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | 'system' || 'system';
+        setTheme(savedTheme);
+    }, []);
 
     useEffect(() => {
         if (!authLoading && !isAuthenticated) router.push('/login');
@@ -74,6 +84,18 @@ export default function SettingsPage() {
             toast.error('Failed to update profile');
         } finally {
             setSaving(false);
+        }
+    };
+
+    const handleThemeChange = (newTheme: 'light' | 'dark' | 'system') => {
+        setTheme(newTheme);
+        localStorage.setItem('theme', newTheme);
+        const root = document.documentElement;
+        if (newTheme === 'system') {
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            root.classList.toggle('dark', prefersDark);
+        } else {
+            root.classList.toggle('dark', newTheme === 'dark');
         }
     };
 
@@ -277,6 +299,61 @@ export default function SettingsPage() {
                             <span className="text-slate-700 dark:text-gray-300">Weekly portfolio summary</span>
                             <input type="checkbox" defaultChecked className="h-5 w-5 rounded text-green-500 focus:ring-green-500" />
                         </label>
+                    </div>
+                </div>
+
+                {/* Theme Preferences */}
+                <div className="bg-white dark:bg-gray-800 rounded-2xl border border-slate-200 dark:border-gray-700 p-6 mb-6">
+                    <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                        <Palette className="h-5 w-5" />
+                        Theme
+                    </h2>
+                    <div className="flex gap-3">
+                        <button
+                            onClick={() => handleThemeChange('light')}
+                            className={`flex-1 p-3 rounded-lg border-2 transition-all ${
+                                theme === 'light'
+                                    ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
+                                    : 'border-slate-200 dark:border-gray-700 hover:border-green-300'
+                            }`}
+                        >
+                            <Sun className={`h-5 w-5 mx-auto mb-1 ${
+                                theme === 'light' ? 'text-green-600' : 'text-slate-400'
+                            }`} />
+                            <div className={`text-sm font-medium ${
+                                theme === 'light' ? 'text-green-700 dark:text-green-400' : 'text-slate-600 dark:text-gray-400'
+                            }`}>Light</div>
+                        </button>
+                        <button
+                            onClick={() => handleThemeChange('dark')}
+                            className={`flex-1 p-3 rounded-lg border-2 transition-all ${
+                                theme === 'dark'
+                                    ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
+                                    : 'border-slate-200 dark:border-gray-700 hover:border-green-300'
+                            }`}
+                        >
+                            <Moon className={`h-5 w-5 mx-auto mb-1 ${
+                                theme === 'dark' ? 'text-green-600 dark:text-green-400' : 'text-slate-400'
+                            }`} />
+                            <div className={`text-sm font-medium ${
+                                theme === 'dark' ? 'text-green-700 dark:text-green-400' : 'text-slate-600 dark:text-gray-400'
+                            }`}>Dark</div>
+                        </button>
+                        <button
+                            onClick={() => handleThemeChange('system')}
+                            className={`flex-1 p-3 rounded-lg border-2 transition-all ${
+                                theme === 'system'
+                                    ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
+                                    : 'border-slate-200 dark:border-gray-700 hover:border-green-300'
+                            }`}
+                        >
+                            <Monitor className={`h-5 w-5 mx-auto mb-1 ${
+                                theme === 'system' ? 'text-green-600 dark:text-green-400' : 'text-slate-400'
+                            }`} />
+                            <div className={`text-sm font-medium ${
+                                theme === 'system' ? 'text-green-700 dark:text-green-400' : 'text-slate-600 dark:text-gray-400'
+                            }`}>System</div>
+                        </button>
                     </div>
                 </div>
 

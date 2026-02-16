@@ -107,7 +107,7 @@ export default function ProfilePage() {
             </div>
 
             {/* Profile Card */}
-            <div className="container mx-auto px-4 sm:px-6 -mt-16 sm:-mt-20 md:-mt-24 max-w-4xl">
+            <div className="container mx-auto px-4 sm:px-6 -mt-16 sm:-mt-20 md:-mt-24 max-w-7xl">
                 <div className="bg-white dark:bg-gray-800 rounded-2xl sm:rounded-3xl shadow-xl border border-slate-100 dark:border-gray-700 overflow-hidden">
                     {/* Profile Header */}
                     <div className="p-4 sm:p-6 md:p-8 border-b border-slate-100 dark:border-gray-700">
@@ -194,23 +194,23 @@ export default function ProfilePage() {
                     </div>
 
                     {/* Menu Grid */}
-                    <div className="p-4 sm:p-6 md:p-8">
-                        <h2 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-white mb-4">Your Account</h2>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+                    <div className="p-6 sm:p-8 md:p-10">
+                        <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-6">Your Account</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                             {menuItems.map((item) => (
                                 <Link
                                     key={item.href}
                                     href={item.href}
-                                    className="group flex items-center gap-3 sm:gap-4 p-4 rounded-xl border border-slate-100 dark:border-gray-700 hover:border-green-200 dark:hover:border-green-700 hover:bg-green-50/50 dark:hover:bg-green-900/20 transition"
+                                    className="group flex items-center gap-4 p-5 rounded-xl border border-slate-100 dark:border-gray-700 hover:border-green-200 dark:hover:border-green-700 hover:bg-green-50/50 dark:hover:bg-green-900/20 transition-all hover:shadow-md"
                                 >
-                                    <div className={`h-11 w-11 sm:h-12 sm:w-12 rounded-xl flex items-center justify-center flex-shrink-0 ${item.color}`}>
-                                        <item.icon className="h-5 w-5 sm:h-6 sm:w-6" />
+                                    <div className={`h-14 w-14 rounded-xl flex items-center justify-center flex-shrink-0 ${item.color}`}>
+                                        <item.icon className="h-7 w-7" />
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <div className="font-medium text-slate-900 dark:text-white group-hover:text-green-700 dark:group-hover:text-green-400 transition truncate">
+                                        <div className="font-semibold text-base text-slate-900 dark:text-white group-hover:text-green-700 dark:group-hover:text-green-400 transition truncate">
                                             {item.label}
                                         </div>
-                                        <div className="text-sm text-slate-500 dark:text-gray-400 truncate">{item.description}</div>
+                                        <div className="text-sm text-slate-500 dark:text-gray-400 mt-0.5 truncate">{item.description}</div>
                                     </div>
                                     <ChevronRight className="h-5 w-5 text-slate-300 dark:text-gray-600 group-hover:text-green-500 transition flex-shrink-0" />
                                 </Link>
@@ -219,29 +219,27 @@ export default function ProfilePage() {
                     </div>
 
                     {/* Getting Started */}
-                    <div className="p-4 sm:p-6 md:p-8 bg-slate-50 dark:bg-gray-800 border-t border-slate-100 dark:border-gray-700">
-                        <h2 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-white mb-4">Getting Started</h2>
-                        <div className="bg-white dark:bg-gray-700 rounded-xl p-4 sm:p-5 border border-slate-100 dark:border-gray-600">
-                            <ul className="space-y-3 text-sm text-slate-600 dark:text-gray-300">
-                                {[
-                                    'Add stocks to your Watchlist to track prices and get updates.',
-                                    'Create your Portfolio to track investments and calculate returns.',
-                                    'Set up Price Alerts to get notified when stocks hit your target.',
-                                    'Use the Stock Screener to discover new investment opportunities.',
-                                ].map((text, i) => (
-                                    <li key={i} className="flex items-start gap-3">
-                                        <span className="h-5 w-5 rounded-full bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-400 flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">
-                                            {i + 1}
-                                        </span>
-                                        <span className="dark:text-gray-300">{text}</span>
-                                    </li>
-                                ))}
-                            </ul>
+                    <div className="p-6 sm:p-8 md:p-10 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-gray-800 dark:to-gray-800 border-t border-slate-100 dark:border-gray-700">
+                        <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-6">Quick Tips</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+                            {[
+                                { icon: Star, text: 'Add stocks to Watchlist for real-time tracking', color: 'text-amber-600 bg-amber-100 dark:bg-amber-900/30' },
+                                { icon: Briefcase, text: 'Build Portfolio to monitor investments', color: 'text-green-600 bg-green-100 dark:bg-green-900/30' },
+                                { icon: Bell, text: 'Set Price Alerts for target notifications', color: 'text-violet-600 bg-violet-100 dark:bg-violet-900/30' },
+                                { icon: BarChart3, text: 'Use Screener to find opportunities', color: 'text-orange-600 bg-orange-100 dark:bg-orange-900/30' },
+                            ].map((tip, i) => (
+                                <div key={i} className="flex items-start gap-3 p-4 bg-white dark:bg-gray-700 rounded-xl border border-slate-100 dark:border-gray-600 hover:shadow-md transition-shadow">
+                                    <div className={`h-10 w-10 rounded-lg flex items-center justify-center flex-shrink-0 ${tip.color}`}>
+                                        <tip.icon className="h-5 w-5" />
+                                    </div>
+                                    <span className="text-sm text-slate-600 dark:text-gray-300 leading-relaxed">{tip.text}</span>
+                                </div>
+                            ))}
                         </div>
                     </div>
 
                     {/* Logout */}
-                    <div className="p-4 sm:p-6 md:p-8 border-t border-slate-100 dark:border-gray-700">
+                    <div className="p-6 sm:p-8 md:p-10 border-t border-slate-100 dark:border-gray-700">
                         <button
                             onClick={handleLogout}
                             className="flex items-center gap-2 text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 font-medium transition"
