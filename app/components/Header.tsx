@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/app/context/AuthContext';
 import { useCountry } from '@/app/context/CountryContext';
+import { useSubscription } from '@/app/context/SubscriptionContext';
 import { stockAPI } from '@/app/utils/api';
 import { debounce } from '@/lib/utils';
 import { fetchNavigation, getSection, NavigationItem } from '@/app/services/navigationService';
@@ -42,6 +43,7 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
   const { user, isAuthenticated, logout } = useAuth();
   const { country, countries, setCountry } = useCountry();
   const { theme, toggleTheme } = useTheme();
+  const { planName, isPro, status } = useSubscription();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -148,6 +150,7 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
     { label: 'Portfolio Tracker', href: '/profile/portfolio' },
     { label: 'Watchlist', href: '/watchlist' },
     { label: 'Compare Stocks', href: '/stocks/comparison' },
+    { label: 'Compare Crypto', href: '/crypto/comparison' },
     { label: 'All Tools', href: `${mainAppUrl}/tools` },
   ]);
 
@@ -359,49 +362,61 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                     </a>
                   </div>
                 ) : (
-                  <div className="hidden md:block relative" ref={userMenuRef}>
-                    <button
-                      onClick={() => setUserMenuOpen(!userMenuOpen)}
-                      className="flex items-center gap-2 p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition"
-                    >
-                      {user?.avatarUrl ? (
-                        <img src={user.avatarUrl} alt="" className="h-8 w-8 rounded-full object-cover" />
-                      ) : (
-                        <div className="h-8 w-8 rounded-full bg-emerald-500 flex items-center justify-center text-white text-sm font-medium">
-                          {initials}
+                  <div className="hidden md:flex items-center gap-3">
+                    {/* Plan Badge */}
+                    <div className={`px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-wider ${isPro
+                      ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-sm'
+                      : status === 'trialing'
+                        ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                        : 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400'
+                      }`}>
+                      {status === 'trialing' ? 'Trial' : isPro ? 'Pro' : 'Free'}
+                    </div>
+
+                    <div className="relative" ref={userMenuRef}>
+                      <button
+                        onClick={() => setUserMenuOpen(!userMenuOpen)}
+                        className="flex items-center gap-2 p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+                      >
+                        {user?.avatarUrl ? (
+                          <img src={user.avatarUrl} alt="" className="h-8 w-8 rounded-full object-cover" />
+                        ) : (
+                          <div className="h-8 w-8 rounded-full bg-emerald-500 flex items-center justify-center text-white text-sm font-medium">
+                            {initials}
+                          </div>
+                        )}
+                        <span className="text-sm text-gray-700 dark:text-gray-300 max-w-[100px] truncate transition-colors duration-300">{user?.name || 'Account'}</span>
+                        <ChevronDown size={14} className="text-gray-400" />
+                      </button>
+
+                      {userMenuOpen && (
+                        <div className="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50 transition-colors duration-300">
+                          <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-700 transition-colors duration-300">
+                            <p className="font-medium text-gray-900 dark:text-white transition-colors duration-300">{user?.name || user?.email}</p>
+                            <p className="text-sm text-gray-500 dark:text-pearto-gray transition-colors duration-300">{user?.email}</p>
+                          </div>
+                          <div className="py-2">
+                            <Link href="/profile" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300">
+                              <User size={16} className="text-gray-400" /> Profile
+                            </Link>
+                            <Link href="/profile/portfolio" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300">
+                              <Briefcase size={16} className="text-gray-400" /> Portfolio
+                            </Link>
+                            <Link href="/profile/watchlist" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300">
+                              <Star size={16} className="text-gray-400" /> Watchlist
+                            </Link>
+                            <Link href="/profile/settings" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300">
+                              <Settings size={16} className="text-gray-400" /> Settings
+                            </Link>
+                          </div>
+                          <div className="border-t border-gray-100 dark:border-gray-700 py-2 transition-colors duration-300">
+                            <button onClick={handleLogout} className="flex items-center gap-3 px-4 py-2 text-sm text-red-600 dark:text-pearto-pink hover:bg-red-50 dark:hover:bg-red-900/20 w-full transition-colors duration-300">
+                              <LogOut size={16} /> Sign out
+                            </button>
+                          </div>
                         </div>
                       )}
-                      <span className="text-sm text-gray-700 dark:text-gray-300 max-w-[100px] truncate transition-colors duration-300">{user?.name || 'Account'}</span>
-                      <ChevronDown size={14} className="text-gray-400" />
-                    </button>
-
-                    {userMenuOpen && (
-                      <div className="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50 transition-colors duration-300">
-                        <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-700 transition-colors duration-300">
-                          <p className="font-medium text-gray-900 dark:text-white transition-colors duration-300">{user?.name || user?.email}</p>
-                          <p className="text-sm text-gray-500 dark:text-pearto-gray transition-colors duration-300">{user?.email}</p>
-                        </div>
-                        <div className="py-2">
-                          <Link href="/profile" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300">
-                            <User size={16} className="text-gray-400" /> Profile
-                          </Link>
-                          <Link href="/profile/portfolio" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300">
-                            <Briefcase size={16} className="text-gray-400" /> Portfolio
-                          </Link>
-                          <Link href="/profile/watchlist" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300">
-                            <Star size={16} className="text-gray-400" /> Watchlist
-                          </Link>
-                          <Link href="/profile/settings" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300">
-                            <Settings size={16} className="text-gray-400" /> Settings
-                          </Link>
-                        </div>
-                        <div className="border-t border-gray-100 dark:border-gray-700 py-2 transition-colors duration-300">
-                          <button onClick={handleLogout} className="flex items-center gap-3 px-4 py-2 text-sm text-red-600 dark:text-pearto-pink hover:bg-red-50 dark:hover:bg-red-900/20 w-full transition-colors duration-300">
-                            <LogOut size={16} /> Sign out
-                          </button>
-                        </div>
-                      </div>
-                    )}
+                    </div>
                   </div>
                 )
               }
@@ -419,19 +434,19 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
       </nav >
 
       {/* SECONDARY NAVBAR - Fixed below primary navbar, always visible */}
-      < div className="fixed top-24 left-0 right-0 z-30 bg-white dark:bg-gray-900 backdrop-blur border-b border-gray-200 dark:border-gray-800/50 hidden md:block transition-colors duration-300" >
+      < div className="fixed top-24 left-0 right-0 z-30 bg-white/95 dark:bg-slate-900/95 backdrop-blur border-b border-gray-200 dark:border-slate-800 hidden md:block transition-colors duration-300" >
         <div className="container mx-auto px-4 md:px-6">
-          <div className="flex items-center justify-center gap-2 py-2.5">
+          <div className="flex items-center justify-center gap-3 py-2.5">
             {/* Pillars Dropdown */}
             <div
               className="relative"
               onMouseEnter={() => setPillarsOpen(true)}
               onMouseLeave={() => setPillarsOpen(false)}
             >
-              <button className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
-                <Layers size={14} className="opacity-80" />
+              <button className="inline-flex items-center gap-2 h-9 px-3 rounded-full border transition text-sm font-medium text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700">
+                <Layers size={14} className="opacity-70" />
                 Pillars
-                <ChevronDown size={14} className={`transition-transform ${pillarsOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown size={14} className={`opacity-70 transition-transform ${pillarsOpen ? 'rotate-180' : ''}`} />
               </button>
               {pillarsOpen && (
                 <div className="absolute left-0 top-full mt-1 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50 transition-colors duration-300">
@@ -461,7 +476,7 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
             {/* Booyah Button */}
             <a
               href={`${mainAppUrl}/booyah`}
-              className="px-4 py-2 rounded-lg font-bold text-white bg-gradient-to-br from-green-500 via-emerald-500 to-green-600 shadow hover:from-green-600 hover:to-emerald-600 transition-all text-sm"
+              className="px-4 py-2 rounded-lg font-semibold text-sm text-white bg-gradient-to-br from-green-500 via-emerald-500 to-green-600 shadow hover:shadow-md transition"
             >
               Booyah
             </a>
@@ -472,10 +487,10 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
               onMouseEnter={() => setToolsOpen(true)}
               onMouseLeave={() => setToolsOpen(false)}
             >
-              <button className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
-                <Wrench size={14} className="opacity-80" />
+              <button className="inline-flex items-center gap-2 h-9 px-3 rounded-full border transition text-sm font-medium text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700">
+                <Wrench size={14} className="opacity-70" />
                 Tools
-                <ChevronDown size={14} className={`transition-transform ${toolsOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown size={14} className={`opacity-70 transition-transform ${toolsOpen ? 'rotate-180' : ''}`} />
               </button>
               {toolsOpen && (
                 <div className="absolute left-0 top-full mt-1 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50 transition-colors duration-300">
@@ -508,10 +523,10 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
               onMouseEnter={() => setResourcesOpen(true)}
               onMouseLeave={() => setResourcesOpen(false)}
             >
-              <button className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
-                <BookOpen size={14} className="opacity-80" />
+              <button className="inline-flex items-center gap-2 h-9 px-3 rounded-full border transition text-sm font-medium text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700">
+                <BookOpen size={14} className="opacity-70" />
                 Resources
-                <ChevronDown size={14} className={`transition-transform ${resourcesOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown size={14} className={`opacity-70 transition-transform ${resourcesOpen ? 'rotate-180' : ''}`} />
               </button>
               {resourcesOpen && (
                 <div className="absolute left-0 top-full mt-1 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50 transition-colors duration-300">
@@ -661,7 +676,7 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                 <div className="pt-4 border-t border-gray-200 dark:border-gray-700 transition-colors duration-300">
                   {!isAuthenticated ? (
                     <div className="flex gap-3">
-                      <a href={`${authRedirectBase}/login?redirect=true`} className="flex-1 py-3 text-center rounded-xl border border-gray-200 dark:border-gray-700 font-medium transition-colors duration-300" onClick={() => setMobileMenuOpen(false)}>
+                      <a href={`${authRedirectBase}/login?redirect=true`} className="flex-1 py-3 text-center rounded-xl border border-gray-200 dark:border-gray-700 font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300" onClick={() => setMobileMenuOpen(false)}>
                         Sign In
                       </a>
                       <a href={`${authRedirectBase}/signup?redirect=true`} className="flex-1 py-3 text-center rounded-xl text-white bg-gradient-to-r from-emerald-600 via-emerald-500 to-cyan-500 font-medium" onClick={() => setMobileMenuOpen(false)}>

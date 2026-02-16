@@ -6,6 +6,7 @@ import { AuthProvider } from './context/AuthContext';
 import { CurrencyProvider } from './context/CurrencyContext';
 import { CountryProvider } from './context/CountryContext';
 import { ThemeProvider } from './context/ThemeContext';
+import { SubscriptionProvider } from './context/SubscriptionContext';
 import LayoutWrapper from './components/layoutWrapper';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -23,15 +24,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${inter.className} antialiased`}>
         <ThemeProvider>
           <AuthProvider>
-            <CurrencyProvider>
-              <CountryProvider>
-                <LayoutWrapper>
-                  <AuthSync />
-                  {children}
-                </LayoutWrapper>
-                <Toaster position="top-right" />
-              </CountryProvider>
-            </CurrencyProvider>
+            <SubscriptionProvider>
+              <CurrencyProvider>
+                <CountryProvider>
+                  <LayoutWrapper>
+                    <AuthSync />
+                    {children}
+                  </LayoutWrapper>
+                  <Toaster position="top-right" />
+                </CountryProvider>
+              </CurrencyProvider>
+            </SubscriptionProvider>
           </AuthProvider>
         </ThemeProvider>
       </body>

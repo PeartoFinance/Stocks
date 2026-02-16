@@ -477,7 +477,7 @@ export default function MarketMovers({
                 const changeData = formatChange(stock.change, stock.changePercent);
                 return (
                   <Link key={i} href={`/stock/${stock.symbol.toLowerCase()}`}>
-                    <div className="flex items-center justify-between p-2 sm:p-3 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-pearto-card transition-colors cursor-pointer">
+                    <div className="flex items-center justify-between p-2 sm:p-3 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-slate-50 dark:hover:bg-gray-700 transition-colors cursor-pointer">
                       <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
                         <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${changeData.isPositive ? 'bg-green-100 dark:bg-pearto-green/10' : 'bg-red-100 dark:bg-pearto-pink/10'
                           }`}>

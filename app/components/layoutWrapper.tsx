@@ -9,6 +9,7 @@ import TickerTape from './TickerTape';
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const [isOpenMobile, setIsOpenMobile] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
 
   // Prevent hydration mismatch
   useEffect(() => {
@@ -22,16 +23,13 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
       {/* Header - Full width at top */}
       <Header onOpenSidebar={() => setIsOpenMobile(true)} />
 
-      {/* Middle section: Sidebar + Content with top padding for fixed header */}
-      <div className="flex flex-1 pt-32">
-        {/* Sidebar - sticky within content area */}
-        <Sidebar isOpenMobile={isOpenMobile} setIsOpenMobile={setIsOpenMobile} />
+      {/* Sidebar - Fixed vertically */}
+      <Sidebar isOpenMobile={isOpenMobile} setIsOpenMobile={setIsOpenMobile} onCollapseChange={setSidebarCollapsed} />
 
-        {/* Main content */}
-        <main className="flex-1 w-full overflow-x-hidden">
-          {children}
-        </main>
-      </div>
+      {/* Main content with left padding for sidebar */}
+      <main className={`flex-1 w-full overflow-x-hidden pt-32 transition-all duration-300 ${sidebarCollapsed ? 'lg:pl-20' : 'lg:pl-64'}`}>
+        {children}
+      </main>
 
       {/* Footer - Full width at bottom */}
       <Footer />

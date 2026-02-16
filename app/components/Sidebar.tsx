@@ -6,17 +6,22 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import {
   Home, Star, BarChart3, Calendar, Briefcase,
-  ChevronLeft, ChevronRight, X, Gem, TrendingUp, Bitcoin
+  ChevronLeft, ChevronRight, X, Gem, TrendingUp, Bitcoin, Newspaper
 } from 'lucide-react';
 
 interface SidebarProps {
   isOpenMobile: boolean;
   setIsOpenMobile: (open: boolean) => void;
+  onCollapseChange?: (collapsed: boolean) => void;
 }
 
-export default function Sidebar({ isOpenMobile, setIsOpenMobile }: SidebarProps) {
+export default function Sidebar({ isOpenMobile, setIsOpenMobile, onCollapseChange }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const pathname = usePathname();
+
+  useEffect(() => {
+    onCollapseChange?.(isCollapsed);
+  }, [isCollapsed, onCollapseChange]);
 
   useEffect(() => {
     const updateWidth = () => {
@@ -39,6 +44,7 @@ export default function Sidebar({ isOpenMobile, setIsOpenMobile }: SidebarProps)
     { icon: TrendingUp, label: 'Trending', href: '/trending' },
     { icon: Calendar, label: 'IPOs', href: '/ipos' },
     { icon: Briefcase, label: 'ETFs', href: '/etfs' },
+    { icon: Newspaper, label: 'News', href: '/news' },
   ];
 
   const SidebarInner = ({ isMobile = false }) => (
@@ -94,16 +100,17 @@ export default function Sidebar({ isOpenMobile, setIsOpenMobile }: SidebarProps)
         )}
       </AnimatePresence>
 
-      {/* DESKTOP SIDEBAR - Sticky within content area, not fixed full height */}
+      {/* DESKTOP SIDEBAR - Fixed vertically, stays in place when scrolling */}
       <aside
-        className={`sticky top-0 self-start h-screen bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800/50 z-40 transition-all duration-300 hidden lg:block flex-shrink-0 ${isCollapsed ? 'w-20' : 'w-64'
+        className={`fixed left-0 top-32 h-[calc(100vh-8rem)] bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800/50 z-30 transition-all duration-300 hidden lg:block overflow-y-auto ${isCollapsed ? 'w-20' : 'w-64'
           }`}
       >
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="absolute -right-3 top-20 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full p-1 shadow-md z-50 text-gray-600 dark:text-gray-400 hover:text-emerald-500 dark:hover:text-emerald-400 hover:scale-110 transition-all duration-200"
+          className="fixed left-[68px] top-44 bg-emerald-500 dark:bg-emerald-600 border-2 border-white dark:border-gray-800 rounded-full p-1.5 shadow-lg z-50 text-white hover:bg-emerald-600 dark:hover:bg-emerald-700 hover:scale-110 transition-all duration-200"
+          style={{ left: isCollapsed ? '68px' : '244px' }}
         >
-          {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
+          {isCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
         </button>
         <SidebarInner />
       </aside>
