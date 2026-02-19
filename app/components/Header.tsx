@@ -679,10 +679,10 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                 <div className="pt-4 border-t border-gray-200 dark:border-gray-700 transition-colors duration-300">
                   {!isAuthenticated ? (
                     <div className="flex gap-3">
-                      <a href={`${authRedirectBase}/login?redirect=true`} className="flex-1 py-3 text-center rounded-xl border border-gray-200 dark:border-gray-700 font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300" onClick={() => setMobileMenuOpen(false)}>
+                      <a href={`${authRedirectBase}/login?redirect=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : mainAppUrl)}`} className="flex-1 py-3 text-center rounded-xl border border-gray-200 dark:border-gray-700 font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300" onClick={() => setMobileMenuOpen(false)}>
                         Sign In
                       </a>
-                      <a href={`${authRedirectBase}/signup?redirect=true`} className="flex-1 py-3 text-center rounded-xl text-white bg-gradient-to-r from-emerald-600 via-emerald-500 to-cyan-500 font-medium" onClick={() => setMobileMenuOpen(false)}>
+                      <a href={`${authRedirectBase}/signup?redirect=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : mainAppUrl)}`} className="flex-1 py-3 text-center rounded-xl text-white bg-gradient-to-r from-emerald-600 via-emerald-500 to-cyan-500 font-medium" onClick={() => setMobileMenuOpen(false)}>
                         Sign Up
                       </a>
                     </div>

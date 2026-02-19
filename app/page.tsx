@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Search, TrendingUp, TrendingDown, BarChart, List, Activity, Tag, Globe, Users, Clock, DollarSign, Zap, ArrowRight, Star, Bell, Filter, RefreshCw, Eye, Calendar, PieChart, LineChart, Target, Briefcase, Bitcoin, Building, Rocket, Coins, Newspaper } from 'lucide-react';
+import { Search, TrendingUp, TrendingDown, BarChart, List, Activity, Tag, Globe, Users, Clock, DollarSign, Zap, ArrowRight, Star, Bell, Filter, RefreshCw, Eye, Calendar, PieChart, LineChart, Target, Briefcase, Bitcoin, Building, Rocket, Coins, Newspaper, Building2 } from 'lucide-react';
 import Link from 'next/link';
 import { stockAPI } from './utils/api';
 import { worldIndicesService } from './utils/worldIndicesService';
@@ -461,15 +461,15 @@ export default function HomePage() {
                 <Link href="/stocks/exchanges" className="group bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-xl sm:rounded-2xl shadow-xl dark:shadow-pearto-green/10 border border-slate-200 dark:border-gray-700 hover:shadow-2xl dark:hover:shadow-pearto-green/20 transition-all hover:-translate-y-1">
                   <div className="flex items-center justify-between mb-3 sm:mb-4">
                     <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-indigo-500 to-indigo-600 dark:from-pearto-puerto-rico dark:to-pearto-blue rounded-lg sm:rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                      <PieChart className="h-5 w-5 sm:h-6 sm:w-6 text-white dark:text-pearto-blockchain" />
+                      <Building2 className="h-5 w-5 sm:h-6 sm:w-6 text-white dark:text-pearto-blockchain" />
                     </div>
                     <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 dark:text-gray-400 group-hover:text-indigo-600 dark:group-hover:text-pearto-puerto-rico transition-colors" />
                   </div>
-                  <h3 className="font-bold text-base sm:text-lg text-slate-900 dark:text-white mb-2">Sector Analysis</h3>
-                  <p className="text-slate-600 dark:text-gray-400 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2">Deep dive into industry trends, sector rotation, and comparative performance analytics.</p>
+                  <h3 className="font-bold text-base sm:text-lg text-slate-900 dark:text-white mb-2">Exchanges</h3>
+                  <p className="text-slate-600 dark:text-gray-400 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2">Explore global stock exchanges, trading hours, and market information worldwide.</p>
                   <div className="flex items-center gap-2 text-xs sm:text-sm text-indigo-600 dark:text-pearto-puerto-rico font-medium">
-                    <Tag className="h-3 w-3 sm:h-4 sm:w-4" />
-                    <span>Compare Sectors</span>
+                    <Globe className="h-3 w-3 sm:h-4 sm:w-4" />
+                    <span>View Exchanges</span>
                   </div>
                 </Link>
 
