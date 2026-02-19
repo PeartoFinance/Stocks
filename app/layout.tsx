@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Manrope } from 'next/font/google';
 import './globals.css';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
@@ -9,7 +9,10 @@ import { ThemeProvider } from './context/ThemeContext';
 import { SubscriptionProvider } from './context/SubscriptionContext';
 import LayoutWrapper from './components/layoutWrapper';
 
-const inter = Inter({ subsets: ['latin'] });
+const manrope = Manrope({
+  subsets: ['latin'],
+  variable: '--font-manrope',
+});
 
 export const metadata: Metadata = {
   title: 'Pearto Stocks - Professional Stock Market Analysis',
@@ -21,7 +24,7 @@ import AuthSync from './components/AuthSync';
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${inter.className} antialiased`}>
+      <body className={`${manrope.variable} font-sans antialiased`}>
         <ThemeProvider>
           <AuthProvider>
             <SubscriptionProvider>

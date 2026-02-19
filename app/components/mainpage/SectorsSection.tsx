@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { worldIndicesService, SectorData } from '../../utils/worldIndicesService';
 import { Building, PieChart as PieChartIcon, TrendingUp, TrendingDown, Minus, Info } from 'lucide-react';
 import { Doughnut } from 'react-chartjs-2';
+import { useRouter } from 'next/navigation';
 import {
   Chart as ChartJS,
   ArcElement,
@@ -24,6 +25,7 @@ export default function SectorsSection({ className = '' }: SectorsSectionProps) 
   const [sectors, setSectors] = useState<SectorData[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<ChartTabType>('weight');
+  const router = useRouter();
 
   useEffect(() => {
     const fetchSectors = async () => {
@@ -123,6 +125,15 @@ export default function SectorsSection({ className = '' }: SectorsSectionProps) 
           </div>
           <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight transition-colors duration-300">Sector Performance</h2>
         </div>
+        <button
+          onClick={() => router.push('/sectors')}
+          className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg transition-colors duration-200 flex items-center gap-2"
+        >
+          View Full Analysis
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
@@ -139,7 +150,7 @@ export default function SectorsSection({ className = '' }: SectorsSectionProps) 
             </div>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-2 auto-rows-[minmax(85px,auto)]">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 gap-2 auto-rows-[minmax(85px,auto)]">
             {sectors.map((sector) => (
               <div
                 key={sector.sector}
