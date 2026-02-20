@@ -366,16 +366,16 @@ export default function StockDetailPage({ params }: PageProps) {
               <div className="lg:col-span-3">
                 <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-5">
                   {/* Chart Controls */}
-                  <div className="mb-4 p-3 bg-slate-50/50 dark:bg-pearto-surface/50 rounded-xl border border-slate-100 dark:border-pearto-border transition-colors duration-300">
+                  <div className="mb-4 p-3 bg-slate-50/50 dark:bg-slate-800/50 rounded-xl border border-slate-100 dark:border-slate-700 transition-colors duration-300">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
                       <div className="flex items-center gap-3">
-                        <span className="text-sm font-semibold text-gray-700 dark:text-pearto-luna transition-colors duration-300">Duration</span>
-                        <div className="flex bg-white dark:bg-pearto-card rounded-lg p-1 border border-slate-200 dark:border-pearto-border transition-colors duration-300 overflow-x-auto">
+                        <span className="text-sm font-semibold text-gray-700 dark:text-slate-300 transition-colors duration-300">Duration</span>
+                        <div className="flex bg-white dark:bg-slate-700 rounded-lg p-1 border border-slate-200 dark:border-slate-600 transition-colors duration-300 overflow-x-auto">
                           {periods.map((p) => (
                             <button
                               key={p}
                               onClick={() => handlePeriodChange(p)}
-                              className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${chartPeriod === p ? "bg-gray-900 dark:bg-pearto-green text-white shadow-sm" : "text-gray-600 dark:text-pearto-cloud hover:bg-gray-100 dark:hover:bg-pearto-surface"
+                              className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${chartPeriod === p ? "bg-blue-600 dark:bg-emerald-600 text-white shadow-sm" : "text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-600"
                                 }`}
                             >
                               {p}
@@ -392,13 +392,13 @@ export default function StockDetailPage({ params }: PageProps) {
                     </div>
 
                     <div className="flex items-center gap-3">
-                      <span className="text-sm font-semibold text-gray-700 dark:text-pearto-luna transition-colors duration-300">Type</span>
-                      <div className="flex bg-white dark:bg-pearto-card rounded-lg p-1 border border-slate-200 dark:border-pearto-border transition-colors duration-300">
+                      <span className="text-sm font-semibold text-gray-700 dark:text-slate-300 transition-colors duration-300">Type</span>
+                      <div className="flex bg-white dark:bg-slate-700 rounded-lg p-1 border border-slate-200 dark:border-slate-600 transition-colors duration-300">
                         {chartTypes.map((type) => (
                           <button
                             key={type.key}
                             onClick={() => setChartType(type.key)}
-                            className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${chartType === type.key ? "bg-blue-600 dark:bg-pearto-pink text-white shadow-sm" : "text-gray-600 dark:text-pearto-cloud hover:bg-gray-100 dark:hover:bg-pearto-surface"
+                            className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${chartType === type.key ? "bg-blue-600 dark:bg-purple-600 text-white shadow-sm" : "text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-600"
                               }`}
                           >
                             <type.icon className="h-3.5 w-3.5" />
@@ -545,12 +545,12 @@ export default function StockDetailPage({ params }: PageProps) {
                 { label: "Volume", val: stock.volume ? `${(stock.volume / 1e6).toFixed(1)}M` : "N/A", color: "purple", Icon: BarChart3 },
                 { label: "Avg Vol", val: stock.avgVolume ? `${(stock.avgVolume / 1e6).toFixed(1)}M` : "N/A", color: "indigo", Icon: Activity },
               ].map((item, i) => (
-                <div key={i} className={`bg-${item.color}-50 dark:bg-pearto-surface p-3 rounded-xl border border-${item.color}-100 dark:border-pearto-border`}>
+                <div key={i} className={`bg-${item.color}-50 dark:bg-slate-800 p-3 rounded-xl border border-${item.color}-100 dark:border-slate-700`}>
                   <div className="flex justify-between items-center mb-1">
-                    <span className={`text-xs font-medium text-${item.color}-700 dark:text-pearto-luna`}>{item.label}</span>
-                    <item.Icon className={`h-3 w-3 text-${item.color}-600 dark:text-pearto-green`} />
+                    <span className={`text-xs font-medium text-${item.color}-700 dark:text-slate-300`}>{item.label}</span>
+                    <item.Icon className={`h-3 w-3 text-${item.color}-600 dark:text-${item.color}-400`} />
                   </div>
-                  <p className={`text-sm font-bold text-${item.color}-900 dark:text-pearto-luna`}>
+                  <p className={`text-sm font-bold text-${item.color}-900 dark:text-white`}>
                     {typeof item.val === 'number' ? <PriceDisplay amount={item.val} /> : item.val}
                   </p>
                 </div>
@@ -636,13 +636,13 @@ export default function StockDetailPage({ params }: PageProps) {
           <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 lg:p-5">
             <div className="mb-4 lg:mb-6 p-3 lg:p-4 bg-gray-50 dark:bg-gray-700 rounded-xl border border-gray-100 dark:border-gray-600">
               <div className="flex flex-col gap-3 mb-3">
-                <span className="text-sm font-semibold text-gray-700 dark:text-gray-300 transition-colors duration-300">Duration</span>
-                <div className="flex bg-white dark:bg-gray-600 rounded-lg p-1 border border-gray-200 dark:border-gray-500 transition-colors duration-300 overflow-x-auto scrollbar-hide">
+                <span className="text-sm font-semibold text-gray-700 dark:text-slate-300 transition-colors duration-300">Duration</span>
+                <div className="flex bg-white dark:bg-slate-700 rounded-lg p-1 border border-gray-200 dark:border-slate-600 transition-colors duration-300 overflow-x-auto scrollbar-hide">
                   {periods.map((p) => (
                     <button
                       key={p}
                       onClick={() => handlePeriodChange(p)}
-                      className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all whitespace-nowrap ${chartPeriod === p ? "bg-gray-900 dark:bg-emerald-600 text-white shadow-sm" : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-500"
+                      className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all whitespace-nowrap ${chartPeriod === p ? "bg-blue-600 dark:bg-emerald-600 text-white shadow-sm" : "text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-600"
                         }`}
                     >
                       {p}
@@ -651,13 +651,13 @@ export default function StockDetailPage({ params }: PageProps) {
                 </div>
               </div>
               <div className="flex flex-col gap-3">
-                <span className="text-sm font-semibold text-gray-700 dark:text-gray-300 transition-colors duration-300">Type</span>
-                <div className="flex bg-white dark:bg-gray-600 rounded-lg p-1 border border-gray-200 dark:border-gray-500 transition-colors duration-300 overflow-x-auto scrollbar-hide">
+                <span className="text-sm font-semibold text-gray-700 dark:text-slate-300 transition-colors duration-300">Type</span>
+                <div className="flex bg-white dark:bg-slate-700 rounded-lg p-1 border border-gray-200 dark:border-slate-600 transition-colors duration-300 overflow-x-auto scrollbar-hide">
                   {chartTypes.map((type) => (
                     <button
                       key={type.key}
                       onClick={() => setChartType(type.key)}
-                      className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-md transition-all whitespace-nowrap ${chartType === type.key ? "bg-blue-600 text-white shadow-sm" : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-500"
+                      className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-md transition-all whitespace-nowrap ${chartType === type.key ? "bg-blue-600 text-white shadow-sm" : "text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-600"
                         }`}
                     >
                       <type.icon className="h-3.5 w-3.5" />

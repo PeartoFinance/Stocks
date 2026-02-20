@@ -1,7 +1,9 @@
 'use client';
 
 import React, { useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 import { Doughnut } from 'react-chartjs-2';
+import { ArrowRight } from 'lucide-react';
 import {
   Chart as ChartJS,
   ArcElement,
@@ -32,6 +34,7 @@ interface StockRiskAnalysisChartProps {
 }
 
 export default function StockRiskAnalysisChart({ className = '', stock }: StockRiskAnalysisChartProps) {
+  const router = useRouter();
   const riskData = useMemo(() => {
     // Calculate risk based on real stock metrics
     let lowRisk = 0;
@@ -163,11 +166,20 @@ export default function StockRiskAnalysisChart({ className = '', stock }: StockR
 
   return (
     <div className={`bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-3 ${className}`}>
-      <div className="mb-2">
-        <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-1 transition-colors duration-300">Risk Analysis</h3>
-        <p className="text-xs text-gray-600 dark:text-gray-400 transition-colors duration-300">
-          Based on {stock.symbol} metrics
-        </p>
+      <div className="mb-2 flex items-center justify-between">
+        <div>
+          <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-1 transition-colors duration-300">Risk Analysis</h3>
+          <p className="text-xs text-gray-600 dark:text-gray-400 transition-colors duration-300">
+            Based on {stock.symbol} metrics
+          </p>
+        </div>
+        <button
+          onClick={() => router.push(`/analysis?stock=${stock.symbol}`)}
+          className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-lg transition-colors"
+        >
+          View More
+          <ArrowRight className="h-3 w-3" />
+        </button>
       </div>
       
       <div className="h-20 relative mb-2">
