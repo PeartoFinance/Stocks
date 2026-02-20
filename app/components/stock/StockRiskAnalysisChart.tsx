@@ -1,13 +1,16 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Doughnut } from 'react-chartjs-2';
+import { ArrowRight } from 'lucide-react';
 import {
   Chart as ChartJS,
   ArcElement,
   Tooltip,
   Legend
 } from 'chart.js';
+import { getTechnicalAnalysis } from '../../utils/technicalAnalysis';
 
 // Register Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -25,59 +28,68 @@ interface StockRiskAnalysisChartProps {
     dayLow?: number;
     high52w?: number;
     low52w?: number;
-    pe?: number;
+    peRatio?: number;
     dividend?: number;
     sector?: string;
   };
 }
 
 export default function StockRiskAnalysisChart({ className = '', stock }: StockRiskAnalysisChartProps) {
-  const riskData = useMemo(() => {
-    // Calculate risk based on real stock metrics
+  const router = useRouter();
+  const [technicalData, setTechnicalData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTechnicalAnalysis = async () => {
+      try {
+        const data = await getTechnicalAnalysis(stock.symbol);
+        setTechnicalData(data);
+      } catch (error) {
+        console.error('Failed to fetch technical analysis:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTechnicalAnalysis();
+  }, [stock.symbol]);
+
+  const riskData = React.useMemo(() => {
     let lowRisk = 0;
     let mediumRisk = 0;
     let highRisk = 0;
     let veryHighRisk = 0;
 
-    // Price Volatility Risk (based on price change)
-    const volatilityScore = Math.abs(stock.changePercent || 0);
-    if (volatilityScore < 2) lowRisk += 30;
-    else if (volatilityScore < 5) mediumRisk += 30;
-    else if (volatilityScore < 7) highRisk += 30;
-    else veryHighRisk += 30;
-
-    // Market Cap Risk (larger cap = lower risk)
-    const stockMarketCap = stock.marketCap || 0;
-    if (stockMarketCap > 100000000000) lowRisk += 25;
-    else if (stockMarketCap > 10000000000) mediumRisk += 25;
-    else if (stockMarketCap > 1000000000) highRisk += 25;
-    else veryHighRisk += 25;
-
-    // Volume Risk (higher volume = lower risk)
-    const volume = stock.volume || 0;
-    const volumeToMarketCapRatio = stockMarketCap > 0 ? volume / stockMarketCap : 0;
-    if (volumeToMarketCapRatio > 0.1) lowRisk += 25;
-    else if (volumeToMarketCapRatio > 0.05) mediumRisk += 25;
-    else if (volumeToMarketCapRatio > 0.01) highRisk += 25;
-    else veryHighRisk += 25;
-
-    // P/E Ratio Risk (lower P/E = lower risk for value stocks)
-    const peRatio = stock.pe || 0;
-    if (peRatio > 0 && peRatio < 15) lowRisk += 25;
-    else if (peRatio >= 15 && peRatio < 25) mediumRisk += 25;
-    else if (peRatio >= 25 && peRatio < 35) highRisk += 25;
-    else veryHighRisk += 25;
-
-    // Price Range Risk (smaller range = lower risk)
-    if (stock.dayHigh && stock.dayLow) {
-      const dailyRange = ((stock.dayHigh - stock.dayLow) / stock.dayLow) * 100;
-      if (dailyRange < 2) lowRisk += 20;
-      else if (dailyRange < 5) mediumRisk += 20;
-      else if (dailyRange < 10) highRisk += 20;
-      else veryHighRisk += 20;
+    // Technical Analysis Score (40% weight)
+    if (technicalData) {
+      const score = technicalData.summary.score;
+      if (score >= 5) lowRisk += 40;
+      else if (score >= 0) mediumRisk += 40;
+      else if (score >= -5) highRisk += 40;
+      else veryHighRisk += 40;
     } else {
-      mediumRisk += 20; // Default if no range data
+      mediumRisk += 40;
     }
+
+    // Price Volatility (20% weight)
+    const volatilityScore = Math.abs(stock.changePercent || 0);
+    if (volatilityScore < 2) lowRisk += 20;
+    else if (volatilityScore < 5) mediumRisk += 20;
+    else if (volatilityScore < 10) highRisk += 20;
+    else veryHighRisk += 20;
+
+    // Market Cap (20% weight)
+    const stockMarketCap = stock.marketCap || 0;
+    if (stockMarketCap > 100000000000) lowRisk += 20;
+    else if (stockMarketCap > 10000000000) mediumRisk += 20;
+    else if (stockMarketCap > 1000000000) highRisk += 20;
+    else veryHighRisk += 20;
+
+    // P/E Ratio (20% weight)
+    const peRatio = stock.peRatio || 0;
+    if (peRatio > 0 && peRatio < 20) lowRisk += 20;
+    else if (peRatio >= 20 && peRatio < 30) mediumRisk += 20;
+    else if (peRatio >= 30 && peRatio < 50) highRisk += 20;
+    else veryHighRisk += 20;
 
     // Normalize to 100%
     const total = lowRisk + mediumRisk + highRisk + veryHighRisk;
@@ -103,7 +115,7 @@ export default function StockRiskAnalysisChart({ className = '', stock }: StockR
         hoverOffset: 4
       }]
     };
-  }, [stock]);
+  }, [stock, technicalData]);
 
   const getOverallRiskLevel = () => {
     const data = riskData.datasets[0].data;
@@ -163,11 +175,20 @@ export default function StockRiskAnalysisChart({ className = '', stock }: StockR
 
   return (
     <div className={`bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-3 ${className}`}>
-      <div className="mb-2">
-        <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-1 transition-colors duration-300">Risk Analysis</h3>
-        <p className="text-xs text-gray-600 dark:text-gray-400 transition-colors duration-300">
-          Based on {stock.symbol} metrics
-        </p>
+      <div className="mb-2 flex items-center justify-between">
+        <div>
+          <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-1 transition-colors duration-300">Risk Analysis</h3>
+          <p className="text-xs text-gray-600 dark:text-gray-400 transition-colors duration-300">
+            {loading ? 'Loading...' : technicalData ? 'Technical + Fundamental' : 'Based on metrics'}
+          </p>
+        </div>
+        <button
+          onClick={() => router.push(`/analysis?stock=${stock.symbol}`)}
+          className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-lg transition-colors"
+        >
+          View More
+          <ArrowRight className="h-3 w-3" />
+        </button>
       </div>
       
       <div className="h-20 relative mb-2">
@@ -183,6 +204,19 @@ export default function StockRiskAnalysisChart({ className = '', stock }: StockR
       
       {/* Key Metrics - 3 rows */}
       <div className="space-y-1.5 pt-2 border-t border-slate-200 dark:border-slate-700 transition-colors duration-300">
+        {technicalData && (
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-gray-600 dark:text-gray-400 transition-colors duration-300">Technical Score</span>
+            <span className={`font-semibold ${
+              technicalData.summary.score >= 5 ? 'text-green-600 dark:text-green-400' :
+              technicalData.summary.score >= 0 ? 'text-yellow-600 dark:text-yellow-400' :
+              technicalData.summary.score >= -5 ? 'text-red-600 dark:text-red-400' : 'text-purple-600 dark:text-purple-400'
+            }`}>
+              {technicalData.summary.score > 0 ? '+' : ''}{technicalData.summary.score}
+            </span>
+          </div>
+        )}
+        
         <div className="flex items-center justify-between text-xs">
           <span className="text-gray-600 dark:text-gray-400 transition-colors duration-300">Volatility</span>
           <span className={`font-semibold ${
@@ -197,27 +231,11 @@ export default function StockRiskAnalysisChart({ className = '', stock }: StockR
         <div className="flex items-center justify-between text-xs">
           <span className="text-gray-600 dark:text-gray-400 transition-colors duration-300">P/E Ratio</span>
           <span className={`font-semibold ${
-            (stock.pe || 0) > 0 && (stock.pe || 0) < 15 ? 'text-green-600 dark:text-green-400' :
-            (stock.pe || 0) >= 15 && (stock.pe || 0) < 25 ? 'text-yellow-600 dark:text-yellow-400' :
-            (stock.pe || 0) >= 25 && (stock.pe || 0) < 35 ? 'text-red-600 dark:text-red-400' : 'text-purple-600 dark:text-purple-400'
+            (stock.peRatio || 0) > 0 && (stock.peRatio || 0) < 20 ? 'text-green-600 dark:text-green-400' :
+            (stock.peRatio || 0) >= 20 && (stock.peRatio || 0) < 30 ? 'text-yellow-600 dark:text-yellow-400' :
+            (stock.peRatio || 0) >= 30 && (stock.peRatio || 0) < 50 ? 'text-red-600 dark:text-red-400' : 'text-purple-600 dark:text-purple-400'
           }`}>
-            {stock.pe ? stock.pe.toFixed(1) : 'N/A'}
-          </span>
-        </div>
-        
-        <div className="flex items-center justify-between text-xs">
-          <span className="text-gray-600 dark:text-gray-400 transition-colors duration-300">Market Cap</span>
-          <span className={`font-semibold ${
-            stockMarketCap > 100000000000 ? 'text-green-600 dark:text-green-400' :
-            stockMarketCap > 10000000000 ? 'text-yellow-600 dark:text-yellow-400' :
-            stockMarketCap > 1000000000 ? 'text-red-600 dark:text-red-400' : 'text-purple-600 dark:text-purple-400'
-          }`}>
-            {stockMarketCap > 1000000000 
-              ? `$${(stockMarketCap / 1000000000).toFixed(1)}B` 
-              : stockMarketCap > 1000000
-              ? `$${(stockMarketCap / 1000000).toFixed(1)}M`
-              : `$${(stockMarketCap / 1000).toFixed(1)}K`
-            }
+            {stock.peRatio ? stock.peRatio.toFixed(1) : 'N/A'}
           </span>
         </div>
       </div>

@@ -8,15 +8,18 @@ import {
   Activity, 
   AreaChart,
   LineChart,
-  Mountain
+  Mountain,
+  CandlestickChart
 } from 'lucide-react';
 import StockChart from '../StockChart';
 
 interface HistoricalData {
-  time: string;
-  price: number;
+  date: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
   volume: number;
-  marketCap: number;
 }
 
 interface ChartTabProps {
@@ -71,6 +74,7 @@ export default function ChartTab({
   const periods = ['1D', '1W', '1M', '3M', '1Y', '5Y'];
   const chartTypes = [
     { key: 'area', label: 'Area', icon: AreaChart },
+    { key: 'candlestick', label: 'Candle', icon: CandlestickChart },
     { key: 'line', label: 'Line', icon: LineChart },
     { key: 'mountain', label: 'Mountain', icon: Mountain },
   ];
@@ -81,8 +85,8 @@ export default function ChartTab({
   const calculatePeriodChange = () => {
     if (historicalData.length < 2) return { change: 0, changePercent: 0 };
     
-    const firstPrice = historicalData[0].price;
-    const lastPrice = historicalData[historicalData.length - 1].price;
+    const firstPrice = historicalData[0].close;
+    const lastPrice = historicalData[historicalData.length - 1].close;
     const change = lastPrice - firstPrice;
     const changePercent = (change / firstPrice) * 100;
     
@@ -105,7 +109,7 @@ export default function ChartTab({
                 isPositive ? "text-emerald-700 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-900/20" : "text-red-700 bg-red-50 dark:text-red-400 dark:bg-red-900/20"
               }`}>
                 {isPositive ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
-                {formatPrice(historicalData[historicalData.length - 1]?.price || crypto.change)}
+                {formatPrice(historicalData[historicalData.length - 1]?.close || crypto.change)}
               </div>
               <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-bold ${
                 periodChange.change >= 0 ? "text-emerald-700 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-900/20" : "text-red-700 bg-red-50 dark:text-red-400 dark:bg-red-900/20"
@@ -191,14 +195,7 @@ export default function ChartTab({
           {historicalData.length > 0 ? (
             <div className="h-full p-4">
               <StockChart 
-                data={historicalData.map(item => ({
-                  date: item.time,
-                  open: item.price,
-                  high: item.price,
-                  low: item.price,
-                  close: item.price,
-                  volume: item.volume
-                }))} 
+                data={historicalData} 
                 isPositive={periodChange.change >= 0} 
                 height={450} 
                 chartType={chartType} 
@@ -221,25 +218,25 @@ export default function ChartTab({
         {[
           { 
             label: 'Period High', 
-            value: historicalData.length > 0 ? formatPrice(Math.max(...historicalData.map(d => d.price))) : '-',
+            value: historicalData.length > 0 ? formatPrice(Math.max(...historicalData.map(d => d.high))) : '-',
             icon: TrendingUp,
             color: 'emerald'
           },
           { 
             label: 'Period Low', 
-            value: historicalData.length > 0 ? formatPrice(Math.min(...historicalData.map(d => d.price))) : '-',
+            value: historicalData.length > 0 ? formatPrice(Math.min(...historicalData.map(d => d.low))) : '-',
             icon: TrendingDown,
             color: 'red'
           },
           { 
             label: 'Average Price', 
-            value: historicalData.length > 0 ? formatPrice(historicalData.reduce((sum, d) => sum + d.price, 0) / historicalData.length) : '-',
+            value: historicalData.length > 0 ? formatPrice(historicalData.reduce((sum, d) => sum + d.close, 0) / historicalData.length) : '-',
             icon: BarChart3,
             color: 'blue'
           },
           { 
             label: 'Volatility', 
-            value: historicalData.length > 1 ? `${((Math.max(...historicalData.map(d => d.price)) - Math.min(...historicalData.map(d => d.price))) / Math.min(...historicalData.map(d => d.price)) * 100).toFixed(2)}%` : '-',
+            value: historicalData.length > 1 ? `${((Math.max(...historicalData.map(d => d.high)) - Math.min(...historicalData.map(d => d.low))) / Math.min(...historicalData.map(d => d.low)) * 100).toFixed(2)}%` : '-',
             icon: Activity,
             color: 'purple'
           },
