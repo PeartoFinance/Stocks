@@ -189,8 +189,8 @@ export default function TechnicalChartPage() {
         </div>
       </motion.div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-3 sm:gap-4">
-        <div className="xl:col-span-2">
+      <div className="grid grid-cols-1 xl:grid-cols-4 gap-3 sm:gap-4">
+        <div className="xl:col-span-3">
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700">
             <ChartHeader
               symbol={symbol}

@@ -3,10 +3,15 @@
  * Matches frontend-Pearto-new API structure
  */
 
+import { getFromCache, setCache } from './cache';
+
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://apipearto.ashlya.com/api';
 
 // Helper to make API requests
 async function apiRequest<T>(endpoint: string, options?: RequestInit): Promise<T> {
+  const cached = getFromCache<T>(endpoint);
+  if (cached) return cached;
+  
   const url = `${API_BASE}${endpoint}`;
 
   const response = await fetch(url, {
@@ -23,7 +28,10 @@ async function apiRequest<T>(endpoint: string, options?: RequestInit): Promise<T
     throw new Error(errorBody.error || `API Error: ${response.status}`);
   }
 
-  return response.json();
+  const data = await response.json();
+  setCache(endpoint, data);
+  
+  return data;
 }
 
 // Types for market overview response

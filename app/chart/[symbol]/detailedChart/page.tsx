@@ -40,7 +40,7 @@ import { useCurrency } from '../../../context/CurrencyContext';
 import { useTheme } from '../../../context/ThemeContext';
 
 // Technical indicator types
-type ChartType = 'candlestick' | 'line' | 'area' | 'bar';
+type ChartType = 'candlestick' | 'line' | 'area' | 'bar' | 'heikinashi';
 type Timeframe = '1D' | '5D' | '1M' | '3M' | '6M' | '1Y' | '5Y' | 'ALL';
 type Interval = '1m' | '5m' | '15m' | '30m' | '1h' | '4h' | '1d' | '1w' | '1mo';
 
@@ -243,6 +243,32 @@ export default function DetailedChartPage() {
     return { bands, upperBand, lowerBand };
   }, []);
 
+  // Calculate Heikin-Ashi
+  const calculateHeikinAshi = useCallback((data: HistoricalData[]) => {
+    const haData = [];
+    let prevHA = { open: data[0].open, close: data[0].close };
+    
+    for (let i = 0; i < data.length; i++) {
+      const haClose = (data[i].open + data[i].high + data[i].low + data[i].close) / 4;
+      const haOpen = i === 0 ? data[i].open : (prevHA.open + prevHA.close) / 2;
+      const haHigh = Math.max(data[i].high, haOpen, haClose);
+      const haLow = Math.min(data[i].low, haOpen, haClose);
+      
+      const time = data[i].date.includes('T') ? data[i].date.split('T')[0] : data[i].date;
+      
+      haData.push({
+        time: time as Time,
+        open: haOpen,
+        high: haHigh,
+        low: haLow,
+        close: haClose,
+      });
+      
+      prevHA = { open: haOpen, close: haClose };
+    }
+    return haData;
+  }, []);
+
   // Calculate ATR
   const calculateATR = useCallback((data: HistoricalData[], period: number) => {
     const atr = [];
@@ -317,19 +343,18 @@ export default function DetailedChartPage() {
   useEffect(() => {
     if (!mainChartRef.current || !indicatorChartRef.current || data.length === 0) return;
 
-    // Check if already initialized with same data
-    if (isInitialized.current) {
-      // Only update data if charts exist
-      try {
-        if (mainChartRefApi.current) {
-          mainChartRefApi.current.remove();
-        }
-        if (indicatorChartRefApi.current) {
-          indicatorChartRefApi.current.remove();
-        }
-      } catch (e) {
-        // Ignore disposal errors
+    // Always cleanup before creating new charts
+    try {
+      if (mainChartRefApi.current) {
+        mainChartRefApi.current.remove();
+        mainChartRefApi.current = null;
       }
+      if (indicatorChartRefApi.current) {
+        indicatorChartRefApi.current.remove();
+        indicatorChartRefApi.current = null;
+      }
+    } catch (e) {
+      // Ignore disposal errors
     }
 
     const bgColor = isDark ? '#1e293b' : '#ffffff';
@@ -367,7 +392,7 @@ export default function DetailedChartPage() {
     // Add main series based on chart type
     let mainSeries: ISeriesApi<any>;
     
-    if (chartType === 'candlestick') {
+    if (chartType === 'candlestick' || chartType === 'bar') {
       mainSeries = mainChart.addSeries(CandlestickSeries, {
         upColor: isDark ? '#0aff8d' : '#2563eb',
         downColor: isDark ? '#e02d75' : '#ef4444',
@@ -377,6 +402,22 @@ export default function DetailedChartPage() {
       });
       mainSeries.setData(data.map(item => ({
         time: formatTime(item.date),
+        open: convertPrice(item.open),
+        high: convertPrice(item.high),
+        low: convertPrice(item.low),
+        close: convertPrice(item.close),
+      })));
+    } else if (chartType === 'heikinashi') {
+      mainSeries = mainChart.addSeries(CandlestickSeries, {
+        upColor: isDark ? '#0aff8d' : '#10b981',
+        downColor: isDark ? '#e02d75' : '#ef4444',
+        borderVisible: false,
+        wickUpColor: isDark ? '#0aff8d' : '#10b981',
+        wickDownColor: isDark ? '#e02d75' : '#ef4444',
+      });
+      const haData = calculateHeikinAshi(data);
+      mainSeries.setData(haData.map(item => ({
+        time: item.time,
         open: convertPrice(item.open),
         high: convertPrice(item.high),
         low: convertPrice(item.low),
@@ -401,22 +442,6 @@ export default function DetailedChartPage() {
       mainSeries.setData(data.map(item => ({
         time: formatTime(item.date),
         value: convertPrice(item.close),
-      })));
-    } else {
-      // Bar chart
-      mainSeries = mainChart.addSeries(CandlestickSeries, {
-        upColor: isDark ? '#0aff8d' : '#2563eb',
-        downColor: isDark ? '#e02d75' : '#ef4444',
-        borderVisible: false,
-        wickUpColor: isDark ? '#0aff8d' : '#2563eb',
-        wickDownColor: isDark ? '#e02d75' : '#ef4444',
-      });
-      mainSeries.setData(data.map(item => ({
-        time: formatTime(item.date),
-        open: convertPrice(item.open),
-        high: convertPrice(item.high),
-        low: convertPrice(item.low),
-        close: convertPrice(item.close),
       })));
     }
 
@@ -566,7 +591,7 @@ export default function DetailedChartPage() {
     resizeObserverRef.current.observe(mainChartRef.current);
 
     isInitialized.current = true;
-  }, [data, chartType, indicators, showIndicators, isDark, convertPrice, formatTime, calculateSMA, calculateEMA, calculateRSI, calculateMACD, calculateBollinger]);
+  }, [data, chartType, indicators, showIndicators, isDark, convertPrice, formatTime, calculateSMA, calculateEMA, calculateRSI, calculateMACD, calculateBollinger, calculateATR, calculateHeikinAshi]);
 
   // Load data on mount and when settings change
   useEffect(() => {
@@ -587,6 +612,7 @@ export default function DetailedChartPage() {
     { value: 'line', label: 'Line', icon: LineChart },
     { value: 'area', label: 'Area', icon: AreaChart },
     { value: 'bar', label: 'Bar', icon: BarChart3 },
+    { value: 'heikinashi', label: 'Heikin-Ashi', icon: CandlestickChart },
   ] as const;
 
   // Timeframe options

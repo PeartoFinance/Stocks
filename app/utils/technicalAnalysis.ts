@@ -1,3 +1,5 @@
+import { getFromCache, setCache } from './cache';
+
 const API_BASE = (process.env.NEXT_PUBLIC_API_URL || '').replace(/\/$/, '');
 
 interface TechnicalAnalysisResponse {
@@ -23,10 +25,16 @@ interface TechnicalAnalysisResponse {
 }
 
 export async function getTechnicalAnalysis(symbol: string): Promise<TechnicalAnalysisResponse> {
-  const response = await fetch(`${API_BASE}/market/technical-analysis/${symbol}`, {
+  const endpoint = `/market/technical-analysis/${symbol}`;
+  const cached = getFromCache<TechnicalAnalysisResponse>(endpoint);
+  if (cached) return cached;
+
+  const response = await fetch(`${API_BASE}${endpoint}`, {
     headers: { 'Content-Type': 'application/json' },
   });
 
   if (!response.ok) throw new Error('Failed to fetch technical analysis');
-  return response.json();
+  const data = await response.json();
+  setCache(endpoint, data);
+  return data;
 }
