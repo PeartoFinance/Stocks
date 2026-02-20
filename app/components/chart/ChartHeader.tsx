@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { RefreshCw, Brain, Maximize2 } from 'lucide-react';
+import { RefreshCw, Brain, Maximize2, Radio } from 'lucide-react';
+import Link from 'next/link';
 
 interface ChartHeaderProps {
   symbol: string;
@@ -67,6 +68,14 @@ export default function ChartHeader({
           >
             <Maximize2 className="h-4 w-4" />
           </button>
+          <Link
+            href={`${process.env.NEXT_PUBLIC_MAIN_APP_URL || 'https://pearto.com'}/live?symbol=btc&type=crypto`}
+            className="hidden sm:flex px-3 py-1 bg-red-600 text-white text-xs font-medium rounded-lg hover:bg-red-700 transition-colors items-center gap-1"
+            title="Live Chart"
+          >
+            <Radio className="h-3 w-3" />
+            Live
+          </Link>
           <button
             className="hidden sm:flex px-3 py-1 bg-purple-600 text-white text-xs font-medium rounded-lg hover:bg-purple-700 transition-colors items-center gap-1"
             onClick={onCompare}
