@@ -12,7 +12,10 @@ import {
   Hash,
   Target,
   Globe,
-  ExternalLink
+  ExternalLink,
+  AreaChart,
+  LineChart,
+  CandlestickChart
 } from 'lucide-react';
 import StockChart from '../StockChart';
 import RiskAnalysisChart from './RiskAnalysisChart';
@@ -48,10 +51,12 @@ interface CryptoDetails {
 }
 
 interface HistoricalData {
-  time: string;
-  price: number;
+  date: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
   volume: number;
-  marketCap: number;
 }
 
 interface OverviewTabProps {
@@ -104,8 +109,9 @@ export default function OverviewTab({
 
   const periods = ['1D', '1W', '1M', '3M', '1Y', '5Y'];
   const chartTypes = [
-    { key: 'area', label: 'Area', icon: BarChart3 },
-    { key: 'line', label: 'Line', icon: TrendingUp },
+    { key: 'area', label: 'Area', icon: AreaChart },
+    { key: 'candlestick', label: 'Candle', icon: CandlestickChart },
+    { key: 'line', label: 'Line', icon: LineChart },
     { key: 'mountain', label: 'Mountain', icon: BarChart3 },
   ];
 
@@ -118,7 +124,7 @@ export default function OverviewTab({
         {/* Today's Stats */}
         <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-3 sm:p-4 transition-colors duration-300">
           <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3 transition-colors duration-300">Today's Stats</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-3">
             {[
               { label: "Open", val: crypto.open, icon: TrendingUp },
               { label: "High", val: crypto.dayHigh, icon: TrendingUp },
@@ -141,7 +147,7 @@ export default function OverviewTab({
         {/* Volume Stats */}
         <div className="bg-white  dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-3 sm:p-4 transition-colors duration-300">
           <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3 transition-colors duration-300">Volume & Supply</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-3">
             {[
               { label: "Volume 24h", val: formatVolume(crypto.volume) },
               { label: "Circulating Supply", val: crypto.circulatingSupply ? `${(crypto.circulatingSupply / 1e6).toFixed(1)}M` : "N/A" },
@@ -205,7 +211,7 @@ export default function OverviewTab({
             <div className="mb-4 p-3 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 transition-colors duration-300">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 transition-colors duration-300">Duration</span>
+                  <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 transition-colors duration-300">Duration</span>
                   <div className="flex bg-white dark:bg-slate-900 rounded-lg p-1 border border-slate-200 dark:border-slate-700 gap-1 overflow-x-auto transition-colors duration-300">
                     {periods.map((p) => (
                       <button
@@ -230,7 +236,7 @@ export default function OverviewTab({
               </div>
 
               <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 transition-colors duration-300">Type</span>
+                <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 transition-colors duration-300">Type</span>
                 <div className="flex bg-white dark:bg-slate-900 rounded-lg p-1 border border-slate-200 dark:border-slate-700 gap-1 transition-colors duration-300">
                   {chartTypes.map((type) => (
                     <button
@@ -257,14 +263,7 @@ export default function OverviewTab({
               ) : null}
               {historicalData.length > 0 ? (
                 <StockChart 
-                  data={historicalData.map(item => ({
-                    date: item.time,
-                    open: item.price,
-                    high: item.price,
-                    low: item.price,
-                    close: item.price,
-                    volume: item.volume
-                  }))} 
+                  data={historicalData} 
                   isPositive={isPositive} 
                   height={320} 
                   chartType={chartType} 
@@ -316,6 +315,26 @@ export default function OverviewTab({
             </div>
           </div>
 
+          {/* Chart Type Selector - Mobile */}
+          <div className="mb-3 overflow-x-auto">
+            <div className="flex gap-2 pb-2">
+              {chartTypes.map((type) => (
+                <button
+                  key={type.key}
+                  onClick={() => onChartTypeChange(type.key as any)}
+                  className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg whitespace-nowrap transition-all ${
+                    chartType === type.key 
+                      ? "bg-blue-600 text-white shadow-sm" 
+                      : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300"
+                  }`}
+                >
+                  <type.icon className="h-4 w-4" />
+                  <span>{type.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Chart */}
           <div className="h-64 relative">
             {chartLoading ? (
@@ -325,14 +344,7 @@ export default function OverviewTab({
             ) : null}
             {historicalData.length > 0 ? (
               <StockChart 
-                data={historicalData.map(item => ({
-                  date: item.time,
-                  open: item.price,
-                  high: item.price,
-                  low: item.price,
-                  close: item.price,
-                  volume: item.volume
-                }))} 
+                data={historicalData} 
                 isPositive={isPositive} 
                 height={256} 
                 chartType={chartType} 

@@ -1,4 +1,5 @@
 import { Stock, MarketIndex, HistoricalData, TechnicalIndicators, FundamentalData, StockRecommendation, ScreenerFilters, APIResponse, StockData } from '../types';
+import { getFromCache, setCache } from './cache';
 
 /**
  * Stock API Service
@@ -42,6 +43,9 @@ function buildUrl(endpoint: string): string {
 
 // Helper to make API requests (matching core app's fetchWithTimeout pattern)
 async function apiFetch<T>(endpoint: string, options?: RequestInit): Promise<T> {
+  const cached = getFromCache<T>(endpoint);
+  if (cached) return cached;
+
   const url = buildUrl(endpoint);
   console.log('[stockAPI] Fetching:', url);
 
@@ -60,7 +64,9 @@ async function apiFetch<T>(endpoint: string, options?: RequestInit): Promise<T> 
     throw new Error(`API Error: ${response.status}`);
   }
 
-  return response.json();
+  const data = await response.json();
+  setCache(endpoint, data);
+  return data;
 }
 
 // Transform server response to Stock type

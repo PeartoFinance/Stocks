@@ -246,12 +246,7 @@ export default function CryptoDetailPage() {
         return (
           <OverviewTab
             crypto={crypto}
-            historicalData={historicalData.map(item => ({
-              time: item.date,
-              price: item.close,
-              volume: item.volume,
-              marketCap: crypto.marketCap
-            }))}
+            historicalData={historicalData}
             chartPeriod={chartPeriod}
             chartType={chartType}
             onPeriodChange={handlePeriodChange}
@@ -267,12 +262,7 @@ export default function CryptoDetailPage() {
         return (
           <ChartTab
             crypto={crypto}
-            historicalData={historicalData.map(item => ({
-              time: item.date,
-              price: item.close,
-              volume: item.volume,
-              marketCap: crypto.marketCap
-            }))}
+            historicalData={historicalData}
             chartPeriod={chartPeriod}
             chartType={chartType}
             onPeriodChange={handlePeriodChange}

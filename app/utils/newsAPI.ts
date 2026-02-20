@@ -6,6 +6,7 @@
  */
 
 import { NewsItem, APIResponse } from '../types';
+import { getFromCache, setCache } from './cache';
 
 // Ensure no trailing slash on the base URL
 const API_BASE = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, '') || '';
@@ -30,6 +31,9 @@ function getBaseHeaders(): Record<string, string> {
 
 // Helper to make API requests with context
 async function newsFetch<T>(endpoint: string, options?: RequestInit): Promise<T> {
+  const cached = getFromCache<T>(endpoint);
+  if (cached) return cached;
+
   // Ensure endpoint starts with a slash
   const path = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
   const url = `${API_BASE}${path}`;
@@ -47,7 +51,9 @@ async function newsFetch<T>(endpoint: string, options?: RequestInit): Promise<T>
     throw new Error(`API Error: ${response.status}`);
   }
 
-  return response.json();
+  const data = await response.json();
+  setCache(endpoint, data);
+  return data;
 }
 
 export const newsAPI = {
