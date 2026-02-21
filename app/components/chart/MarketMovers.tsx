@@ -139,14 +139,14 @@ export default function MarketMovers({
   const MarketMoverItem = ({ stock, isGainer }: { stock: any; isGainer: boolean }) => (
     <div
       onClick={() => onSelectStock(stock)}
-      className="flex items-center gap-2 p-2 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer rounded-lg transition-colors border border-gray-100 dark:border-gray-700"
+      className="flex items-center gap-2 p-2 hover:bg-slate-50 dark:hover:bg-gray-700 cursor-pointer rounded-lg transition-colors border border-gray-100 dark:border-slate-700"
     >
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-1">
           <span className="font-medium text-xs text-gray-900 dark:text-gray-100 truncate">{stock.symbol}</span>
-          <Activity className="h-3 w-3 text-gray-400 dark:text-gray-500 flex-shrink-0" />
+          <Activity className="h-3 w-3 text-slate-400 dark:text-slate-500 flex-shrink-0" />
         </div>
-        <div className="text-xs text-gray-500 dark:text-gray-400 truncate">{stock.name}</div>
+        <div className="text-xs text-slate-500 dark:text-slate-400 truncate">{stock.name}</div>
       </div>
       
       <div className="w-12 h-6 flex-shrink-0">
@@ -176,11 +176,11 @@ export default function MarketMovers({
   );
 
   return (
-    <div className={`bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 p-4 ${className}`}>
+    <div className={`bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-gray-100 dark:border-slate-700 p-4 ${className}`}>
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Market Movers</h3>
+        <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100">Market Movers</h3>
         {marketLoading && (
-          <RefreshCw className="h-3 w-3 text-gray-400 animate-spin" />
+          <RefreshCw className="h-3 w-3 text-slate-400 animate-spin" />
         )}
       </div>
       
@@ -203,12 +203,12 @@ export default function MarketMovers({
                   <span className="font-medium text-xs text-gray-900 dark:text-gray-100 truncate">{stock.symbol}</span>
                   <Activity className="h-2.5 w-2.5 text-green-500 flex-shrink-0" />
                 </div>
-                <div className="text-xs text-gray-600 dark:text-gray-400 truncate mb-1">
+                <div className="text-xs text-gray-600 dark:text-slate-400 truncate mb-1">
                   {stock.name ? (stock.name.split(' ')[0].length > 6 ? stock.name.split(' ')[0].substring(0, 6) : stock.name.split(' ')[0]) : ''}
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-gray-900 dark:text-gray-100">{formatPrice(stock.price || 0)}</span>
-                  <span className="text-xs font-bold text-[#008016]">
+                  <span className="text-xs font-medium text-gray-900 dark:text-gray-100">{formatPrice(stock.price || 0)}</span>
+                  <span className="text-xs font-medium text-[#008016]">
                     +{(stock.changePercent || 0).toFixed(2)}%
                   </span>
                 </div>
@@ -234,12 +234,12 @@ export default function MarketMovers({
                   <span className="font-medium text-xs text-gray-900 dark:text-gray-100 truncate">{stock.symbol}</span>
                   <Activity className="h-2.5 w-2.5 text-red-500 flex-shrink-0" />
                 </div>
-                <div className="text-xs text-gray-600 dark:text-gray-400 truncate mb-1">
+                <div className="text-xs text-gray-600 dark:text-slate-400 truncate mb-1">
                   {stock.name ? (stock.name.split(' ')[0].length > 6 ? stock.name.split(' ')[0].substring(0, 6) : stock.name.split(' ')[0]) : ''}
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-gray-900 dark:text-gray-100">{formatPrice(stock.price || 0)}</span>
-                  <span className="text-xs font-bold text-[#d0021b]">
+                  <span className="text-xs font-medium text-gray-900 dark:text-gray-100">{formatPrice(stock.price || 0)}</span>
+                  <span className="text-xs font-medium text-[#d0021b]">
                     {(stock.changePercent || 0).toFixed(2)}%
                   </span>
                 </div>

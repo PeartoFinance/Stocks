@@ -33,26 +33,26 @@ export default function CompareView({ stocks, onRemove, onClose }: Props) {
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden">
+      <div className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-          <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-slate-700">
+          <h2 className="text-xl font-medium text-slate-900 dark:text-white">
             Compare Stocks ({stocks.length})
           </h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+            className="p-2 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
           >
-            <X className="h-5 w-5 text-slate-600 dark:text-gray-400" />
+            <X className="h-5 w-5 text-slate-600 dark:text-slate-400" />
           </button>
         </div>
 
         {/* Comparison Table */}
         <div className="overflow-auto max-h-[calc(90vh-80px)]">
           <table className="w-full">
-            <thead className="bg-gray-50 dark:bg-gray-700 sticky top-0">
+            <thead className="bg-slate-50 dark:bg-slate-700 sticky top-0">
               <tr>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-slate-900 dark:text-white">
+                <th className="px-4 py-3 text-left text-sm font-medium text-slate-900 dark:text-white">
                   Metric
                 </th>
                 {stocks.map((stock) => (
@@ -60,7 +60,7 @@ export default function CompareView({ stocks, onRemove, onClose }: Props) {
                     <div className="flex flex-col items-center gap-2">
                       <Link
                         href={`/stock/${stock.symbol}`}
-                        className="font-bold text-blue-600 dark:text-blue-400 hover:underline"
+                        className="font-medium text-blue-600 dark:text-blue-400 hover:underline"
                       >
                         {stock.symbol}
                       </Link>
@@ -77,7 +77,7 @@ export default function CompareView({ stocks, onRemove, onClose }: Props) {
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
               {metrics.map((metric) => (
-                <tr key={metric.label} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                <tr key={metric.label} className="hover:bg-slate-50 dark:hover:bg-gray-700/50">
                   <td className="px-4 py-3 text-sm font-medium text-slate-900 dark:text-white">
                     {metric.label}
                   </td>
@@ -93,8 +93,8 @@ export default function CompareView({ stocks, onRemove, onClose }: Props) {
                         className={`px-4 py-3 text-sm text-center ${
                           isChange
                             ? isPositive
-                              ? 'text-green-600 dark:text-green-400 font-semibold'
-                              : 'text-red-600 dark:text-red-400 font-semibold'
+                              ? 'text-green-600 dark:text-green-400 font-medium'
+                              : 'text-red-600 dark:text-red-400 font-medium'
                             : 'text-slate-900 dark:text-white'
                         }`}
                       >

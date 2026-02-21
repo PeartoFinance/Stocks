@@ -40,16 +40,16 @@ export default function QuickStats({ data, formatPrice, className = '' }: QuickS
   ];
 
   return (
-    <div className={`border-t border-gray-200 dark:border-gray-700 ${className}`}>
+    <div className={`border-t border-gray-200 dark:border-slate-700 ${className}`}>
       <div className="flex items-center gap-2 mb-3 px-4 pt-4">
         <Activity className="h-4 w-4 text-blue-600" />
-        <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Quick Stats</h4>
+        <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100">Quick Stats</h4>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 px-4 pb-4">
         {stats.map((stat, i) => (
-          <div key={i} className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-            <p className="text-xs text-gray-600 dark:text-gray-400 font-medium mb-1">{stat.label}</p>
-            <p className="text-sm font-bold text-gray-900 dark:text-gray-100">{stat.value}</p>
+          <div key={i} className="p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
+            <p className="text-xs text-gray-600 dark:text-slate-400 font-medium mb-1">{stat.label}</p>
+            <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{stat.value}</p>
           </div>
         ))}
       </div>

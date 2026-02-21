@@ -46,32 +46,32 @@ export default function MarketCarousel({ className = '' }: MarketCarouselProps) 
 
   if (loading) {
     return (
-      <div className={`bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-slate-200 dark:border-gray-700 p-6 ${className}`}>
+      <div className={`bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-6 ${className}`}>
         <div className="flex items-center justify-center h-32">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600"></div>
-          <span className="ml-3 text-slate-600 dark:text-gray-400 transition-colors duration-300">Loading market data...</span>
+          <span className="ml-3 text-slate-600 dark:text-slate-400 transition-colors duration-300">Loading market data...</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className={`bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-slate-200 dark:border-gray-700 p-6 ${className}`}>
+    <div className={`bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-6 ${className}`}>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center transition-colors duration-300">
+        <h2 className="text-xl font-medium text-slate-900 dark:text-white flex items-center transition-colors duration-300">
           <span className="w-2 h-6 bg-emerald-600 dark:bg-pearto-pink rounded-full mr-3 transition-colors duration-300"></span>
           Trending Markets
         </h2>
         <div className="flex gap-2">
           <button
             onClick={prevSlide}
-            className="p-2 text-gray-500 dark:text-gray-400 hover:text-emerald-600  hover:bg-emerald-50 rounded-lg transition-colors"
+            className="p-2 text-slate-500 dark:text-slate-400 hover:text-emerald-600  hover:bg-emerald-50 rounded-lg transition-colors"
           >
             <TrendingUp className="h-4 w-4 rotate-90" />
           </button>
           <button
             onClick={nextSlide}
-            className="p-2 text-gray-500 dark:text-gray-400 hover:text-emerald-600  hover:bg-emerald-50 rounded-lg transition-colors"
+            className="p-2 text-slate-500 dark:text-slate-400 hover:text-emerald-600  hover:bg-emerald-50 rounded-lg transition-colors"
           >
             <TrendingUp className="h-4 w-4 -rotate-90" />
           </button>
@@ -89,9 +89,9 @@ export default function MarketCarousel({ className = '' }: MarketCarouselProps) 
                 <div className="flex justify-between items-start mb-3">
                   <div>
                     <div className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">{item.symbol}</div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300">{item.name}</div>
+                    <div className="text-xs text-slate-500 dark:text-slate-400 transition-colors duration-300">{item.name}</div>
                   </div>
-                  <div className={`text-lg font-bold ${
+                  <div className={`text-lg font-medium ${
                     item.changePercent >= 0 ? 'text-emerald-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
                   }`}>
                     ${item.change >= 0 ? '+' : ''}{item.change.toFixed(2)}
@@ -100,7 +100,7 @@ export default function MarketCarousel({ className = '' }: MarketCarouselProps) 
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div className="flex items-center gap-1">
                     <BarChart3 className="h-4 w-4 text-gray-400" />
-                    <span className="text-slate-600 dark:text-gray-400 transition-colors duration-300">${item.price.toFixed(2)}</span>
+                    <span className="text-slate-600 dark:text-slate-400 transition-colors duration-300">${item.price.toFixed(2)}</span>
                   </div>
                   <div className="flex items-center gap-1">
                     {item.changePercent >= 0 ? (
@@ -117,7 +117,7 @@ export default function MarketCarousel({ className = '' }: MarketCarouselProps) 
                 </div>
                 {item.volume && (
                   <div className="mt-2 pt-2 border-t border-emerald-100">
-                    <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300">
+                    <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 transition-colors duration-300">
                       <Users className="h-3 w-3" />
                       <span>Vol: {item.volume}</span>
                     </div>

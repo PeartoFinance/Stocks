@@ -226,7 +226,7 @@ export default function HistoricalDataTable({ data, symbol, onDataUpdate, onLoad
         <div className="p-3 lg:p-5 border-b border-slate-200 dark:border-slate-700 transition-colors duration-300">
           <div className="flex flex-col gap-3 lg:gap-4">
             <div>
-              <h2 className="text-base lg:text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2 transition-colors duration-300">
+              <h2 className="text-base lg:text-lg font-medium text-slate-900 dark:text-white flex items-center gap-2 transition-colors duration-300">
                 <BarChart3 className="h-4 w-4 text-blue-600" />
                 Historical Data
                 {loading && <Activity className="h-4 w-4 text-blue-600 animate-spin" />}
@@ -309,31 +309,31 @@ export default function HistoricalDataTable({ data, symbol, onDataUpdate, onLoad
                 <th className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-left">
                   <button
                     onClick={toggleSort}
-                    className="flex items-center gap-1 text-[10px] lg:text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wide hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300"
+                    className="flex items-center gap-1 text-[10px] lg:text-xs font-medium text-slate-700 dark:text-slate-300 uppercase tracking-wide hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300"
                   >
                     Date
                     {sortOrder === 'desc' ? <ChevronDown className="h-3 w-3 lg:h-3.5 lg:w-3.5" /> : <ChevronUp className="h-3 w-3 lg:h-3.5 lg:w-3.5" />}
                   </button>
                 </th>
-                <th className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-left text-[10px] lg:text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wide hidden sm:table-cell transition-colors duration-300">
+                <th className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-left text-[10px] lg:text-xs font-medium text-slate-700 dark:text-slate-300 uppercase tracking-wide hidden sm:table-cell transition-colors duration-300">
                   Open
                 </th>
-                <th className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-left text-[10px] lg:text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wide hidden sm:table-cell transition-colors duration-300">
+                <th className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-left text-[10px] lg:text-xs font-medium text-slate-700 dark:text-slate-300 uppercase tracking-wide hidden sm:table-cell transition-colors duration-300">
                   High
                 </th>
-                <th className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-left text-[10px] lg:text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wide hidden sm:table-cell transition-colors duration-300">
+                <th className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-left text-[10px] lg:text-xs font-medium text-slate-700 dark:text-slate-300 uppercase tracking-wide hidden sm:table-cell transition-colors duration-300">
                   Low
                 </th>
-                <th className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-left text-[10px] lg:text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wide transition-colors duration-300">
+                <th className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-left text-[10px] lg:text-xs font-medium text-slate-700 dark:text-slate-300 uppercase tracking-wide transition-colors duration-300">
                   Close
                 </th>
-                <th className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-left text-[10px] lg:text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wide hidden lg:table-cell transition-colors duration-300">
+                <th className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-left text-[10px] lg:text-xs font-medium text-slate-700 dark:text-slate-300 uppercase tracking-wide hidden lg:table-cell transition-colors duration-300">
                   Adj. Close
                 </th>
-                <th className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-left text-[10px] lg:text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wide transition-colors duration-300">
+                <th className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-left text-[10px] lg:text-xs font-medium text-slate-700 dark:text-slate-300 uppercase tracking-wide transition-colors duration-300">
                   Change
                 </th>
-                <th className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-left text-[10px] lg:text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wide hidden md:table-cell transition-colors duration-300">
+                <th className="px-2 lg:px-4 lg:px-5 py-2 lg:py-3 text-left text-[10px] lg:text-xs font-medium text-slate-700 dark:text-slate-300 uppercase tracking-wide hidden md:table-cell transition-colors duration-300">
                   Volume
                 </th>
               </tr>
@@ -386,7 +386,7 @@ export default function HistoricalDataTable({ data, symbol, onDataUpdate, onLoad
 
           {filteredData.length === 0 && (
             <div className="text-center py-6 lg:py-10">
-              <BarChart3 className="h-8 w-8 lg:h-10 lg:w-10 text-slate-300 dark:text-slate-600 dark:text-gray-400 mx-auto mb-3 lg:mb-4 transition-colors duration-300" />
+              <BarChart3 className="h-8 w-8 lg:h-10 lg:w-10 text-slate-300 dark:text-slate-600 dark:text-slate-400 mx-auto mb-3 lg:mb-4 transition-colors duration-300" />
               <p className="text-xs lg:text-sm text-slate-500 dark:text-slate-400 transition-colors duration-300">No historical data available</p>
             </div>
           )}

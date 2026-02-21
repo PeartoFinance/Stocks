@@ -56,7 +56,7 @@ export default function SettingsPage() {
 
     if (authLoading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-gray-900">
+            <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900/95">
                 <Loader2 className="h-8 w-8 animate-spin text-green-500" />
             </div>
         );
@@ -100,7 +100,7 @@ export default function SettingsPage() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-gray-900 py-8">
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-900/95 py-8">
             <div className="container mx-auto px-4 max-w-4xl">
                 {/* Header */}
                 <div className="flex items-center gap-4 mb-8">

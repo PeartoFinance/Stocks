@@ -30,13 +30,13 @@ export default function StockHeader({
     <div className="mb-6">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-pearto-luna transition-colors duration-300">{stock.name} ({stock.symbol})</h1>
-          <p className="text-gray-600 dark:text-pearto-cloud transition-colors duration-300">NASDAQ: {stock.symbol} · Real-Time Price · <span className="font-semibold">{currency}</span></p>
+          <h1 className="text-3xl font-medium text-gray-900 dark:text-pearto-luna transition-colors duration-300">{stock.name} ({stock.symbol})</h1>
+          <p className="text-gray-600 dark:text-pearto-cloud transition-colors duration-300">NASDAQ: {stock.symbol} · Real-Time Price · <span className="font-medium">{currency}</span></p>
         </div>
         <div className="flex items-center gap-3">
           <button
             onClick={toggleWatchlist}
-            className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-300 ${isWatchlisted ? "bg-blue-600 dark:bg-pearto-blue text-white" : "bg-white dark:bg-pearto-card border border-gray-300 dark:border-pearto-border text-gray-700 dark:text-pearto-cloud hover:bg-gray-50 dark:hover:bg-pearto-surface"
+            className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-300 ${isWatchlisted ? "bg-blue-600 dark:bg-pearto-blue text-white" : "bg-white dark:bg-pearto-card border border-gray-300 dark:border-pearto-border text-gray-700 dark:text-pearto-cloud hover:bg-slate-50 dark:hover:bg-pearto-surface"
               }`}
           >
             <Plus className="h-4 w-4" />
@@ -54,7 +54,7 @@ export default function StockHeader({
 
       <div className="flex items-center gap-6 mb-6">
         <div className="flex items-center gap-4">
-          <PriceDisplay amount={stock.price} className="text-4xl font-bold text-gray-900 dark:text-pearto-luna transition-colors duration-300" />
+          <PriceDisplay amount={stock.price} className="text-4xl font-medium text-gray-900 dark:text-pearto-luna transition-colors duration-300" />
           <div className={`flex items-center gap-1 ${isPositive ? "text-green-600 dark:text-pearto-green" : "text-red-600 dark:text-pearto-pink"} transition-colors duration-300`}>
             {isPositive ? <TrendingUp className="h-5 w-5" /> : <TrendingDown className="h-5 w-5" />}
             <span className="font-medium flex items-center gap-1">
@@ -74,7 +74,7 @@ export default function StockHeader({
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap transition-all duration-300 ${activeTab === tab ? "border-blue-500 dark:border-pearto-green text-blue-600 dark:text-pearto-green" : "border-transparent text-gray-500 dark:text-pearto-gray hover:text-gray-700 dark:hover:text-pearto-cloud hover:border-gray-300 dark:hover:border-pearto-border"
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap transition-all duration-300 ${activeTab === tab ? "border-blue-500 dark:border-pearto-green text-blue-600 dark:text-pearto-green" : "border-transparent text-slate-500 dark:text-pearto-gray hover:text-gray-700 dark:hover:text-pearto-cloud hover:border-gray-300 dark:hover:border-pearto-border"
                 }`}
             >
               {tab}

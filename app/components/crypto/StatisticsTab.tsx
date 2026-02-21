@@ -119,7 +119,7 @@ export default function StatisticsTab({ crypto }: StatisticsTabProps) {
           <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
             <DollarSign className="h-4 w-4 text-emerald-600 dark:text-pearto-green transition-colors duration-300" />
           </div>
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white transition-colors duration-300">Price Statistics</h3>
+          <h3 className="text-lg font-medium text-slate-900 dark:text-white transition-colors duration-300">Price Statistics</h3>
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -136,7 +136,7 @@ export default function StatisticsTab({ crypto }: StatisticsTabProps) {
                 <item.icon className={`h-4 w-4 text-${item.color}-600 dark:text-${item.color}-400`} />
                 <span className={`text-sm font-medium text-${item.color}-700 dark:text-slate-300`}>{item.label}</span>
               </div>
-              <p className={`text-lg font-bold text-${item.color}-900 dark:text-white`}>{item.value}</p>
+              <p className={`text-lg font-medium text-${item.color}-900 dark:text-white`}>{item.value}</p>
             </div>
           ))}
         </div>
@@ -148,7 +148,7 @@ export default function StatisticsTab({ crypto }: StatisticsTabProps) {
           <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
             <PieChart className="h-4 w-4 text-blue-600" />
           </div>
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white transition-colors duration-300">Market Statistics</h3>
+          <h3 className="text-lg font-medium text-slate-900 dark:text-white transition-colors duration-300">Market Statistics</h3>
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -165,7 +165,7 @@ export default function StatisticsTab({ crypto }: StatisticsTabProps) {
                 <item.icon className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                 <span className="text-sm font-medium text-blue-700 dark:text-blue-300">{item.label}</span>
               </div>
-              <p className="text-lg font-bold text-blue-900 dark:text-white">{item.value}</p>
+              <p className="text-lg font-medium text-blue-900 dark:text-white">{item.value}</p>
             </div>
           ))}
         </div>
@@ -177,7 +177,7 @@ export default function StatisticsTab({ crypto }: StatisticsTabProps) {
           <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
             <Hash className="h-4 w-4 text-purple-600" />
           </div>
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white transition-colors duration-300">Supply Statistics</h3>
+          <h3 className="text-lg font-medium text-slate-900 dark:text-white transition-colors duration-300">Supply Statistics</h3>
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -194,7 +194,7 @@ export default function StatisticsTab({ crypto }: StatisticsTabProps) {
                 <item.icon className="h-4 w-4 text-purple-600 dark:text-purple-400" />
                 <span className="text-sm font-medium text-purple-700 dark:text-purple-300">{item.label}</span>
               </div>
-              <p className="text-lg font-bold text-purple-900 dark:text-white">{item.value}</p>
+              <p className="text-lg font-medium text-purple-900 dark:text-white">{item.value}</p>
             </div>
           ))}
         </div>
@@ -206,7 +206,7 @@ export default function StatisticsTab({ crypto }: StatisticsTabProps) {
           <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
             <Zap className="h-4 w-4 text-orange-600" />
           </div>
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white transition-colors duration-300">Additional Metrics</h3>
+          <h3 className="text-lg font-medium text-slate-900 dark:text-white transition-colors duration-300">Additional Metrics</h3>
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -223,7 +223,7 @@ export default function StatisticsTab({ crypto }: StatisticsTabProps) {
                 <item.icon className="h-4 w-4 text-orange-600 dark:text-orange-400" />
                 <span className="text-sm font-medium text-orange-700 dark:text-orange-300">{item.label}</span>
               </div>
-              <p className="text-lg font-bold text-orange-900 dark:text-white">{item.value}</p>
+              <p className="text-lg font-medium text-orange-900 dark:text-white">{item.value}</p>
             </div>
           ))}
         </div>

@@ -134,7 +134,7 @@ export default function WatchlistPage() {
   // Not logged in view
   if (!authLoading && !isAuthenticated) {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-gray-900 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900/95 flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-2xl border border-slate-200 dark:border-gray-700 p-8 text-center">
           <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
             <Star className="h-8 w-8 text-green-600 dark:text-green-400" />
@@ -159,14 +159,14 @@ export default function WatchlistPage() {
 
   if (loading || authLoading) {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900/95 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-2 border-green-500 border-t-transparent" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-900 py-8">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900/95 py-8">
       <div className="container mx-auto px-4 max-w-7xl">
         {/* Header */}
         <div className="mb-8">

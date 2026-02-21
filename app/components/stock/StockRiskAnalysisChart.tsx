@@ -131,7 +131,7 @@ export default function StockRiskAnalysisChart({ className = '', stock }: StockR
       'High': 'text-red-600 dark:text-red-400',
       'Very High': 'text-purple-600 dark:text-purple-400'
     };
-    return colors[level as keyof typeof colors] || 'text-slate-600 dark:text-gray-400';
+    return colors[level as keyof typeof colors] || 'text-slate-600 dark:text-slate-400';
   };
 
   const options = {
@@ -177,8 +177,8 @@ export default function StockRiskAnalysisChart({ className = '', stock }: StockR
     <div className={`bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-3 ${className}`}>
       <div className="mb-2 flex items-center justify-between">
         <div>
-          <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-1 transition-colors duration-300">Risk Analysis</h3>
-          <p className="text-xs text-gray-600 dark:text-gray-400 transition-colors duration-300">
+          <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-1 transition-colors duration-300">Risk Analysis</h3>
+          <p className="text-xs text-gray-600 dark:text-slate-400 transition-colors duration-300">
             {loading ? 'Loading...' : technicalData ? 'Technical + Fundamental' : 'Based on metrics'}
           </p>
         </div>
@@ -197,7 +197,7 @@ export default function StockRiskAnalysisChart({ className = '', stock }: StockR
       
       {/* Risk Level Text Below Chart */}
       <div className="text-center mb-3">
-        <div className={`text-lg font-bold ${getRiskColor(overallRisk)}`}>
+        <div className={`text-lg font-medium ${getRiskColor(overallRisk)}`}>
           {overallRisk} Risk
         </div>
       </div>
@@ -206,8 +206,8 @@ export default function StockRiskAnalysisChart({ className = '', stock }: StockR
       <div className="space-y-1.5 pt-2 border-t border-slate-200 dark:border-slate-700 transition-colors duration-300">
         {technicalData && (
           <div className="flex items-center justify-between text-xs">
-            <span className="text-gray-600 dark:text-gray-400 transition-colors duration-300">Technical Score</span>
-            <span className={`font-semibold ${
+            <span className="text-gray-600 dark:text-slate-400 transition-colors duration-300">Technical Score</span>
+            <span className={`font-medium ${
               technicalData.summary.score >= 5 ? 'text-green-600 dark:text-green-400' :
               technicalData.summary.score >= 0 ? 'text-yellow-600 dark:text-yellow-400' :
               technicalData.summary.score >= -5 ? 'text-red-600 dark:text-red-400' : 'text-purple-600 dark:text-purple-400'
@@ -218,8 +218,8 @@ export default function StockRiskAnalysisChart({ className = '', stock }: StockR
         )}
         
         <div className="flex items-center justify-between text-xs">
-          <span className="text-gray-600 dark:text-gray-400 transition-colors duration-300">Volatility</span>
-          <span className={`font-semibold ${
+          <span className="text-gray-600 dark:text-slate-400 transition-colors duration-300">Volatility</span>
+          <span className={`font-medium ${
             Math.abs(stock.changePercent || 0) < 2 ? 'text-green-600 dark:text-green-400' :
             Math.abs(stock.changePercent || 0) < 5 ? 'text-yellow-600 dark:text-yellow-400' :
             Math.abs(stock.changePercent || 0) < 10 ? 'text-red-600 dark:text-red-400' : 'text-purple-600 dark:text-purple-400'
@@ -229,8 +229,8 @@ export default function StockRiskAnalysisChart({ className = '', stock }: StockR
         </div>
         
         <div className="flex items-center justify-between text-xs">
-          <span className="text-gray-600 dark:text-gray-400 transition-colors duration-300">P/E Ratio</span>
-          <span className={`font-semibold ${
+          <span className="text-gray-600 dark:text-slate-400 transition-colors duration-300">P/E Ratio</span>
+          <span className={`font-medium ${
             (stock.peRatio || 0) > 0 && (stock.peRatio || 0) < 20 ? 'text-green-600 dark:text-green-400' :
             (stock.peRatio || 0) >= 20 && (stock.peRatio || 0) < 30 ? 'text-yellow-600 dark:text-yellow-400' :
             (stock.peRatio || 0) >= 30 && (stock.peRatio || 0) < 50 ? 'text-red-600 dark:text-red-400' : 'text-purple-600 dark:text-purple-400'

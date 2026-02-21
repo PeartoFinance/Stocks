@@ -34,8 +34,8 @@ export default function RiskAnalysisChart({ symbol, className = '' }: RiskAnalys
 
   if (loading) {
     return (
-      <div className={`bg-white dark:bg-gray-800 rounded-2xl border border-slate-200 dark:border-gray-700 p-6 flex items-center justify-center min-h-[300px] shadow-lg ${className}`}>
-        <Loader2 className="h-8 w-8 animate-spin text-green-500" />
+      <div className={`bg-white dark:bg-gray-800 rounded-2xl border border-slate-200 dark:border-gray-700 p-4 md:p-6 flex items-center justify-center min-h-[200px] md:min-h-[300px] shadow-lg ${className}`}>
+        <Loader2 className="h-6 w-6 md:h-8 md:w-8 animate-spin text-green-500" />
       </div>
     );
   }
@@ -78,39 +78,39 @@ export default function RiskAnalysisChart({ symbol, className = '' }: RiskAnalys
   };
 
   return (
-    <div className={`bg-white dark:bg-gray-800 rounded-2xl border border-slate-200 dark:border-gray-700 p-6 shadow-lg ${className}`}>
-      <div className="flex items-center gap-3 mb-6">
-        <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
-          <PieChart className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+    <div className={`bg-white dark:bg-gray-800 rounded-2xl border border-slate-200 dark:border-gray-700 p-4 md:p-6 shadow-lg ${className}`}>
+      <div className="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
+        <div className="p-1.5 md:p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
+          <PieChart className="h-4 w-4 md:h-5 md:w-5 text-purple-600 dark:text-purple-400" />
         </div>
-        <h3 className="text-lg font-bold text-slate-900 dark:text-white">Signal Distribution</h3>
+        <h3 className="text-base md:text-lg font-bold text-slate-900 dark:text-white">Signal Distribution</h3>
       </div>
       
-      <div className="h-40 relative mb-6">
+      <div className="h-32 md:h-40 relative mb-4 md:mb-6">
         <Doughnut data={chartData} options={options} />
       </div>
       
-      <div className="text-center mb-6">
-        <div className="text-2xl font-bold text-slate-900 dark:text-white mb-1">
+      <div className="text-center mb-4 md:mb-6">
+        <div className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-1">
           {summary.signal}
         </div>
-        <div className="text-sm text-slate-500 dark:text-gray-400">
+        <div className="text-xs md:text-sm text-slate-500 dark:text-gray-400">
           Score: {summary.score.toFixed(1)}
         </div>
       </div>
       
-      <div className="space-y-3 pt-4 border-t border-slate-200 dark:border-gray-700">
+      <div className="space-y-2 md:space-y-3 pt-3 md:pt-4 border-t border-slate-200 dark:border-gray-700">
         <div className="flex items-center justify-between">
-          <span className="text-sm text-slate-600 dark:text-gray-400">Buy</span>
-          <span className="font-bold text-green-600 dark:text-green-400">{totalBuy}</span>
+          <span className="text-xs md:text-sm text-slate-600 dark:text-gray-400">Buy</span>
+          <span className="font-bold text-sm md:text-base text-green-600 dark:text-green-400">{totalBuy}</span>
         </div>
         <div className="flex items-center justify-between">
-          <span className="text-sm text-slate-600 dark:text-gray-400">Neutral</span>
-          <span className="font-bold text-yellow-600 dark:text-yellow-400">{totalNeutral}</span>
+          <span className="text-xs md:text-sm text-slate-600 dark:text-gray-400">Neutral</span>
+          <span className="font-bold text-sm md:text-base text-yellow-600 dark:text-yellow-400">{totalNeutral}</span>
         </div>
         <div className="flex items-center justify-between">
-          <span className="text-sm text-slate-600 dark:text-gray-400">Sell</span>
-          <span className="font-bold text-red-600 dark:text-red-400">{totalSell}</span>
+          <span className="text-xs md:text-sm text-slate-600 dark:text-gray-400">Sell</span>
+          <span className="font-bold text-sm md:text-base text-red-600 dark:text-red-400">{totalSell}</span>
         </div>
       </div>
     </div>

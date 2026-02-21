@@ -107,7 +107,7 @@ export default function CryptoNewsTab({ symbol, slug }: CryptoNewsTabProps) {
     return (
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+          <h3 className="text-lg font-medium text-slate-900 dark:text-white">
             {symbol} News
           </h3>
         </div>
@@ -131,7 +131,7 @@ export default function CryptoNewsTab({ symbol, slug }: CryptoNewsTabProps) {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+          <h3 className="text-lg font-medium text-slate-900 dark:text-white">
             {symbol} News & Updates
           </h3>
           <p className="text-sm text-slate-500 dark:text-slate-400">
@@ -194,7 +194,7 @@ export default function CryptoNewsTab({ symbol, slug }: CryptoNewsTabProps) {
                   <div className="flex-1 min-w-0">
                     {/* Title and Source */}
                     <div className="flex items-start justify-between gap-3 mb-2">
-                      <h4 className="text-base font-semibold text-slate-900 dark:text-white line-clamp-2 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                      <h4 className="text-base font-medium text-slate-900 dark:text-white line-clamp-2 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
                         {article.title}
                       </h4>
                       <ExternalLink className="h-4 w-4 text-slate-400 flex-shrink-0 mt-1" />

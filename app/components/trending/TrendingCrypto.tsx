@@ -310,7 +310,7 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
       case 'volume': return 'bg-blue-100 text-blue-700';
       case 'breakout': return 'bg-purple-100 text-purple-700';
       case 'momentum': return 'bg-pink-100 text-pink-700';
-      default: return 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300';
+      default: return 'bg-slate-100 dark:bg-slate-800 text-gray-700 dark:text-slate-300';
     }
   };
 
@@ -321,8 +321,8 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
           <div className="flex items-center justify-center h-96">
             <div className="text-center">
               <Activity className="h-12 w-12 text-orange-600 animate-spin mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white transition-colors duration-300">Loading Trending Cryptocurrencies</h2>
-              <p className="text-gray-600 dark:text-gray-400 transition-colors duration-300">Please wait while we fetch the latest crypto trending data...</p>
+              <h2 className="text-xl font-medium text-gray-900 dark:text-white transition-colors duration-300">Loading Trending Cryptocurrencies</h2>
+              <p className="text-gray-600 dark:text-slate-400 transition-colors duration-300">Please wait while we fetch the latest crypto trending data...</p>
             </div>
           </div>
         </main>
@@ -344,7 +344,7 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
               className="mb-6 lg:mb-8 mt-4 lg:mt-6"
             >
               <div className="flex items-center justify-between mb-3">
-                <h1 className="text-xl lg:text-2xl font-bold bg-gradient-to-r from-orange-600 to-pink-600 bg-clip-text text-transparent">
+                <h1 className="text-xl lg:text-2xl font-medium bg-gradient-to-r from-orange-600 to-pink-600 bg-clip-text text-transparent">
                   Trending Cryptocurrencies
                 </h1>
                 <button
@@ -355,7 +355,7 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
                   AI Analysis
                 </button>
               </div>
-              <p className="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300">
+              <p className="text-sm text-gray-600 dark:text-slate-400 transition-colors duration-300">
                 Discover the most talked about and actively traded cryptocurrencies
               </p>
             </motion.div>
@@ -367,12 +367,12 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
               transition={{ duration: 0.6, delay: 0.1 }}
               className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-4"
             >
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-3 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
+              <div className="bg-white dark:bg-slate-800 rounded-lg p-3 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
                 <div className="flex items-center justify-between mb-2">
                   <Flame className="h-5 w-5 text-orange-600" />
-                  <span className="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300">Most Mentioned</span>
+                  <span className="text-xs text-slate-500 dark:text-slate-400 transition-colors duration-300">Most Mentioned</span>
                 </div>
-                <p className="text-sm font-bold text-slate-900 dark:text-white truncate transition-colors duration-300">
+                <p className="text-sm font-medium text-slate-900 dark:text-white truncate transition-colors duration-300">
                   {filteredCryptos.length > 0 ? filteredCryptos.reduce((max, crypto) =>
                     crypto.socialMentions > (max?.socialMentions || 0) ? crypto : max, filteredCryptos[0])?.symbol || 'N/A' : 'N/A'}
                 </p>
@@ -384,12 +384,12 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
                 </p>
               </div>
 
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-3 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
+              <div className="bg-white dark:bg-slate-800 rounded-lg p-3 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
                 <div className="flex items-center justify-between mb-2">
                   <TrendingUp className="h-5 w-5 text-green-600 dark:text-pearto-green transition-colors duration-300" />
-                  <span className="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300">Top Gainer</span>
+                  <span className="text-xs text-slate-500 dark:text-slate-400 transition-colors duration-300">Top Gainer</span>
                 </div>
-                <p className="text-sm font-bold text-slate-900 dark:text-white truncate transition-colors duration-300">
+                <p className="text-sm font-medium text-slate-900 dark:text-white truncate transition-colors duration-300">
                   {filteredCryptos.length > 0 ?
                     filteredCryptos.filter(c => c.changePercent > 0).sort((a, b) => b.changePercent - a.changePercent)[0]?.symbol || 'N/A' :
                     'No gainers'}
@@ -401,12 +401,12 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
                 </p>
               </div>
 
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-3 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
+              <div className="bg-white dark:bg-slate-800 rounded-lg p-3 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
                 <div className="flex items-center justify-between mb-2">
                   <Eye className="h-5 w-5 text-blue-600" />
-                  <span className="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300">Highest Volume</span>
+                  <span className="text-xs text-slate-500 dark:text-slate-400 transition-colors duration-300">Highest Volume</span>
                 </div>
-                <p className="text-sm font-bold text-slate-900 dark:text-white truncate transition-colors duration-300">
+                <p className="text-sm font-medium text-slate-900 dark:text-white truncate transition-colors duration-300">
                   {filteredCryptos.length > 0 ?
                     filteredCryptos.sort((a, b) => b.volume - a.volume)[0]?.symbol || 'N/A' :
                     'No data'}
@@ -418,12 +418,12 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
                 </p>
               </div>
 
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-3 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
+              <div className="bg-white dark:bg-slate-800 rounded-lg p-3 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
                 <div className="flex items-center justify-between mb-2">
                   <Zap className="h-5 w-5 text-purple-600" />
-                  <span className="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300">Breakout Score</span>
+                  <span className="text-xs text-slate-500 dark:text-slate-400 transition-colors duration-300">Breakout Score</span>
                 </div>
-                <p className="text-sm font-bold text-slate-900 dark:text-white truncate transition-colors duration-300">
+                <p className="text-sm font-medium text-slate-900 dark:text-white truncate transition-colors duration-300">
                   {filteredCryptos.length > 0 ?
                     filteredCryptos.sort((a, b) => b.trendScore - a.trendScore)[0]?.symbol || 'N/A' :
                     'No data'}
@@ -444,8 +444,8 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
               className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4"
             >
               {/* Trend Type Distribution */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
-                <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-3 transition-colors duration-300">Trend Distribution</h3>
+              <div className="bg-white dark:bg-slate-800 rounded-lg p-4 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
+                <h3 className="text-sm font-medium text-slate-900 dark:text-white mb-3 transition-colors duration-300">Trend Distribution</h3>
                 <div className="h-56">
                   <Pie
                     data={getTrendTypeDistribution()}
@@ -483,8 +483,8 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
               </div>
 
               {/* Category Distribution */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
-                <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-3 transition-colors duration-300">Category Distribution</h3>
+              <div className="bg-white dark:bg-slate-800 rounded-lg p-4 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
+                <h3 className="text-sm font-medium text-slate-900 dark:text-white mb-3 transition-colors duration-300">Category Distribution</h3>
                 <div className="h-56">
                   <Doughnut
                     data={getSectorDistribution()}
@@ -522,8 +522,8 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
               </div>
 
               {/* Performance Distribution */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
-                <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-3 transition-colors duration-300">Performance Overview</h3>
+              <div className="bg-white dark:bg-slate-800 rounded-lg p-4 shadow-sm border border-gray-100 dark:border-pearto-border-subtle transition-colors duration-300">
+                <h3 className="text-sm font-medium text-slate-900 dark:text-white mb-3 transition-colors duration-300">Performance Overview</h3>
                 <div className="h-56">
                   <Pie
                     data={getPerformanceDistribution()}
@@ -566,7 +566,7 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="bg-white dark:bg-gray-800 rounded-lg p-2 sm:p-4 shadow-sm border border-gray-100 dark:border-pearto-border-subtle mb-4 transition-colors duration-300"
+              className="bg-white dark:bg-slate-800 rounded-lg p-2 sm:p-4 shadow-sm border border-gray-100 dark:border-pearto-border-subtle mb-4 transition-colors duration-300"
             >
               {/* Mobile Layout */}
               <div className="flex flex-col gap-2 sm:hidden">
@@ -579,7 +579,7 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
                         onClick={() => setActiveFilter(filter.key)}
                         className={`flex items-center space-x-1 px-2 py-1 rounded-md text-[10px] font-medium transition-all ${activeFilter === filter.key
                           ? 'bg-orange-600 text-white'
-                          : 'bg-gray-100 dark:bg-gray-700 text-slate-600 dark:text-gray-400 hover:bg-gray-200'
+                          : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400 hover:bg-gray-200'
                           }`}
                       >
                         <Icon className="h-3 w-3" />
@@ -591,7 +591,7 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value as any)}
-                    className="px-2 py-1 text-[10px] border border-slate-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 dark:focus:ring-pearto-pink bg-white dark:bg-gray-700 text-slate-900 dark:text-white transition-colors duration-300"
+                    className="px-2 py-1 text-[10px] border border-slate-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 dark:focus:ring-pearto-pink bg-white dark:bg-slate-700 text-slate-900 dark:text-white transition-colors duration-300"
                   >
                     <option value="trendScore">Score</option>
                     <option value="changePercent">Change</option>
@@ -599,13 +599,13 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
                     <option value="marketCap">MCap</option>
                   </select>
                   <div className="relative flex-1">
-                    <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-3 w-3 text-gray-400 dark:text-pearto-gray" />
+                    <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-3 w-3 text-slate-400 dark:text-pearto-gray" />
                     <input
                       type="text"
                       placeholder="Search..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full pl-7 pr-2 py-1 text-[10px] border border-slate-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 dark:focus:ring-pearto-pink bg-white dark:bg-gray-700 text-slate-900 dark:text-white placeholder-gray-400 dark:placeholder-pearto-gray transition-colors duration-300"
+                      className="w-full pl-7 pr-2 py-1 text-[10px] border border-slate-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 dark:focus:ring-pearto-pink bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-gray-400 dark:placeholder-pearto-gray transition-colors duration-300"
                     />
                   </div>
                 </div>
@@ -622,7 +622,7 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
                         onClick={() => setActiveFilter(filter.key)}
                         className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${activeFilter === filter.key
                           ? 'bg-orange-600 text-white shadow-md'
-                          : 'bg-gray-100 dark:bg-gray-700 text-slate-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
+                          : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400 hover:bg-gray-200 dark:hover:bg-gray-600'
                           }`}
                       >
                         <Icon className="h-4 w-4" />
@@ -635,7 +635,7 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value as any)}
-                    className="px-4 py-2 text-sm border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-pearto-pink bg-white dark:bg-gray-700 text-slate-900 dark:text-white transition-colors duration-300"
+                    className="px-4 py-2 text-sm border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-pearto-pink bg-white dark:bg-slate-700 text-slate-900 dark:text-white transition-colors duration-300"
                   >
                     <option value="trendScore">Trend Score</option>
                     <option value="changePercent">Change %</option>
@@ -643,13 +643,13 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
                     <option value="marketCap">Market Cap</option>
                   </select>
                   <div className="relative w-64">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-pearto-gray" />
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-pearto-gray" />
                     <input
                       type="text"
                       placeholder="Search cryptocurrencies..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2 text-sm border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-pearto-pink bg-white dark:bg-gray-700 text-slate-900 dark:text-white placeholder-gray-400 dark:placeholder-pearto-gray transition-colors duration-300"
+                      className="w-full pl-10 pr-4 py-2 text-sm border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-pearto-pink bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-gray-400 dark:placeholder-pearto-gray transition-colors duration-300"
                     />
                   </div>
                 </div>
@@ -661,21 +661,21 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-slate-200 dark:border-gray-700 overflow-hidden transition-all duration-300"
+              className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden transition-all duration-300"
             >
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[700px]">
                   <thead className="bg-gradient-to-r from-orange-50 via-amber-50 to-yellow-50 dark:from-gray-800 dark:via-gray-800 dark:to-gray-700 border-b-2 border-orange-200 dark:border-gray-600">
                     <tr>
-                      <th className="px-3 sm:px-6 py-4 text-left text-xs font-bold text-orange-700 dark:text-orange-400 uppercase tracking-wider">Crypto</th>
-                      <th className="px-3 sm:px-6 py-4 text-right text-xs font-bold text-orange-700 dark:text-orange-400 uppercase tracking-wider">Price</th>
-                      <th className="px-3 sm:px-6 py-4 text-right text-xs font-bold text-orange-700 dark:text-orange-400 uppercase tracking-wider">Change</th>
-                      <th className="px-3 sm:px-6 py-4 text-right text-xs font-bold text-orange-700 dark:text-orange-400 uppercase tracking-wider">Volume</th>
-                      <th className="px-3 sm:px-6 py-4 text-right text-xs font-bold text-orange-700 dark:text-orange-400 uppercase tracking-wider">Mkt Cap</th>
-                      <th className="px-3 sm:px-6 py-4 text-center text-xs font-bold text-orange-700 dark:text-orange-400 uppercase tracking-wider">Score</th>
+                      <th className="px-3 sm:px-6 py-4 text-left text-xs font-medium text-orange-700 dark:text-orange-400 uppercase tracking-wider">Crypto</th>
+                      <th className="px-3 sm:px-6 py-4 text-right text-xs font-medium text-orange-700 dark:text-orange-400 uppercase tracking-wider">Price</th>
+                      <th className="px-3 sm:px-6 py-4 text-right text-xs font-medium text-orange-700 dark:text-orange-400 uppercase tracking-wider">Change</th>
+                      <th className="px-3 sm:px-6 py-4 text-right text-xs font-medium text-orange-700 dark:text-orange-400 uppercase tracking-wider">Volume</th>
+                      <th className="px-3 sm:px-6 py-4 text-right text-xs font-medium text-orange-700 dark:text-orange-400 uppercase tracking-wider">Mkt Cap</th>
+                      <th className="px-3 sm:px-6 py-4 text-center text-xs font-medium text-orange-700 dark:text-orange-400 uppercase tracking-wider">Score</th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                  <tbody className="bg-white dark:bg-slate-800 divide-y divide-gray-200 dark:divide-gray-700">
                     {filteredCryptos.map((crypto, index) => {
                       const TrendIcon = getTrendIcon(crypto.trendType);
                       return (
@@ -691,20 +691,20 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
                               <div className="flex flex-col">
                                 <Link
                                   href={`/crypto/${crypto.symbol.toLowerCase()}`}
-                                  className="text-sm font-bold text-slate-900 dark:text-white hover:text-orange-600 dark:hover:text-orange-400 transition-colors truncate max-w-[100px] sm:max-w-[150px]"
+                                  className="text-sm font-medium text-slate-900 dark:text-white hover:text-orange-600 dark:hover:text-orange-400 transition-colors truncate max-w-[100px] sm:max-w-[150px]"
                                 >
                                   {crypto.symbol}
                                 </Link>
-                                <p className="text-xs text-slate-600 dark:text-gray-400 truncate max-w-[100px] sm:max-w-[150px]">{crypto.name}</p>
+                                <p className="text-xs text-slate-600 dark:text-slate-400 truncate max-w-[100px] sm:max-w-[150px]">{crypto.name}</p>
                               </div>
                             </div>
                           </td>
                           <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right">
-                            <div className="text-sm font-bold text-slate-900 dark:text-white">{formatPrice(crypto.price)}</div>
+                            <div className="text-sm font-medium text-slate-900 dark:text-white">{formatPrice(crypto.price)}</div>
                           </td>
                           <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right">
                             <div className="inline-flex flex-col items-end">
-                              <span className={`text-sm font-bold ${crypto.change >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                              <span className={`text-sm font-medium ${crypto.change >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                                 {crypto.change >= 0 ? '+' : ''}{formatPrice(Math.abs(crypto.change))}
                               </span>
                               <span className={`text-xs ${crypto.changePercent >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
@@ -713,14 +713,14 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
                             </div>
                           </td>
                           <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right">
-                            <div className="text-sm font-bold text-slate-900 dark:text-white">{formatNumber(crypto.volume)}</div>
+                            <div className="text-sm font-medium text-slate-900 dark:text-white">{formatNumber(crypto.volume)}</div>
                           </td>
                           <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right">
-                            <div className="text-sm font-bold text-slate-900 dark:text-white">{formatNumber(crypto.marketCap)}</div>
+                            <div className="text-sm font-medium text-slate-900 dark:text-white">{formatNumber(crypto.marketCap)}</div>
                           </td>
                           <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-center">
                             <div className="inline-flex items-center px-3 py-1.5 rounded-lg bg-gradient-to-r from-orange-50 to-pink-50 dark:from-orange-900/20 dark:to-pink-900/20">
-                              <span className="text-sm font-bold text-orange-700 dark:text-orange-400">{crypto.trendScore.toFixed(0)}</span>
+                              <span className="text-sm font-medium text-orange-700 dark:text-orange-400">{crypto.trendScore.toFixed(0)}</span>
                             </div>
                           </td>
                         </tr>
@@ -734,8 +734,8 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
             {filteredCryptos.length === 0 && (
               <div className="text-center py-12">
                 <Activity className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-                <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-2 transition-colors duration-300">No trending cryptocurrencies found</h3>
-                <p className="text-xs text-slate-600 dark:text-gray-400 transition-colors duration-300">Try adjusting your search or filter criteria</p>
+                <h3 className="text-sm font-medium text-slate-900 dark:text-white mb-2 transition-colors duration-300">No trending cryptocurrencies found</h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 transition-colors duration-300">Try adjusting your search or filter criteria</p>
               </div>
             )}
           </div>
@@ -743,19 +743,19 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
       </main>
 
       {/* Sliding AI Panel */}
-      <div className={`fixed top-0 right-0 h-full w-96 bg-white dark:bg-gray-800 shadow-2xl transform transition-transform duration-300 ease-in-out z-50 ${isAIPanelOpen ? 'translate-x-0' : 'translate-x-full'
+      <div className={`fixed top-0 right-0 h-full w-96 bg-white dark:bg-slate-800 shadow-2xl transform transition-transform duration-300 ease-in-out z-50 ${isAIPanelOpen ? 'translate-x-0' : 'translate-x-full'
         }`}>
         <div className="h-full flex flex-col">
           {/* AI Panel Header */}
-          <div className="px-4 py-3 border-b border-slate-200 dark:border-gray-700 bg-gradient-to-r from-orange-50 to-pink-50 transition-colors duration-300">
+          <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-700 bg-gradient-to-r from-orange-50 to-pink-50 transition-colors duration-300">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Brain className="h-5 w-5 text-orange-600" />
-                <h3 className="text-sm font-semibold text-slate-900 dark:text-white transition-colors duration-300">AI Crypto Analysis</h3>
+                <h3 className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">AI Crypto Analysis</h3>
               </div>
               <button
                 onClick={() => setIsAIPanelOpen(false)}
-                className="p-1 text-gray-500 hover:text-slate-700 dark:text-gray-400 hover:bg-gray-200 rounded-lg transition-colors"
+                className="p-1 text-slate-500 hover:text-slate-700 dark:text-slate-400 hover:bg-gray-200 rounded-lg transition-colors"
               >
                 <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

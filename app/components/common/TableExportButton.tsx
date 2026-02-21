@@ -319,7 +319,7 @@ function DropdownMenu({
         <div className="absolute right-0 mt-1 w-56 bg-white dark:bg-pearto-card border border-slate-200 dark:border-pearto-border rounded-xl shadow-xl z-[9999] overflow-hidden transition-colors duration-300">
             <div className="max-h-64 overflow-y-auto">
                 <div className="p-2">
-                    <p className="px-2 py-1.5 text-xs font-semibold text-slate-400 uppercase tracking-wide">
+                    <p className="px-2 py-1.5 text-xs font-medium text-slate-400 uppercase tracking-wide">
                         Export Format
                     </p>
                     {options.map((option) => (

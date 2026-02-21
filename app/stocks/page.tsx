@@ -39,19 +39,19 @@ export default function StockScreener() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-900 transition-colors duration-300">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900/95 transition-colors duration-300">
       <div className="max-w-[2560px] mx-auto px-3 sm:px-4 lg:px-6 xl:px-8 2xl:px-12 py-4 sm:py-6 lg:py-8">
         
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 mb-4 sm:mb-6 lg:mb-8">
           <div>
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white transition-colors duration-300">Stock Market</h1>
-            <p className="text-sm sm:text-base text-slate-600 dark:text-gray-400 mt-1 sm:mt-2 transition-colors duration-300">Explore stocks, gainers, losers, and trending assets</p>
+            <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 mt-1 sm:mt-2 transition-colors duration-300">Explore stocks, gainers, losers, and trending assets</p>
           </div>
         </div>
 
         {/* Tab Navigation */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-lg border border-blue-200 dark:border-gray-700 p-1 mb-3 sm:mb-4 md:mb-6 transition-colors duration-300">
+        <div className="bg-white dark:bg-slate-800 rounded-xl sm:rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 p-1 mb-3 sm:mb-4 md:mb-6 transition-colors duration-300">
           <div className="flex gap-1">
             {tabs.map((tab) => {
               const Icon = tab.icon;
@@ -61,16 +61,16 @@ export default function StockScreener() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex-1 flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2.5 rounded-lg font-semibold transition-all duration-300 text-[10px] sm:text-sm md:text-base ${
+                  className={`flex-1 flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2.5 rounded-lg font-medium transition-all duration-300 text-[10px] sm:text-sm md:text-base ${
                     isActive
                       ? `text-white shadow-md`
-                      : 'text-slate-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-pearto-luna hover:bg-slate-50 dark:hover:bg-gray-700'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-700'
                   }`}
                   style={{
                     backgroundColor: isActive ? 
                       (tab.color === 'blue' ? '#2563eb' : 
-                       tab.color === 'green' ? '#0aff8d' : 
-                       tab.color === 'red' ? '#e02d75' : 
+                       tab.color === 'green' ? '#10b981' : 
+                       tab.color === 'red' ? '#ef4444' : 
                        tab.color === 'purple' ? '#9333ea' : undefined) : undefined
                   }}
                 >

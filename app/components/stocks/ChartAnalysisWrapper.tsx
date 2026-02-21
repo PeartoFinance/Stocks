@@ -93,7 +93,7 @@ export default function ChartAnalysisWrapper({ activeTab }: ChartAnalysisWrapper
       <div className="flex items-center justify-center py-12">
         <div className="flex flex-col items-center gap-3">
           <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
-          <p className="text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">Loading analysis...</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400 transition-colors duration-300">Loading analysis...</p>
         </div>
       </div>
     );
@@ -103,7 +103,7 @@ export default function ChartAnalysisWrapper({ activeTab }: ChartAnalysisWrapper
     return (
       <div className="flex items-center justify-center py-12">
         <div className="text-center">
-          <p className="text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">{error || 'No data available'}</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400 transition-colors duration-300">{error || 'No data available'}</p>
         </div>
       </div>
     );

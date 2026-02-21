@@ -106,7 +106,7 @@ export default function ProfileTab({ stock }: ProfileTabProps) {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="flex items-center gap-3 text-slate-500 dark:text-gray-400 transition-colors duration-300">
+        <div className="flex items-center gap-3 text-slate-500 dark:text-slate-400 transition-colors duration-300">
           <Loader2 className="h-6 w-6 animate-spin" />
           <span>Loading profile...</span>
         </div>
@@ -117,7 +117,7 @@ export default function ProfileTab({ stock }: ProfileTabProps) {
   if (error && !profile) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="text-center text-slate-500 dark:text-gray-400 transition-colors duration-300">
+        <div className="text-center text-slate-500 dark:text-slate-400 transition-colors duration-300">
           <p className="mb-2">{error}</p>
           <button
             onClick={() => window.location.reload()}
@@ -137,7 +137,7 @@ export default function ProfileTab({ stock }: ProfileTabProps) {
     <div className="space-y-6">
       {/* Company Overview */}
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 transition-colors duration-300">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
+        <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
           <Building2 className="h-5 w-5 text-blue-500" />
           Company Overview
         </h3>
@@ -211,7 +211,7 @@ export default function ProfileTab({ stock }: ProfileTabProps) {
 
       {/* Trading Information */}
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 transition-colors duration-300">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 transition-colors duration-300">
+        <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-4 transition-colors duration-300">
           Trading Information
         </h3>
 
@@ -279,7 +279,7 @@ export default function ProfileTab({ stock }: ProfileTabProps) {
 
       {/* Contact Information */}
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 transition-colors duration-300">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 transition-colors duration-300">
+        <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-4 transition-colors duration-300">
           Additional Information
         </h3>
 
@@ -295,7 +295,7 @@ export default function ProfileTab({ stock }: ProfileTabProps) {
                 </a>
               </div>
             ) : (
-              <p className="text-sm text-slate-500 dark:text-gray-400 transition-colors duration-300">No website information available</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400 transition-colors duration-300">No website information available</p>
             )}
           </div>
 

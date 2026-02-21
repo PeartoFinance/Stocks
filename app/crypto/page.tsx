@@ -82,7 +82,7 @@ export default function CryptoPage() {
   );
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900/95">
       {/* Main Content */}
       <div className="px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8">
         <div className="flex flex-col gap-6">

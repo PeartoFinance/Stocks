@@ -19,12 +19,12 @@ export default function MostActiveStocks({
   if (stocks.length === 0) return null;
 
   return (
-    <div className={`border-t border-gray-200 dark:border-gray-700 ${className}`}>
+    <div className={`border-t border-gray-200 dark:border-slate-700 ${className}`}>
       <div className="flex items-center justify-between mb-1 px-4 pt-4">
         <div className="flex items-center gap-2">
           <Activity className="h-4 w-4 text-blue-600" />
-          <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Most Active Stocks</h4>
-          <span className="text-xs text-gray-500 dark:text-gray-400">({stocks.length} stocks)</span>
+          <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100">Most Active Stocks</h4>
+          <span className="text-xs text-slate-500 dark:text-slate-400">({stocks.length} stocks)</span>
         </div>
       </div>
       
@@ -50,12 +50,12 @@ export default function MostActiveStocks({
                     <span className="font-medium text-sm text-gray-900 dark:text-gray-100 truncate">{stock.symbol}</span>
                     <Activity className="h-3 w-3 text-blue-500 flex-shrink-0" />
                   </div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400 truncate mb-1">{stock.name}</div>
+                  <div className="text-xs text-gray-600 dark:text-slate-400 truncate mb-1">{stock.name}</div>
                   <div className="flex items-center justify-between mb-1">
-                    <div className="text-sm font-bold text-gray-900 dark:text-gray-100">
+                    <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
                       {formatPrice(stock.price || 0)}
                     </div>
-                    <div className={`text-xs font-bold ${
+                    <div className={`text-xs font-medium ${
                       isPositive ? 'text-green-700 dark:text-green-400' : 'text-red-700 dark:text-red-400'
                     }`}>
                       {stock.changePercent !== undefined && stock.changePercent !== null 
@@ -66,7 +66,7 @@ export default function MostActiveStocks({
                       }
                     </div>
                   </div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400">
+                  <div className="text-xs text-slate-500 dark:text-slate-400">
                     Vol: {((stock.volume || 0) / 1e6).toFixed(1)}M
                   </div>
                 </div>

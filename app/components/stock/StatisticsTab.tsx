@@ -95,7 +95,7 @@ export default function StatisticsTab({ stock }: StatisticsTabProps) {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="flex items-center gap-3 text-slate-500 dark:text-gray-400 transition-colors duration-300">
+        <div className="flex items-center gap-3 text-slate-500 dark:text-slate-400 transition-colors duration-300">
           <Loader2 className="h-6 w-6 animate-spin" />
           <span>Loading statistics...</span>
         </div>
@@ -106,7 +106,7 @@ export default function StatisticsTab({ stock }: StatisticsTabProps) {
   if (error && !statistics) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="text-center text-slate-500 dark:text-gray-400 transition-colors duration-300">
+        <div className="text-center text-slate-500 dark:text-slate-400 transition-colors duration-300">
           <p className="mb-2">{error}</p>
           <button
             onClick={() => window.location.reload()}
@@ -163,7 +163,7 @@ export default function StatisticsTab({ stock }: StatisticsTabProps) {
         <span className={`text-sm font-medium text-${color}-700 dark:text-${color}-300`}>{label}</span>
         <Icon className={`h-4 w-4 text-${color}-600 dark:text-${color}-400`} />
       </div>
-      <p className={`text-xl font-bold text-${color}-900 dark:text-${color}-100`}>{value}</p>
+      <p className={`text-xl font-medium text-${color}-900 dark:text-${color}-100`}>{value}</p>
     </div>
   );
 
@@ -171,7 +171,7 @@ export default function StatisticsTab({ stock }: StatisticsTabProps) {
     <div className="space-y-6">
       {/* Valuation Metrics */}
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 transition-colors duration-300">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
+        <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
           <PieChart className="h-5 w-5 text-blue-500" />
           Valuation Metrics
         </h3>
@@ -184,7 +184,7 @@ export default function StatisticsTab({ stock }: StatisticsTabProps) {
 
       {/* Trading Metrics */}
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 transition-colors duration-300">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
+        <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
           <BarChart3 className="h-5 w-5 text-green-500" />
           Trading Information
         </h3>
@@ -197,7 +197,7 @@ export default function StatisticsTab({ stock }: StatisticsTabProps) {
 
       {/* Performance Metrics */}
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 transition-colors duration-300">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
+        <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
           <Activity className="h-5 w-5 text-purple-500" />
           Performance Analysis
         </h3>
@@ -210,7 +210,7 @@ export default function StatisticsTab({ stock }: StatisticsTabProps) {
 
       {/* Additional Statistics */}
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 transition-colors duration-300">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 transition-colors duration-300">
+        <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-4 transition-colors duration-300">
           Additional Statistics
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

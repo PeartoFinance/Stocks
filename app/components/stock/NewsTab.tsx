@@ -54,8 +54,8 @@ export default function NewsTab({ symbol, news: initialNews, loading: initialLoa
     switch (sentiment) {
       case 'positive': return 'text-green-600 dark:text-pearto-green bg-green-100 dark:bg-green-900/20 dark:text-green-400';
       case 'negative': return 'text-red-600 dark:text-pearto-pink bg-red-100 dark:bg-red-900/20 dark:text-red-400';
-      case 'neutral': return 'text-slate-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-900/20 dark:text-gray-400';
-      default: return 'text-slate-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-900/20 dark:text-gray-400';
+      case 'neutral': return 'text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-900/95/20 dark:text-slate-400';
+      default: return 'text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-900/95/20 dark:text-slate-400';
     }
   };
 
@@ -89,7 +89,7 @@ export default function NewsTab({ symbol, news: initialNews, loading: initialLoa
       {/* News Header & Filters */}
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 transition-colors duration-300">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2 transition-colors duration-300">
+          <h3 className="text-lg font-medium text-slate-900 dark:text-white flex items-center gap-2 transition-colors duration-300">
             <Newspaper className="h-5 w-5 text-blue-500" />
             Latest News for {symbol}
           </h3>
@@ -123,7 +123,7 @@ export default function NewsTab({ symbol, news: initialNews, loading: initialLoa
         {filteredNews.length === 0 ? (
           <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-8 text-center transition-colors duration-300">
             <Newspaper className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2 transition-colors duration-300">
+            <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2 transition-colors duration-300">
               No News Found
             </h3>
             <p className="text-slate-500 dark:text-slate-400 transition-colors duration-300">
@@ -151,7 +151,7 @@ export default function NewsTab({ symbol, news: initialNews, loading: initialLoa
                 {/* Article Content */}
                 <div className="flex-1">
                   <div className="flex items-start justify-between gap-4 mb-2">
-                    <h4 className="text-lg font-semibold text-slate-900 dark:text-white leading-tight transition-colors duration-300">
+                    <h4 className="text-lg font-medium text-slate-900 dark:text-white leading-tight transition-colors duration-300">
                       {article.title}
                     </h4>
                   </div>

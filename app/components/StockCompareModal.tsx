@@ -112,7 +112,7 @@ export default function StockCompareModal({
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 w-full max-w-4xl max-h-[90vh] overflow-hidden transition-colors duration-300">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-700 transition-colors duration-300">
-          <h2 className="text-xl font-semibold text-slate-900 dark:text-white flex items-center gap-2 transition-colors duration-300">
+          <h2 className="text-xl font-medium text-slate-900 dark:text-white flex items-center gap-2 transition-colors duration-300">
             <BarChart3 className="h-5 w-5 text-blue-500" />
             Compare Stocks
           </h2>
@@ -163,7 +163,7 @@ export default function StockCompareModal({
                           <p className="text-sm text-slate-500 dark:text-slate-400 transition-colors duration-300">{stock.sector}</p>
                         </div>
                         <div className="text-right">
-                          <p className="font-semibold text-slate-900 dark:text-white transition-colors duration-300">
+                          <p className="font-medium text-slate-900 dark:text-white transition-colors duration-300">
                             {formatPrice(stock.price)}
                           </p>
                           <div className={`flex items-center gap-1 text-sm ${isPositive ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'
@@ -183,17 +183,17 @@ export default function StockCompareModal({
           {/* Comparison Table */}
           {selectedStock && initialStock && (
             <div>
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 transition-colors duration-300">Comparison</h3>
+              <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-4 transition-colors duration-300">Comparison</h3>
 
               {/* Stock Headers */}
               <div className="grid grid-cols-3 gap-4 mb-4 p-4 bg-slate-50 dark:bg-slate-800 rounded-lg transition-colors duration-300">
                 <div className="text-sm font-medium text-slate-500 dark:text-slate-400 transition-colors duration-300">Metric</div>
                 <div className="text-center">
-                  <h4 className="font-semibold text-slate-900 dark:text-white transition-colors duration-300">{initialStock.symbol}</h4>
+                  <h4 className="font-medium text-slate-900 dark:text-white transition-colors duration-300">{initialStock.symbol}</h4>
                   <p className="text-xs text-slate-500 dark:text-slate-400 transition-colors duration-300">{initialStock.name}</p>
                 </div>
                 <div className="text-center">
-                  <h4 className="font-semibold text-slate-900 dark:text-white transition-colors duration-300">{selectedStock.symbol}</h4>
+                  <h4 className="font-medium text-slate-900 dark:text-white transition-colors duration-300">{selectedStock.symbol}</h4>
                   <p className="text-xs text-slate-500 dark:text-slate-400 transition-colors duration-300">{selectedStock.name}</p>
                 </div>
               </div>
@@ -282,7 +282,7 @@ export default function StockCompareModal({
           {searchTerm.length > 1 && searchResults.length === 0 && !loading && (
             <div className="text-center py-8">
               <Search className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2 transition-colors duration-300">
+              <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2 transition-colors duration-300">
                 No Results Found
               </h3>
               <p className="text-slate-500 dark:text-slate-400 transition-colors duration-300">
@@ -295,7 +295,7 @@ export default function StockCompareModal({
           {searchTerm.length <= 1 && (
             <div className="text-center py-8">
               <BarChart3 className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2 transition-colors duration-300">
+              <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2 transition-colors duration-300">
                 Compare {initialSymbol} with Another Stock
               </h3>
               <p className="text-slate-500 dark:text-slate-400 transition-colors duration-300">

@@ -78,8 +78,8 @@ export default function TickerTape() {
 
     if (error && tickerData.length === 0) {
         return (
-            <div className="bg-gray-100 dark:bg-slate-900 text-gray-800 dark:text-gray-100 py-2 text-xs font-medium border-b border-gray-300 dark:border-gray-700 transition-colors duration-300">
-                <div className="flex items-center justify-center gap-2 text-gray-600 dark:text-gray-400">
+            <div className="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-100 py-2 text-xs font-medium border-b border-slate-300 dark:border-slate-700 transition-colors duration-300">
+                <div className="flex items-center justify-center gap-2 text-slate-600 dark:text-slate-400">
                     <span>Market data unavailable</span>
                     <span className="text-xs">• Import data from admin panel</span>
                 </div>
@@ -89,22 +89,22 @@ export default function TickerTape() {
 
     if (loading && tickerData.length === 0) {
         return (
-            <div className="bg-gray-100 dark:bg-slate-900 text-gray-800 dark:text-gray-100 py-2 text-xs font-medium border-b border-gray-300 dark:border-gray-700 transition-colors duration-300">
+            <div className="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-100 py-2 text-xs font-medium border-b border-slate-300 dark:border-slate-700 transition-colors duration-300">
                 <div className="flex items-center justify-center gap-2">
                     <Loader2 className="animate-spin" size={12} />
-                    <span className="text-gray-600 dark:text-gray-400">Loading market data...</span>
+                    <span className="text-slate-600 dark:text-slate-400">Loading market data...</span>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="bg-gray-100 dark:bg-slate-900 text-gray-800 dark:text-gray-100 py-2 text-xs font-medium overflow-hidden border-b border-gray-300 dark:border-gray-700 transition-colors duration-300">
+        <div className="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-100 py-2 text-xs font-medium overflow-hidden border-b border-slate-300 dark:border-slate-700 transition-colors duration-300">
             <div className="flex items-center gap-8 animate-marquee hover:pause-animation">
                 {tickerData.map((ticker, index) => (
                     <div key={index} className="flex items-center gap-2 flex-shrink-0">
-                        <span className="text-gray-600 dark:text-pearto-gray">{ticker.symbol}</span>
-                        <PriceDisplay amount={ticker.price} className="font-semibold" />
+                        <span className="text-slate-600 dark:text-pearto-gray">{ticker.symbol}</span>
+                        <PriceDisplay amount={ticker.price} className="font-medium" />
                         <span className={`flex items-center gap-0.5 ${ticker.up ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'}`}>
                             {ticker.up ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
                             {ticker.change}
@@ -114,8 +114,8 @@ export default function TickerTape() {
 
                 {tickerData.map((ticker, index) => (
                     <div key={`dup-${index}`} className="flex items-center gap-2 flex-shrink-0">
-                        <span className="text-gray-600 dark:text-pearto-gray">{ticker.symbol}</span>
-                        <PriceDisplay amount={ticker.price} className="font-semibold" />
+                        <span className="text-slate-600 dark:text-pearto-gray">{ticker.symbol}</span>
+                        <PriceDisplay amount={ticker.price} className="font-medium" />
                         <span className={`flex items-center gap-0.5 ${ticker.up ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'}`}>
                             {ticker.up ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
                             {ticker.change}

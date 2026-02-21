@@ -19,6 +19,8 @@ import cryptoService from '@/app/utils/cryptoService';
 import AIAnalysisPanel from '@/app/components/ai/AIAnalysisPanel';
 import StockChart from '@/app/components/StockChart';
 import { HistoricalData as StockHistoricalData } from '@/app/types';
+import { addToWatchlist, removeFromWatchlist, getWatchlist } from '@/app/utils/portfolioWatchlistAPI';
+import { useAuth } from '@/app/context/AuthContext';
 
 // Import crypto tab components
 import {
@@ -74,6 +76,7 @@ export default function CryptoDetailPage() {
   const params = useParams();
   const router = useRouter();
   const symbol = params.symbol as string;
+  const { user } = useAuth();
 
   const [crypto, setCrypto] = useState<CryptoDetails | null>(null);
   const [historicalData, setHistoricalData] = useState<StockHistoricalData[]>([]);
@@ -133,6 +136,24 @@ export default function CryptoDetailPage() {
 
     fetchCryptoDetails();
   }, [symbol, router]);
+
+  // Check watchlist status when user changes
+  useEffect(() => {
+    const checkWatchlistStatus = async () => {
+      if (user && symbol) {
+        try {
+          const watchlist = await getWatchlist();
+          const decodedSymbol = decodeURIComponent(symbol);
+          setIsFavorited(watchlist.some((item) => item.symbol.toUpperCase() === decodedSymbol.toUpperCase()));
+        } catch (error) {
+          console.error('Failed to check watchlist status:', error);
+        }
+      } else {
+        setIsFavorited(false);
+      }
+    };
+    checkWatchlistStatus();
+  }, [user, symbol]);
 
   const handleRefresh = async () => {
     setRefreshing(true);
@@ -221,19 +242,26 @@ export default function CryptoDetailPage() {
   const formatChange = (change: number, percent: number) =>
     `${change >= 0 ? "+" : ""}${change.toFixed(2)} (${percent >= 0 ? "+" : ""}${percent.toFixed(2)}%)`;
 
-  const toggleWatchlist = () => {
+  const toggleWatchlist = async () => {
     if (!crypto) return;
-    const watchlist = JSON.parse(localStorage.getItem("cryptoWatchlist") || "[]");
-    if (isFavorited) {
-      const newWatchlist = watchlist.filter((item: CryptoDetails) => item.symbol !== crypto.symbol);
-      localStorage.setItem("cryptoWatchlist", JSON.stringify(newWatchlist));
-      setIsFavorited(false);
-      toast.success("Removed from watchlist");
-    } else {
-      watchlist.push(crypto);
-      localStorage.setItem("cryptoWatchlist", JSON.stringify(watchlist));
-      setIsFavorited(true);
-      toast.success("Added to watchlist");
+    
+    if (!user) {
+      toast.error("Sign in to add to watchlist");
+      return;
+    }
+
+    try {
+      if (isFavorited) {
+        await removeFromWatchlist(crypto.symbol);
+        setIsFavorited(false);
+        toast.success("Removed from watchlist");
+      } else {
+        await addToWatchlist(crypto.symbol);
+        setIsFavorited(true);
+        toast.success("Added to watchlist");
+      }
+    } catch (error: any) {
+      toast.error(error.message || "Failed to update watchlist");
     }
   };
 
@@ -297,10 +325,10 @@ export default function CryptoDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen p-4 lg:p-8 flex items-center justify-center bg-gray-50 dark:bg-slate-900">
+      <div className="min-h-screen p-4 lg:p-8 flex items-center justify-center bg-slate-50 dark:bg-slate-900">
         <div className="text-center">
           <Activity className="h-12 w-12 text-emerald-600 animate-spin mx-auto mb-4" />
-          <p className="text-gray-600 dark:text-gray-400">Loading cryptocurrency data...</p>
+          <p className="text-slate-600 dark:text-slate-400">Loading cryptocurrency data...</p>
         </div>
       </div>
     );
@@ -308,7 +336,7 @@ export default function CryptoDetailPage() {
 
   if (!crypto) {
     return (
-      <div className="min-h-screen p-4 lg:p-8 flex items-center justify-center bg-gray-50 dark:bg-slate-900">
+      <div className="min-h-screen p-4 lg:p-8 flex items-center justify-center bg-slate-50 dark:bg-slate-900">
         <div className="text-center">
           <h1 className="text-xl lg:text-2xl font-bold text-slate-900 dark:text-white mb-2">Cryptocurrency Not Found</h1>
           <p className="text-slate-500 dark:text-slate-400 mb-4">The symbol "{symbol}" could not be found.</p>
@@ -326,7 +354,7 @@ export default function CryptoDetailPage() {
   const isPositive = crypto.change >= 0;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
       {/* Mobile Header - Sticky */}
       <div className="lg:hidden sticky top-0 z-30 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700">
         <div className="px-4 py-3">
@@ -371,8 +399,8 @@ export default function CryptoDetailPage() {
               <span className="text-2xl font-bold text-slate-900 dark:text-white">
                 {formatPrice(crypto.price)}
               </span>
-              <div className={`flex items-center gap-1 text-sm font-semibold ${
-                isPositive ? 'text-emerald-600' : 'text-red-500'
+              <div className={`flex items-center gap-1 text-sm font-medium ${
+                isPositive ? 'text-emerald-500' : 'text-red-500'
               }`}>
                 {isPositive ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
                 <span>
@@ -412,8 +440,8 @@ export default function CryptoDetailPage() {
                 <span className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">
                   {formatPrice(crypto.price)}
                 </span>
-                <div className={`flex items-center gap-1 text-base sm:text-lg font-semibold ${
-                  isPositive ? 'text-emerald-600' : 'text-red-500'
+                <div className={`flex items-center gap-1 text-base sm:text-lg font-medium ${
+                  isPositive ? 'text-emerald-500' : 'text-red-500'
                 }`}>
                   {isPositive ? <TrendingUp size={18} className="sm:w-5 sm:h-5" /> : <TrendingDown size={18} className="sm:w-5 sm:h-5" />}
                   <span>
@@ -491,8 +519,8 @@ export default function CryptoDetailPage() {
               className="bg-white dark:bg-slate-900 rounded-t-2xl w-full max-h-[85vh] overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="p-4 border-b border-gray-200 dark:border-slate-700 flex items-center justify-between sticky top-0 bg-white dark:bg-slate-900 z-10">
-                <h3 className="font-semibold text-lg text-slate-900 dark:text-white">AI Analysis</h3>
+              <div className="p-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between sticky top-0 bg-white dark:bg-slate-900 z-10">
+                <h3 className="font-medium text-lg text-slate-900 dark:text-white">AI Analysis</h3>
                 <button
                   onClick={() => setShowAIPanel(false)}
                   className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-full"
@@ -549,15 +577,15 @@ export default function CryptoDetailPage() {
             >
               <div className="h-full flex flex-col">
                 {/* AI Panel Header */}
-                <div className="px-4 py-3 border-b border-gray-200 dark:border-slate-700 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
+                <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-700 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Brain className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                      <h3 className="text-sm font-semibold text-gray-900 dark:text-white">AI Crypto Analysis</h3>
+                      <h3 className="text-sm font-medium text-slate-900 dark:text-white">AI Crypto Analysis</h3>
                     </div>
                     <button
                       onClick={() => setShowAIPanel(false)}
-                      className="p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-200 dark:hover:bg-slate-700 rounded-lg transition-colors"
+                      className="p-1 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition-colors"
                     >
                       <X className="h-5 w-5" />
                     </button>

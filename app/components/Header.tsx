@@ -157,7 +157,7 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
   const [resourcesItems, setResourcesItems] = useState<any[]>([
     { label: 'Articles', href: '/articles' },
     { label: 'Newsletter', href: '/newsletter' },
-    { label: 'About Us', href: `${mainAppUrl}/about` },
+    { label: 'About Us', href: `${mainAppUrl}/p/about` },
     { label: 'Contact', href: `${mainAppUrl}/contact` },
   ]);
 
@@ -219,22 +219,22 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
       </div>
 
       {/* PRIMARY NAVBAR - Fixed below TickerTape */}
-      <nav className="fixed top-8 left-0 right-0 z-40 bg-white dark:bg-gray-900 border-b border-gray-200  dark:border-gray-800/50 transition-colors duration-300">
+      <nav className="fixed top-8 left-0 right-0 z-40 bg-white dark:bg-slate-900/95 border-b border-slate-200 dark:border-slate-800/50 transition-colors duration-300">
         <div className="container mx-auto px-2 sm:px-4 md:px-6">
           <div className="flex items-center justify-between h-12 sm:h-14 md:h-16 gap-2 sm:gap-4">
 
             {/* Mobile Menu Trigger - ONLY visible on sm/md screens */}
             <button
               onClick={onOpenSidebar}
-              className="lg:hidden p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+              className="lg:hidden p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
             >
-              <Menu className="h-5 w-5 sm:h-6 sm:w-6 text-gray-600 dark:text-gray-300 transition-colors duration-300" />
+              <Menu className="h-5 w-5 sm:h-6 sm:w-6 text-slate-600 dark:text-slate-300 transition-colors duration-300" />
             </button>
 
             {/* Left: Logo */}
             <Link href="/" className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0 mr-auto lg:mr-0">
               <img src="/logo.svg" alt="Pearto Logo" className="h-6 sm:h-7 md:h-8 w-auto" />
-              <span className="text-base sm:text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 via-emerald-500 to-cyan-500 truncate">
+              <span className="text-xl sm:text-2xl md:text-3xl font-medium bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 via-emerald-500 to-cyan-500 truncate">
                 Pearto
               </span>
             </Link>
@@ -242,19 +242,19 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
             {/* Center: Search Bar */}
             <div ref={searchRef} className="hidden md:flex flex-1 max-w-xl mx-4 relative">
               <button
-                className="w-full flex items-center gap-3 h-10 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-800 text-sm text-gray-500 dark:text-gray-400 transition focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+                className="w-full flex items-center gap-3 h-10 px-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 text-sm text-slate-500 dark:text-slate-400 transition focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
                 onClick={() => setShowSearchResults(true)}
               >
-                <Search size={18} className="text-gray-400 flex-shrink-0" />
+                <Search size={18} className="text-slate-400 flex-shrink-0" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search stocks, crypto, news..."
-                  className="flex-1 text-left bg-transparent outline-none text-gray-900 dark:text-white placeholder-gray-400 transition-colors duration-300"
+                  className="flex-1 text-left bg-transparent outline-none text-slate-900 dark:text-white placeholder-slate-400 transition-colors duration-300"
                 />
-                <span className="hidden lg:flex items-center gap-1 text-xs text-gray-400">
-                  <kbd className="px-1.5 py-0.5 rounded border bg-white dark:bg-gray-700 text-[10px] transition-colors duration-300">/</kbd>
+                <span className="hidden lg:flex items-center gap-1 text-xs text-slate-400">
+                  <kbd className="px-1.5 py-0.5 rounded border bg-white dark:bg-slate-700 text-[10px] transition-colors duration-300">/</kbd>
                 </span>
               </button>
 
@@ -265,16 +265,16 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
-                    className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg max-h-80 overflow-y-auto z-50 transition-colors duration-300"
+                    className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg max-h-80 overflow-y-auto z-50 transition-colors duration-300"
                   >
                     {searchResults.map((stock) => (
                       <button
                         key={stock.symbol}
                         onClick={() => handleSearchResultClick(stock.symbol)}
-                        className="w-full px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700 border-b border-gray-100 dark:border-gray-700 last:border-b-0 transition"
+                        className="w-full px-4 py-3 text-left hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-slate-700 last:border-b-0 transition"
                       >
-                        <div className="font-semibold text-gray-900 dark:text-white transition-colors duration-300">{stock.symbol}</div>
-                        <div className="text-sm text-gray-600 dark:text-gray-400 truncate transition-colors duration-300">{stock.name}</div>
+                        <div className="font-medium text-slate-900 dark:text-white transition-colors duration-300">{stock.symbol}</div>
+                        <div className="text-sm text-slate-600 dark:text-slate-400 truncate transition-colors duration-300">{stock.name}</div>
                       </button>
                     ))}
                   </motion.div>
@@ -286,24 +286,24 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
             <div className="flex items-center gap-1 sm:gap-2 md:gap-3">
               {/* Mobile search button */}
               <button
-                className="md:hidden p-1.5 sm:p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300"
+                className="md:hidden p-1.5 sm:p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-300"
                 onClick={() => setShowSearchResults(true)}
               >
                 <Search size={18} />
               </button>
 
               {/* Theme, Country, AI Group */}
-              <div className="hidden md:flex items-center gap-2 p-1 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm bg-white dark:bg-gray-800">
+              <div className="hidden md:flex items-center gap-2 p-1 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm bg-white dark:bg-slate-800">
                 {/* Theme toggle */}
                 <button
-                  className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300"
+                  className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-all duration-300"
                   onClick={toggleTheme}
                   title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
                 >
                   {theme === 'dark' ? (
-                    <Sun size={18} className="text-pearto-green" />
+                    <Sun size={18} className="text-emerald-500" />
                   ) : (
-                    <Moon size={18} className="text-gray-600 dark:text-pearto-cloud transition-colors duration-300" />
+                    <Moon size={18} className="text-slate-600 transition-colors duration-300" />
                   )}
                 </button>
 
@@ -311,29 +311,29 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                 <div className="relative" ref={countryMenuRef}>
                   <button
                     onClick={() => setCountryMenuOpen(!countryMenuOpen)}
-                    className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition"
+                    className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-sm transition"
                   >
-                    {countries.find(c => c.code === country)?.flagEmoji || '🌐'}                  <span className="text-gray-700 dark:text-gray-300">{country}</span>
-                    <ChevronDown size={14} className="text-gray-400" />
+                    {countries.find(c => c.code === country)?.flagEmoji || '🌐'}                  <span className="text-slate-700 dark:text-slate-300">{country}</span>
+                    <ChevronDown size={14} className="text-slate-400" />
                   </button >
 
                 {countryMenuOpen && (
-                  <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 py-2 max-h-80 overflow-y-auto z-50 transition-colors duration-300">
+                  <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 py-2 max-h-80 overflow-y-auto z-50 transition-colors duration-300">
                     {countries.length > 0 ? (
                       countries.map((c) => (
                         <button
                           key={c.code}
                           onClick={() => { setCountry(c.code); setCountryMenuOpen(false); }}
-                          className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition ${country === c.code ? 'text-emerald-600 dark:text-pearto-green bg-emerald-50 dark:bg-emerald-900/20' : 'text-gray-700 dark:text-gray-300'}`}
+                          className={`w-full text-left px-4 py-2 text-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition ${country === c.code ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20' : 'text-slate-700 dark:text-slate-300'}`}
                         >
                           {c.flagEmoji} {c.name}
                         </button>
                       ))
                     ) : (
                       <>
-                        <button onClick={() => { setCountry('US'); setCountryMenuOpen(false); }} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300">🇺🇸 United States</button>
-                        <button onClick={() => { setCountry('NP'); setCountryMenuOpen(false); }} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300">🇳🇵 Nepal</button>
-                        <button onClick={() => { setCountry('IN'); setCountryMenuOpen(false); }} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300">🇮🇳 India</button>
+                        <button onClick={() => { setCountry('US'); setCountryMenuOpen(false); }} className="w-full text-left px-4 py-2 text-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors duration-300">🇺🇸 United States</button>
+                        <button onClick={() => { setCountry('NP'); setCountryMenuOpen(false); }} className="w-full text-left px-4 py-2 text-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors duration-300">🇳🇵 Nepal</button>
+                        <button onClick={() => { setCountry('IN'); setCountryMenuOpen(false); }} className="w-full text-left px-4 py-2 text-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors duration-300">🇮🇳 India</button>
                       </>
                     )}
                   </div>
@@ -344,7 +344,7 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                 {/* AI Button */}
                 < a
                   href={`${mainAppUrl}/ai`}
-                  className="px-3 py-2 rounded-lg font-semibold text-sm text-white bg-gradient-to-br from-purple-500 via-blue-500 to-cyan-500 hover:shadow-md transition flex items-center gap-1.5"
+                  className="px-3 py-2 rounded-lg font-medium text-sm text-white bg-gradient-to-br from-purple-500 via-blue-500 to-cyan-500 hover:shadow-md transition flex items-center gap-1.5"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M12 3l1.912 5.813a2 2 0 001.276 1.276L21 12l-5.812 1.912a2 2 0 00-1.276 1.276L12 21l-1.912-5.812a2 2 0 00-1.276-1.276L3 12l5.812-1.912a2 2 0 001.276-1.276L12 3z" />
@@ -357,7 +357,7 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
               {
                 !isAuthenticated ? (
                   <div className="hidden md:flex items-center gap-2">
-                    <a href={`${authRedirectBase}/login?redirect=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : mainAppUrl)}`} className="px-3 py-2 text-sm font-medium hover:text-emerald-600 dark:text-pearto-green transition">
+                    <a href={`${authRedirectBase}/login?redirect=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : mainAppUrl)}`} className="px-3 py-2 text-sm font-medium hover:text-emerald-600 transition">
                       Sign In
                     </a>
                     <a href={`${authRedirectBase}/signup?redirect=true`} className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-emerald-600 via-emerald-500 to-cyan-500 rounded-lg shadow hover:shadow-md transition">
@@ -365,9 +365,9 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                     </a>
                   </div>
                 ) : (
-                  <div className="hidden md:flex items-center gap-2 p-1 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm bg-white dark:bg-gray-800">
+                  <div className="hidden md:flex items-center gap-2 p-1 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm bg-white dark:bg-slate-800">
                     {/* Plan Badge */}
-                    <div className={`px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-wider ${isPro
+                    <div className={`px-2.5 py-1 rounded-md text-xs font-medium uppercase tracking-wider ${isPro
                       ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white'
                       : status === 'trialing'
                         ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
@@ -379,7 +379,7 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                     <div className="relative" ref={userMenuRef}>
                       <button
                         onClick={() => setUserMenuOpen(!userMenuOpen)}
-                        className="flex items-center gap-2 p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                        className="flex items-center gap-2 p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition"
                       >
                         {user?.avatarUrl ? (
                           <img src={user.avatarUrl} alt="" className="h-8 w-8 rounded-full object-cover" />
@@ -388,32 +388,32 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                             {initials}
                           </div>
                         )}
-                        <span className="text-sm text-gray-700 dark:text-gray-300 max-w-[100px] truncate transition-colors duration-300">{user?.name || 'Account'}</span>
-                        <ChevronDown size={14} className="text-gray-400" />
+                        <span className="text-sm text-slate-700 dark:text-slate-300 max-w-[100px] truncate transition-colors duration-300">{user?.name || 'Account'}</span>
+                        <ChevronDown size={14} className="text-slate-400" />
                       </button>
 
                       {userMenuOpen && (
-                        <div className="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50 transition-colors duration-300">
-                          <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-700 transition-colors duration-300">
-                            <p className="font-medium text-gray-900 dark:text-white transition-colors duration-300">{user?.name || user?.email}</p>
-                            <p className="text-sm text-gray-500 dark:text-pearto-gray transition-colors duration-300">{user?.email}</p>
+                        <div className="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 py-2 z-50 transition-colors duration-300">
+                          <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700 transition-colors duration-300">
+                            <p className="font-medium text-slate-900 dark:text-white transition-colors duration-300">{user?.name || user?.email}</p>
+                            <p className="text-sm text-slate-500 transition-colors duration-300">{user?.email}</p>
                           </div>
                           <div className="py-2">
-                            <Link href="/profile" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300">
-                              <User size={16} className="text-gray-400" /> Profile
+                            <Link href="/profile" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors duration-300">
+                              <User size={16} className="text-slate-400" /> Profile
                             </Link>
-                            <Link href="/profile/portfolio" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300">
-                              <Briefcase size={16} className="text-gray-400" /> Portfolio
+                            <Link href="/profile/portfolio" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors duration-300">
+                              <Briefcase size={16} className="text-slate-400" /> Portfolio
                             </Link>
-                            <Link href="/profile/watchlist" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300">
-                              <Star size={16} className="text-gray-400" /> Watchlist
+                            <Link href="/profile/watchlist" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors duration-300">
+                              <Star size={16} className="text-slate-400" /> Watchlist
                             </Link>
-                            <Link href="/profile/settings" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300">
-                              <Settings size={16} className="text-gray-400" /> Settings
+                            <Link href="/profile/settings" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors duration-300">
+                              <Settings size={16} className="text-slate-400" /> Settings
                             </Link>
                           </div>
-                          <div className="border-t border-gray-100 dark:border-gray-700 py-2 transition-colors duration-300">
-                            <button onClick={handleLogout} className="flex items-center gap-3 px-4 py-2 text-sm text-red-600 dark:text-pearto-pink hover:bg-red-50 dark:hover:bg-red-900/20 w-full transition-colors duration-300">
+                          <div className="border-t border-slate-100 dark:border-slate-700 py-2 transition-colors duration-300">
+                            <button onClick={handleLogout} className="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 w-full transition-colors duration-300">
                               <LogOut size={16} /> Sign out
                             </button>
                           </div>
@@ -426,7 +426,7 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
 
               {/* Mobile burger */}
               <button
-                className="md:hidden p-1.5 sm:p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors duration-300"
+                className="md:hidden p-1.5 sm:p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 transition-colors duration-300"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               >
                 {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -437,7 +437,7 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
       </nav >
 
       {/* SECONDARY NAVBAR - Fixed below primary navbar, always visible */}
-      < div className="fixed top-24 left-0 right-0 z-30 bg-white/95 dark:bg-slate-900/95 backdrop-blur border-b border-gray-200 dark:border-slate-800 hidden md:block transition-colors duration-300" >
+      < div className="fixed top-24 left-0 right-0 z-30 bg-white/95 dark:bg-slate-900/95 backdrop-blur border-b border-slate-200 dark:border-slate-800 hidden md:block transition-colors duration-300" >
         <div className="container mx-auto px-4 md:px-6">
           <div className="flex items-center justify-center gap-3 py-2.5">
             {/* Pillars Dropdown */}
@@ -452,13 +452,13 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                 <ChevronDown size={14} className={`opacity-70 transition-transform ${pillarsOpen ? 'rotate-180' : ''}`} />
               </button>
               {pillarsOpen && (
-                <div className="absolute left-0 top-full mt-1 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50 transition-colors duration-300">
+                <div className="absolute left-0 top-full mt-1 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 py-2 z-50 transition-colors duration-300">
                   {pillarsItems.map((item) => (
                     item.href.startsWith('http') || item.href.startsWith(mainAppUrl) ? (
                       <a
                         key={item.label}
                         href={item.href}
-                        className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+                        className="block px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition"
                       >
                         {item.label}
                       </a>
@@ -466,7 +466,7 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                       <Link
                         key={item.label}
                         href={item.href}
-                        className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+                        className="block px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition"
                       >
                         {item.label}
                       </Link>
@@ -479,7 +479,7 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
             {/* Booyah Button */}
             <a
               href={`${mainAppUrl}/booyah`}
-              className="px-4 py-2 rounded-lg font-semibold text-sm text-white bg-gradient-to-br from-green-500 via-emerald-500 to-green-600 shadow hover:shadow-md transition"
+              className="px-4 py-2 rounded-lg font-medium text-sm text-white bg-gradient-to-br from-green-500 via-emerald-500 to-green-600 shadow hover:shadow-md transition"
             >
               Booyah
             </a>
@@ -496,13 +496,13 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                 <ChevronDown size={14} className={`opacity-70 transition-transform ${toolsOpen ? 'rotate-180' : ''}`} />
               </button>
               {toolsOpen && (
-                <div className="absolute left-0 top-full mt-1 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50 transition-colors duration-300">
+                <div className="absolute left-0 top-full mt-1 w-56 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 py-2 z-50 transition-colors duration-300">
                   {toolsItems.map((item) => (
                     item.href.startsWith('http') || item.href.startsWith(mainAppUrl) ? (
                       <a
                         key={item.label}
                         href={item.href}
-                        className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+                        className="block px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition"
                       >
                         {item.label}
                       </a>
@@ -510,7 +510,7 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                       <Link
                         key={item.label}
                         href={item.href}
-                        className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+                        className="block px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition"
                       >
                         {item.label}
                       </Link>
@@ -532,13 +532,13 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                 <ChevronDown size={14} className={`opacity-70 transition-transform ${resourcesOpen ? 'rotate-180' : ''}`} />
               </button>
               {resourcesOpen && (
-                <div className="absolute left-0 top-full mt-1 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50 transition-colors duration-300">
+                <div className="absolute left-0 top-full mt-1 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 py-2 z-50 transition-colors duration-300">
                   {resourcesItems.map((item) => (
                     item.href.startsWith('http') || item.href.startsWith(mainAppUrl) ? (
                       <a
                         key={item.label}
                         href={item.href}
-                        className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+                        className="block px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition"
                       >
                         {item.label}
                       </a>
@@ -546,7 +546,7 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                       <Link
                         key={item.label}
                         href={item.href}
-                        className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+                        className="block px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition"
                       >
                         {item.label}
                       </Link>
@@ -567,35 +567,35 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="md:hidden fixed inset-x-0 top-12 sm:top-14 z-40 bg-white dark:bg-gray-900 overflow-auto max-h-[calc(100vh-3.5rem)] transition-colors duration-300"
+              className="md:hidden fixed inset-x-0 top-12 sm:top-14 z-40 bg-white dark:bg-slate-900 overflow-auto max-h-[calc(100vh-3.5rem)] transition-colors duration-300"
             >
               <div className="p-3 sm:p-4 space-y-3 pb-20">
                 {/* Close button at the top */}
                 <div className="flex justify-end">
                   <button
                     onClick={() => setMobileMenuOpen(false)}
-                    className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300"
+                    className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-300"
                   >
-                    <X size={20} className="text-gray-600 dark:text-gray-300" />
+                    <X size={20} className="text-slate-600 dark:text-slate-300" />
                   </button>
                 </div>
 
                 {/* Mobile Search */}
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search stocks..."
-                    className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white transition-colors duration-300"
+                    className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white transition-colors duration-300"
                   />
                 </div>
 
                 {/* AI Button */}
                 <a
                   href={`${mainAppUrl}/ai`}
-                  className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-bold text-white bg-gradient-to-br from-purple-500 via-blue-500 to-cyan-500 shadow-md"
+                  className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-medium text-white bg-gradient-to-br from-purple-500 via-blue-500 to-cyan-500 shadow-md"
                 >
                   <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M12 3l1.912 5.813a2 2 0 001.276 1.276L21 12l-5.812 1.912a2 2 0 00-1.276 1.276L12 21l-1.912-5.812a2 2 0 00-1.276-1.276L3 12l5.812-1.912a2 2 0 001.276-1.276L12 3z" />
@@ -606,7 +606,7 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                 {/* Booyah */}
                 <a
                   href={`${mainAppUrl}/booyah`}
-                  className="flex items-center justify-center w-full py-3 rounded-xl font-bold text-white bg-gradient-to-br from-green-500 via-emerald-500 to-green-600 shadow-md"
+                  className="flex items-center justify-center w-full py-3 rounded-xl font-medium text-white bg-gradient-to-br from-green-500 via-emerald-500 to-green-600 shadow-md"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Booyah
@@ -615,18 +615,18 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                 {/* Menu Sections */}
                 <div className="space-y-4">
                   {/* Pillars */}
-                  <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 transition-colors duration-300">
-                    <div className="text-xs uppercase tracking-wide text-gray-500 dark:text-pearto-gray mb-3 flex items-center gap-2 transition-colors duration-300">
+                  <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4 transition-colors duration-300">
+                    <div className="text-xs uppercase tracking-wide text-slate-500 dark:text-pearto-gray mb-3 flex items-center gap-2 transition-colors duration-300">
                       <Layers size={14} /> Pillars
                     </div>
                     <div className="space-y-1">
                       {pillarsItems.map((item) => (
                         item.href.startsWith('http') || item.href.startsWith(mainAppUrl) ? (
-                          <a key={item.label} href={item.href} className="block py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-colors duration-300" onClick={() => setMobileMenuOpen(false)}>
+                          <a key={item.label} href={item.href} className="block py-2.5 px-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-sm transition-colors duration-300" onClick={() => setMobileMenuOpen(false)}>
                             {item.label}
                           </a>
                         ) : (
-                          <Link key={item.label} href={item.href} className="block py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-colors duration-300" onClick={() => setMobileMenuOpen(false)}>
+                          <Link key={item.label} href={item.href} className="block py-2.5 px-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-sm transition-colors duration-300" onClick={() => setMobileMenuOpen(false)}>
                             {item.label}
                           </Link>
                         )
@@ -635,18 +635,18 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                   </div>
 
                   {/* Tools */}
-                  <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 transition-colors duration-300">
-                    <div className="text-xs uppercase tracking-wide text-gray-500 dark:text-pearto-gray mb-3 flex items-center gap-2 transition-colors duration-300">
+                  <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4 transition-colors duration-300">
+                    <div className="text-xs uppercase tracking-wide text-slate-500 dark:text-pearto-gray mb-3 flex items-center gap-2 transition-colors duration-300">
                       <Wrench size={14} /> Tools
                     </div>
                     <div className="space-y-1">
                       {toolsItems.map((item) => (
                         item.href.startsWith('http') || item.href.startsWith(mainAppUrl) ? (
-                          <a key={item.label} href={item.href} className="block py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-colors duration-300" onClick={() => setMobileMenuOpen(false)}>
+                          <a key={item.label} href={item.href} className="block py-2.5 px-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-sm transition-colors duration-300" onClick={() => setMobileMenuOpen(false)}>
                             {item.label}
                           </a>
                         ) : (
-                          <Link key={item.label} href={item.href} className="block py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-colors duration-300" onClick={() => setMobileMenuOpen(false)}>
+                          <Link key={item.label} href={item.href} className="block py-2.5 px-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-sm transition-colors duration-300" onClick={() => setMobileMenuOpen(false)}>
                             {item.label}
                           </Link>
                         )
@@ -655,18 +655,18 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                   </div>
 
                   {/* Resources */}
-                  <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 transition-colors duration-300">
-                    <div className="text-xs uppercase tracking-wide text-gray-500 dark:text-pearto-gray mb-3 flex items-center gap-2 transition-colors duration-300">
+                  <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4 transition-colors duration-300">
+                    <div className="text-xs uppercase tracking-wide text-slate-500 dark:text-pearto-gray mb-3 flex items-center gap-2 transition-colors duration-300">
                       <BookOpen size={14} /> Resources
                     </div>
                     <div className="space-y-1">
                       {resourcesItems.map((item) => (
                         item.href.startsWith('http') || item.href.startsWith(mainAppUrl) ? (
-                          <a key={item.label} href={item.href} className="block py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-colors duration-300" onClick={() => setMobileMenuOpen(false)}>
+                          <a key={item.label} href={item.href} className="block py-2.5 px-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-sm transition-colors duration-300" onClick={() => setMobileMenuOpen(false)}>
                             {item.label}
                           </a>
                         ) : (
-                          <Link key={item.label} href={item.href} className="block py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-colors duration-300" onClick={() => setMobileMenuOpen(false)}>
+                          <Link key={item.label} href={item.href} className="block py-2.5 px-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-sm transition-colors duration-300" onClick={() => setMobileMenuOpen(false)}>
                             {item.label}
                           </Link>
                         )
@@ -676,10 +676,10 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                 </div>
 
                 {/* Auth Section */}
-                <div className="pt-4 border-t border-gray-200 dark:border-gray-700 transition-colors duration-300">
+                <div className="pt-4 border-t border-slate-200 dark:border-slate-700 transition-colors duration-300">
                   {!isAuthenticated ? (
                     <div className="flex gap-3">
-                      <a href={`${authRedirectBase}/login?redirect=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : mainAppUrl)}`} className="flex-1 py-3 text-center rounded-xl border border-gray-200 dark:border-gray-700 font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300" onClick={() => setMobileMenuOpen(false)}>
+                      <a href={`${authRedirectBase}/login?redirect=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : mainAppUrl)}`} className="flex-1 py-3 text-center rounded-xl border border-slate-200 dark:border-slate-700 font-medium text-slate-700 dark:text-slate-300 transition-colors duration-300" onClick={() => setMobileMenuOpen(false)}>
                         Sign In
                       </a>
                       <a href={`${authRedirectBase}/signup?redirect=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : mainAppUrl)}`} className="flex-1 py-3 text-center rounded-xl text-white bg-gradient-to-r from-emerald-600 via-emerald-500 to-cyan-500 font-medium" onClick={() => setMobileMenuOpen(false)}>
@@ -688,10 +688,10 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                     </div>
                   ) : (
                     <div className="space-y-2">
-                      <Link href="/profile" onClick={() => setMobileMenuOpen(false)} className="block py-3 px-4 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300">Profile</Link>
-                      <Link href="/profile/portfolio" onClick={() => setMobileMenuOpen(false)} className="block py-3 px-4 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300">Portfolio</Link>
-                      <Link href="/profile/settings" onClick={() => setMobileMenuOpen(false)} className="block py-3 px-4 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300">Settings</Link>
-                      <button onClick={() => { handleLogout(); setMobileMenuOpen(false); }} className="w-full py-3 rounded-xl bg-red-50 dark:bg-pearto-pink/100/10 text-red-600 dark:text-pearto-pink font-medium transition-colors duration-300">
+                      <Link href="/profile" onClick={() => setMobileMenuOpen(false)} className="block py-3 px-4 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-300">Profile</Link>
+                      <Link href="/profile/portfolio" onClick={() => setMobileMenuOpen(false)} className="block py-3 px-4 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-300">Portfolio</Link>
+                      <Link href="/profile/settings" onClick={() => setMobileMenuOpen(false)} className="block py-3 px-4 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-300">Settings</Link>
+                      <button onClick={() => { handleLogout(); setMobileMenuOpen(false); }} className="w-full py-3 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 font-medium transition-colors duration-300">
                         Sign out
                       </button>
                     </div>

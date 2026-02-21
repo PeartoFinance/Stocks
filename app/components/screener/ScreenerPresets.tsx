@@ -93,7 +93,7 @@ export default function ScreenerPresets({ onSelectPreset, activePreset }: Props)
             className={`relative p-4 rounded-xl text-left transition-all ${
               isActive
                 ? `bg-gradient-to-br ${colorClasses[preset.color as keyof typeof colorClasses]} text-white shadow-lg scale-105`
-                : 'bg-white dark:bg-gray-800 hover:shadow-lg border border-gray-200 dark:border-gray-700'
+                : 'bg-white dark:bg-slate-800 hover:shadow-lg border border-gray-200 dark:border-slate-700'
             }`}
           >
             <div className="flex items-start gap-3">
@@ -108,7 +108,7 @@ export default function ScreenerPresets({ onSelectPreset, activePreset }: Props)
               </div>
               <div className="flex-1 min-w-0">
                 <h3
-                  className={`font-bold text-sm mb-1 ${
+                  className={`font-medium text-sm mb-1 ${
                     isActive ? 'text-white' : 'text-slate-900 dark:text-white'
                   }`}
                 >
@@ -116,7 +116,7 @@ export default function ScreenerPresets({ onSelectPreset, activePreset }: Props)
                 </h3>
                 <p
                   className={`text-xs ${
-                    isActive ? 'text-white/90' : 'text-slate-600 dark:text-gray-400'
+                    isActive ? 'text-white/90' : 'text-slate-600 dark:text-slate-400'
                   }`}
                 >
                   {preset.description}

@@ -29,7 +29,7 @@ export default function PriceDisplay({
     if (autoColor) {
         if (amount > 0) colorClass = 'text-green-500';
         else if (amount < 0) colorClass = 'text-red-500';
-        else colorClass = 'text-gray-500';
+        else colorClass = 'text-slate-500';
     }
 
     // Determine sign

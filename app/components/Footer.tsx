@@ -35,7 +35,7 @@ export default function Footer() {
             { label: 'Stock Analysis Pro', href: '/pro' },
         ],
         company: [
-            { label: 'About Us', href: `${mainAppUrl}/about` },
+            { label: 'About Us', href: `${mainAppUrl}/p/about` },
             { label: 'Contact', href: `${mainAppUrl}/contact` },
             { label: 'Privacy Policy', href: `${mainAppUrl}/privacy` },
             { label: 'Terms of Service', href: `${mainAppUrl}/terms` },
@@ -52,7 +52,7 @@ export default function Footer() {
 
     return (
         /* Shadow added via relative positioning and shadow-inner/border-t */
-        <footer className="relative bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-gray-900 dark:to-gray-900 text-white transition-colors duration-300 border-t border-black/10 dark:border-white/5 w-full overflow-x-hidden">
+        <footer className="relative bg-gradient-to-r from-emerald-600 to-teal-600 dark:bg-none dark:bg-slate-900/95 text-white transition-colors duration-300 border-t border-black/10 dark:border-white/5 w-full overflow-x-hidden">
             
             {/* Top Shadow Layer */}
             <div className="absolute inset-x-0 top-0 h-4 shadow-[inset_0_4px_6px_-1px_rgba(0,0,0,0.1),_0_-4px_10px_rgba(0,0,0,0.05)] pointer-events-none" />
@@ -69,9 +69,9 @@ export default function Footer() {
                             <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-xl bg-white/20 dark:bg-emerald-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
                                 <span className="text-white dark:text-emerald-400 font-extrabold text-lg sm:text-xl">P</span>
                             </div>
-                            <span className="text-xl sm:text-2xl font-bold tracking-tight text-white">Pearto Stocks</span>
+                            <span className="text-xl sm:text-2xl font-medium tracking-tight text-white">Pearto Stocks</span>
                         </Link>
-                        <p className="text-emerald-50 dark:text-gray-400 text-xs sm:text-sm leading-relaxed mb-4 sm:mb-8 max-w-xs">
+                        <p className="text-emerald-50 dark:text-slate-400 text-xs sm:text-sm leading-relaxed mb-4 sm:mb-8 max-w-xs">
                             Professional stock analysis platform with real-time data, powerful screening tools, and comprehensive market insights.
                         </p>
                         <div className="flex flex-wrap gap-2 sm:gap-4">
@@ -81,7 +81,7 @@ export default function Footer() {
                                     href={social.href}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-white/10 dark:bg-gray-800 hover:bg-white/25 dark:hover:bg-gray-700 flex items-center justify-center transition-all active:scale-95"
+                                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-white/10 dark:bg-slate-800 hover:bg-white/25 dark:hover:bg-slate-700 flex items-center justify-center transition-all active:scale-95"
                                     aria-label={social.label}
                                 >
                                     <social.icon className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -92,11 +92,11 @@ export default function Footer() {
 
                     {/* Navigation Columns */}
                     <div>
-                        <h3 className="text-[10px] sm:text-sm font-bold uppercase tracking-wider text-white mb-3 sm:mb-6">Markets</h3>
+                        <h3 className="text-[10px] sm:text-sm font-medium uppercase tracking-wider text-white mb-3 sm:mb-6">Markets</h3>
                         <ul className="space-y-2 sm:space-y-4">
                             {footerLinks.markets.map((link) => (
                                 <li key={link.label}>
-                                    <Link href={link.href} className="text-emerald-50/70 dark:text-gray-400 hover:text-white dark:hover:text-emerald-400 text-[10px] sm:text-sm transition-colors block">
+                                    <Link href={link.href} className="text-emerald-50/70 dark:text-slate-400 hover:text-white dark:hover:text-emerald-400 text-[10px] sm:text-sm transition-colors block">
                                         {link.label}
                                     </Link>
                                 </li>
@@ -105,11 +105,11 @@ export default function Footer() {
                     </div>
 
                     <div>
-                        <h3 className="text-[10px] sm:text-sm font-bold uppercase tracking-wider text-white mb-3 sm:mb-6">Tools</h3>
+                        <h3 className="text-[10px] sm:text-sm font-medium uppercase tracking-wider text-white mb-3 sm:mb-6">Tools</h3>
                         <ul className="space-y-2 sm:space-y-4">
                             {footerLinks.tools.map((link) => (
                                 <li key={link.label}>
-                                    <Link href={link.href} className="text-emerald-50/70 dark:text-gray-400 hover:text-white dark:hover:text-emerald-400 text-[10px] sm:text-sm transition-colors block">
+                                    <Link href={link.href} className="text-emerald-50/70 dark:text-slate-400 hover:text-white dark:hover:text-emerald-400 text-[10px] sm:text-sm transition-colors block">
                                         {link.label}
                                     </Link>
                                 </li>
@@ -118,11 +118,11 @@ export default function Footer() {
                     </div>
 
                     <div>
-                        <h3 className="text-[10px] sm:text-sm font-bold uppercase tracking-wider text-white mb-3 sm:mb-6">Resources</h3>
+                        <h3 className="text-[10px] sm:text-sm font-medium uppercase tracking-wider text-white mb-3 sm:mb-6">Resources</h3>
                         <ul className="space-y-2 sm:space-y-4">
                             {footerLinks.resources.map((link) => (
                                 <li key={link.label}>
-                                    <Link href={link.href} className="text-emerald-50/70 dark:text-gray-400 hover:text-white dark:hover:text-emerald-400 text-[10px] sm:text-sm transition-colors block">
+                                    <Link href={link.href} className="text-emerald-50/70 dark:text-slate-400 hover:text-white dark:hover:text-emerald-400 text-[10px] sm:text-sm transition-colors block">
                                         {link.label}
                                     </Link>
                                 </li>
@@ -131,11 +131,11 @@ export default function Footer() {
                     </div>
 
                     <div>
-                        <h3 className="text-[10px] sm:text-sm font-bold uppercase tracking-wider text-white mb-3 sm:mb-6">Company</h3>
+                        <h3 className="text-[10px] sm:text-sm font-medium uppercase tracking-wider text-white mb-3 sm:mb-6">Company</h3>
                         <ul className="space-y-2 sm:space-y-4">
                             {footerLinks.company.map((link) => (
                                 <li key={link.label}>
-                                    <a href={link.href} className="text-emerald-50/70 dark:text-gray-400 hover:text-white dark:hover:text-emerald-400 text-[10px] sm:text-sm transition-colors block">
+                                    <a href={link.href} className="text-emerald-50/70 dark:text-slate-400 hover:text-white dark:hover:text-emerald-400 text-[10px] sm:text-sm transition-colors block">
                                         {link.label}
                                     </a>
                                 </li>
@@ -145,10 +145,10 @@ export default function Footer() {
                 </div>
 
                 {/* Bottom Bar */}
-                <div className="mt-8 sm:mt-16 pt-4 sm:pt-8 border-t border-white/10 dark:border-gray-800">
+                <div className="mt-8 sm:mt-16 pt-4 sm:pt-8 border-t border-white/10 dark:border-slate-800">
                     <div className="flex flex-col lg:flex-row justify-between items-center gap-3 sm:gap-6 text-center lg:text-left">
                         <div className="order-2 lg:order-1">
-                            <p className="text-emerald-100/60 dark:text-gray-500 text-[10px] sm:text-sm">
+                            <p className="text-emerald-100/60 dark:text-slate-500 text-[10px] sm:text-sm">
                                 © {currentYear} Pearto Stocks. Built for modern investors.
                             </p>
                         </div>
@@ -156,12 +156,12 @@ export default function Footer() {
                         <div className="flex flex-wrap justify-center items-center gap-x-4 sm:gap-x-8 gap-y-2 sm:gap-y-4 order-1 lg:order-2">
                             <a
                                 href={mainAppUrl}
-                                className="text-emerald-50/80 dark:text-gray-400 hover:text-white dark:hover:text-emerald-400 text-[10px] sm:text-sm font-medium transition-colors"
+                                className="text-emerald-50/80 dark:text-slate-400 hover:text-white dark:hover:text-emerald-400 text-[10px] sm:text-sm font-medium transition-colors"
                             >
                                 Main Platform
                             </a>
-                            <div className="hidden sm:block h-4 w-px bg-white/20 dark:bg-gray-800" />
-                            <span className="text-emerald-100/40 dark:text-gray-600 text-[9px] sm:text-xs max-w-[250px] sm:max-w-none">
+                            <div className="hidden sm:block h-4 w-px bg-white/20 dark:bg-slate-800" />
+                            <span className="text-emerald-100/40 dark:text-slate-600 text-[9px] sm:text-xs max-w-[250px] sm:max-w-none">
                                 Data provided for informational purposes only.
                             </span>
                         </div>
