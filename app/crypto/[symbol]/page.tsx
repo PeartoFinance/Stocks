@@ -19,6 +19,8 @@ import cryptoService from '@/app/utils/cryptoService';
 import AIAnalysisPanel from '@/app/components/ai/AIAnalysisPanel';
 import StockChart from '@/app/components/StockChart';
 import { HistoricalData as StockHistoricalData } from '@/app/types';
+import { addToWatchlist, removeFromWatchlist, getWatchlist } from '@/app/utils/portfolioWatchlistAPI';
+import { useAuth } from '@/app/context/AuthContext';
 
 // Import crypto tab components
 import {
@@ -74,6 +76,7 @@ export default function CryptoDetailPage() {
   const params = useParams();
   const router = useRouter();
   const symbol = params.symbol as string;
+  const { user } = useAuth();
 
   const [crypto, setCrypto] = useState<CryptoDetails | null>(null);
   const [historicalData, setHistoricalData] = useState<StockHistoricalData[]>([]);
@@ -133,6 +136,24 @@ export default function CryptoDetailPage() {
 
     fetchCryptoDetails();
   }, [symbol, router]);
+
+  // Check watchlist status when user changes
+  useEffect(() => {
+    const checkWatchlistStatus = async () => {
+      if (user && symbol) {
+        try {
+          const watchlist = await getWatchlist();
+          const decodedSymbol = decodeURIComponent(symbol);
+          setIsFavorited(watchlist.some((item) => item.symbol.toUpperCase() === decodedSymbol.toUpperCase()));
+        } catch (error) {
+          console.error('Failed to check watchlist status:', error);
+        }
+      } else {
+        setIsFavorited(false);
+      }
+    };
+    checkWatchlistStatus();
+  }, [user, symbol]);
 
   const handleRefresh = async () => {
     setRefreshing(true);
@@ -221,19 +242,26 @@ export default function CryptoDetailPage() {
   const formatChange = (change: number, percent: number) =>
     `${change >= 0 ? "+" : ""}${change.toFixed(2)} (${percent >= 0 ? "+" : ""}${percent.toFixed(2)}%)`;
 
-  const toggleWatchlist = () => {
+  const toggleWatchlist = async () => {
     if (!crypto) return;
-    const watchlist = JSON.parse(localStorage.getItem("cryptoWatchlist") || "[]");
-    if (isFavorited) {
-      const newWatchlist = watchlist.filter((item: CryptoDetails) => item.symbol !== crypto.symbol);
-      localStorage.setItem("cryptoWatchlist", JSON.stringify(newWatchlist));
-      setIsFavorited(false);
-      toast.success("Removed from watchlist");
-    } else {
-      watchlist.push(crypto);
-      localStorage.setItem("cryptoWatchlist", JSON.stringify(watchlist));
-      setIsFavorited(true);
-      toast.success("Added to watchlist");
+    
+    if (!user) {
+      toast.error("Sign in to add to watchlist");
+      return;
+    }
+
+    try {
+      if (isFavorited) {
+        await removeFromWatchlist(crypto.symbol);
+        setIsFavorited(false);
+        toast.success("Removed from watchlist");
+      } else {
+        await addToWatchlist(crypto.symbol);
+        setIsFavorited(true);
+        toast.success("Added to watchlist");
+      }
+    } catch (error: any) {
+      toast.error(error.message || "Failed to update watchlist");
     }
   };
 

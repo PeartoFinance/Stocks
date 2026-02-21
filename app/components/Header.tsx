@@ -234,7 +234,7 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
             {/* Left: Logo */}
             <Link href="/" className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0 mr-auto lg:mr-0">
               <img src="/logo.svg" alt="Pearto Logo" className="h-6 sm:h-7 md:h-8 w-auto" />
-              <span className="text-base sm:text-xl md:text-2xl font-medium bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 via-emerald-500 to-cyan-500 truncate">
+              <span className="text-xl sm:text-2xl md:text-3xl font-medium bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 via-emerald-500 to-cyan-500 truncate">
                 Pearto
               </span>
             </Link>

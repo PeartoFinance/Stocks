@@ -28,6 +28,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { marketService } from "../../utils/marketService";
 import { Stock, HistoricalData } from "../../types";
 import toast from "react-hot-toast";
+import { addToWatchlist, removeFromWatchlist, getWatchlist } from "../../utils/portfolioWatchlistAPI";
+import { useAuth } from "../../context/AuthContext";
 
 // Components
 import StockChart from "../../components/StockChart";
@@ -59,6 +61,7 @@ interface PageProps {
 export default function StockDetailPage({ params }: PageProps) {
   const { symbol } = params;
   const router = useRouter();
+  const { user } = useAuth();
 
   // State
   const [stock, setStock] = useState<Stock | null>(null);
@@ -160,19 +163,26 @@ export default function StockDetailPage({ params }: PageProps) {
     }
   };
 
-  const toggleWatchlist = () => {
+  const toggleWatchlist = async () => {
     if (!stock) return;
-    const watchlist = JSON.parse(localStorage.getItem("watchlist") || "[]");
-    if (isWatchlisted) {
-      const newWatchlist = watchlist.filter((item: Stock) => item.symbol !== stock.symbol);
-      localStorage.setItem("watchlist", JSON.stringify(newWatchlist));
-      setIsWatchlisted(false);
-      toast.success("Removed from watchlist");
-    } else {
-      watchlist.push(stock);
-      localStorage.setItem("watchlist", JSON.stringify(watchlist));
-      setIsWatchlisted(true);
-      toast.success("Added to watchlist");
+    
+    if (!user) {
+      toast.error("Sign in to add to watchlist");
+      return;
+    }
+
+    try {
+      if (isWatchlisted) {
+        await removeFromWatchlist(stock.symbol);
+        setIsWatchlisted(false);
+        toast.success("Removed from watchlist");
+      } else {
+        await addToWatchlist(stock.symbol);
+        setIsWatchlisted(true);
+        toast.success("Added to watchlist");
+      }
+    } catch (error: any) {
+      toast.error(error.message || "Failed to update watchlist");
     }
   };
 
@@ -234,9 +244,6 @@ export default function StockDetailPage({ params }: PageProps) {
             setTodayData(transformedData[transformedData.length - 1]);
           }
         }
-
-        const watchlist = JSON.parse(localStorage.getItem("watchlist") || "[]");
-        setIsWatchlisted(watchlist.some((item: Stock) => item.symbol === symbol));
       } catch (error) {
         toast.error("Failed to load stock information");
         console.error('Stock fetch error:', error);
@@ -246,6 +253,24 @@ export default function StockDetailPage({ params }: PageProps) {
     };
     fetchStockData();
   }, [symbol]);
+
+  // Check watchlist status when user changes
+  useEffect(() => {
+    const checkWatchlistStatus = async () => {
+      if (user && symbol) {
+        try {
+          const watchlist = await getWatchlist();
+          const decodedSymbol = decodeURIComponent(symbol);
+          setIsWatchlisted(watchlist.some((item) => item.symbol.toUpperCase() === decodedSymbol.toUpperCase()));
+        } catch (error) {
+          console.error('Failed to check watchlist status:', error);
+        }
+      } else {
+        setIsWatchlisted(false);
+      }
+    };
+    checkWatchlistStatus();
+  }, [user, symbol]);
 
   // Render tab content
   const renderTabContent = () => {
