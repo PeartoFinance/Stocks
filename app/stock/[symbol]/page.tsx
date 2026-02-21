@@ -777,6 +777,12 @@ export default function StockDetailPage({ params }: PageProps) {
                 <Star className="h-5 w-5" fill={isWatchlisted ? 'currentColor' : 'none'} />
               </button>
               <button
+                onClick={() => router.push(`/stocks/comparison?stocks=${stock.symbol}`)}
+                className="p-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition"
+              >
+                <GitCompare className="h-5 w-5" />
+              </button>
+              <button
                 onClick={() => setShowAIPanel(true)}
                 className="p-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg"
               >
