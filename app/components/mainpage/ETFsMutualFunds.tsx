@@ -65,40 +65,40 @@ export default function ETFsMutualFunds({ className = '' }: ETFsMutualFundsProps
 
   if (loading) {
     return (
-      <div className={`bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-slate-200 dark:border-gray-700 p-8 ${className}`}>
+      <div className={`bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-8 ${className}`}>
         <div className="flex items-center justify-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
-          <span className="ml-3 text-slate-600 dark:text-gray-400 transition-colors duration-300">Loading ETFs and mutual funds...</span>
+          <span className="ml-3 text-slate-600 dark:text-slate-400 transition-colors duration-300">Loading ETFs and mutual funds...</span>
         </div>
       </div>
     );
   }
 
   const DataTable = ({ data, title }: { data: ETFData[]; title: string }) => (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-slate-200 dark:border-gray-700 overflow-hidden transition-colors duration-300">
-      <div className="px-4 py-3 bg-gradient-to-r from-indigo-50 to-purple-50 border-b border-slate-200 dark:border-gray-700 transition-colors duration-300">
-        <h3 className="font-semibold text-slate-900 dark:text-white transition-colors duration-300">{title}</h3>
+    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden transition-colors duration-300">
+      <div className="px-4 py-3 bg-gradient-to-r from-indigo-50 to-purple-50 border-b border-slate-200 dark:border-slate-700 transition-colors duration-300">
+        <h3 className="font-medium text-slate-900 dark:text-white transition-colors duration-300">{title}</h3>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full">
-          <thead className="bg-gray-50 dark:bg-gray-700 border-b border-slate-200 dark:border-gray-700 transition-colors duration-300">
+          <thead className="bg-slate-50 dark:bg-slate-700 border-b border-slate-200 dark:border-slate-700 transition-colors duration-300">
             <tr>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase transition-colors duration-300">Symbol</th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase transition-colors duration-300">Name</th>
-              <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase transition-colors duration-300">Price</th>
-              <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase transition-colors duration-300">Change</th>
-              <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase transition-colors duration-300">% Change</th>
-              <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase transition-colors duration-300">Volume</th>
-              <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase transition-colors duration-300">Expense Ratio</th>
+              <th className="px-4 py-2 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase transition-colors duration-300">Symbol</th>
+              <th className="px-4 py-2 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase transition-colors duration-300">Name</th>
+              <th className="px-4 py-2 text-right text-xs font-medium text-slate-500 dark:text-slate-400 uppercase transition-colors duration-300">Price</th>
+              <th className="px-4 py-2 text-right text-xs font-medium text-slate-500 dark:text-slate-400 uppercase transition-colors duration-300">Change</th>
+              <th className="px-4 py-2 text-right text-xs font-medium text-slate-500 dark:text-slate-400 uppercase transition-colors duration-300">% Change</th>
+              <th className="px-4 py-2 text-right text-xs font-medium text-slate-500 dark:text-slate-400 uppercase transition-colors duration-300">Volume</th>
+              <th className="px-4 py-2 text-right text-xs font-medium text-slate-500 dark:text-slate-400 uppercase transition-colors duration-300">Expense Ratio</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
             {data.map((item, i) => (
-              <tr key={item.symbol} className="hover:bg-gray-50 dark:bg-gray-700 transition-colors">
+              <tr key={item.symbol} className="hover:bg-slate-50 dark:bg-slate-700 transition-colors">
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2">
                     <span className="font-medium text-slate-900 dark:text-white transition-colors duration-300">{item.symbol}</span>
-                    <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded transition-colors duration-300">
+                    <span className="text-xs text-slate-500 dark:text-slate-400 bg-gray-100 dark:bg-slate-700 px-2 py-1 rounded transition-colors duration-300">
                       {item.type === 'etf' ? 'ETF' : 'MF'}
                     </span>
                   </div>
@@ -135,17 +135,17 @@ export default function ETFsMutualFunds({ className = '' }: ETFsMutualFundsProps
     <div className={`space-y-6 ${className}`}>
       <div className="flex items-center gap-2 mb-4">
         <BarChart3 className="h-5 w-5 text-indigo-600" />
-        <h2 className="text-xl font-bold text-slate-900 dark:text-white transition-colors duration-300">ETFs and Mutual Funds</h2>
+        <h2 className="text-xl font-medium text-slate-900 dark:text-white transition-colors duration-300">ETFs and Mutual Funds</h2>
       </div>
 
       {/* Main Tab Navigation */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-slate-200 dark:border-gray-700 overflow-hidden transition-colors duration-300">
-        <div className="flex border-b border-slate-200 dark:border-gray-700 transition-colors duration-300">
+      <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden transition-colors duration-300">
+        <div className="flex border-b border-slate-200 dark:border-slate-700 transition-colors duration-300">
           <button
             onClick={() => setActiveTab('etfs')}
             className={`flex items-center gap-2 px-6 py-3 font-medium transition-colors ${activeTab === 'etfs'
                 ? 'text-indigo-600 border-b-2 border-indigo-600 bg-indigo-50'
-                : 'text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:text-white hover:bg-gray-50 dark:bg-gray-700'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-slate-50 dark:bg-slate-700'
               }`}
           >
             <BarChart3 className="h-4 w-4" />
@@ -155,7 +155,7 @@ export default function ETFsMutualFunds({ className = '' }: ETFsMutualFundsProps
             onClick={() => setActiveTab('mutual-funds')}
             className={`flex items-center gap-2 px-6 py-3 font-medium transition-colors ${activeTab === 'mutual-funds'
                 ? 'text-indigo-600 border-b-2 border-indigo-600 bg-indigo-50'
-                : 'text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:text-white hover:bg-gray-50 dark:bg-gray-700'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-slate-50 dark:bg-slate-700'
               }`}
           >
             <Building className="h-4 w-4" />
@@ -164,14 +164,14 @@ export default function ETFsMutualFunds({ className = '' }: ETFsMutualFundsProps
         </div>
 
         {/* Sub-Tab Navigation */}
-        <div className="flex border-b border-slate-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 transition-colors duration-300">
+        <div className="flex border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-700 transition-colors duration-300">
           {['most-active', 'gainers', 'losers'].map((subTab) => (
             <button
               key={subTab}
               onClick={() => setActiveSubTab(subTab as any)}
               className={`px-4 py-2 text-sm font-medium transition-colors ${activeSubTab === subTab
-                  ? 'text-indigo-600 border-b-2 border-indigo-600 bg-white dark:bg-gray-800'
-                  : 'text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:text-white hover:bg-white dark:bg-gray-800'
+                  ? 'text-indigo-600 border-b-2 border-indigo-600 bg-white dark:bg-slate-800'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-white dark:bg-slate-800'
                 }`}
             >
               {subTab.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}

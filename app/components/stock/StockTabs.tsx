@@ -78,7 +78,7 @@ export default function StockTabs({ activeTab, onTabChange }: StockTabsProps) {
                     ? 'bg-blue-600 dark:bg-pearto-blue text-white shadow-md'
                     : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
                   }
-                  rounded-lg font-bold
+                  rounded-lg font-medium
                 `}
               >
                 <Icon size={16} className={isActive ? "animate-pulse" : ""} />

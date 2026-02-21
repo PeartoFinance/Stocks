@@ -86,7 +86,7 @@ export default function MarketSummary({ className = '' }: MarketSummaryProps) {
     switch (sentiment) {
       case 'bullish': return 'text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-500/10';
       case 'bearish': return 'text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-500/10';
-      default: return 'text-slate-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-700';
+      default: return 'text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-700';
     }
   };
 
@@ -148,23 +148,23 @@ export default function MarketSummary({ className = '' }: MarketSummaryProps) {
 
   if (loading) {
     return (
-      <div className={`bg-white dark:bg-gray-800 rounded-xl shadow-sm p-8 ${className}`}>
+      <div className={`bg-white dark:bg-slate-800 rounded-xl shadow-sm p-8 ${className}`}>
         <div className="flex items-center justify-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-          <span className="ml-3 text-slate-600 dark:text-gray-400 transition-colors duration-300">Loading market summary...</span>
+          <span className="ml-3 text-slate-600 dark:text-slate-400 transition-colors duration-300">Loading market summary...</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className={`bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-slate-200 dark:border-gray-700 p-6 transition-colors duration-300 ${className}`}>
+    <div className={`bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-6 transition-colors duration-300 ${className}`}>
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center transition-colors duration-300">
+        <h2 className="text-xl font-medium text-slate-900 dark:text-white flex items-center transition-colors duration-300">
           <span className="w-1.5 h-6 bg-gradient-to-b from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-500 rounded-full mr-3"></span>
           Market Summary
         </h2>
-        <div className={`px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-colors duration-300 ${getSentimentColor(marketStats.marketSentiment)}`}>
+        <div className={`px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1.5 transition-colors duration-300 ${getSentimentColor(marketStats.marketSentiment)}`}>
           {getSentimentIcon(marketStats.marketSentiment)}
           <span className="capitalize">{marketStats.marketSentiment}</span>
         </div>
@@ -180,37 +180,37 @@ export default function MarketSummary({ className = '' }: MarketSummaryProps) {
 
         {/* Market Stats */}
         <div className="space-y-3">
-          <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-750 rounded-xl p-4 transition-colors duration-300">
+          <div className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-700 dark:to-slate-750 rounded-xl p-4 transition-colors duration-300">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-semibold text-slate-700 dark:text-gray-300 transition-colors duration-300">Total Volume</span>
-              <Volume className="h-4 w-4 text-slate-500 dark:text-gray-400 transition-colors duration-300" />
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-300 transition-colors duration-300">Total Volume</span>
+              <Volume className="h-4 w-4 text-slate-500 dark:text-slate-400 transition-colors duration-300" />
             </div>
-            <div className="text-2xl font-bold text-slate-900 dark:text-white transition-colors duration-300">
+            <div className="text-2xl font-medium text-slate-900 dark:text-white transition-colors duration-300">
               {formatVolume(marketStats.totalVolume)}
             </div>
           </div>
 
           <div className="grid grid-cols-3 gap-2">
             <div className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-500/10 dark:to-green-500/5 rounded-xl p-3 text-center transition-colors duration-300">
-              <div className="text-lg font-bold text-green-600 dark:text-green-400 transition-colors duration-300">{marketStats.advancers}</div>
+              <div className="text-lg font-medium text-green-600 dark:text-green-400 transition-colors duration-300">{marketStats.advancers}</div>
               <div className="text-xs font-medium text-green-600 dark:text-green-400 mt-1 transition-colors duration-300">Advancers</div>
             </div>
             <div className="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-500/10 dark:to-red-500/5 rounded-xl p-3 text-center transition-colors duration-300">
-              <div className="text-lg font-bold text-red-600 dark:text-red-400 transition-colors duration-300">{marketStats.decliners}</div>
+              <div className="text-lg font-medium text-red-600 dark:text-red-400 transition-colors duration-300">{marketStats.decliners}</div>
               <div className="text-xs font-medium text-red-600 dark:text-red-400 mt-1 transition-colors duration-300">Decliners</div>
             </div>
-            <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-750 rounded-xl p-3 text-center transition-colors duration-300">
-              <div className="text-lg font-bold text-slate-700 dark:text-gray-300 transition-colors duration-300">{marketStats.unchanged}</div>
-              <div className="text-xs font-medium text-slate-600 dark:text-gray-400 mt-1 transition-colors duration-300">Unchanged</div>
+            <div className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-700 dark:to-slate-750 rounded-xl p-3 text-center transition-colors duration-300">
+              <div className="text-lg font-medium text-slate-700 dark:text-slate-300 transition-colors duration-300">{marketStats.unchanged}</div>
+              <div className="text-xs font-medium text-slate-600 dark:text-slate-400 mt-1 transition-colors duration-300">Unchanged</div>
             </div>
           </div>
 
           <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-500/10 dark:to-blue-500/5 rounded-xl p-4 transition-colors duration-300">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-semibold text-blue-700 dark:text-blue-400 transition-colors duration-300">Market Participation</span>
+              <span className="text-sm font-medium text-blue-700 dark:text-blue-400 transition-colors duration-300">Market Participation</span>
               <BarChart3 className="h-4 w-4 text-blue-600 dark:text-blue-400 transition-colors duration-300" />
             </div>
-            <div className="text-base font-bold text-blue-800 dark:text-blue-300 transition-colors duration-300">
+            <div className="text-base font-medium text-blue-800 dark:text-blue-300 transition-colors duration-300">
               {marketStats.advancers + marketStats.decliners + marketStats.unchanged > 0 
                 ? `${Math.round(((marketStats.advancers + marketStats.decliners) / (marketStats.advancers + marketStats.decliners + marketStats.unchanged)) * 100)}% Active`
                 : 'Loading...'

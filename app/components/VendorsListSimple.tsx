@@ -48,7 +48,7 @@ export default function VendorsListSimple({ className = '', limit = 8, category 
   if (loading) {
     return (
       <div className={`bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-2.5 ${className}`}>
-        <h3 className="text-xs font-semibold text-slate-900 dark:text-white mb-2 flex items-center gap-1.5 transition-colors duration-300">
+        <h3 className="text-xs font-medium text-slate-900 dark:text-white mb-2 flex items-center gap-1.5 transition-colors duration-300">
           <Building2 className="h-3.5 w-3.5 text-blue-600" />
           Related Vendors
         </h3>
@@ -67,13 +67,13 @@ export default function VendorsListSimple({ className = '', limit = 8, category 
   if (error || vendors.length === 0) {
     return (
       <div className={`bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-2.5 ${className}`}>
-        <h3 className="text-xs font-semibold text-slate-900 dark:text-white mb-2 flex items-center gap-1.5 transition-colors duration-300">
+        <h3 className="text-xs font-medium text-slate-900 dark:text-white mb-2 flex items-center gap-1.5 transition-colors duration-300">
           <Building2 className="h-3.5 w-3.5 text-blue-600" />
           Related Vendors
         </h3>
         <div className="text-center py-4">
-          <Building2 className="h-6 w-6 text-gray-400 mx-auto mb-1.5" />
-          <p className="text-xs text-gray-500 dark:text-pearto-gray transition-colors duration-300">
+          <Building2 className="h-6 w-6 text-slate-400 mx-auto mb-1.5" />
+          <p className="text-xs text-slate-500 dark:text-pearto-gray transition-colors duration-300">
             {error || 'No vendors available'}
           </p>
         </div>
@@ -83,7 +83,7 @@ export default function VendorsListSimple({ className = '', limit = 8, category 
 
   return (
     <div className={`bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-2.5 ${className}`}>
-      <h3 className="text-xs font-semibold text-slate-900 dark:text-white mb-2 flex items-center gap-1.5 transition-colors duration-300">
+      <h3 className="text-xs font-medium text-slate-900 dark:text-white mb-2 flex items-center gap-1.5 transition-colors duration-300">
         <Building2 className="h-3.5 w-3.5 text-blue-600" />
         Related Vendors
       </h3>
@@ -111,12 +111,12 @@ export default function VendorsListSimple({ className = '', limit = 8, category 
                     target.style.display = 'none';
                     const parent = target.parentElement;
                     if (parent) {
-                      parent.innerHTML = `<span class="text-white text-[10px] font-bold">${vendor.name.charAt(0).toUpperCase()}</span>`;
+                      parent.innerHTML = `<span class="text-white text-[10px] font-medium">${vendor.name.charAt(0).toUpperCase()}</span>`;
                     }
                   }}
                 />
               ) : (
-                <span className="text-white text-[10px] font-bold">
+                <span className="text-white text-[10px] font-medium">
                   {vendor.name.charAt(0).toUpperCase()}
                 </span>
               )}

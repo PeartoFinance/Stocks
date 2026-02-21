@@ -58,7 +58,7 @@ export default function ForecastTab({ symbol, currentPrice }: ForecastTabProps) 
     if (normalizedRating.includes('buy')) return 'text-green-600 dark:text-pearto-green bg-green-50 dark:bg-pearto-green/10';
     if (normalizedRating.includes('hold')) return 'text-yellow-600 bg-yellow-50';
     if (normalizedRating.includes('sell')) return 'text-red-600 dark:text-pearto-pink bg-red-50 dark:bg-pearto-pink/10';
-    return 'text-slate-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-700';
+    return 'text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-700';
   };
 
   const calculateUpside = (targetPrice: number | null, currentPrice: number) => {
@@ -88,7 +88,7 @@ export default function ForecastTab({ symbol, currentPrice }: ForecastTabProps) 
     <div className="space-y-6">
       {/* Price Target Summary */}
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 transition-colors duration-300">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
+        <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
           <Target className="h-5 w-5 text-blue-500" />
           Analyst Price Targets
         </h3>
@@ -96,13 +96,13 @@ export default function ForecastTab({ symbol, currentPrice }: ForecastTabProps) 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           <div className="text-center p-4 bg-slate-50 dark:bg-slate-800 rounded-lg transition-colors duration-300">
             <p className="text-sm text-slate-500 dark:text-slate-400 mb-1 transition-colors duration-300">Current Price</p>
-            <div className="text-2xl font-bold text-slate-900 dark:text-white transition-colors duration-300 flex justify-center">
+            <div className="text-2xl font-medium text-slate-900 dark:text-white transition-colors duration-300 flex justify-center">
               <PriceDisplay amount={forecast.currentPrice || currentPrice} />
             </div>
           </div>
           <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg transition-colors duration-300">
             <p className="text-sm text-green-600 dark:text-green-400 mb-1 transition-colors duration-300">Average Target</p>
-            <div className="text-2xl font-bold text-green-700 dark:text-green-300 transition-colors duration-300 flex justify-center">
+            <div className="text-2xl font-medium text-green-700 dark:text-green-300 transition-colors duration-300 flex justify-center">
               <PriceDisplay amount={forecast.targetMean || 0} />
             </div>
             <p className="text-xs text-green-600 dark:text-green-400 transition-colors duration-300">
@@ -111,7 +111,7 @@ export default function ForecastTab({ symbol, currentPrice }: ForecastTabProps) 
           </div>
           <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg transition-colors duration-300">
             <p className="text-sm text-blue-600 dark:text-blue-400 mb-1 transition-colors duration-300">High Target</p>
-            <div className="text-2xl font-bold text-blue-700 dark:text-blue-300 transition-colors duration-300 flex justify-center">
+            <div className="text-2xl font-medium text-blue-700 dark:text-blue-300 transition-colors duration-300 flex justify-center">
               <PriceDisplay amount={forecast.targetHigh || 0} />
             </div>
             <p className="text-xs text-blue-600 dark:text-blue-400 transition-colors duration-300">
@@ -120,7 +120,7 @@ export default function ForecastTab({ symbol, currentPrice }: ForecastTabProps) 
           </div>
           <div className="text-center p-4 bg-red-50 dark:bg-red-900/20 rounded-lg transition-colors duration-300">
             <p className="text-sm text-red-600 dark:text-red-400 mb-1 transition-colors duration-300">Low Target</p>
-            <div className="text-2xl font-bold text-red-700 dark:text-red-300 transition-colors duration-300 flex justify-center">
+            <div className="text-2xl font-medium text-red-700 dark:text-red-300 transition-colors duration-300 flex justify-center">
               <PriceDisplay amount={forecast.targetLow || 0} />
             </div>
             <p className="text-xs text-red-600 dark:text-red-400 transition-colors duration-300">
@@ -150,7 +150,7 @@ export default function ForecastTab({ symbol, currentPrice }: ForecastTabProps) 
       {/* Analyst Recommendations */}
       {forecast.recommendations && forecast.recommendations.length > 0 && (
         <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 transition-colors duration-300">
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
+          <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
             <Users className="h-5 w-5 text-purple-500" />
             Recent Analyst Recommendations
           </h3>
@@ -174,7 +174,7 @@ export default function ForecastTab({ symbol, currentPrice }: ForecastTabProps) 
                   <span className={`px-3 py-1 rounded-full text-xs font-medium ${getRatingColor(rec.toGrade)}`}>
                     {rec.toGrade}
                   </span>
-                  <span className="text-xs text-slate-500 dark:text-gray-400 transition-colors duration-300">{rec.action}</span>
+                  <span className="text-xs text-slate-500 dark:text-slate-400 transition-colors duration-300">{rec.action}</span>
                 </div>
               </div>
             ))}
@@ -184,7 +184,7 @@ export default function ForecastTab({ symbol, currentPrice }: ForecastTabProps) 
 
       {/* Recommendation Summary */}
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 transition-colors duration-300">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 transition-colors duration-300">
+        <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-4 transition-colors duration-300">
           Recommendation Summary
         </h3>
 
@@ -208,7 +208,7 @@ export default function ForecastTab({ symbol, currentPrice }: ForecastTabProps) 
                   />
                 </div>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mb-1 transition-colors duration-300">{item.label}</p>
-                <p className="text-lg font-bold text-slate-900 dark:text-white transition-colors duration-300">{item.count}</p>
+                <p className="text-lg font-medium text-slate-900 dark:text-white transition-colors duration-300">{item.count}</p>
               </div>
             );
           })}

@@ -41,7 +41,7 @@ export default function CryptoTableView({ cryptoData, loading = false, viewMode 
     if (change >= 5) return 'text-emerald-700 bg-emerald-50 border-emerald-200';
     if (change >= 2) return 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 border-emerald-200';
     if (change > 0) return 'text-emerald-500 dark:text-emerald-400 bg-emerald-50 border-emerald-200';
-    if (change === 0) return 'text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-600';
+    if (change === 0) return 'text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800 border-gray-200 dark:border-gray-600';
     if (change > -2) return 'text-rose-500 dark:text-rose-400 bg-rose-50 border-rose-200';
     if (change >= -5) return 'text-rose-600 dark:text-rose-400 bg-rose-50 border-rose-200';
     return 'text-rose-700 dark:text-rose-400 bg-rose-50 border-rose-200';
@@ -60,10 +60,10 @@ export default function CryptoTableView({ cryptoData, loading = false, viewMode 
 
   if (loading) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-slate-200 dark:border-gray-700 p-8 transition-colors duration-300">
+      <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-8 transition-colors duration-300">
         <div className="flex items-center justify-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600"></div>
-          <span className="ml-3 text-slate-600 dark:text-gray-400 transition-colors duration-300">Loading crypto data...</span>
+          <span className="ml-3 text-slate-600 dark:text-slate-400 transition-colors duration-300">Loading crypto data...</span>
         </div>
       </div>
     );
@@ -106,10 +106,10 @@ export default function CryptoTableView({ cryptoData, loading = false, viewMode 
                     <img 
                       src={crypto.logoUrl} 
                       alt="" 
-                      className="h-5 w-5 md:h-6 md:w-6 rounded-full bg-white dark:bg-gray-800 p-0.5 transition-colors duration-300" 
+                      className="h-5 w-5 md:h-6 md:w-6 rounded-full bg-white dark:bg-slate-800 p-0.5 transition-colors duration-300" 
                     />
                   ) : (
-                    <div className="h-5 w-5 md:h-6 md:w-6 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center text-[8px] font-bold uppercase transition-colors duration-300">
+                    <div className="h-5 w-5 md:h-6 md:w-6 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center text-[8px] font-medium uppercase transition-colors duration-300">
                       {crypto?.symbol?.substring(0, 2)}
                     </div>
                   )}
@@ -135,7 +135,7 @@ export default function CryptoTableView({ cryptoData, loading = false, viewMode 
 
               {/* Bottom: Name & Market Cap (Secondary Data) */}
               <div className="flex justify-between items-end mt-auto">
-                <span className="text-[9px] md:text-[10px] font-bold uppercase truncate max-w-[60%] opacity-60 group-hover:opacity-100 transition-colors duration-300">
+                <span className="text-[9px] md:text-[10px] font-medium uppercase truncate max-w-[60%] opacity-60 group-hover:opacity-100 transition-colors duration-300">
                   {crypto?.name}
                 </span>
                 <span className="text-[8px] md:text-[10px] font-mono opacity-50 hidden sm:block">
@@ -144,7 +144,7 @@ export default function CryptoTableView({ cryptoData, loading = false, viewMode 
               </div>
 
               {/* Background Glow Effect */}
-              <div className="absolute inset-0 bg-white dark:bg-gray-800 opacity-0 group-hover:opacity-5 transition-opacity pointer-events-none" />
+              <div className="absolute inset-0 bg-white dark:bg-slate-800 opacity-0 group-hover:opacity-5 transition-opacity pointer-events-none" />
             </Link>
           );
         })}
@@ -153,19 +153,19 @@ export default function CryptoTableView({ cryptoData, loading = false, viewMode 
   );
 }
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-slate-200 dark:border-gray-700 overflow-hidden transition-all duration-300 hover:shadow-xl">
+    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden transition-all duration-300 hover:shadow-xl">
       <div className="overflow-x-auto">
         <table className="w-full min-w-[600px]">
           <thead className="bg-gradient-to-r from-emerald-50 via-teal-50 to-cyan-50 dark:from-gray-800 dark:via-gray-800 dark:to-gray-700 border-b-2 border-emerald-200 dark:border-gray-600 transition-colors duration-300">
             <tr>
-              <th className="px-3 sm:px-6 py-4 text-left text-xs font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider transition-colors duration-300">Cryptocurrency</th>
-              <th className="px-3 sm:px-6 py-4 text-right text-xs font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider transition-colors duration-300">Price</th>
-              <th className="px-3 sm:px-6 py-4 text-right text-xs font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider transition-colors duration-300">24h Change</th>
-              <th className="px-3 sm:px-6 py-4 text-right text-xs font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider transition-colors duration-300">Market Cap</th>
-              <th className="px-3 sm:px-6 py-4 text-right text-xs font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider transition-colors duration-300">Volume (24h)</th>
+              <th className="px-3 sm:px-6 py-4 text-left text-xs font-medium text-emerald-700 dark:text-emerald-400 uppercase tracking-wider transition-colors duration-300">Cryptocurrency</th>
+              <th className="px-3 sm:px-6 py-4 text-right text-xs font-medium text-emerald-700 dark:text-emerald-400 uppercase tracking-wider transition-colors duration-300">Price</th>
+              <th className="px-3 sm:px-6 py-4 text-right text-xs font-medium text-emerald-700 dark:text-emerald-400 uppercase tracking-wider transition-colors duration-300">24h Change</th>
+              <th className="px-3 sm:px-6 py-4 text-right text-xs font-medium text-emerald-700 dark:text-emerald-400 uppercase tracking-wider transition-colors duration-300">Market Cap</th>
+              <th className="px-3 sm:px-6 py-4 text-right text-xs font-medium text-emerald-700 dark:text-emerald-400 uppercase tracking-wider transition-colors duration-300">Volume (24h)</th>
             </tr>
           </thead>
-          <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700 transition-colors duration-300">
+          <tbody className="bg-white dark:bg-slate-800 divide-y divide-gray-200 dark:divide-gray-700 transition-colors duration-300">
             {cryptoData.map((crypto, index) => (
               <tr 
                 key={crypto.id || crypto.symbol || index} 
@@ -177,24 +177,24 @@ export default function CryptoTableView({ cryptoData, loading = false, viewMode 
                       <img src={crypto.logoUrl} alt={crypto.symbol} className="h-8 w-8 sm:h-10 sm:w-10 rounded-xl shadow-sm mr-3 sm:mr-4 ring-2 ring-white dark:ring-gray-700" />
                     ) : (
                       <div className="flex-shrink-0 h-8 w-8 sm:h-10 sm:w-10 bg-gradient-to-br from-emerald-400 via-teal-500 to-cyan-600 rounded-xl flex items-center justify-center mr-3 sm:mr-4 shadow-md ring-2 ring-white dark:ring-gray-700">
-                        <span className="text-[10px] md:text-xs font-bold text-white">{(crypto.symbol || '??').substring(0, 2).toUpperCase()}</span>
+                        <span className="text-[10px] md:text-xs font-medium text-white">{(crypto.symbol || '??').substring(0, 2).toUpperCase()}</span>
                       </div>
                     )}
                     <div className="flex flex-col md:flex-row md:items-center md:gap-2">
                       <Link href={`/crypto/${crypto.symbol}`} className="hover:underline transition-colors duration-300">
-                        <span className="text-sm font-bold text-slate-900 dark:text-white truncate max-w-[80px] sm:max-w-[120px] group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors duration-300">{crypto.name || 'Unknown'}</span>
+                        <span className="text-sm font-medium text-slate-900 dark:text-white truncate max-w-[80px] sm:max-w-[120px] group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors duration-300">{crypto.name || 'Unknown'}</span>
                       </Link>
-                      <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide transition-colors duration-300">{crypto.symbol || '??'}</div>
+                      <div className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide transition-colors duration-300">{crypto.symbol || '??'}</div>
                     </div>
                   </div>
                 </td>
                 <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right">
-                  <div className="text-sm font-bold text-slate-900 dark:text-white transition-colors duration-300">{formatPrice(crypto.price)}</div>
+                  <div className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">{formatPrice(crypto.price)}</div>
                 </td>
                 <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right">
-                  <div className="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-bold shadow-sm">
+                  <div className="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium shadow-sm">
                     {crypto.changePercent === 0 ? (
-                      <span className="text-gray-600 dark:text-gray-400 transition-colors duration-300">0.00%</span>
+                      <span className="text-gray-600 dark:text-slate-400 transition-colors duration-300">0.00%</span>
                     ) : (
                       <>
                         {(crypto.changePercent || 0) > 0 ? (
@@ -210,10 +210,10 @@ export default function CryptoTableView({ cryptoData, loading = false, viewMode 
                   </div>
                 </td>
                 <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right">
-                  <div className="text-sm font-bold text-slate-900 dark:text-white transition-colors duration-300">{formatMarketCap(crypto.marketCap)}</div>
+                  <div className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">{formatMarketCap(crypto.marketCap)}</div>
                 </td>
                 <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right">
-                  <div className="text-sm font-bold text-slate-900 dark:text-white transition-colors duration-300">
+                  <div className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">
                     {crypto.volume ? `$${(crypto.volume / 1e6).toFixed(1)}M` : '$0M'}
                   </div>
                 </td>

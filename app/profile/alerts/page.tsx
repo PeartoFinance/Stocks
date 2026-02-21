@@ -245,7 +245,7 @@ export default function AlertsPage() {
 
             <div className="container mx-auto px-4 py-8 max-w-6xl">
                 {/* Stats Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
                     <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
                         <div className="flex items-center justify-between">
                             <div>
@@ -359,7 +359,7 @@ export default function AlertsPage() {
             {showCreateAlert && (
                 <div className="fixed inset-0 bg-black/50 dark:bg-black/70 flex items-center justify-center p-4 z-50">
                     <div className="bg-white dark:bg-gray-800 rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-xl">
-                        <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between sticky top-0 bg-white dark:bg-gray-800 z-10">
+                        <div className="p-4 lg:p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between sticky top-0 bg-white dark:bg-gray-800 z-10">
                             <h2 className="text-xl font-bold text-gray-900 dark:text-white">Create Price Alert</h2>
                             <button
                                 onClick={() => {
@@ -372,7 +372,7 @@ export default function AlertsPage() {
                             </button>
                         </div>
 
-                        <div className="p-6 space-y-6">
+                        <div className="p-4 lg:p-6 space-y-6">
                             {/* Search Stock */}
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">

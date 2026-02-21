@@ -66,7 +66,7 @@ export default function DividendsTab({ symbol }: DividendsTabProps) {
       case 'paid': return 'text-green-700 bg-green-100 dark:bg-green-900/20 dark:text-green-300';
       case 'approved': return 'text-blue-700 bg-blue-100 dark:bg-blue-900/20 dark:text-blue-300';
       case 'proposed': return 'text-yellow-700 bg-yellow-100 dark:bg-yellow-900/20 dark:text-yellow-300';
-      default: return 'text-slate-700 dark:text-gray-400 bg-gray-100 dark:bg-slate-900/95/20 dark:text-gray-300';
+      default: return 'text-slate-700 dark:text-slate-400 bg-slate-100 dark:bg-slate-900/95/20 dark:text-slate-300';
     }
   };
 
@@ -85,7 +85,7 @@ export default function DividendsTab({ symbol }: DividendsTabProps) {
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-8 transition-colors duration-300">
         <div className="text-center">
           <DollarSign className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2 transition-colors duration-300">
+          <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2 transition-colors duration-300">
             No Dividend Information
           </h3>
           <p className="text-slate-500 dark:text-slate-400 transition-colors duration-300">
@@ -109,7 +109,7 @@ export default function DividendsTab({ symbol }: DividendsTabProps) {
     <div className="space-y-6">
       {/* Dividend Overview */}
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 transition-colors duration-300">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
+        <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
           <DollarSign className="h-5 w-5 text-green-500" />
           Dividend Overview
         </h3>
@@ -120,7 +120,7 @@ export default function DividendsTab({ symbol }: DividendsTabProps) {
               <span className="text-sm font-medium text-green-700 dark:text-green-300 transition-colors duration-300">Total Amount</span>
               <DollarSign className="h-4 w-4 text-green-600 dark:text-green-400 transition-colors duration-300" />
             </div>
-            <p className="text-2xl font-bold text-green-900 dark:text-green-100 transition-colors duration-300">
+            <p className="text-2xl font-medium text-green-900 dark:text-green-100 transition-colors duration-300">
               {formatPrice(totalDividendAmount)}
             </p>
           </div>
@@ -130,7 +130,7 @@ export default function DividendsTab({ symbol }: DividendsTabProps) {
               <span className="text-sm font-medium text-blue-700 dark:text-blue-300 transition-colors duration-300">Avg Cash %</span>
               <Percent className="h-4 w-4 text-blue-600 dark:text-blue-400 transition-colors duration-300" />
             </div>
-            <p className="text-2xl font-bold text-blue-900 dark:text-blue-100 transition-colors duration-300">
+            <p className="text-2xl font-medium text-blue-900 dark:text-blue-100 transition-colors duration-300">
               {avgCashPercent.toFixed(1)}%
             </p>
           </div>
@@ -140,7 +140,7 @@ export default function DividendsTab({ symbol }: DividendsTabProps) {
               <span className="text-sm font-medium text-purple-700 dark:text-purple-300 transition-colors duration-300">Avg Bonus %</span>
               <Percent className="h-4 w-4 text-purple-600 dark:text-purple-400 transition-colors duration-300" />
             </div>
-            <p className="text-2xl font-bold text-purple-900 dark:text-purple-100 transition-colors duration-300">
+            <p className="text-2xl font-medium text-purple-900 dark:text-purple-100 transition-colors duration-300">
               {avgBonusPercent.toFixed(1)}%
             </p>
           </div>
@@ -150,7 +150,7 @@ export default function DividendsTab({ symbol }: DividendsTabProps) {
               <span className="text-sm font-medium text-orange-700 dark:text-orange-300 transition-colors duration-300">Records</span>
               <TrendingUp className="h-4 w-4 text-orange-600 dark:text-orange-400 transition-colors duration-300" />
             </div>
-            <p className="text-2xl font-bold text-orange-900 dark:text-orange-100 transition-colors duration-300">
+            <p className="text-2xl font-medium text-orange-900 dark:text-orange-100 transition-colors duration-300">
               {dividends.length}
             </p>
           </div>
@@ -159,7 +159,7 @@ export default function DividendsTab({ symbol }: DividendsTabProps) {
 
       {/* Dividend History */}
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 transition-colors duration-300">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
+        <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
           <Calendar className="h-5 w-5 text-blue-500" />
           Dividend History
         </h3>
@@ -219,7 +219,7 @@ export default function DividendsTab({ symbol }: DividendsTabProps) {
 
       {/* Dividend Analysis */}
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 transition-colors duration-300">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 transition-colors duration-300">
+        <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-4 transition-colors duration-300">
           Dividend Analysis
         </h3>
 
@@ -249,7 +249,7 @@ export default function DividendsTab({ symbol }: DividendsTabProps) {
                     <span className="text-sm text-slate-900 dark:text-white font-medium transition-colors duration-300">{item.label}</span>
                     <p className="text-xs text-slate-500 dark:text-slate-400 transition-colors duration-300">{item.description}</p>
                   </div>
-                  <span className="text-sm font-bold text-slate-900 dark:text-white transition-colors duration-300">{item.value}</span>
+                  <span className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">{item.value}</span>
                 </div>
               ))}
             </div>

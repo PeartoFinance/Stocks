@@ -108,10 +108,10 @@ export default function ProfileTab({ crypto }: ProfileTabProps) {
       <div className="bg-white  dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-6 transition-colors duration-300">
         <div className="flex items-start gap-4">
           <div className="w-16 h-16 bg-gradient-to-br from-emerald-400 to-teal-600 rounded-xl flex items-center justify-center shadow-lg">
-            <span className="text-2xl font-bold text-white">{crypto.symbol.substring(0, 2).toUpperCase()}</span>
+            <span className="text-2xl font-medium text-white">{crypto.symbol.substring(0, 2).toUpperCase()}</span>
           </div>
           <div className="flex-1">
-            <h1 className="text-2xl lg:text-3xl font-bold text-slate-900 dark:text-white mb-2 transition-colors duration-300">
+            <h1 className="text-2xl lg:text-3xl font-medium text-slate-900 dark:text-white mb-2 transition-colors duration-300">
               {crypto.name}
             </h1>
             <div className="flex flex-wrap items-center gap-3 text-sm text-slate-600 dark:text-slate-400 transition-colors duration-300">
@@ -140,7 +140,7 @@ export default function ProfileTab({ crypto }: ProfileTabProps) {
           <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
             <FileText className="h-4 w-4 text-emerald-600 dark:text-pearto-green transition-colors duration-300" />
           </div>
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-white transition-colors duration-300">About {crypto.name}</h2>
+          <h2 className="text-lg font-medium text-slate-900 dark:text-white transition-colors duration-300">About {crypto.name}</h2>
         </div>
         
         {crypto.description ? (
@@ -164,7 +164,7 @@ export default function ProfileTab({ crypto }: ProfileTabProps) {
             <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
               <Hash className="h-4 w-4 text-blue-600" />
             </div>
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-white transition-colors duration-300">Basic Information</h3>
+            <h3 className="text-lg font-medium text-slate-900 dark:text-white transition-colors duration-300">Basic Information</h3>
           </div>
           
           <div className="space-y-3">
@@ -190,7 +190,7 @@ export default function ProfileTab({ crypto }: ProfileTabProps) {
             <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
               <BarChart3 className="h-4 w-4 text-purple-600" />
             </div>
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-white transition-colors duration-300">Supply Information</h3>
+            <h3 className="text-lg font-medium text-slate-900 dark:text-white transition-colors duration-300">Supply Information</h3>
           </div>
           
           <div className="space-y-3">
@@ -216,7 +216,7 @@ export default function ProfileTab({ crypto }: ProfileTabProps) {
           <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
             <Zap className="h-4 w-4 text-emerald-600 dark:text-pearto-green transition-colors duration-300" />
           </div>
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white transition-colors duration-300">Technology</h3>
+          <h3 className="text-lg font-medium text-slate-900 dark:text-white transition-colors duration-300">Technology</h3>
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -244,7 +244,7 @@ export default function ProfileTab({ crypto }: ProfileTabProps) {
             <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
               <Globe className="h-4 w-4 text-blue-600" />
             </div>
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-white transition-colors duration-300">Official Links</h3>
+            <h3 className="text-lg font-medium text-slate-900 dark:text-white transition-colors duration-300">Official Links</h3>
           </div>
           
           <div className="space-y-3">
@@ -286,7 +286,7 @@ export default function ProfileTab({ crypto }: ProfileTabProps) {
             <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
               <Twitter className="h-4 w-4 text-purple-600" />
             </div>
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-white transition-colors duration-300">Community</h3>
+            <h3 className="text-lg font-medium text-slate-900 dark:text-white transition-colors duration-300">Community</h3>
           </div>
           
           <div className="space-y-3">
@@ -330,7 +330,7 @@ export default function ProfileTab({ crypto }: ProfileTabProps) {
           <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
             <Shield className="h-4 w-4 text-emerald-600 dark:text-pearto-green transition-colors duration-300" />
           </div>
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white transition-colors duration-300">Status & Recognition</h3>
+          <h3 className="text-lg font-medium text-slate-900 dark:text-white transition-colors duration-300">Status & Recognition</h3>
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -345,7 +345,7 @@ export default function ProfileTab({ crypto }: ProfileTabProps) {
                 <item.icon className={`h-4 w-4 text-${item.color}-600 dark:text-${item.color}-400`} />
                 <span className={`text-sm font-medium text-${item.color}-700 dark:text-${item.color}-300`}>{item.label}</span>
               </div>
-              <p className={`text-lg font-bold text-${item.color}-900 dark:text-white`}>{item.value}</p>
+              <p className={`text-lg font-medium text-${item.color}-900 dark:text-white`}>{item.value}</p>
             </div>
           ))}
         </div>

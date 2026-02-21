@@ -270,7 +270,7 @@ export default function PortfolioPage() {
                         <div className="flex flex-col gap-4">
                             <div>
                                 <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-1">Portfolio View</h2>
-                                <p className="text-sm text-slate-600 dark:text-gray-400">
+                                <p className="text-sm text-slate-600 dark:text-slate-400">
                                     {currentPortfolioId === 'all' 
                                         ? 'Showing all portfolios' 
                                         : `Showing: ${portfolios.find(p => p.id === currentPortfolioId)?.name || 'Unknown'}`
@@ -421,7 +421,7 @@ export default function PortfolioPage() {
                                                                     ${stock.price?.toFixed(2) || '0.00'}
                                                                 </div>
                                                                 <div className={`text-sm font-medium ${
-                                                                    stock.change >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'
+                                                                    stock.change >= 0 ? 'text-emerald-500' : 'text-red-500'
                                                                 }`}>
                                                                     {stock.change >= 0 ? '+' : ''}{stock.changePercent?.toFixed(2) || '0.00'}%
                                                                 </div>
@@ -564,12 +564,12 @@ export default function PortfolioPage() {
                             <RefreshCw className="h-8 w-8 text-blue-500 animate-spin" />
                         </div>
                     ) : filteredHoldings.length === 0 ? (
-                        <div className="p-8 sm:p-12 text-center">
+                        <div className="p-4 lg:p-6 sm:p-12 text-center">
                             <div className="h-14 w-14 rounded-full bg-blue-100 dark:bg-blue-500/20 flex items-center justify-center mx-auto mb-4">
                                 <PieChart className="h-7 w-7 text-blue-600 dark:text-blue-400" />
                             </div>
                             <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">No holdings yet</h3>
-                            <p className="text-slate-500 dark:text-gray-400 mb-6 max-w-sm mx-auto">
+                            <p className="text-slate-500 dark:text-slate-400 mb-6 max-w-sm mx-auto">
                                 Create a portfolio and add your first stock.
                             </p>
                             <div className="flex flex-wrap justify-center gap-2">

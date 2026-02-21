@@ -56,7 +56,7 @@ export default function StockOverview({ stock }: StockOverviewProps) {
   return (
     <div className="bg-white dark:bg-pearto-card rounded-xl border border-slate-200 dark:border-pearto-border shadow-sm dark:shadow-pearto-green/5 overflow-hidden transition-colors duration-300">
       <div className="px-4 py-3 border-b border-slate-100 dark:border-pearto-border bg-slate-50/50 dark:bg-pearto-surface/50 transition-colors duration-300">
-        <h3 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-pearto-gray">
+        <h3 className="text-xs font-medium uppercase tracking-widest text-slate-500 dark:text-pearto-gray">
           Market Statistics
         </h3>
       </div>
@@ -65,7 +65,7 @@ export default function StockOverview({ stock }: StockOverviewProps) {
           {metrics.map((metric, idx) => (
             <div key={idx} className="flex justify-between py-2.5 border-b border-slate-50 dark:border-pearto-border-subtle last:border-0 transition-colors duration-300">
               <span className="text-slate-500 dark:text-pearto-cloud font-medium">{metric.label}</span>
-              <span className="font-semibold text-slate-900 dark:text-pearto-luna">{metric.value}</span>
+              <span className="font-medium text-slate-900 dark:text-pearto-luna">{metric.value}</span>
             </div>
           ))}
         </div>

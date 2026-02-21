@@ -28,13 +28,13 @@ export default function ChartHeader({
   className = ''
 }: ChartHeaderProps) {
   return (
-    <div className={`px-3 sm:px-4 py-3 border-b border-gray-200 dark:border-gray-700 ${className}`}>
+    <div className={`px-3 sm:px-4 py-3 border-b border-gray-200 dark:border-slate-700 ${className}`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <h3 className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-gray-100">
+          <h3 className="text-xs sm:text-sm font-medium text-gray-900 dark:text-gray-100">
             {symbol} - {period} Chart
           </h3>
-          <span className="hidden sm:inline text-xs text-gray-500 dark:text-gray-400">
+          <span className="hidden sm:inline text-xs text-slate-500 dark:text-slate-400">
             {dataLength} points • {period === '1D' ? '1-min' : 'Daily'}
           </span>
           <button
@@ -56,14 +56,14 @@ export default function ChartHeader({
           <button
             onClick={onRefresh}
             disabled={loading}
-            className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition-colors disabled:opacity-50"
+            className="p-1.5 text-slate-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition-colors disabled:opacity-50"
             title="Refresh"
           >
             <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
           </button>
           <button
             onClick={onFullscreen}
-            className="p-1.5 text-gray-500 hover:text-green-600 hover:bg-green-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
+            className="p-1.5 text-slate-500 hover:text-green-600 hover:bg-green-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
             title="Open Fullscreen Chart"
           >
             <Maximize2 className="h-4 w-4" />

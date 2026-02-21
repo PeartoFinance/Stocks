@@ -34,7 +34,7 @@ export default function SectorHeatmap({ className = '', sectors }: SectorHeatmap
   };
 
   return (
-    <div className={`bg-white dark:bg-gray-800 rounded-2xl border border-slate-200 dark:border-gray-700 p-5 shadow-sm ${className}`}>
+    <div className={`bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-5 shadow-sm ${className}`}>
       {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-2.5">
@@ -42,11 +42,11 @@ export default function SectorHeatmap({ className = '', sectors }: SectorHeatmap
             <Activity className="h-4 w-4 text-emerald-600 dark:text-pearto-green transition-colors duration-300" />
           </div>
           <div>
-            <h2 className="text-slate-900 dark:text-white text-sm font-bold tracking-tight leading-none transition-colors duration-300">Market Heatmap</h2>
-            <p className="text-[10px] text-slate-500 dark:text-gray-400 mt-1 font-medium transition-colors duration-300">Performance by Sector Weight</p>
+            <h2 className="text-slate-900 dark:text-white text-sm font-medium tracking-tight leading-none transition-colors duration-300">Market Heatmap</h2>
+            <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 font-medium transition-colors duration-300">Performance by Sector Weight</p>
           </div>
         </div>
-        <button className="text-slate-400 hover:text-slate-600 dark:text-gray-400 transition-colors">
+        <button className="text-slate-400 hover:text-slate-600 dark:text-slate-400 transition-colors">
           <Info className="h-4 w-4" />
         </button>
       </div>
@@ -70,7 +70,7 @@ export default function SectorHeatmap({ className = '', sectors }: SectorHeatmap
               `}
             >
               <div className="flex justify-between items-start gap-1">
-                <span className="text-[10px] font-bold uppercase tracking-tight truncate leading-tight overflow-hidden">
+                <span className="text-[10px] font-medium uppercase tracking-tight truncate leading-tight overflow-hidden">
                   {s.sector}
                 </span>
                 <div className="shrink-0">
@@ -83,7 +83,7 @@ export default function SectorHeatmap({ className = '', sectors }: SectorHeatmap
               
               <div className="flex items-end justify-between">
                 <div className="flex flex-col">
-                  <span className="text-lg font-bold font-mono tracking-tighter leading-none">
+                  <span className="text-lg font-medium font-mono tracking-tighter leading-none">
                     {s.dayReturn > 0 ? '+' : ''}{s.dayReturn}%
                   </span>
                   <span className="text-[9px] font-medium opacity-70 mt-1 uppercase tracking-tighter">
@@ -102,7 +102,7 @@ export default function SectorHeatmap({ className = '', sectors }: SectorHeatmap
       {/* Legend */}
       <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Returns</span>
+          <span className="text-[10px] text-slate-400 font-medium uppercase tracking-widest">Returns</span>
           <div className="flex gap-1">
             {['bg-rose-600', 'bg-rose-50', 'bg-emerald-50', 'bg-emerald-600 dark:bg-pearto-pink'].map((color, i) => (
               <div key={i} className={`w-3 h-1.5 rounded-full ${color}`} />
@@ -114,7 +114,7 @@ export default function SectorHeatmap({ className = '', sectors }: SectorHeatmap
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
           </span>
-          <span className="text-[10px] text-emerald-700 font-bold uppercase tracking-tight">Live Market Data</span>
+          <span className="text-[10px] text-emerald-700 font-medium uppercase tracking-tight">Live Market Data</span>
         </div>
       </div>
     </div>

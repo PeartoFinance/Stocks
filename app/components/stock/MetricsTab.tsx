@@ -119,7 +119,7 @@ export default function MetricsTab({ stock }: MetricsTabProps) {
         <span className={`text-sm font-medium text-${color}-700 dark:text-${color}-300`}>{label}</span>
         <Icon className={`h-4 w-4 text-${color}-600 dark:text-${color}-400`} />
       </div>
-      <p className={`text-xl font-bold text-${color}-900 dark:text-${color}-100`}>
+      <p className={`text-xl font-medium text-${color}-900 dark:text-${color}-100`}>
         {value}
       </p>
     </div>
@@ -129,7 +129,7 @@ export default function MetricsTab({ stock }: MetricsTabProps) {
     <div className="space-y-6">
       {/* Valuation Metrics */}
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+        <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-4 flex items-center gap-2">
           <PieChart className="h-5 w-5 text-blue-500" />
           Valuation Metrics
         </h3>
@@ -163,7 +163,7 @@ export default function MetricsTab({ stock }: MetricsTabProps) {
 
       {/* Trading Metrics */}
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+        <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-4 flex items-center gap-2">
           <BarChart3 className="h-5 w-5 text-green-500" />
           Trading Information
         </h3>
@@ -197,7 +197,7 @@ export default function MetricsTab({ stock }: MetricsTabProps) {
 
       {/* Financial Metrics */}
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+        <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-4 flex items-center gap-2">
           <Target className="h-5 w-5 text-purple-500" />
           Financial Metrics
         </h3>
@@ -231,7 +231,7 @@ export default function MetricsTab({ stock }: MetricsTabProps) {
 
       {/* Additional Statistics */}
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
+        <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-4">
           Additional Statistics
         </h3>
 

@@ -69,7 +69,7 @@ export default function NewsCarousel({ className = '' }: NewsCarouselProps) {
       case 'high': return 'bg-red-100 dark:bg-red-500/10 text-red-700 dark:text-red-400 border-red-200 dark:border-red-500/20';
       case 'medium': return 'bg-yellow-100 dark:bg-yellow-500/10 text-yellow-700 dark:text-yellow-400 border-yellow-200 dark:border-yellow-500/20';
       case 'low': return 'bg-green-100 dark:bg-green-500/10 text-green-700 dark:text-green-400 border-green-200 dark:border-green-500/20';
-      default: return 'bg-gray-100 dark:bg-gray-700 text-slate-700 dark:text-gray-400 border-slate-200 dark:border-gray-700';
+      default: return 'bg-gray-100 dark:bg-slate-700 text-slate-700 dark:text-slate-400 border-slate-200 dark:border-slate-700';
     }
   };
 
@@ -101,10 +101,10 @@ export default function NewsCarousel({ className = '' }: NewsCarouselProps) {
 
   if (loading) {
     return (
-      <div className={`bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-slate-200 dark:border-gray-700 p-8 ${className}`}>
+      <div className={`bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-8 ${className}`}>
         <div className="flex items-center justify-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-          <span className="ml-3 text-slate-600 dark:text-gray-400 transition-colors duration-300">Loading news...</span>
+          <span className="ml-3 text-slate-600 dark:text-slate-400 transition-colors duration-300">Loading news...</span>
         </div>
       </div>
     );
@@ -112,11 +112,11 @@ export default function NewsCarousel({ className = '' }: NewsCarouselProps) {
 
   if (news.length === 0) {
     return (
-      <div className={`bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-slate-200 dark:border-gray-700 p-8 ${className}`}>
+      <div className={`bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 p-8 ${className}`}>
         <div className="text-center">
           <Newspaper className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-          <h3 className="text-lg font-semibold text-slate-700 dark:text-gray-400 mb-2 transition-colors duration-300">No News Available</h3>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 max-w-md mx-auto transition-colors duration-300">
+          <h3 className="text-lg font-medium text-slate-700 dark:text-slate-400 mb-2 transition-colors duration-300">No News Available</h3>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mb-4 max-w-md mx-auto transition-colors duration-300">
             Market news will appear here as soon as it becomes available.
           </p>
         </div>
@@ -130,16 +130,16 @@ export default function NewsCarousel({ className = '' }: NewsCarouselProps) {
     <div className={`space-y-6 ${className}`}>
       <div className="flex items-center gap-2 mb-4">
         <Newspaper className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-        <h2 className="text-xl font-bold text-slate-900 dark:text-white">Latest News</h2>
+        <h2 className="text-xl font-medium text-slate-900 dark:text-white">Latest News</h2>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-slate-200 dark:border-gray-700 overflow-hidden">
+      <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
         {currentNews && (
           <div className="relative">
             <div className="flex gap-4">
               {currentNews?.image && currentNews.image.trim() !== '' && (
                 <div className="w-1/3 flex-shrink-0">
-                  <div className="w-full h-full min-h-[200px] bg-gray-100 dark:bg-gray-700">
+                  <div className="w-full h-full min-h-[200px] bg-gray-100 dark:bg-slate-700">
                     <img 
                       src={currentNews.image} 
                       alt={currentNews.title}
@@ -159,16 +159,16 @@ export default function NewsCarousel({ className = '' }: NewsCarouselProps) {
                     {currentNews.impact.toUpperCase()}
                   </span>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-slate-900 dark:text-white mb-2 leading-tight">
+                    <h3 className="font-medium text-slate-900 dark:text-white mb-2 leading-tight">
                       {currentNews.title}
                     </h3>
-                    <p className="text-sm text-slate-600 dark:text-gray-400 line-clamp-3">
+                    <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-3">
                       {currentNews.summary}
                     </p>
                   </div>
                 </div>
                 
-                <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+                <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
                   <div className="flex items-center gap-2">
                     <Clock className="h-3 w-3" />
                     <span>{formatTime(currentNews.time)}</span>
@@ -193,7 +193,7 @@ export default function NewsCarousel({ className = '' }: NewsCarouselProps) {
             {/* Navigation Controls */}
             <button
               onClick={prevSlide}
-              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-slate-700 dark:text-gray-300 p-2 rounded-full shadow-md transition-all z-10"
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white dark:bg-slate-700 hover:bg-slate-50 dark:hover:bg-gray-600 text-slate-700 dark:text-slate-300 p-2 rounded-full shadow-md transition-all z-10"
               aria-label="Previous news"
             >
               <ChevronLeft className="h-4 w-4" />
@@ -201,7 +201,7 @@ export default function NewsCarousel({ className = '' }: NewsCarouselProps) {
             
             <button
               onClick={nextSlide}
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-slate-700 dark:text-gray-300 p-2 rounded-full shadow-md transition-all z-10"
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white dark:bg-slate-700 hover:bg-slate-50 dark:hover:bg-gray-600 text-slate-700 dark:text-slate-300 p-2 rounded-full shadow-md transition-all z-10"
               aria-label="Next news"
             >
               <ChevronRight className="h-4 w-4" />
@@ -210,7 +210,7 @@ export default function NewsCarousel({ className = '' }: NewsCarouselProps) {
         )}
 
         {/* Indicators */}
-        <div className="flex justify-center gap-2 p-4 border-t border-gray-100 dark:border-gray-700">
+        <div className="flex justify-center gap-2 p-4 border-t border-gray-100 dark:border-slate-700">
           {news.map((_, index) => (
             <button
               key={index}
@@ -218,7 +218,7 @@ export default function NewsCarousel({ className = '' }: NewsCarouselProps) {
               className={`w-2 h-2 rounded-full transition-all ${
                 index === currentIndex
                   ? 'bg-blue-600 dark:bg-blue-500 w-8'
-                  : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
+                  : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-slate-500'
               }`}
               aria-label={`Go to news ${index + 1}`}
             />

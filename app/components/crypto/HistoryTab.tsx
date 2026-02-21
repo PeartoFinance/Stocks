@@ -195,13 +195,13 @@ export default function HistoryTab({
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 lg:p-6 transition-colors duration-300">
+      <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-4 lg:p-6 transition-colors duration-300">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
           <div>
-            <h2 className="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white mb-2 transition-colors duration-300">
+            <h2 className="text-xl lg:text-2xl font-medium text-gray-900 dark:text-white mb-2 transition-colors duration-300">
               {crypto.name} Historical Data
             </h2>
-            <p className="text-gray-600 dark:text-gray-400 transition-colors duration-300">
+            <p className="text-gray-600 dark:text-slate-400 transition-colors duration-300">
               Complete price and volume history for {crypto.symbol}
             </p>
           </div>
@@ -222,7 +222,7 @@ export default function HistoryTab({
                 <TrendingUp className="h-4 w-4 text-emerald-600 dark:text-emerald-400 transition-colors duration-300" />
                 <span className="text-sm font-medium text-emerald-700 dark:text-emerald-300 transition-colors duration-300">High</span>
               </div>
-              <p className="text-base sm:text-lg font-bold text-emerald-900 dark:text-emerald-100 transition-colors duration-300">
+              <p className="text-base sm:text-lg font-medium text-emerald-900 dark:text-emerald-100 transition-colors duration-300">
                 {formatPrice(stats.high)}
               </p>
             </div>
@@ -231,7 +231,7 @@ export default function HistoryTab({
                 <TrendingDown className="h-4 w-4 text-red-600 dark:text-red-400 transition-colors duration-300" />
                 <span className="text-sm font-medium text-red-700 dark:text-red-300 transition-colors duration-300">Low</span>
               </div>
-              <p className="text-base sm:text-lg font-bold text-red-900 dark:text-red-100 transition-colors duration-300">
+              <p className="text-base sm:text-lg font-medium text-red-900 dark:text-red-100 transition-colors duration-300">
                 {formatPrice(stats.low)}
               </p>
             </div>
@@ -240,7 +240,7 @@ export default function HistoryTab({
                 <BarChart3 className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                 <span className="text-sm font-medium text-blue-700 dark:text-blue-300 transition-colors duration-300">Average</span>
               </div>
-              <p className="text-base sm:text-lg font-bold text-blue-900 dark:text-blue-100 transition-colors duration-300">
+              <p className="text-base sm:text-lg font-medium text-blue-900 dark:text-blue-100 transition-colors duration-300">
                 {formatPrice(stats.average)}
               </p>
             </div>
@@ -249,7 +249,7 @@ export default function HistoryTab({
                 <Activity className="h-4 w-4 text-purple-600 dark:text-purple-400" />
                 <span className="text-sm font-medium text-purple-700 dark:text-purple-300 transition-colors duration-300">Data Points</span>
               </div>
-              <p className="text-base sm:text-lg font-bold text-purple-900 dark:text-purple-100 transition-colors duration-300">
+              <p className="text-base sm:text-lg font-medium text-purple-900 dark:text-purple-100 transition-colors duration-300">
                 {stats.dataPoints.toLocaleString()}
               </p>
             </div>
@@ -260,13 +260,13 @@ export default function HistoryTab({
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-slate-500" />
               <input
                 type="text"
                 placeholder="Search by date, price, or volume..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors duration-300"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors duration-300"
               />
             </div>
           </div>
@@ -274,7 +274,7 @@ export default function HistoryTab({
             <select
               value={sortField}
               onChange={(e) => setSortField(e.target.value as any)}
-              className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm w-full sm:w-auto transition-colors duration-300"
+              className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-slate-700 text-gray-900 dark:text-white text-sm w-full sm:w-auto transition-colors duration-300"
             >
               <option value="date">Sort by Date</option>
               <option value="price">Sort by Price</option>
@@ -284,7 +284,7 @@ export default function HistoryTab({
             </select>
             <button
               onClick={() => setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')}
-              className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 bg-white dark:bg-gray-700 transition-colors text-sm text-gray-900 dark:text-white"
+              className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-slate-50 dark:hover:bg-gray-600 bg-white dark:bg-slate-700 transition-colors text-sm text-gray-900 dark:text-white"
             >
               {sortDirection === 'asc' ? '↑' : '↓'}
             </button>
@@ -293,16 +293,16 @@ export default function HistoryTab({
       </div>
 
       {/* Data Table */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden transition-colors duration-300">
+      <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 overflow-hidden transition-colors duration-300">
         <div className="overflow-x-auto">
           <table className="w-full border-collapse min-w-max">
-            <thead className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600 transition-colors duration-300">
+            <thead className="bg-slate-50 dark:bg-slate-700 border-b border-gray-200 dark:border-gray-600 transition-colors duration-300">
               <tr>
                 {/* Date: Left Aligned */}
                 <th className="px-2 sm:px-6 py-3 sm:py-4 text-left">
                   <button
                     onClick={() => handleSort('date')}
-                    className="flex items-center gap-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                    className="flex items-center gap-2 text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
                   >
                     Date
                     {sortField === 'date' && (
@@ -315,7 +315,7 @@ export default function HistoryTab({
                 <th className="px-2 sm:px-6 py-3 sm:py-4">
                   <button
                     onClick={() => handleSort('price')}
-                    className="flex items-center justify-end w-full gap-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                    className="flex items-center justify-end w-full gap-2 text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
                   >
                     Price
                     {sortField === 'price' && (
@@ -328,7 +328,7 @@ export default function HistoryTab({
                 <th className="px-2 sm:px-6 py-3 sm:py-4">
                   <button
                     onClick={() => handleSort('change')}
-                    className="flex items-center justify-end w-full gap-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                    className="flex items-center justify-end w-full gap-2 text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
                   >
                     Change
                     {sortField === 'change' && (
@@ -341,7 +341,7 @@ export default function HistoryTab({
                 <th className="px-2 sm:px-6 py-3 sm:py-4">
                   <button
                     onClick={() => handleSort('volume')}
-                    className="flex items-center justify-end w-full gap-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                    className="flex items-center justify-end w-full gap-2 text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
                   >
                     Volume
                     {sortField === 'volume' && (
@@ -354,7 +354,7 @@ export default function HistoryTab({
                 <th className="px-2 sm:px-6 py-3 sm:py-4">
                   <button
                     onClick={() => handleSort('marketCap')}
-                    className="flex items-center justify-end w-full gap-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                    className="flex items-center justify-end w-full gap-2 text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
                   >
                     Market Cap
                     {sortField === 'marketCap' && (
@@ -364,17 +364,17 @@ export default function HistoryTab({
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700 transition-colors duration-300">
+            <tbody className="bg-white dark:bg-slate-800 divide-y divide-gray-200 dark:divide-gray-700 transition-colors duration-300">
               {filteredAndSortedData.map((item) => {
                 const priceChange = item.change || 0;
                 const isPositive = priceChange >= 0;
 
                 return (
-                  <tr key={item.time} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                  <tr key={item.time} className="hover:bg-slate-50 dark:hover:bg-gray-700/50 transition-colors">
                     <td className="px-2 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium text-gray-900 dark:text-white transition-colors duration-300">
                       {formatDate(item.time)}
                     </td>
-                    <td className="px-2 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-right font-semibold text-gray-900 dark:text-white transition-colors duration-300">
+                    <td className="px-2 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-right font-medium text-gray-900 dark:text-white transition-colors duration-300">
                       {formatPrice(item.price)}
                     </td>
                     <td className="px-2 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-right">
@@ -383,10 +383,10 @@ export default function HistoryTab({
                         {Math.abs(priceChange) >= 0.01 ? formatPrice(Math.abs(priceChange)) : '< $0.01'}
                       </div>
                     </td>
-                    <td className="px-2 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-right font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300">
+                    <td className="px-2 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-right font-medium text-gray-700 dark:text-slate-300 transition-colors duration-300">
                       {formatVolume(item.volume)}
                     </td>
-                    <td className="px-2 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-right font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300">
+                    <td className="px-2 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-right font-medium text-gray-700 dark:text-slate-300 transition-colors duration-300">
                       {formatMarketCap(item.marketCap)}
                     </td>
                   </tr>

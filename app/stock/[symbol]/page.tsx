@@ -259,7 +259,7 @@ export default function StockDetailPage({ params }: PageProps) {
             <div className="lg:hidden space-y-3 mb-4">
               {/* Today's Stats */}
               <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4">
-                <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">Today's Stats</h3>
+                <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Today's Stats</h3>
                 <div className="grid grid-cols-2 gap-3">
                   {[
                     { label: "Open", val: stock.open, icon: TrendingUp },
@@ -282,7 +282,7 @@ export default function StockDetailPage({ params }: PageProps) {
 
               {/* Volume Stats */}
               <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4">
-                <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">Volume</h3>
+                <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Volume</h3>
                 <div className="grid grid-cols-2 gap-3">
                   {[
                     { label: "Volume", val: stock.volume ? `${(stock.volume / 1e6).toFixed(1)}M` : "N/A" },
@@ -302,7 +302,7 @@ export default function StockDetailPage({ params }: PageProps) {
                   onClick={() => setShowStatsExpanded(!showStatsExpanded)}
                   className="w-full flex items-center justify-between p-4"
                 >
-                  <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300">Key Metrics</h3>
+                  <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300">Key Metrics</h3>
                   {showStatsExpanded ? <ChevronUp className="h-5 w-5 text-slate-400" /> : <ChevronDown className="h-5 w-5 text-slate-400" />}
                 </button>
 
@@ -633,8 +633,8 @@ export default function StockDetailPage({ params }: PageProps) {
 
       case 'chart':
         return (
-          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 lg:p-5">
-            <div className="mb-4 lg:mb-6 p-3 lg:p-4 bg-gray-50 dark:bg-gray-700 rounded-xl border border-gray-100 dark:border-gray-600">
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-5">
+            <div className="mb-4 lg:mb-6 p-3 lg:p-4 bg-slate-50 dark:bg-slate-700 rounded-xl border border-slate-100 dark:border-slate-600">
               <div className="flex flex-col gap-3 mb-3">
                 <span className="text-sm font-semibold text-gray-700 dark:text-slate-300 transition-colors duration-300">Duration</span>
                 <div className="flex bg-white dark:bg-slate-700 rounded-lg p-1 border border-gray-200 dark:border-slate-600 transition-colors duration-300 overflow-x-auto scrollbar-hide">
@@ -669,14 +669,14 @@ export default function StockDetailPage({ params }: PageProps) {
             </div>
             <div className="h-64 lg:h-[500px] relative">
               {chartLoading ? (
-                <div className="absolute inset-0 flex items-center justify-center bg-white/50 dark:bg-gray-800/50 z-10">
+                <div className="absolute inset-0 flex items-center justify-center bg-white/50 dark:bg-slate-800/50 z-10">
                   <Activity className="h-8 w-8 text-blue-600 animate-spin" />
                 </div>
               ) : null}
               {historicalData.length > 0 ? (
                 <StockChart data={historicalData} isPositive={stock.change >= 0} height={window.innerWidth < 1024 ? 256 : 500} chartType={chartType} />
               ) : (
-                <div className="flex items-center justify-center h-full bg-gray-50 dark:bg-gray-700 rounded-lg text-gray-400 dark:text-gray-500">
+                <div className="flex items-center justify-center h-full bg-slate-50 dark:bg-slate-700 rounded-lg text-slate-400 dark:text-slate-500">
                   No data available for this period.
                 </div>
               )}
@@ -771,7 +771,7 @@ export default function StockDetailPage({ params }: PageProps) {
               <span className="text-2xl font-bold text-slate-900 dark:text-white">
                 ${formatNumber(stock.price)}
               </span>
-              <div className={`flex items-center gap-1 text-sm font-semibold ${isPositive ? 'text-emerald-600' : 'text-red-500'
+              <div className={`flex items-center gap-1 text-sm font-medium ${isPositive ? 'text-emerald-500' : 'text-red-500'
                 }`}>
                 {isPositive ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
                 <span>
@@ -811,7 +811,7 @@ export default function StockDetailPage({ params }: PageProps) {
                 <span className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">
                   ${formatNumber(stock.price)}
                 </span>
-                <div className={`flex items-center gap-1 text-base sm:text-lg font-semibold ${isPositive ? 'text-emerald-600' : 'text-red-500'
+                <div className={`flex items-center gap-1 text-base sm:text-lg font-medium ${isPositive ? 'text-emerald-500' : 'text-red-500'
                   }`}>
                   {isPositive ? <TrendingUp size={18} className="sm:w-5 sm:h-5" /> : <TrendingDown size={18} className="sm:w-5 sm:h-5" />}
                   <span>
@@ -889,7 +889,7 @@ export default function StockDetailPage({ params }: PageProps) {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="p-4 border-b border-gray-200 dark:border-slate-700 flex items-center justify-between sticky top-0 bg-white dark:bg-slate-900 z-10">
-                <h3 className="font-semibold text-lg text-slate-900 dark:text-white">AI Analysis</h3>
+                <h3 className="font-medium text-lg text-slate-900 dark:text-white">AI Analysis</h3>
                 <button
                   onClick={() => setShowAIPanel(false)}
                   className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-full"
@@ -951,7 +951,7 @@ export default function StockDetailPage({ params }: PageProps) {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Brain className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                      <h3 className="text-sm font-semibold text-gray-900 dark:text-white">AI Stock Analysis</h3>
+                      <h3 className="text-sm font-medium text-slate-900 dark:text-white">AI Stock Analysis</h3>
                     </div>
                     <button
                       onClick={() => setShowAIPanel(false)}

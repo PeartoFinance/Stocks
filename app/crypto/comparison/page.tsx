@@ -174,8 +174,8 @@ export default function CryptoComparison() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-3 sm:mb-4">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-1">Crypto Comparison</h1>
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-gray-400">Compare up to 5 cryptocurrencies side by side</p>
+                <h1 className="text-xl sm:text-2xl font-medium text-slate-900 dark:text-white mb-1">Crypto Comparison</h1>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">Compare up to 5 cryptocurrencies side by side</p>
               </div>
               <button
                 onClick={() => setIsAIPanelOpen(true)}
@@ -188,34 +188,34 @@ export default function CryptoComparison() {
           </motion.div>
 
           {/* Search Section */}
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white dark:bg-gray-800 rounded-lg p-3 sm:p-4 border border-slate-200 dark:border-gray-700 mb-4 sm:mb-6">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white dark:bg-slate-800 rounded-lg p-3 sm:p-4 border border-slate-200 dark:border-slate-700 mb-4 sm:mb-6">
             <div className="flex items-center justify-between mb-2 sm:mb-3">
-              <h2 className="text-xs sm:text-sm font-semibold text-slate-900 dark:text-white">Add Cryptocurrencies</h2>
-              <span className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400">{comparedCryptos.length}/5</span>
+              <h2 className="text-xs sm:text-sm font-medium text-slate-900 dark:text-white">Add Cryptocurrencies</h2>
+              <span className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400">{comparedCryptos.length}/5</span>
             </div>
             <div className="relative mb-2 sm:mb-3">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-3 w-3 sm:h-4 sm:w-4 text-gray-400 dark:text-gray-400" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-3 w-3 sm:h-4 sm:w-4 text-slate-400 dark:text-slate-400" />
               <input
                 type="text"
                 placeholder="Search cryptocurrencies..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-8 sm:pl-10 pr-4 py-2 text-xs sm:text-sm border border-slate-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-emerald-500"
+                className="w-full pl-8 sm:pl-10 pr-4 py-2 text-xs sm:text-sm border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-emerald-500"
               />
               {loading && <Activity className="absolute right-3 top-1/2 transform -translate-y-1/2 h-3 w-3 sm:h-4 sm:w-4 text-blue-600 dark:text-emerald-500 animate-spin" />}
             </div>
 
             {searchResults.length > 0 && (
-              <div className="border border-slate-200 dark:border-gray-700 rounded-lg max-h-48 sm:max-h-64 overflow-y-auto">
+              <div className="border border-slate-200 dark:border-slate-700 rounded-lg max-h-48 sm:max-h-64 overflow-y-auto">
                 {searchResults.map((crypto) => (
-                  <div key={crypto.symbol} className="flex items-center justify-between p-2 sm:p-3 hover:bg-slate-50 dark:hover:bg-[#1a1a1a] border-b border-gray-100 dark:border-gray-700 last:border-b-0">
+                  <div key={crypto.symbol} className="flex items-center justify-between p-2 sm:p-3 hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-slate-700 last:border-b-0">
                     <div className="flex-1 min-w-0">
-                      <h4 className="text-xs sm:text-sm font-semibold text-slate-900 dark:text-white truncate">{crypto.symbol}</h4>
-                      <p className="text-[10px] sm:text-xs text-slate-600 dark:text-gray-400 truncate">{crypto.name}</p>
+                      <h4 className="text-xs sm:text-sm font-medium text-slate-900 dark:text-white truncate">{crypto.symbol}</h4>
+                      <p className="text-[10px] sm:text-xs text-slate-600 dark:text-slate-400 truncate">{crypto.name}</p>
                     </div>
                     <div className="flex items-center gap-2 sm:gap-3">
                       <div className="text-right">
-                        <p className="text-xs sm:text-sm font-semibold text-slate-900 dark:text-white">${crypto.price?.toFixed(2) || '0.00'}</p>
+                        <p className="text-xs sm:text-sm font-medium text-slate-900 dark:text-white">${crypto.price?.toFixed(2) || '0.00'}</p>
                         <p className={`text-[10px] sm:text-xs font-medium ${(crypto.changePercent || 0) >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                           {(crypto.changePercent || 0) >= 0 ? '+' : ''}{(crypto.changePercent || 0).toFixed(2)}%
                         </p>
@@ -231,14 +231,14 @@ export default function CryptoComparison() {
 
             {searchTerm === '' && comparedCryptos.length < 5 && (
               <div>
-                <h4 className="text-[10px] sm:text-xs font-medium text-slate-700 dark:text-gray-400 mb-2">Popular Cryptocurrencies</h4>
+                <h4 className="text-[10px] sm:text-xs font-medium text-slate-700 dark:text-slate-400 mb-2">Popular Cryptocurrencies</h4>
                 <div className="flex flex-wrap gap-1.5 sm:gap-2">
                   {['BTC', 'ETH', 'BNB', 'SOL', 'XRP', 'ADA'].map((symbol) => (
                     <button
                       key={symbol}
                       onClick={() => setSearchTerm(symbol)}
                       disabled={comparedCryptos.some(c => c.symbol === symbol)}
-                      className="px-2 sm:px-3 py-1 text-[10px] sm:text-xs font-medium bg-slate-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-[#262626] disabled:opacity-50 text-slate-700 dark:text-white rounded-md"
+                      className="px-2 sm:px-3 py-1 text-[10px] sm:text-xs font-medium bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 disabled:opacity-50 text-slate-700 dark:text-white rounded-md"
                     >
                       {symbol}
                     </button>
@@ -251,7 +251,7 @@ export default function CryptoComparison() {
           {/* Tabs */}
           {comparedCryptos.length > 0 && (
             <>
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-1 border border-slate-200 dark:border-gray-700 mb-4 sm:mb-6">
+              <div className="bg-white dark:bg-slate-800 rounded-lg p-1 border border-slate-200 dark:border-slate-700 mb-4 sm:mb-6">
                 <div className="flex gap-1 overflow-x-auto scrollbar-hide">
                   {tabs.map((tab) => {
                     const Icon = tab.icon;
@@ -263,7 +263,7 @@ export default function CryptoComparison() {
                         className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all flex-shrink-0 ${
                           isActive
                             ? 'bg-blue-600 dark:bg-emerald-600 text-white shadow-sm'
-                            : 'text-slate-700 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-[#1a1a1a]'
+                            : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
                         }`}
                       >
                         <Icon className="h-3 w-3 sm:h-4 sm:w-4" />
@@ -289,19 +289,19 @@ export default function CryptoComparison() {
       {/* AI Analysis Panel */}
       {isAIPanelOpen && (
         <>
-          <div className={`fixed bottom-0 md:top-0 md:right-0 left-0 md:left-auto h-[85vh] md:h-full w-full md:w-96 bg-white dark:bg-gray-800 shadow-2xl transform transition-transform duration-300 ease-in-out z-50 rounded-t-2xl md:rounded-none ${
+          <div className={`fixed bottom-0 md:top-0 md:right-0 left-0 md:left-auto h-[85vh] md:h-full w-full md:w-96 bg-white dark:bg-slate-800 shadow-2xl transform transition-transform duration-300 ease-in-out z-50 rounded-t-2xl md:rounded-none ${
             isAIPanelOpen ? 'translate-y-0 md:translate-x-0' : 'translate-y-full md:translate-y-0 md:translate-x-full'
           }`}>
             <div className="h-full flex flex-col">
-              <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-slate-900/95">
+              <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/95">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Brain className="h-5 w-5 text-blue-600 dark:text-emerald-500" />
-                    <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">AI Analysis</h3>
+                    <h3 className="text-sm font-medium text-slate-900 dark:text-slate-100">AI Analysis</h3>
                   </div>
                   <button
                     onClick={() => setIsAIPanelOpen(false)}
-                    className="p-1 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                    className="p-1 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition-colors"
                   >
                     <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

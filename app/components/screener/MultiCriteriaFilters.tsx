@@ -48,7 +48,7 @@ export default function MultiCriteriaFilters({ filters, onChange, availableSecto
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Price Range */}
         <div className="space-y-3">
-          <label className="flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white">
+          <label className="flex items-center gap-2 text-sm font-medium text-slate-900 dark:text-white">
             <DollarSign className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
             Price Range
           </label>
@@ -59,7 +59,7 @@ export default function MultiCriteriaFilters({ filters, onChange, availableSecto
                 placeholder="Min Price"
                 value={filters.minPrice || ''}
                 onChange={(e) => updateFilter('minPrice', Number(e.target.value) || undefined)}
-                className="w-full px-4 py-2.5 border border-slate-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white dark:bg-gray-700 text-slate-900 dark:text-white text-sm"
+                className="w-full px-4 py-2.5 border border-slate-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white dark:bg-slate-700 text-slate-900 dark:text-white text-sm"
               />
             </div>
             <div>
@@ -68,7 +68,7 @@ export default function MultiCriteriaFilters({ filters, onChange, availableSecto
                 placeholder="Max Price"
                 value={filters.maxPrice || ''}
                 onChange={(e) => updateFilter('maxPrice', Number(e.target.value) || undefined)}
-                className="w-full px-4 py-2.5 border border-slate-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white dark:bg-gray-700 text-slate-900 dark:text-white text-sm"
+                className="w-full px-4 py-2.5 border border-slate-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white dark:bg-slate-700 text-slate-900 dark:text-white text-sm"
               />
             </div>
           </div>
@@ -76,7 +76,7 @@ export default function MultiCriteriaFilters({ filters, onChange, availableSecto
 
         {/* P/E Ratio */}
         <div className="space-y-3">
-          <label className="flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white">
+          <label className="flex items-center gap-2 text-sm font-medium text-slate-900 dark:text-white">
             <TrendingUp className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
             P/E Ratio
           </label>
@@ -86,21 +86,21 @@ export default function MultiCriteriaFilters({ filters, onChange, availableSecto
               placeholder="Min P/E"
               value={filters.minPE || ''}
               onChange={(e) => updateFilter('minPE', Number(e.target.value) || undefined)}
-              className="w-full px-4 py-2.5 border border-slate-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white dark:bg-gray-700 text-slate-900 dark:text-white text-sm"
+              className="w-full px-4 py-2.5 border border-slate-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white dark:bg-slate-700 text-slate-900 dark:text-white text-sm"
             />
             <input
               type="number"
               placeholder="Max P/E"
               value={filters.maxPE || ''}
               onChange={(e) => updateFilter('maxPE', Number(e.target.value) || undefined)}
-              className="w-full px-4 py-2.5 border border-slate-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white dark:bg-gray-700 text-slate-900 dark:text-white text-sm"
+              className="w-full px-4 py-2.5 border border-slate-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white dark:bg-slate-700 text-slate-900 dark:text-white text-sm"
             />
           </div>
         </div>
 
         {/* Market Cap */}
         <div className="lg:col-span-2 space-y-3">
-          <label className="flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white">
+          <label className="flex items-center gap-2 text-sm font-medium text-slate-900 dark:text-white">
             <BarChart3 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
             Market Cap
           </label>
@@ -112,10 +112,10 @@ export default function MultiCriteriaFilters({ filters, onChange, availableSecto
                 className={`px-4 py-3 text-sm font-medium rounded-lg transition-all border ${
                   filters.minMarketCap === preset.min && filters.maxMarketCap === preset.max
                     ? 'bg-emerald-500 text-white border-emerald-500 shadow-md'
-                    : 'bg-white dark:bg-gray-700 text-slate-700 dark:text-gray-300 border-slate-300 dark:border-gray-600 hover:border-emerald-400 dark:hover:border-emerald-500'
+                    : 'bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-gray-600 hover:border-emerald-400 dark:hover:border-emerald-500'
                 }`}
               >
-                <div className="font-semibold">{preset.label}</div>
+                <div className="font-medium">{preset.label}</div>
                 <div className="text-xs opacity-80">{preset.sublabel}</div>
               </button>
             ))}
@@ -124,7 +124,7 @@ export default function MultiCriteriaFilters({ filters, onChange, availableSecto
 
         {/* Dividend Yield */}
         <div className="space-y-3">
-          <label className="flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white">
+          <label className="flex items-center gap-2 text-sm font-medium text-slate-900 dark:text-white">
             <Percent className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
             Min Dividend Yield (%)
           </label>
@@ -133,7 +133,7 @@ export default function MultiCriteriaFilters({ filters, onChange, availableSecto
             placeholder="e.g., 3"
             value={filters.minDividendYield || ''}
             onChange={(e) => updateFilter('minDividendYield', Number(e.target.value) || undefined)}
-            className="w-full px-4 py-2.5 border border-slate-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white dark:bg-gray-700 text-slate-900 dark:text-white text-sm"
+            className="w-full px-4 py-2.5 border border-slate-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white dark:bg-slate-700 text-slate-900 dark:text-white text-sm"
           />
         </div>
       </div>
@@ -141,7 +141,7 @@ export default function MultiCriteriaFilters({ filters, onChange, availableSecto
       {/* Sectors */}
       {availableSectors.length > 0 && (
         <div className="mt-6 pt-6 border-t border-gray-200 dark:border-slate-700">
-          <label className="flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white mb-3">
+          <label className="flex items-center gap-2 text-sm font-medium text-slate-900 dark:text-white mb-3">
             <Building2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
             Sectors {filters.sectors && filters.sectors.length > 0 && <span className="text-emerald-600 dark:text-emerald-400">({filters.sectors.length} selected)</span>}
           </label>
@@ -153,7 +153,7 @@ export default function MultiCriteriaFilters({ filters, onChange, availableSecto
                 className={`px-4 py-2 text-sm font-medium rounded-lg transition-all border ${
                   filters.sectors?.includes(sector)
                     ? 'bg-emerald-500 text-white border-emerald-500 shadow-md'
-                    : 'bg-white dark:bg-gray-700 text-slate-700 dark:text-gray-300 border-slate-300 dark:border-gray-600 hover:border-emerald-400 dark:hover:border-emerald-500'
+                    : 'bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-gray-600 hover:border-emerald-400 dark:hover:border-emerald-500'
                 }`}
               >
                 {sector}
@@ -166,7 +166,7 @@ export default function MultiCriteriaFilters({ filters, onChange, availableSecto
       {/* Industries */}
       {availableIndustries.length > 0 && (
         <div className="mt-6 pt-6 border-t border-gray-200 dark:border-slate-700">
-          <label className="flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white mb-3">
+          <label className="flex items-center gap-2 text-sm font-medium text-slate-900 dark:text-white mb-3">
             <Building2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
             Industries {filters.industries && filters.industries.length > 0 && <span className="text-emerald-600 dark:text-emerald-400">({filters.industries.length} selected)</span>}
           </label>
@@ -178,7 +178,7 @@ export default function MultiCriteriaFilters({ filters, onChange, availableSecto
                 className={`px-4 py-2 text-sm font-medium rounded-lg transition-all border ${
                   filters.industries?.includes(industry)
                     ? 'bg-emerald-500 text-white border-emerald-500 shadow-md'
-                    : 'bg-white dark:bg-gray-700 text-slate-700 dark:text-gray-300 border-slate-300 dark:border-gray-600 hover:border-emerald-400 dark:hover:border-emerald-500'
+                    : 'bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-gray-600 hover:border-emerald-400 dark:hover:border-emerald-500'
                 }`}
               >
                 {industry}

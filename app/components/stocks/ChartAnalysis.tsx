@@ -234,27 +234,27 @@ export default function ChartAnalysis({ stocks, title, type }: ChartAnalysisProp
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-slate-200 dark:border-gray-700 p-3 transition-colors duration-300"
+        className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-3 transition-colors duration-300"
       >
-        <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2 transition-colors duration-300">{title} Analysis</h3>
+        <h3 className="text-base font-medium text-slate-900 dark:text-white mb-2 transition-colors duration-300">{title} Analysis</h3>
         <div className="grid grid-cols-2 gap-2 text-xs">
           <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-2 border border-blue-200 dark:from-blue-900/20 dark:to-blue-800/20 dark:border-blue-800">
             <div className="text-blue-600 dark:text-blue-400 font-medium mb-1">Total Stocks</div>
-            <div className="text-blue-900 dark:text-blue-100 font-bold text-sm">{stocks.length}</div>
+            <div className="text-blue-900 dark:text-blue-100 font-medium text-sm">{stocks.length}</div>
           </div>
           <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg p-2 border border-purple-200 dark:from-purple-900/20 dark:to-purple-800/20 dark:border-purple-800">
             <div className="text-purple-600 dark:text-purple-400 font-medium mb-1">Avg Change</div>
-            <div className={`font-bold text-sm ${avgChange >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'}`}>
+            <div className={`font-medium text-sm ${avgChange >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'}`}>
               {avgChange >= 0 ? '+' : ''}{avgChange.toFixed(2)}%
             </div>
           </div>
           <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-2 border border-green-200 dark:from-green-900/20 dark:to-green-800/20 dark:border-green-800">
             <div className="text-green-600 dark:text-pearto-green font-medium mb-1 transition-colors duration-300">Total Volume</div>
-            <div className="text-green-900 dark:text-green-100 font-bold text-sm">{formatNumber(totalVolume)}</div>
+            <div className="text-green-900 dark:text-green-100 font-medium text-sm">{formatNumber(totalVolume)}</div>
           </div>
           <div className="bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-2 border border-orange-200 dark:from-orange-900/20 dark:to-orange-800/20 dark:border-orange-800">
             <div className="text-orange-600 dark:text-orange-400 font-medium mb-1">Max Change</div>
-            <div className="text-orange-900 dark:text-orange-100 font-bold text-sm">{maxChange.toFixed(1)}%</div>
+            <div className="text-orange-900 dark:text-orange-100 font-medium text-sm">{maxChange.toFixed(1)}%</div>
           </div>
         </div>
       </motion.div>
@@ -266,7 +266,7 @@ export default function ChartAnalysis({ stocks, title, type }: ChartAnalysisProp
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-slate-200 dark:border-gray-700 p-3 transition-colors duration-300"
+          className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-3 transition-colors duration-300"
         >
           <div className="h-48">
             <Pie 
@@ -298,7 +298,7 @@ export default function ChartAnalysis({ stocks, title, type }: ChartAnalysisProp
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-slate-200 dark:border-gray-700 p-3 transition-colors duration-300"
+          className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-3 transition-colors duration-300"
         >
           <div className="h-48">
             <Doughnut 
@@ -330,7 +330,7 @@ export default function ChartAnalysis({ stocks, title, type }: ChartAnalysisProp
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-slate-200 dark:border-gray-700 p-3 transition-colors duration-300"
+          className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-3 transition-colors duration-300"
         >
           <div className="h-48">
             <Pie 

@@ -103,21 +103,21 @@ export default function ProfilePage() {
             {/* Main Content */}
             <div className="container mx-auto px-6 py-6 md:py-20 max-w-7xl">
                 {/* User Profile Header */}
-                <div className="flex items-center gap-4 mb-8 md:mb-12 bg-white dark:bg-gray-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 md:p-6">
+                <div className="flex items-center gap-4 mb-8 md:mb-12 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 md:p-6">
                     <div className="relative">
                         {user.avatarUrl ? (
                             <img src={user.avatarUrl} alt={user.name} className="h-16 w-16 rounded-2xl object-cover" />
                         ) : (
-                            <div className="h-16 w-16 rounded-2xl bg-slate-900 dark:bg-slate-800 flex items-center justify-center">
+                            <div className="h-16 w-16 rounded-2xl bg-slate-900 dark:bg-slate-700 flex items-center justify-center">
                                 <span className="text-xl font-bold text-white">{initials}</span>
                             </div>
                         )}
                     </div>
                     <div className="flex-1">
-                        <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-1">{user.name || 'User'}</h1>
-                        <p className="text-sm text-slate-500 dark:text-slate-400">{user.email}</p>
+                        <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-1">{user.name || 'User'}</h1>
+                        <p className="text-sm text-slate-500">{user.email}</p>
                     </div>
-                    <button onClick={handleLogout} className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-red-500 hover:bg-red-600 text-white font-medium transition-colors whitespace-nowrap">
+                    <button onClick={handleLogout} className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-red-500 hover:bg-red-600 text-white font-medium transition-colors whitespace-nowrap text-sm">
                         <LogOut className="h-4 w-4" />
                         <span>Sign Out</span>
                     </button>
@@ -126,12 +126,12 @@ export default function ProfilePage() {
                 {/* Bento Grid Layout */}
                 <div className="space-y-3 md:space-y-4">
                     {/* Large Portfolio Card - Full Width */}
-                    <Link href="/profile/portfolio" className="block bg-white dark:bg-gray-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 md:p-8 hover:shadow-lg hover:border-slate-300 dark:hover:border-slate-600 transition-all group">
+                    <Link href="/profile/portfolio" className="block bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 md:p-8 hover:shadow-lg hover:border-slate-300 dark:hover:border-slate-600 transition-all group">
                         <div className="flex items-start justify-between mb-6 md:mb-8">
                             <div>
                                 <div className="flex items-center gap-2 md:gap-3 mb-2 md:mb-3">
-                                    <div className="p-2 md:p-3 rounded-xl bg-slate-100 dark:bg-slate-800 group-hover:bg-slate-200 dark:group-hover:bg-slate-700 transition">
-                                        <Briefcase className="h-5 w-5 md:h-6 md:w-6 text-slate-900 dark:text-white" />
+                                    <div className="p-2 md:p-3 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 group-hover:bg-emerald-200 dark:group-hover:bg-emerald-900/40 transition">
+                                        <Briefcase className="h-5 w-5 md:h-6 md:w-6 text-emerald-600" />
                                     </div>
                                     <h3 className="text-lg md:text-xl font-bold text-slate-900 dark:text-white">Total Portfolio</h3>
                                 </div>
@@ -143,7 +143,7 @@ export default function ProfilePage() {
                                     )}
                                 </h2>
                                 {!statsLoading && (
-                                    <p className={`text-base font-semibold ${netChange >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                                    <p className={`text-base font-medium ${netChange >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
                                         {netChange >= 0 ? '+' : ''}${netChange.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ({netChange >= 0 ? '+' : ''}{netChangePct.toFixed(2)}%)
                                     </p>
                                 )}
@@ -151,18 +151,18 @@ export default function ProfilePage() {
                         </div>
                         <div className="h-24 md:h-32 flex items-end justify-between gap-1">
                             {[
-                                { h: 65, color: 'bg-green-500' },
+                                { h: 65, color: 'bg-emerald-500' },
                                 { h: 45, color: 'bg-red-500' },
-                                { h: 70, color: 'bg-green-500' },
+                                { h: 70, color: 'bg-emerald-500' },
                                 { h: 55, color: 'bg-red-500' },
-                                { h: 80, color: 'bg-green-500' },
-                                { h: 60, color: 'bg-green-500' },
+                                { h: 80, color: 'bg-emerald-500' },
+                                { h: 60, color: 'bg-emerald-500' },
                                 { h: 75, color: 'bg-red-500' },
-                                { h: 85, color: 'bg-green-500' },
-                                { h: 70, color: 'bg-green-500' },
-                                { h: 90, color: 'bg-green-500' },
+                                { h: 85, color: 'bg-emerald-500' },
+                                { h: 70, color: 'bg-emerald-500' },
+                                { h: 90, color: 'bg-emerald-500' },
                                 { h: 75, color: 'bg-red-500' },
-                                { h: 95, color: 'bg-green-500' },
+                                { h: 95, color: 'bg-emerald-500' },
                             ].map((bar, i) => (
                                 <div key={i} className={`flex-1 ${bar.color} rounded-t hover:opacity-80 transition`} style={{ height: `${bar.h}%` }} />
                             ))}
@@ -172,67 +172,67 @@ export default function ProfilePage() {
                     {/* Two Column Grid for Other Cards */}
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
                     {/* Watchlist Card */}
-                    <Link href="/profile/watchlist" className="bg-white dark:bg-gray-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 md:p-6 hover:shadow-lg hover:border-slate-300 dark:hover:border-slate-600 transition-all group">
+                    <Link href="/profile/watchlist" className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 md:p-6 hover:shadow-lg hover:border-slate-300 dark:hover:border-slate-600 transition-all group">
                         <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
-                            <div className="p-2 md:p-3 rounded-xl bg-slate-100 dark:bg-slate-800 group-hover:bg-slate-200 dark:group-hover:bg-slate-700 transition">
-                                <Star className="h-5 w-5 md:h-6 md:w-6 text-slate-900 dark:text-white" />
+                            <div className="p-2 md:p-3 rounded-xl bg-amber-100 dark:bg-amber-900/30 group-hover:bg-amber-200 dark:group-hover:bg-amber-900/40 transition">
+                                <Star className="h-5 w-5 md:h-6 md:w-6 text-amber-600" />
                             </div>
                             <h3 className="text-base md:text-lg font-bold text-slate-900 dark:text-white">Watchlist</h3>
                         </div>
                         <p className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">
                             {statsLoading ? <RefreshCw className="h-8 w-8 animate-spin" /> : watchlistCount}
                         </p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">Tracked stocks</p>
+                        <p className="text-xs text-slate-500 mt-2">Tracked stocks</p>
                     </Link>
 
                     {/* Alerts Card */}
-                    <Link href="/profile/alerts" className="bg-white dark:bg-gray-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 md:p-6 hover:shadow-lg hover:border-slate-300 dark:hover:border-slate-600 transition-all group">
+                    <Link href="/profile/alerts" className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 md:p-6 hover:shadow-lg hover:border-slate-300 dark:hover:border-slate-600 transition-all group">
                         <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
-                            <div className="p-2 md:p-3 rounded-xl bg-slate-100 dark:bg-slate-800 group-hover:bg-slate-200 dark:group-hover:bg-slate-700 transition">
-                                <Bell className="h-5 w-5 md:h-6 md:w-6 text-slate-900 dark:text-white" />
+                            <div className="p-2 md:p-3 rounded-xl bg-violet-100 dark:bg-violet-900/30 group-hover:bg-violet-200 dark:group-hover:bg-violet-900/40 transition">
+                                <Bell className="h-5 w-5 md:h-6 md:w-6 text-violet-600" />
                             </div>
                             <h3 className="text-base md:text-lg font-bold text-slate-900 dark:text-white">Alerts</h3>
                         </div>
                         <p className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">
                             {statsLoading ? <RefreshCw className="h-8 w-8 animate-spin" /> : alertsCount}
                         </p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">Active alerts</p>
+                        <p className="text-xs text-slate-500 mt-2">Active alerts</p>
                     </Link>
 
                     {/* Insights Card */}
-                    <Link href="/profile/insights" className="bg-white dark:bg-gray-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 md:p-6 hover:shadow-lg hover:border-slate-300 dark:hover:border-slate-600 transition-all group">
+                    <Link href="/profile/insights" className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 md:p-6 hover:shadow-lg hover:border-slate-300 dark:hover:border-slate-600 transition-all group">
                         <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
-                            <div className="p-2 md:p-3 rounded-xl bg-slate-100 dark:bg-slate-800 group-hover:bg-slate-200 dark:group-hover:bg-slate-700 transition">
-                                <Lightbulb className="h-5 w-5 md:h-6 md:w-6 text-slate-900 dark:text-white" />
+                            <div className="p-2 md:p-3 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 group-hover:bg-emerald-200 dark:group-hover:bg-emerald-900/40 transition">
+                                <Lightbulb className="h-5 w-5 md:h-6 md:w-6 text-emerald-600" />
                             </div>
                             <h3 className="text-base md:text-lg font-bold text-slate-900 dark:text-white">Insights</h3>
                         </div>
-                        <p className="text-sm md:text-base font-semibold text-slate-900 dark:text-white">Market analysis</p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Personalized recommendations</p>
+                        <p className="text-sm md:text-base font-medium text-slate-900 dark:text-white">Market analysis</p>
+                        <p className="text-xs text-slate-500 mt-1">Personalized recommendations</p>
                     </Link>
 
                     {/* Analytics Card */}
-                    <Link href="/profile/analytics" className="bg-white dark:bg-gray-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 md:p-6 hover:shadow-lg hover:border-slate-300 dark:hover:border-slate-600 transition-all group">
+                    <Link href="/profile/analytics" className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 md:p-6 hover:shadow-lg hover:border-slate-300 dark:hover:border-slate-600 transition-all group">
                         <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
-                            <div className="p-2 md:p-3 rounded-xl bg-slate-100 dark:bg-slate-800 group-hover:bg-slate-200 dark:group-hover:bg-slate-700 transition">
-                                <BarChart3 className="h-5 w-5 md:h-6 md:w-6 text-slate-900 dark:text-white" />
+                            <div className="p-2 md:p-3 rounded-xl bg-orange-100 dark:bg-orange-900/30 group-hover:bg-orange-200 dark:group-hover:bg-orange-900/40 transition">
+                                <BarChart3 className="h-5 w-5 md:h-6 md:w-6 text-orange-600" />
                             </div>
                             <h3 className="text-base md:text-lg font-bold text-slate-900 dark:text-white">Analytics</h3>
                         </div>
-                        <p className="text-sm md:text-base font-semibold text-slate-900 dark:text-white">Performance</p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Track your investments</p>
+                        <p className="text-sm md:text-base font-medium text-slate-900 dark:text-white">Performance</p>
+                        <p className="text-xs text-slate-500 mt-1">Track your investments</p>
                     </Link>
 
                     {/* Settings Card */}
-                    <Link href="/profile/settings" className="bg-white dark:bg-gray-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 md:p-6 hover:shadow-lg hover:border-slate-300 dark:hover:border-slate-600 transition-all group">
+                    <Link href="/profile/settings" className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 md:p-6 hover:shadow-lg hover:border-slate-300 dark:hover:border-slate-600 transition-all group">
                         <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
-                            <div className="p-2 md:p-3 rounded-xl bg-slate-100 dark:bg-slate-800 group-hover:bg-slate-200 dark:group-hover:bg-slate-700 transition">
-                                <Settings className="h-5 w-5 md:h-6 md:w-6 text-slate-900 dark:text-white" />
+                            <div className="p-2 md:p-3 rounded-xl bg-slate-100 dark:bg-slate-700 group-hover:bg-slate-200 dark:group-hover:bg-slate-600 transition">
+                                <Settings className="h-5 w-5 md:h-6 md:w-6 text-slate-600 dark:text-slate-300" />
                             </div>
                             <h3 className="text-base md:text-lg font-bold text-slate-900 dark:text-white">Settings</h3>
                         </div>
-                        <p className="text-sm md:text-base font-semibold text-slate-900 dark:text-white">Preferences</p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Account & security</p>
+                        <p className="text-sm md:text-base font-medium text-slate-900 dark:text-white">Preferences</p>
+                        <p className="text-xs text-slate-500 mt-1">Account & security</p>
                     </Link>
                     </div>
                 </div>

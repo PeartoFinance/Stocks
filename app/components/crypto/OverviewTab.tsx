@@ -123,7 +123,7 @@ export default function OverviewTab({
       <div className="lg:hidden space-y-3 mb-4">
         {/* Today's Stats */}
         <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-3 sm:p-4 transition-colors duration-300">
-          <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3 transition-colors duration-300">Today's Stats</h3>
+          <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3 transition-colors duration-300">Today's Stats</h3>
           <div className="grid grid-cols-2 gap-3">
             {[
               { label: "Open", val: crypto.open, icon: TrendingUp },
@@ -136,7 +136,7 @@ export default function OverviewTab({
                   <item.icon className="h-3 w-3 text-slate-400" />
                   <span className="text-xs text-slate-500 dark:text-slate-400 transition-colors duration-300">{item.label}</span>
                 </div>
-                <p className="text-base font-bold text-slate-900 dark:text-white transition-colors duration-300">
+                <p className="text-base font-medium text-slate-900 dark:text-white transition-colors duration-300">
                   {typeof item.val === 'number' ? formatPrice(item.val) : 'N/A'}
                 </p>
               </div>
@@ -146,7 +146,7 @@ export default function OverviewTab({
 
         {/* Volume Stats */}
         <div className="bg-white  dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-3 sm:p-4 transition-colors duration-300">
-          <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3 transition-colors duration-300">Volume & Supply</h3>
+          <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3 transition-colors duration-300">Volume & Supply</h3>
           <div className="grid grid-cols-2 gap-3">
             {[
               { label: "Volume 24h", val: formatVolume(crypto.volume) },
@@ -154,7 +154,7 @@ export default function OverviewTab({
             ].map((item, i) => (
               <div key={i} className="bg-slate-50 dark:bg-slate-800 p-3 rounded-lg transition-colors duration-300">
                 <span className="text-xs text-slate-500 dark:text-slate-400 block mb-1 transition-colors duration-300">{item.label}</span>
-                <p className="text-base font-bold text-slate-900 dark:text-white transition-colors duration-300">{item.val}</p>
+                <p className="text-base font-medium text-slate-900 dark:text-white transition-colors duration-300">{item.val}</p>
               </div>
             ))}
           </div>
@@ -162,7 +162,7 @@ export default function OverviewTab({
 
         {/* Key Metrics */}
         <div className="bg-white  dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-3 sm:p-4 transition-colors duration-300">
-          <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3 transition-colors duration-300">Key Metrics</h3>
+          <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3 transition-colors duration-300">Key Metrics</h3>
           <div className="space-y-2">
             {[
               { label: 'Market Cap', value: formatMarketCap(crypto.marketCap) },
@@ -171,7 +171,7 @@ export default function OverviewTab({
             ].map((item, i) => (
               <div key={i} className="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800 last:border-b-0 transition-colors duration-300">
                 <span className="text-sm text-slate-500 dark:text-slate-400 transition-colors duration-300">{item.label}</span>
-                <span className="text-sm font-semibold text-slate-900 dark:text-white transition-colors duration-300">{item.value}</span>
+                <span className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">{item.value}</span>
               </div>
             ))}
           </div>
@@ -182,7 +182,7 @@ export default function OverviewTab({
       <div className="hidden lg:grid lg:grid-cols-5 gap-4 mb-5">
         {/* Key Stats */}
         <div className="lg:col-span-1 bg-white  dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-3 transition-colors duration-300">
-          <h3 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2 transition-colors duration-300">
+          <h3 className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2 transition-colors duration-300">
             Key Statistics
           </h3>
           <div className="space-y-1">
@@ -211,7 +211,7 @@ export default function OverviewTab({
             <div className="mb-4 p-3 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 transition-colors duration-300">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 transition-colors duration-300">Duration</span>
+                  <span className="text-xs font-medium text-slate-700 dark:text-slate-300 transition-colors duration-300">Duration</span>
                   <div className="flex bg-white dark:bg-slate-900 rounded-lg p-1 border border-slate-200 dark:border-slate-700 gap-1 overflow-x-auto transition-colors duration-300">
                     {periods.map((p) => (
                       <button
@@ -227,7 +227,7 @@ export default function OverviewTab({
                   </div>
                 </div>
 
-                <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-bold ${
+                <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium ${
                   isPositive ? "text-emerald-700 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-900/20" : "text-red-700 bg-red-50 dark:text-red-400 dark:bg-red-900/20"
                 }`}>
                   {isPositive ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
@@ -236,7 +236,7 @@ export default function OverviewTab({
               </div>
 
               <div className="flex items-center gap-2">
-                <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 transition-colors duration-300">Type</span>
+                <span className="text-xs font-medium text-slate-700 dark:text-slate-300 transition-colors duration-300">Type</span>
                 <div className="flex bg-white dark:bg-slate-900 rounded-lg p-1 border border-slate-200 dark:border-slate-700 gap-1 transition-colors duration-300">
                   {chartTypes.map((type) => (
                     <button
@@ -257,7 +257,7 @@ export default function OverviewTab({
             {/* Chart Container */}
             <div className="h-80 relative">
               {chartLoading ? (
-                <div className="absolute inset-0 flex items-center justify-center bg-white dark:bg-gray-800 dark:bg-pearto-card/50 z-10 transition-colors duration-300">
+                <div className="absolute inset-0 flex items-center justify-center bg-white dark:bg-slate-800 dark:bg-pearto-card/50 z-10 transition-colors duration-300">
                   <Activity className="h-8 w-8 text-emerald-600 dark:text-pearto-green animate-spin transition-colors duration-300" />
                 </div>
               ) : null}
@@ -269,7 +269,7 @@ export default function OverviewTab({
                   chartType={chartType} 
                 />
               ) : (
-                <div className="flex items-center justify-center h-full bg-gray-50 dark:bg-gray-700 rounded-lg text-gray-400 transition-colors duration-300">
+                <div className="flex items-center justify-center h-full bg-slate-50 dark:bg-slate-700 rounded-lg text-slate-400 transition-colors duration-300">
                   No data available for this period.
                 </div>
               )}
@@ -288,7 +288,7 @@ export default function OverviewTab({
         <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 transition-colors duration-300">
           {/* Mobile Chart Header */}
           <div className="flex items-center justify-between mb-3">
-            <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-bold ${
+            <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium ${
               isPositive ? "text-emerald-700 bg-emerald-50" : "text-red-700 bg-red-50 dark:bg-pearto-pink/10"
             }`}>
               {isPositive ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
@@ -338,7 +338,7 @@ export default function OverviewTab({
           {/* Chart */}
           <div className="h-64 relative">
             {chartLoading ? (
-              <div className="absolute inset-0 flex items-center justify-center bg-white dark:bg-gray-800 dark:bg-pearto-card/50 z-10 transition-colors duration-300">
+              <div className="absolute inset-0 flex items-center justify-center bg-white dark:bg-slate-800 dark:bg-pearto-card/50 z-10 transition-colors duration-300">
                 <Activity className="h-6 w-6 text-emerald-600 dark:text-pearto-green animate-spin transition-colors duration-300" />
               </div>
             ) : null}
@@ -350,7 +350,7 @@ export default function OverviewTab({
                 chartType={chartType} 
               />
             ) : (
-              <div className="flex items-center justify-center h-full bg-gray-50  dark:bg-gray-700 rounded-lg text-gray-400 text-sm transition-colors duration-300">
+              <div className="flex items-center justify-center h-full bg-slate-50  dark:bg-slate-700 rounded-lg text-slate-400 text-sm transition-colors duration-300">
                 No data available
               </div>
             )}
@@ -369,7 +369,7 @@ export default function OverviewTab({
           <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
             <BarChart3 className="h-4 w-4 text-emerald-600 dark:text-pearto-green transition-colors duration-300" />
           </div>
-          <h3 className="text-base lg:text-lg font-semibold text-slate-900 dark:text-white transition-colors duration-300">
+          <h3 className="text-base lg:text-lg font-medium text-slate-900 dark:text-white transition-colors duration-300">
             About {crypto.name}
           </h3>
         </div>
@@ -378,7 +378,7 @@ export default function OverviewTab({
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
           {/* Description */}
           <div className="lg:col-span-2">
-            <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2 transition-colors duration-300">Overview</h4>
+            <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2 transition-colors duration-300">Overview</h4>
             {crypto.description ? (
               <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed transition-colors duration-300">
                 {crypto.description}
@@ -390,7 +390,7 @@ export default function OverviewTab({
           
           {/* Crypto Details */}
           <div>
-            <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3 transition-colors duration-300">Details</h4>
+            <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3 transition-colors duration-300">Details</h4>
             <div className="space-y-2">
               {[
                 { label: 'Symbol', value: crypto.symbol },

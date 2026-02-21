@@ -182,14 +182,14 @@ export default function MultiStockChart({ stocks, height = 300, period, chartTyp
       top: '6px',
       left: '6px',
       zIndex: '10',
-      backgroundColor: isDark ? 'rgba(17, 17, 17, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+      backgroundColor: isDark ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.95)',
       padding: '4px 8px',
       borderRadius: '4px',
       fontSize: '10px',
       fontFamily: 'Inter, system-ui, sans-serif',
       boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
       pointerEvents: 'none',
-      border: isDark ? '1px solid rgba(44, 44, 44, 0.5)' : '1px solid rgba(229, 231, 235, 0.5)'
+      border: isDark ? '1px solid rgba(51, 65, 85, 0.5)' : '1px solid rgba(229, 231, 235, 0.5)'
     });
 
     const legendContent = stocks.map((stock, index) => {
@@ -230,7 +230,7 @@ export default function MultiStockChart({ stocks, height = 300, period, chartTyp
   }, [stocks, height, period, isDark, theme, convertPrice, formatPrice]);
 
   return (
-    <div className="w-full overflow-hidden relative border border-gray-200 dark:border-pearto-border rounded-lg bg-white dark:bg-pearto-card transition-colors duration-300">
+    <div className="w-full overflow-hidden relative border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 transition-colors duration-300">
       <div ref={chartContainerRef} className="w-full" />
     </div>
   );

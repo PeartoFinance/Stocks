@@ -57,7 +57,7 @@ export default function VendorsList({ className = '', limit = 10, category }: Ve
   if (loading) {
     return (
       <div className={`bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 ${className}`}>
-        <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
+        <h3 className="text-sm font-medium text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
           <Building2 className="h-4 w-4 text-blue-600" />
           Featured Vendors
         </h3>
@@ -77,13 +77,13 @@ export default function VendorsList({ className = '', limit = 10, category }: Ve
   if (error || vendors.length === 0) {
     return (
       <div className={`bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 ${className}`}>
-        <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
+        <h3 className="text-sm font-medium text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
           <Building2 className="h-4 w-4 text-blue-600" />
           Featured Vendors
         </h3>
         <div className="text-center py-8">
-          <Building2 className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-          <p className="text-sm text-gray-500 dark:text-pearto-gray transition-colors duration-300">
+          <Building2 className="h-8 w-8 text-slate-400 mx-auto mb-2" />
+          <p className="text-sm text-slate-500 dark:text-pearto-gray transition-colors duration-300">
             {error || 'No vendors available'}
           </p>
         </div>
@@ -93,7 +93,7 @@ export default function VendorsList({ className = '', limit = 10, category }: Ve
 
   return (
     <div className={`bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 ${className}`}>
-      <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
+      <h3 className="text-sm font-medium text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
         <Building2 className="h-4 w-4 text-blue-600" />
         Featured Vendors
       </h3>
@@ -122,12 +122,12 @@ export default function VendorsList({ className = '', limit = 10, category }: Ve
                       target.style.display = 'none';
                       const parent = target.parentElement;
                       if (parent) {
-                        parent.innerHTML = `<span class="text-white text-sm font-bold">${vendor.name.charAt(0).toUpperCase()}</span>`;
+                        parent.innerHTML = `<span class="text-white text-sm font-medium">${vendor.name.charAt(0).toUpperCase()}</span>`;
                       }
                     }}
                   />
                 ) : (
-                  <span className="text-white text-sm font-bold">
+                  <span className="text-white text-sm font-medium">
                     {vendor.name.charAt(0).toUpperCase()}
                   </span>
                 )}
@@ -136,7 +136,7 @@ export default function VendorsList({ className = '', limit = 10, category }: Ve
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between">
                   <div className="flex-1 min-w-0">
-                    <h4 className="text-sm font-semibold text-slate-900 dark:text-white truncate transition-colors duration-300">
+                    <h4 className="text-sm font-medium text-slate-900 dark:text-white truncate transition-colors duration-300">
                       {vendor.name}
                     </h4>
                     {vendor.category && (
