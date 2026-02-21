@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useSearchParams } from 'next/navigation';
-import { Search, Activity, Plus, BarChart3, User, LineChart } from 'lucide-react';
+import { Search, Activity, Plus, BarChart3, User, LineChart, Brain } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { cryptoService } from '../../utils/cryptoService';
 import PriceDisplay from '../../components/common/PriceDisplay';
@@ -12,6 +12,7 @@ import StatisticsTab from './components/StatisticsTab';
 import ChartTab from './components/ChartTab';
 import ProfileTab from './components/ProfileTab';
 import { ComparisonCrypto } from './components/types';
+import AIAnalysisPanel from '../../components/ai/AIAnalysisPanel';
 
 const CRYPTO_COLORS = ['#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6'];
 
@@ -21,6 +22,7 @@ export default function CryptoComparison() {
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
+  const [isAIPanelOpen, setIsAIPanelOpen] = useState(false);
 
   const tabs = [
     { key: 'overview', label: 'Overview', icon: BarChart3 },
@@ -166,12 +168,23 @@ export default function CryptoComparison() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900/95">
       <main className="p-4 lg:p-6">
         <div className="max-w-[1600px] mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-3 sm:mb-4">
-            <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-1">Crypto Comparison</h1>
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-gray-400">Compare up to 5 cryptocurrencies side by side</p>
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-1">Crypto Comparison</h1>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-gray-400">Compare up to 5 cryptocurrencies side by side</p>
+              </div>
+              <button
+                onClick={() => setIsAIPanelOpen(true)}
+                className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-blue-600 dark:bg-emerald-600 text-white text-xs sm:text-sm font-medium rounded-lg hover:bg-blue-700 dark:hover:bg-emerald-700 transition-colors"
+              >
+                <Brain className="h-4 w-4" />
+                <span className="hidden sm:inline">AI Analysis</span>
+              </button>
+            </div>
           </motion.div>
 
           {/* Search Section */}
@@ -272,6 +285,54 @@ export default function CryptoComparison() {
           )}
         </div>
       </main>
+
+      {/* AI Analysis Panel */}
+      {isAIPanelOpen && (
+        <>
+          <div className={`fixed bottom-0 md:top-0 md:right-0 left-0 md:left-auto h-[85vh] md:h-full w-full md:w-96 bg-white dark:bg-gray-800 shadow-2xl transform transition-transform duration-300 ease-in-out z-50 rounded-t-2xl md:rounded-none ${
+            isAIPanelOpen ? 'translate-y-0 md:translate-x-0' : 'translate-y-full md:translate-y-0 md:translate-x-full'
+          }`}>
+            <div className="h-full flex flex-col">
+              <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-slate-900/95">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Brain className="h-5 w-5 text-blue-600 dark:text-emerald-500" />
+                    <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">AI Analysis</h3>
+                  </div>
+                  <button
+                    onClick={() => setIsAIPanelOpen(false)}
+                    className="p-1 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                  >
+                    <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div className="flex-1 overflow-y-auto">
+                <AIAnalysisPanel
+                  title=""
+                  pageType="crypto-comparison"
+                  pageData={{
+                    cryptos: comparedCryptos.map(c => ({ symbol: c.symbol, name: c.name, price: c.price })),
+                    count: comparedCryptos.length
+                  }}
+                  quickPrompts={[
+                    "Compare all cryptos",
+                    "Best performer",
+                    "Risk analysis",
+                    "Investment recommendation",
+                    "Market trends"
+                  ]}
+                  compact={false}
+                  className="w-full h-full"
+                />
+              </div>
+            </div>
+          </div>
+          <div className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 z-40" onClick={() => setIsAIPanelOpen(false)} />
+        </>
+      )}
     </div>
   );
 }

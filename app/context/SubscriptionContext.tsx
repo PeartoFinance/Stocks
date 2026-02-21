@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
+import { fetchSubscription } from '@/app/utils/subscriptionAPI';
 
 interface SubscriptionContextType {
   planName: string;
@@ -27,7 +28,7 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchSubscription = async () => {
+    const loadSubscription = async () => {
       if (!isAuthenticated) {
         setPlanName('Free');
         setIsPro(false);
@@ -37,30 +38,21 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
       }
 
       try {
-        const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://apipearto.ashlya.com/api';
-        const token = localStorage.getItem('token');
-        
-        const res = await fetch(`${API_BASE}/subscription/status`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (res.ok) {
-          const data = await res.json();
-          setPlanName(data.planName || 'Free');
-          setIsPro(data.isPro || false);
-          setStatus(data.status || 'inactive');
-        }
+        const data = await fetchSubscription();
+        setPlanName(data.tier === 'free' ? 'Free' : data.tier.charAt(0).toUpperCase() + data.tier.slice(1));
+        setIsPro(data.tier !== 'free');
+        setStatus(data.status || 'inactive');
       } catch (error) {
         console.error('Failed to fetch subscription:', error);
+        setPlanName('Free');
+        setIsPro(false);
+        setStatus('inactive');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchSubscription();
+    loadSubscription();
   }, [isAuthenticated, user]);
 
   return (

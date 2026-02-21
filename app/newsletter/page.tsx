@@ -20,7 +20,7 @@ export default function NewsletterPage() {
   };
 
   return (
-    <main className="p-8 dark:bg-gray-900">
+    <main className="p-8 dark:bg-slate-900/95">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
         <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">Market Newsletter</h1>
         <p className="text-gray-600 dark:text-gray-400">Weekly insights, market movers, and curated learning—straight to your inbox.</p>

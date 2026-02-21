@@ -25,13 +25,13 @@ export default function ChartAIPanel({
 
   return (
     <>
-      {/* Sliding AI Panel */}
-      <div className={`fixed top-0 right-0 h-full w-96 bg-white dark:bg-gray-800 shadow-2xl transform transition-transform duration-300 ease-in-out z-50 ${
-        isOpen ? 'translate-x-0' : 'translate-x-full'
+      {/* Sliding AI Panel - from bottom on mobile, from right on desktop */}
+      <div className={`fixed bottom-0 md:top-0 md:right-0 left-0 md:left-auto h-[85vh] md:h-full w-full md:w-96 bg-white dark:bg-gray-800 shadow-2xl transform transition-transform duration-300 ease-in-out z-50 rounded-t-2xl md:rounded-none ${
+        isOpen ? 'translate-y-0 md:translate-x-0' : 'translate-y-full md:translate-y-0 md:translate-x-full'
       }`}>
         <div className="h-full flex flex-col">
           {/* AI Panel Header */}
-          <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+          <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-slate-900/95">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Brain className="h-5 w-5 text-blue-600" />

@@ -1,34 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { TrendingUp, TrendingDown, DollarSign, PieChart, BarChart3, Calendar, Activity, ChevronUp, ChevronDown, Info } from 'lucide-react';
-import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
-    ArcElement,
-    RadialLinearScale
-} from 'chart.js';
-import { Line, Pie, Bar } from 'react-chartjs-2';
+import { TrendingUp, TrendingDown, DollarSign, BarChart3, ChevronUp, ChevronDown, Info, Activity } from 'lucide-react';
 import { useCurrency } from '../../context/CurrencyContext';
-
-// Register Chart.js components
-ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
-    ArcElement,
-    RadialLinearScale
-);
 
 interface HoldingDetailCardProps {
     holding: any;
@@ -55,104 +29,6 @@ export default function HoldingDetailCard({
     const gainPercent = totalCost > 0 ? (totalGain / totalCost) * 100 : 0;
     const dayChange = marketData?.dayChange || 0;
     const dayChangePercent = marketData?.dayChangePercent || 0;
-
-    // Generate mock historical data for charts
-    const generateHistoricalData = () => {
-        const days = 30;
-        const data = [];
-        const basePrice = holding.currentPrice || holding.avgCost;
-
-        for (let i = days; i >= 0; i--) {
-            const randomChange = (Math.random() - 0.5) * 0.1;
-            const price = basePrice * (1 + randomChange * (days - i) / days);
-            data.push({
-                date: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toLocaleDateString(),
-                price: price
-            });
-        }
-        return data;
-    };
-
-    const historicalData = generateHistoricalData();
-
-    // Chart data for price history
-    const priceChartData = {
-        labels: historicalData.map(d => d.date),
-        datasets: [
-            {
-                label: 'Price',
-                data: historicalData.map(d => d.price),
-                borderColor: 'rgb(34, 197, 94)',
-                backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                tension: 0.1
-            }
-        ]
-    };
-
-    // Chart data for portfolio allocation
-    const allocationData = {
-        labels: [holding.symbol, 'Other Holdings'],
-        datasets: [
-            {
-                data: [totalValue, 100000 - totalValue], // Assuming total portfolio value
-                backgroundColor: [
-                    'rgba(34, 197, 94, 0.8)',
-                    'rgba(156, 163, 175, 0.8)'
-                ],
-                borderColor: [
-                    'rgb(34, 197, 94)',
-                    'rgb(156, 163, 175)'
-                ],
-                borderWidth: 1
-            }
-        ]
-    };
-
-    // Chart options
-    const chartOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                display: false
-            }
-        },
-        scales: {
-            y: {
-                beginAtZero: false,
-                ticks: {
-                    color: 'hsl(var(--foreground))',
-                    callback: function (value: any) {
-                        return formatPrice(value);
-                    }
-                },
-                grid: {
-                    color: 'rgba(148, 163, 184, 0.1)'
-                }
-            },
-            x: {
-                ticks: {
-                    color: 'hsl(var(--foreground))'
-                },
-                grid: {
-                    display: false
-                }
-            }
-        }
-    };
-
-    const pieOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                position: 'bottom' as const,
-                labels: {
-                    color: typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches ? '#e2e8f0' : '#64748b'
-                }
-            }
-        }
-    };
 
     return (
         <div className={`bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-slate-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-shadow duration-300 ${className}`}>
@@ -243,81 +119,50 @@ export default function HoldingDetailCard({
             {/* Detailed Information */}
             {showDetails && (
                 <div className="border-t border-slate-100 dark:border-gray-700">
-                    {/* Charts Section */}
-                    <div className="p-4">
-                        <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-                            <BarChart3 className="h-6 w-6 text-slate-600 dark:text-gray-400" />
-                            Performance & Analytics
-                        </h4>
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                            {/* Price History Chart */}
-                            <div className="bg-white dark:bg-gray-700 rounded-xl p-4 shadow-sm border border-slate-200 dark:border-gray-600">
-                                <h5 className="text-sm font-semibold text-slate-800 dark:text-white mb-3 flex items-center gap-2">
-                                    <Activity className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                                    Price History (30 Days)
-                                </h5>
-                                <div className="h-64">
-                                    <Line data={priceChartData} options={chartOptions} />
-                                </div>
-                            </div>
-
-                            {/* Portfolio Allocation */}
-                            <div className="bg-white dark:bg-gray-700 rounded-xl p-4 shadow-sm border border-slate-200 dark:border-gray-600">
-                                <h5 className="text-sm font-semibold text-slate-800 dark:text-white mb-3 flex items-center gap-2">
-                                    <PieChart className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-                                    Portfolio Allocation
-                                </h5>
-                                <div className="h-80">
-                                    <Pie data={allocationData} options={pieOptions} />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                     {/* Additional Details */}
-                    <div className="p-6 border-t border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+                    <div className="p-6 bg-white dark:bg-gray-800">
                         <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
                             <Info className="h-6 w-6 text-slate-600 dark:text-gray-400" />
                             Detailed Information
                         </h4>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div className="grid grid-cols-2 md:grid-cols-2 gap-3 md:gap-6">
                             {/* Market Data */}
-                            <div className="bg-blue-50 dark:bg-blue-900/30 rounded-xl p-6 border border-blue-200 dark:border-blue-800">
-                                <h5 className="text-base font-semibold text-blue-800 dark:text-blue-300 mb-4 flex items-center gap-2">
-                                    <Activity className="h-4 w-4" />
+                            <div className="bg-blue-50 dark:bg-blue-900/30 rounded-xl p-3 md:p-6 border border-blue-200 dark:border-blue-800">
+                                <h5 className="text-xs md:text-base font-semibold text-blue-800 dark:text-blue-300 mb-2 md:mb-4 flex items-center gap-1 md:gap-2">
+                                    <Activity className="h-3 w-3 md:h-4 md:w-4" />
                                     Market Data
                                 </h5>
-                                <div className="space-y-3">
-                                    <div className="flex justify-between items-center p-3 bg-white dark:bg-gray-700 rounded-lg">
-                                        <span className="text-sm font-medium text-slate-600 dark:text-gray-400">52W High:</span>
-                                        <span className="font-bold text-slate-900 dark:text-white">
+                                <div className="space-y-1.5 md:space-y-3">
+                                    <div className="flex justify-between items-center p-2 md:p-3 bg-white dark:bg-gray-700 rounded-lg">
+                                        <span className="text-[10px] md:text-sm font-medium text-slate-600 dark:text-gray-400">52W High:</span>
+                                        <span className="text-xs md:text-base font-bold text-slate-900 dark:text-white">
                                             {marketData?.high52w ? formatPrice(marketData.high52w) : 'N/A'}
                                         </span>
                                     </div>
-                                    <div className="flex justify-between items-center p-3 bg-white dark:bg-gray-700 rounded-lg">
-                                        <span className="text-sm font-medium text-slate-600 dark:text-gray-400">52W Low:</span>
-                                        <span className="font-bold text-slate-900 dark:text-white">
+                                    <div className="flex justify-between items-center p-2 md:p-3 bg-white dark:bg-gray-700 rounded-lg">
+                                        <span className="text-[10px] md:text-sm font-medium text-slate-600 dark:text-gray-400">52W Low:</span>
+                                        <span className="text-xs md:text-base font-bold text-slate-900 dark:text-white">
                                             {marketData?.low52w ? formatPrice(marketData.low52w) : 'N/A'}
                                         </span>
                                     </div>
-                                    <div className="flex justify-between items-center p-3 bg-white dark:bg-gray-700 rounded-lg">
-                                        <span className="text-sm font-medium text-slate-600 dark:text-gray-400">P/E Ratio:</span>
-                                        <span className="font-bold text-slate-900 dark:text-white">
+                                    <div className="flex justify-between items-center p-2 md:p-3 bg-white dark:bg-gray-700 rounded-lg">
+                                        <span className="text-[10px] md:text-sm font-medium text-slate-600 dark:text-gray-400">P/E Ratio:</span>
+                                        <span className="text-xs md:text-base font-bold text-slate-900 dark:text-white">
                                             {marketData?.peRatio?.toFixed(2) || 'N/A'}
                                         </span>
                                     </div>
-                                    <div className="flex justify-between items-center p-3 bg-white dark:bg-gray-700 rounded-lg">
-                                        <span className="text-sm font-medium text-slate-600 dark:text-gray-400">Market Cap:</span>
-                                        <span className="font-bold text-slate-900 dark:text-white">
+                                    <div className="flex justify-between items-center p-2 md:p-3 bg-white dark:bg-gray-700 rounded-lg">
+                                        <span className="text-[10px] md:text-sm font-medium text-slate-600 dark:text-gray-400">Market Cap:</span>
+                                        <span className="text-xs md:text-base font-bold text-slate-900 dark:text-white">
                                             {marketData?.marketCap ?
                                                 formatPrice(marketData.marketCap / 1000000000) + 'B' :
                                                 'N/A'
                                             }
                                         </span>
                                     </div>
-                                    <div className="flex justify-between items-center p-3 bg-white dark:bg-gray-700 rounded-lg">
-                                        <span className="text-sm font-medium text-slate-600 dark:text-gray-400">Sector:</span>
-                                        <span className="font-bold text-slate-900 dark:text-white">
+                                    <div className="flex justify-between items-center p-2 md:p-3 bg-white dark:bg-gray-700 rounded-lg">
+                                        <span className="text-[10px] md:text-sm font-medium text-slate-600 dark:text-gray-400">Sector:</span>
+                                        <span className="text-xs md:text-base font-bold text-slate-900 dark:text-white truncate ml-2">
                                             {marketData?.sector || 'N/A'}
                                         </span>
                                     </div>
@@ -325,74 +170,34 @@ export default function HoldingDetailCard({
                             </div>
 
                             {/* Investment Metrics */}
-                            <div className="bg-purple-50 dark:bg-purple-900/30 rounded-xl p-6 border border-purple-200 dark:border-purple-800">
-                                <h5 className="text-base font-semibold text-purple-800 dark:text-purple-300 mb-4 flex items-center gap-2">
-                                    <Info className="h-4 w-4" />
+                            <div className="bg-purple-50 dark:bg-purple-900/30 rounded-xl p-3 md:p-6 border border-purple-200 dark:border-purple-800">
+                                <h5 className="text-xs md:text-base font-semibold text-purple-800 dark:text-purple-300 mb-2 md:mb-4 flex items-center gap-1 md:gap-2">
+                                    <Info className="h-3 w-3 md:h-4 md:w-4" />
                                     Investment Metrics
                                 </h5>
-                                <div className="space-y-3">
-                                    <div className="flex justify-between items-center p-3 bg-white dark:bg-gray-700 rounded-lg">
-                                        <span className="text-sm font-medium text-slate-600 dark:text-gray-400">Portfolio Weight:</span>
-                                        <span className="font-bold text-slate-900 dark:text-white">
+                                <div className="space-y-1.5 md:space-y-3">
+                                    <div className="flex justify-between items-center p-2 md:p-3 bg-white dark:bg-gray-700 rounded-lg">
+                                        <span className="text-[10px] md:text-sm font-medium text-slate-600 dark:text-gray-400">Portfolio Weight:</span>
+                                        <span className="text-xs md:text-base font-bold text-slate-900 dark:text-white">
                                             {((totalValue / 100000) * 100).toFixed(2)}%
                                         </span>
                                     </div>
-                                    <div className="flex justify-between items-center p-3 bg-white dark:bg-gray-700 rounded-lg">
-                                        <span className="text-sm font-medium text-slate-600 dark:text-gray-400">Daily Return:</span>
-                                        <span className={`font-bold ${dayChange >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                                    <div className="flex justify-between items-center p-2 md:p-3 bg-white dark:bg-gray-700 rounded-lg">
+                                        <span className="text-[10px] md:text-sm font-medium text-slate-600 dark:text-gray-400">Daily Return:</span>
+                                        <span className={`text-xs md:text-base font-bold ${dayChange >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                                             {dayChange >= 0 ? '+' : ''}{dayChange.toFixed(2)}%
                                         </span>
                                     </div>
-                                    <div className="flex justify-between items-center p-3 bg-white dark:bg-gray-700 rounded-lg">
-                                        <span className="text-sm font-medium text-slate-600 dark:text-gray-400">YTD Return:</span>
-                                        <span className="font-bold text-slate-900 dark:text-white">
+                                    <div className="flex justify-between items-center p-2 md:p-3 bg-white dark:bg-gray-700 rounded-lg">
+                                        <span className="text-[10px] md:text-sm font-medium text-slate-600 dark:text-gray-400">YTD Return:</span>
+                                        <span className="text-xs md:text-base font-bold text-slate-900 dark:text-white">
                                             +{gainPercent.toFixed(2)}%
                                         </span>
                                     </div>
-                                    <div className="flex justify-between items-center p-3 bg-white dark:bg-gray-700 rounded-lg">
-                                        <span className="text-sm font-medium text-slate-600 dark:text-gray-400">Volatility:</span>
-                                        <span className="font-bold text-slate-900 dark:text-white">
+                                    <div className="flex justify-between items-center p-2 md:p-3 bg-white dark:bg-gray-700 rounded-lg">
+                                        <span className="text-[10px] md:text-sm font-medium text-slate-600 dark:text-gray-400">Volatility:</span>
+                                        <span className="text-xs md:text-base font-bold text-slate-900 dark:text-white">
                                             {(Math.random() * 30 + 10).toFixed(1)}%
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Transaction Summary */}
-                            <div className="bg-emerald-50 dark:bg-emerald-900/30 rounded-xl p-6 border border-emerald-200 dark:border-emerald-800">
-                                <h5 className="text-base font-semibold text-emerald-800 dark:text-emerald-300 mb-4 flex items-center gap-2">
-                                    <Calendar className="h-4 w-4" />
-                                    Transaction Summary
-                                </h5>
-                                <div className="space-y-3">
-                                    <div className="flex justify-between items-center p-3 bg-white dark:bg-gray-700 rounded-lg">
-                                        <span className="text-sm font-medium text-slate-600 dark:text-gray-400">Total Transactions:</span>
-                                        <span className="font-bold text-slate-900 dark:text-white">
-                                            {transactions.length}
-                                        </span>
-                                    </div>
-                                    <div className="flex justify-between items-center p-3 bg-white dark:bg-gray-700 rounded-lg">
-                                        <span className="text-sm font-medium text-slate-600 dark:text-gray-400">First Purchase:</span>
-                                        <span className="font-bold text-slate-900 dark:text-white">
-                                            {transactions.length > 0 ?
-                                                new Date(transactions[0].date).toLocaleDateString() :
-                                                'N/A'
-                                            }
-                                        </span>
-                                    </div>
-                                    <div className="flex justify-between items-center p-3 bg-white dark:bg-gray-700 rounded-lg">
-                                        <span className="text-sm font-medium text-slate-600 dark:text-gray-400">Last Transaction:</span>
-                                        <span className="font-bold text-slate-900 dark:text-white">
-                                            {transactions.length > 0 ?
-                                                new Date(transactions[transactions.length - 1].date).toLocaleDateString() :
-                                                'N/A'
-                                            }
-                                        </span>
-                                    </div>
-                                    <div className="flex justify-between items-center p-3 bg-white dark:bg-gray-700 rounded-lg">
-                                        <span className="text-sm font-medium text-slate-600 dark:text-gray-400">Avg Hold Time:</span>
-                                        <span className="font-bold text-slate-900 dark:text-white">
-                                            {Math.floor(Math.random() * 365 + 30)} days
                                         </span>
                                     </div>
                                 </div>

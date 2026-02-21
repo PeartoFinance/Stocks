@@ -110,7 +110,7 @@ export default function ArticlesPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 sm:p-6 lg:p-8 transition-colors duration-300">
+      <main className="min-h-screen bg-gray-50 dark:bg-slate-900/95 p-4 sm:p-6 lg:p-8 transition-colors duration-300">
         <div className="max-w-7xl mx-auto">
           <div className="mb-6 sm:mb-8">
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2 sm:mb-3">Articles</h1>
@@ -146,7 +146,7 @@ export default function ArticlesPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 sm:p-6 lg:p-8 transition-colors duration-300">
+    <main className="min-h-screen bg-gray-50 dark:bg-slate-900/95 p-4 sm:p-6 lg:p-8 transition-colors duration-300">
       <div className="max-w-7xl mx-auto">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-6 sm:mb-8">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2 sm:mb-3">Articles</h1>

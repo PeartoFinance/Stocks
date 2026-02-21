@@ -35,7 +35,7 @@ export default function Footer() {
             { label: 'Stock Analysis Pro', href: '/pro' },
         ],
         company: [
-            { label: 'About Us', href: `${mainAppUrl}/about` },
+            { label: 'About Us', href: `${mainAppUrl}/p/about` },
             { label: 'Contact', href: `${mainAppUrl}/contact` },
             { label: 'Privacy Policy', href: `${mainAppUrl}/privacy` },
             { label: 'Terms of Service', href: `${mainAppUrl}/terms` },
@@ -52,7 +52,7 @@ export default function Footer() {
 
     return (
         /* Shadow added via relative positioning and shadow-inner/border-t */
-        <footer className="relative bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-gray-900 dark:to-gray-900 text-white transition-colors duration-300 border-t border-black/10 dark:border-white/5 w-full overflow-x-hidden">
+        <footer className="relative bg-gradient-to-r from-emerald-600 to-teal-600 dark:bg-none dark:bg-slate-900/95 text-white transition-colors duration-300 border-t border-black/10 dark:border-white/5 w-full overflow-x-hidden">
             
             {/* Top Shadow Layer */}
             <div className="absolute inset-x-0 top-0 h-4 shadow-[inset_0_4px_6px_-1px_rgba(0,0,0,0.1),_0_-4px_10px_rgba(0,0,0,0.05)] pointer-events-none" />

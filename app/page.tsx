@@ -215,7 +215,7 @@ export default function HomePage() {
   });
 
   return (
-<div className="min-h-screen bg-slate-50 dark:bg-gray-900 transition-colors duration-300">      {/* Advanced Market Indices Dashboard - Full Width */}
+<div className="min-h-screen bg-slate-50 dark:bg-slate-900/95 transition-colors duration-300">      {/* Advanced Market Indices Dashboard - Full Width */}
       <div className="bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-500 dark:bg-gradient-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 border-b border-blue-700 dark:border-slate-700 transition-colors duration-300">
         <div className="px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 mb-4 mt-8 sm:mt-10">
@@ -499,7 +499,7 @@ export default function HomePage() {
 
             {/* Call to Action */}
             <div className="text-center px-3 sm:px-4">
-              <div className="bg-white dark:bg-gray-900 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 border border-gray-200 dark:border-gray-800 shadow-xl dark:shadow-2xl transition-colors duration-300">
+              <div className="bg-white dark:bg-slate-900/95 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 border border-gray-200 dark:border-gray-800 shadow-xl dark:shadow-2xl transition-colors duration-300">
                 <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4 text-gray-900 dark:text-[#fafafa]">Ready to Start Trading?</h2>
                 <p className="text-sm sm:text-base lg:text-xl text-gray-600 dark:text-gray-400 mb-6 sm:mb-8 max-w-2xl mx-auto px-4">
                   Join thousands of professional traders using our advanced analytics platform to make informed investment decisions.

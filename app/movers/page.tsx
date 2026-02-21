@@ -97,7 +97,7 @@ export default function MarketMoversPage() {
   const losers = filtered.filter(m => m.changePercent < 0).slice(0, 5);
 
   return (
-    <main className="p-3 sm:p-4 md:p-6 lg:p-8 dark:bg-gray-900">
+    <main className="p-3 sm:p-4 md:p-6 lg:p-8 dark:bg-slate-900/95">
       <div className="flex flex-col xl:flex-row gap-4 sm:gap-6 lg:gap-8">
         {/* Main Content */}
         <div className="flex-1">

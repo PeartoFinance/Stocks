@@ -141,20 +141,20 @@ export default function WatchlistPage() {
     if (!isAuthenticated) return null;
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
-            <div className="bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-800 dark:to-emerald-800 mt-8">
-                <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-900/95">
+            <div className="bg-gradient-to-br from-emerald-500 to-green-600 dark:from-slate-900/95 dark:to-slate-900/95 pb-8 pt-16">
+                <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6 border-b border-emerald-600/20 dark:border-slate-800">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <div className="flex items-center gap-3">
                             <Link
                                 href="/profile"
-                                className="p-2 rounded-lg bg-white/20 hover:bg-white/30 text-white transition"
+                                className="p-2 rounded-lg bg-white/20 hover:bg-white/30 dark:bg-slate-800 dark:hover:bg-slate-700 text-white dark:text-white transition"
                             >
                                 <ArrowLeft className="h-5 w-5" />
                             </Link>
                             <div className="flex items-center gap-2">
-                                <Star className="h-6 w-6 sm:h-7 sm:w-7 text-white" />
-                                <h1 className="text-xl sm:text-2xl font-bold text-white">Watchlist</h1>
+                                <Star className="h-6 w-6 sm:h-7 sm:w-7 text-white dark:text-white" />
+                                <h1 className="text-xl sm:text-2xl font-bold text-white dark:text-white">Watchlist</h1>
                             </div>
                         </div>
                         <button
@@ -162,7 +162,7 @@ export default function WatchlistPage() {
                                 setShowSearch(!showSearch);
                                 setSymbolToAdd('');
                             }}
-                            className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white text-green-600 dark:text-green-400 font-medium hover:bg-green-50 dark:hover:bg-green-900/30 transition shadow-sm"
+                            className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/20 hover:bg-white/30 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-medium transition"
                         >
                             <Plus className="h-5 w-5" />
                             Add Stock
@@ -173,7 +173,7 @@ export default function WatchlistPage() {
 
             <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 max-w-4xl">
                 {showSearch && (
-                    <div className="bg-white dark:bg-gray-800 rounded-2xl border border-slate-200 dark:border-gray-700 shadow-sm p-4 sm:p-6 mb-6">
+                    <div className="bg-white dark:bg-gray-800 rounded-2xl border border-slate-200 dark:border-gray-700 shadow-sm p-4 sm:p-6 mb-4 sm:mb-6">
                         <h3 className="font-semibold text-slate-900 dark:text-white mb-4">Add stock to watchlist</h3>
                         <div className="relative">
                             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
@@ -240,15 +240,15 @@ export default function WatchlistPage() {
                 )}
 
                 <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
-                    <div className="px-4 sm:px-6 py-4 border-b border-slate-100 dark:border-slate-700">
-                        <h2 className="font-semibold text-slate-900 dark:text-white">Your watchlist ({watchlist.length})</h2>
+                    <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-100 dark:border-slate-700">
+                        <h2 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-white">Your watchlist ({watchlist.length})</h2>
                     </div>
                     {loading ? (
                         <div className="p-12 flex justify-center">
                             <RefreshCw className="h-8 w-8 text-green-500 animate-spin" />
                         </div>
                     ) : watchlist.length === 0 ? (
-                        <div className="p-8 sm:p-12 text-center">
+                        <div className="p-6 sm:p-12 text-center">
                             <div className="h-14 w-14 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center mx-auto mb-4">
                                 <Star className="h-7 w-7 text-amber-500" />
                             </div>
@@ -269,46 +269,48 @@ export default function WatchlistPage() {
                             {watchlist.map((item) => (
                                 <div
                                     key={item.symbol}
-                                    className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 sm:px-6 hover:bg-slate-50 dark:hover:bg-slate-800 transition"
+                                    className="p-3 sm:p-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition"
                                 >
-                                    <Link href={`/stock/${item.symbol}`} className="flex-1 min-w-0">
-                                        <div className="font-medium text-slate-900 dark:text-white">{item.symbol}</div>
-                                        <div className="text-sm text-slate-500 dark:text-slate-400 truncate">{item.name || '—'}</div>
-                                    </Link>
-                                    <div className="flex items-center gap-4 flex-shrink-0">
-                                        <div className="text-right">
-                                            <div className="font-medium text-slate-900 dark:text-white">
-                                                ${typeof item.price === 'number' && !isNaN(item.price) ? item.price.toFixed(2) : '—'}
+                                    <div className="flex items-center justify-between gap-3">
+                                        <Link href={`/stock/${item.symbol}`} className="flex-1 min-w-0">
+                                            <div className="font-semibold text-sm sm:text-base text-slate-900 dark:text-white">{item.symbol}</div>
+                                            <div className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 truncate">{item.name || '—'}</div>
+                                        </Link>
+                                        <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
+                                            <div className="text-right">
+                                                <div className="font-semibold text-sm sm:text-base text-slate-900 dark:text-white">
+                                                    ${typeof item.price === 'number' && !isNaN(item.price) ? item.price.toFixed(2) : '—'}
+                                                </div>
+                                                <div
+                                                    className={`text-xs sm:text-sm flex items-center justify-end gap-1 ${
+                                                        (item.changePercent ?? 0) >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
+                                                    }`}
+                                                >
+                                                    {(item.changePercent ?? 0) >= 0 ? (
+                                                        <TrendingUp className="h-3 w-3" />
+                                                    ) : (
+                                                        <TrendingDown className="h-3 w-3" />
+                                                    )}
+                                                    {(item.changePercent ?? 0) >= 0 ? '+' : ''}
+                                                    {typeof item.changePercent === 'number' && !isNaN(item.changePercent)
+                                                        ? item.changePercent.toFixed(2)
+                                                        : '—'}
+                                                    %
+                                                </div>
                                             </div>
-                                            <div
-                                                className={`text-sm flex items-center justify-end gap-1 ${
-                                                    (item.changePercent ?? 0) >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
-                                                }`}
+                                            <button
+                                                onClick={() => handleRemove(item.symbol)}
+                                                disabled={removing === item.symbol}
+                                                className="p-1.5 sm:p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 transition disabled:opacity-50"
                                             >
-                                                {(item.changePercent ?? 0) >= 0 ? (
-                                                    <TrendingUp className="h-3 w-3" />
+                                                {removing === item.symbol ? (
+                                                    <RefreshCw className="h-4 w-4 animate-spin" />
                                                 ) : (
-                                                    <TrendingDown className="h-3 w-3" />
+                                                    <Trash2 className="h-4 w-4" />
                                                 )}
-                                                {(item.changePercent ?? 0) >= 0 ? '+' : ''}
-                                                {typeof item.changePercent === 'number' && !isNaN(item.changePercent)
-                                                    ? item.changePercent.toFixed(2)
-                                                    : '—'}
-                                                %
-                                            </div>
+                                            </button>
                                         </div>
-                                        <button
-                                            onClick={() => handleRemove(item.symbol)}
-                                            disabled={removing === item.symbol}
-                                            className="p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 transition disabled:opacity-50"
-                                        >
-                                            {removing === item.symbol ? (
-                                                <RefreshCw className="h-4 w-4 animate-spin" />
-                                            ) : (
-                                                <Trash2 className="h-4 w-4" />
-                                            )}
-                                        </button>
-.                                   </div>
+                                    </div>
                                 </div>
                             ))}
                         </div>

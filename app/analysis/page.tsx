@@ -108,7 +108,7 @@ export default function AnalysisPage() {
     const rotation = (clampedScore / 10) * 90;
 
     return (
-      <div className="relative w-64 h-40 mx-auto">
+      <div className="relative w-48 h-32 md:w-64 md:h-40 mx-auto">
         <svg viewBox="0 0 240 140" className="w-full h-full drop-shadow-lg">
           <defs>
             <linearGradient id="redGrad" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -133,9 +133,9 @@ export default function AnalysisPage() {
           <circle cx="120" cy="110" r="8" fill="#1f2937" className="dark:fill-white" />
           <circle cx="120" cy="110" r="4" fill="#ef4444" />
         </svg>
-        <div className="absolute bottom-2 left-2 text-sm font-bold text-red-600 dark:text-red-400">SELL</div>
-        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 text-xs font-medium text-gray-500 dark:text-gray-400">NEUTRAL</div>
-        <div className="absolute bottom-2 right-2 text-sm font-bold text-green-600 dark:text-green-400">BUY</div>
+        <div className="absolute bottom-2 left-2 text-xs md:text-sm font-bold text-red-600 dark:text-red-400">SELL</div>
+        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 text-[10px] md:text-xs font-medium text-gray-500 dark:text-gray-400">NEUTRAL</div>
+        <div className="absolute bottom-2 right-2 text-xs md:text-sm font-bold text-green-600 dark:text-green-400">BUY</div>
       </div>
     );
   };
@@ -161,11 +161,11 @@ export default function AnalysisPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-900 pt-32 pb-12">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900/95 pt-10 pb-12">
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">Technical Analysis</h1>
-          <p className="text-slate-600 dark:text-gray-400">Advanced indicators and buy/sell signals</p>
+          <h1 className="text-xl md:text-3xl font-bold text-slate-900 dark:text-white mb-2">Technical Analysis</h1>
+          <p className="text-sm md:text-base text-slate-600 dark:text-gray-400">Advanced indicators and buy/sell signals</p>
         </div>
 
         <div className="relative mb-8">
@@ -176,7 +176,7 @@ export default function AnalysisPage() {
               value={searchQuery}
               onChange={(e) => handleSearch(e.target.value)}
               placeholder="Search stocks (e.g., AAPL, TSLA)..."
-              className="w-full pl-12 pr-4 py-4 rounded-xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-green-500 outline-none"
+              className="w-full pl-12 pr-4 py-3 md:py-4 text-sm md:text-base rounded-xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-green-500 outline-none"
             />
           </div>
           {suggestions.length > 0 && (
@@ -196,7 +196,7 @@ export default function AnalysisPage() {
         </div>
 
         {loading && (
-          <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center transition-colors duration-300">
+          <div className="min-h-screen bg-gray-50 dark:bg-slate-900/95 flex items-center justify-center transition-colors duration-300">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
           </div>
         )}
@@ -204,18 +204,18 @@ export default function AnalysisPage() {
         {!loading && analysis && (
           <div className="space-y-6">
             {/* Stock Header with Details */}
-            <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-gray-800 dark:to-gray-800 rounded-2xl p-6 border border-green-200 dark:border-gray-700">
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-gray-800 dark:to-gray-800 rounded-2xl p-4 md:p-6 border border-green-200 dark:border-gray-700">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 md:gap-6">
                 <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <h2 className="text-3xl font-bold text-slate-900 dark:text-white">{analysis.symbol}</h2>
-                    <div className={`px-4 py-1.5 rounded-lg font-bold text-sm ${getSignalBg(analysis.summary.signal)} ${getSignalColor(analysis.summary.signal)}`}>
+                  <div className="flex items-center gap-2 md:gap-3 mb-2">
+                    <h2 className="text-xl md:text-3xl font-bold text-slate-900 dark:text-white">{analysis.symbol}</h2>
+                    <div className={`px-2 md:px-4 py-1 md:py-1.5 rounded-lg font-bold text-xs md:text-sm ${getSignalBg(analysis.summary.signal)} ${getSignalColor(analysis.summary.signal)}`}>
                       {analysis.summary.signal}
                     </div>
                   </div>
-                  {analysis.quote && <p className="text-slate-600 dark:text-gray-400 text-sm">{analysis.quote.name}</p>}
-                  <div className="flex items-baseline gap-3 mt-4">
-                    <span className="text-4xl font-bold text-slate-900 dark:text-white">{formatPrice(analysis.price)}</span>
+                  {analysis.quote && <p className="text-slate-600 dark:text-gray-400 text-xs md:text-sm">{analysis.quote.name}</p>}
+                  <div className="flex items-baseline gap-2 md:gap-3 mt-3 md:mt-4">
+                    <span className="text-2xl md:text-4xl font-bold text-slate-900 dark:text-white">{formatPrice(analysis.price)}</span>
                     {analysis.quote && (
                       <div className="flex items-center gap-2">
                         {analysis.quote.change >= 0 ? (
@@ -223,7 +223,7 @@ export default function AnalysisPage() {
                         ) : (
                           <TrendingDown className="h-5 w-5 text-red-600 dark:text-red-400" />
                         )}
-                        <span className={`text-xl font-semibold ${analysis.quote.change >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                        <span className={`text-sm md:text-xl font-semibold ${analysis.quote.change >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                           {analysis.quote.change >= 0 ? '+' : ''}{formatPrice(analysis.quote.change)} ({analysis.quote.changePercent >= 0 ? '+' : ''}{analysis.quote.changePercent.toFixed(2)}%)
                         </span>
                       </div>
@@ -231,33 +231,33 @@ export default function AnalysisPage() {
                   </div>
                 </div>
                 {analysis.quote && (
-                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div className="bg-white dark:bg-gray-700 rounded-xl p-4">
-                      <div className="flex items-center gap-2 text-slate-600 dark:text-gray-400 text-xs mb-1">
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+                    <div className="bg-white dark:bg-gray-700 rounded-xl p-3 md:p-4">
+                      <div className="flex items-center gap-2 text-slate-600 dark:text-gray-400 text-[10px] md:text-xs mb-1">
                         <Activity className="h-3 w-3" />
                         Volume
                       </div>
-                      <div className="text-lg font-bold text-slate-900 dark:text-white">{((analysis.quote.volume || 0) / 1000000).toFixed(2)}M</div>
+                      <div className="text-sm md:text-lg font-bold text-slate-900 dark:text-white">{((analysis.quote.volume || 0) / 1000000).toFixed(2)}M</div>
                     </div>
                     {analysis.quote.marketCap && (
-                      <div className="bg-white dark:bg-gray-700 rounded-xl p-4">
-                        <div className="flex items-center gap-2 text-slate-600 dark:text-gray-400 text-xs mb-1">
+                      <div className="bg-white dark:bg-gray-700 rounded-xl p-3 md:p-4">
+                        <div className="flex items-center gap-2 text-slate-600 dark:text-gray-400 text-[10px] md:text-xs mb-1">
                           <DollarSign className="h-3 w-3" />
                           Market Cap
                         </div>
-                        <div className="text-lg font-bold text-slate-900 dark:text-white">{formatPrice((analysis.quote.marketCap || 0) / 1000000000, 2)}B</div>
+                        <div className="text-sm md:text-lg font-bold text-slate-900 dark:text-white">{formatPrice((analysis.quote.marketCap || 0) / 1000000000, 2)}B</div>
                       </div>
                     )}
                     {analysis.quote.week52High && (
-                      <div className="bg-white dark:bg-gray-700 rounded-xl p-4">
-                        <div className="text-slate-600 dark:text-gray-400 text-xs mb-1">52W High</div>
-                        <div className="text-lg font-bold text-slate-900 dark:text-white">{formatPrice(analysis.quote.week52High)}</div>
+                      <div className="bg-white dark:bg-gray-700 rounded-xl p-3 md:p-4">
+                        <div className="text-slate-600 dark:text-gray-400 text-[10px] md:text-xs mb-1">52W High</div>
+                        <div className="text-sm md:text-lg font-bold text-slate-900 dark:text-white">{formatPrice(analysis.quote.week52High)}</div>
                       </div>
                     )}
                     {analysis.quote.week52Low && (
-                      <div className="bg-white dark:bg-gray-700 rounded-xl p-4">
-                        <div className="text-slate-600 dark:text-gray-400 text-xs mb-1">52W Low</div>
-                        <div className="text-lg font-bold text-slate-900 dark:text-white">{formatPrice(analysis.quote.week52Low)}</div>
+                      <div className="bg-white dark:bg-gray-700 rounded-xl p-3 md:p-4">
+                        <div className="text-slate-600 dark:text-gray-400 text-[10px] md:text-xs mb-1">52W Low</div>
+                        <div className="text-sm md:text-lg font-bold text-slate-900 dark:text-white">{formatPrice(analysis.quote.week52Low)}</div>
                       </div>
                     )}
                   </div>
@@ -265,37 +265,37 @@ export default function AnalysisPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
               <RiskAnalysisChart symbol={analysis.symbol} />
-              <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-800 rounded-2xl p-8 border border-slate-200 dark:border-gray-700 shadow-xl">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg">
-                    <Gauge className="h-6 w-6 text-green-600 dark:text-green-400" />
+              <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-800 rounded-2xl p-4 md:p-8 border border-slate-200 dark:border-gray-700 shadow-xl">
+                <div className="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
+                  <div className="p-1.5 md:p-2 bg-green-100 dark:bg-green-900/30 rounded-lg">
+                    <Gauge className="h-4 w-4 md:h-6 md:w-6 text-green-600 dark:text-green-400" />
                   </div>
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white">Overall Signal</h3>
+                  <h3 className="text-base md:text-xl font-bold text-slate-900 dark:text-white">Overall Signal</h3>
                 </div>
                 <CompassChart score={analysis.summary.score} />
-                <div className="text-center mt-8">
-                  <div className="text-5xl font-black text-slate-900 dark:text-white mb-2">{analysis.summary.score.toFixed(1)}</div>
-                  <div className="text-sm text-slate-600 dark:text-gray-400 mb-4">Technical Score (-10 to +10)</div>
-                  <div className={`inline-block px-6 py-3 rounded-xl font-bold text-lg ${getSignalBg(analysis.summary.signal)} ${getSignalColor(analysis.summary.signal)} shadow-lg`}>
+                <div className="text-center mt-4 md:mt-8">
+                  <div className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-2">{analysis.summary.score.toFixed(1)}</div>
+                  <div className="text-xs md:text-sm text-slate-600 dark:text-gray-400 mb-3 md:mb-4">Technical Score (-10 to +10)</div>
+                  <div className={`inline-block px-4 md:px-6 py-2 md:py-3 rounded-xl font-bold text-sm md:text-lg ${getSignalBg(analysis.summary.signal)} ${getSignalColor(analysis.summary.signal)} shadow-lg`}>
                     {analysis.summary.signal}
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-slate-200 dark:border-gray-700 shadow-lg">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-                    <BarChart3 className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+              <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 md:p-6 border border-slate-200 dark:border-gray-700 shadow-lg">
+                <div className="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
+                  <div className="p-1.5 md:p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                    <BarChart3 className="h-4 w-4 md:h-5 md:w-5 text-blue-600 dark:text-blue-400" />
                   </div>
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-white">Signal Breakdown</h3>
+                  <h3 className="text-base md:text-lg font-bold text-slate-900 dark:text-white">Signal Breakdown</h3>
                 </div>
-                <div className="space-y-6">
+                <div className="space-y-4 md:space-y-6">
                   <div>
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-sm font-medium text-slate-600 dark:text-gray-400">Oscillators</span>
-                      <span className="text-2xl font-bold text-slate-900 dark:text-white">{analysis.summary.oscillatorsScore}</span>
+                    <div className="flex items-center justify-between mb-2 md:mb-3">
+                      <span className="text-xs md:text-sm font-medium text-slate-600 dark:text-gray-400">Oscillators</span>
+                      <span className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">{analysis.summary.oscillatorsScore}</span>
                     </div>
                     <div className="space-y-2">
                       <div className="flex items-center gap-2">
@@ -312,10 +312,10 @@ export default function AnalysisPage() {
                       </div>
                     </div>
                   </div>
-                  <div className="border-t border-slate-200 dark:border-gray-700 pt-4">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-sm font-medium text-slate-600 dark:text-gray-400">Moving Averages</span>
-                      <span className="text-2xl font-bold text-slate-900 dark:text-white">{analysis.summary.movingAveragesScore}</span>
+                  <div className="border-t border-slate-200 dark:border-gray-700 pt-3 md:pt-4">
+                    <div className="flex items-center justify-between mb-2 md:mb-3">
+                      <span className="text-xs md:text-sm font-medium text-slate-600 dark:text-gray-400">Moving Averages</span>
+                      <span className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">{analysis.summary.movingAveragesScore}</span>
                     </div>
                     <div className="space-y-2">
                       <div className="flex items-center gap-2">
@@ -336,62 +336,62 @@ export default function AnalysisPage() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-white to-blue-50 dark:from-gray-800 dark:to-gray-800 rounded-2xl p-6 border border-blue-200 dark:border-gray-700 shadow-lg">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-                  <Target className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+            <div className="bg-gradient-to-br from-white to-blue-50 dark:from-gray-800 dark:to-gray-800 rounded-2xl p-4 md:p-6 border border-blue-200 dark:border-gray-700 shadow-lg">
+              <div className="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
+                <div className="p-1.5 md:p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                  <Target className="h-4 w-4 md:h-6 md:w-6 text-blue-600 dark:text-blue-400" />
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white">Key Oscillators</h3>
+                <h3 className="text-base md:text-xl font-bold text-slate-900 dark:text-white">Key Oscillators</h3>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="p-5 rounded-xl bg-white dark:bg-gray-700 border-2 border-slate-100 dark:border-gray-600 hover:shadow-lg transition-shadow">
-                  <div className="text-xs font-semibold text-slate-500 dark:text-gray-400 mb-2">RSI (14)</div>
-                  <div className="text-3xl font-black text-slate-900 dark:text-white mb-2">{analysis.indicators.rsi.value.toFixed(1)}</div>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+                <div className="p-3 md:p-5 rounded-xl bg-white dark:bg-gray-700 border-2 border-slate-100 dark:border-gray-600 hover:shadow-lg transition-shadow">
+                  <div className="text-[10px] md:text-xs font-semibold text-slate-500 dark:text-gray-400 mb-1 md:mb-2">RSI (14)</div>
+                  <div className="text-xl md:text-3xl font-black text-slate-900 dark:text-white mb-1 md:mb-2">{analysis.indicators.rsi.value.toFixed(1)}</div>
                   <RSIGauge value={analysis.indicators.rsi.value} />
-                  <div className={`text-sm font-bold mt-3 ${getSignalColor(analysis.indicators.rsi.signal)}`}>{analysis.indicators.rsi.signal}</div>
+                  <div className={`text-xs md:text-sm font-bold mt-2 md:mt-3 ${getSignalColor(analysis.indicators.rsi.signal)}`}>{analysis.indicators.rsi.signal}</div>
                 </div>
-                <div className="p-5 rounded-xl bg-white dark:bg-gray-700 border-2 border-slate-100 dark:border-gray-600 hover:shadow-lg transition-shadow">
-                  <div className="text-xs font-semibold text-slate-500 dark:text-gray-400 mb-2">Stochastic %K</div>
-                  <div className="text-3xl font-black text-slate-900 dark:text-white mb-2">{analysis.indicators.stoch.k.toFixed(1)}</div>
+                <div className="p-3 md:p-5 rounded-xl bg-white dark:bg-gray-700 border-2 border-slate-100 dark:border-gray-600 hover:shadow-lg transition-shadow">
+                  <div className="text-[10px] md:text-xs font-semibold text-slate-500 dark:text-gray-400 mb-1 md:mb-2">Stochastic %K</div>
+                  <div className="text-xl md:text-3xl font-black text-slate-900 dark:text-white mb-1 md:mb-2">{analysis.indicators.stoch.k.toFixed(1)}</div>
                   <RSIGauge value={analysis.indicators.stoch.k} />
-                  <div className={`text-sm font-bold mt-3 ${getSignalColor(analysis.indicators.stoch.signal)}`}>{analysis.indicators.stoch.signal}</div>
+                  <div className={`text-xs md:text-sm font-bold mt-2 md:mt-3 ${getSignalColor(analysis.indicators.stoch.signal)}`}>{analysis.indicators.stoch.signal}</div>
                 </div>
-                <div className="p-5 rounded-xl bg-white dark:bg-gray-700 border-2 border-slate-100 dark:border-gray-600 hover:shadow-lg transition-shadow">
-                  <div className="text-xs font-semibold text-slate-500 dark:text-gray-400 mb-2">MACD (12,26)</div>
-                  <div className="text-3xl font-black text-slate-900 dark:text-white mb-4">{analysis.indicators.macd.value.toFixed(2)}</div>
-                  <div className={`px-3 py-2 rounded-lg text-sm font-bold text-center ${getSignalBg(analysis.indicators.macd.signal)} ${getSignalColor(analysis.indicators.macd.signal)}`}>{analysis.indicators.macd.signal}</div>
+                <div className="p-3 md:p-5 rounded-xl bg-white dark:bg-gray-700 border-2 border-slate-100 dark:border-gray-600 hover:shadow-lg transition-shadow">
+                  <div className="text-[10px] md:text-xs font-semibold text-slate-500 dark:text-gray-400 mb-1 md:mb-2">MACD (12,26)</div>
+                  <div className="text-xl md:text-3xl font-black text-slate-900 dark:text-white mb-2 md:mb-4">{analysis.indicators.macd.value.toFixed(2)}</div>
+                  <div className={`px-2 md:px-3 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-bold text-center ${getSignalBg(analysis.indicators.macd.signal)} ${getSignalColor(analysis.indicators.macd.signal)}`}>{analysis.indicators.macd.signal}</div>
                 </div>
-                <div className="p-5 rounded-xl bg-white dark:bg-gray-700 border-2 border-slate-100 dark:border-gray-600 hover:shadow-lg transition-shadow">
-                  <div className="text-xs font-semibold text-slate-500 dark:text-gray-400 mb-2">CCI (20)</div>
-                  <div className="text-3xl font-black text-slate-900 dark:text-white mb-4">{analysis.indicators.cci.value.toFixed(0)}</div>
-                  <div className={`px-3 py-2 rounded-lg text-sm font-bold text-center ${getSignalBg(analysis.indicators.cci.signal)} ${getSignalColor(analysis.indicators.cci.signal)}`}>{analysis.indicators.cci.signal}</div>
+                <div className="p-3 md:p-5 rounded-xl bg-white dark:bg-gray-700 border-2 border-slate-100 dark:border-gray-600 hover:shadow-lg transition-shadow">
+                  <div className="text-[10px] md:text-xs font-semibold text-slate-500 dark:text-gray-400 mb-1 md:mb-2">CCI (20)</div>
+                  <div className="text-xl md:text-3xl font-black text-slate-900 dark:text-white mb-2 md:mb-4">{analysis.indicators.cci.value.toFixed(0)}</div>
+                  <div className={`px-2 md:px-3 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-bold text-center ${getSignalBg(analysis.indicators.cci.signal)} ${getSignalColor(analysis.indicators.cci.signal)}`}>{analysis.indicators.cci.signal}</div>
                 </div>
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-white to-purple-50 dark:from-gray-800 dark:to-gray-800 rounded-2xl p-6 border border-purple-200 dark:border-gray-700 shadow-lg">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
-                    <Activity className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+            <div className="bg-gradient-to-br from-white to-purple-50 dark:from-gray-800 dark:to-gray-800 rounded-2xl p-4 md:p-6 border border-purple-200 dark:border-gray-700 shadow-lg">
+              <div className="flex items-center justify-between mb-4 md:mb-6">
+                <div className="flex items-center gap-2 md:gap-3">
+                  <div className="p-1.5 md:p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
+                    <Activity className="h-4 w-4 md:h-6 md:w-6 text-purple-600 dark:text-purple-400" />
                   </div>
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white">Moving Averages</h3>
+                  <h3 className="text-base md:text-xl font-bold text-slate-900 dark:text-white">Moving Averages</h3>
                 </div>
-                <div className="text-sm text-slate-600 dark:text-gray-400">Price vs MA</div>
+                <div className="text-xs md:text-sm text-slate-600 dark:text-gray-400">Price vs MA</div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
                 {analysis.indicators.movingAverages.map((ma, idx) => {
                   const priceDiff = ((analysis.price - ma.value) / ma.value) * 100;
                   return (
-                    <div key={idx} className="flex items-center justify-between p-4 rounded-xl bg-white dark:bg-gray-700 border border-slate-200 dark:border-gray-600 hover:shadow-md transition-all">
+                    <div key={idx} className="flex items-center justify-between p-3 md:p-4 rounded-xl bg-white dark:bg-gray-700 border border-slate-200 dark:border-gray-600 hover:shadow-md transition-all">
                       <div className="flex-1">
-                        <div className="font-bold text-slate-900 dark:text-white mb-1">{ma.name}</div>
-                        <div className="text-sm text-slate-600 dark:text-gray-400">{formatPrice(ma.value)}</div>
-                        <div className={`text-xs font-semibold mt-1 ${priceDiff >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                        <div className="font-bold text-sm md:text-base text-slate-900 dark:text-white mb-1">{ma.name}</div>
+                        <div className="text-xs md:text-sm text-slate-600 dark:text-gray-400">{formatPrice(ma.value)}</div>
+                        <div className={`text-[10px] md:text-xs font-semibold mt-1 ${priceDiff >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                           {priceDiff >= 0 ? '+' : ''}{priceDiff.toFixed(2)}%
                         </div>
                       </div>
-                      <div className={`px-4 py-2 rounded-lg text-sm font-bold ${getSignalBg(ma.signal)} ${getSignalColor(ma.signal)}`}>
+                      <div className={`px-2 md:px-4 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-bold ${getSignalBg(ma.signal)} ${getSignalColor(ma.signal)}`}>
                         {ma.signal}
                       </div>
                     </div>

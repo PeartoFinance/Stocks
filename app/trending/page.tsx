@@ -9,7 +9,7 @@ export default function TrendingPage() {
   const [activeTab, setActiveTab] = useState<'stocks' | 'crypto'>('stocks');
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-900 transition-colors duration-300">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900/95 transition-colors duration-300">
       {/* Header with Toggle */}
       <div className="bg-white dark:bg-gray-800 border-b border-slate-200 dark:border-gray-700 shadow-sm transition-colors duration-300">
         <div className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 lg:py-6">

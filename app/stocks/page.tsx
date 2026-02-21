@@ -39,7 +39,7 @@ export default function StockScreener() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-900 transition-colors duration-300">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900/95 transition-colors duration-300">
       <div className="max-w-[2560px] mx-auto px-3 sm:px-4 lg:px-6 xl:px-8 2xl:px-12 py-4 sm:py-6 lg:py-8">
         
         {/* Header */}

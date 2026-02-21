@@ -66,7 +66,7 @@ export default function DividendsTab({ symbol }: DividendsTabProps) {
       case 'paid': return 'text-green-700 bg-green-100 dark:bg-green-900/20 dark:text-green-300';
       case 'approved': return 'text-blue-700 bg-blue-100 dark:bg-blue-900/20 dark:text-blue-300';
       case 'proposed': return 'text-yellow-700 bg-yellow-100 dark:bg-yellow-900/20 dark:text-yellow-300';
-      default: return 'text-slate-700 dark:text-gray-400 bg-gray-100 dark:bg-gray-900/20 dark:text-gray-300';
+      default: return 'text-slate-700 dark:text-gray-400 bg-gray-100 dark:bg-slate-900/95/20 dark:text-gray-300';
     }
   };
 

@@ -48,7 +48,7 @@ export default function Sidebar({ isOpenMobile, setIsOpenMobile, onCollapseChang
   ];
 
   const SidebarInner = ({ isMobile = false }) => (
-    <div className="flex flex-col h-full bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800/50 transition-colors duration-300">
+    <div className="flex flex-col h-full bg-white dark:bg-slate-900/95 border-r border-gray-200 dark:border-gray-800/50 transition-colors duration-300">
       {/* Mobile close button */}
       {isMobile && (
         <div className="h-16 flex items-center justify-end px-6 border-b border-gray-100 dark:border-gray-800/50">
@@ -102,7 +102,7 @@ export default function Sidebar({ isOpenMobile, setIsOpenMobile, onCollapseChang
 
       {/* DESKTOP SIDEBAR - Fixed vertically, stays in place when scrolling */}
       <aside
-        className={`fixed left-0 top-32 h-[calc(100vh-8rem)] bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800/50 z-30 transition-all duration-300 hidden lg:block overflow-y-auto ${isCollapsed ? 'w-20' : 'w-64'
+        className={`fixed left-0 top-32 h-[calc(100vh-8rem)] bg-white dark:bg-slate-900/95 border-r border-gray-200 dark:border-gray-800/50 z-30 transition-all duration-300 hidden lg:block overflow-y-auto ${isCollapsed ? 'w-20' : 'w-64'
           }`}
       >
         <button

@@ -43,7 +43,7 @@ export default function ProfilePage() {
 
     if (isLoading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-gray-900">
+            <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900/95">
                 <div className="animate-spin rounded-full h-12 w-12 border-2 border-green-500 border-t-transparent" />
             </div>
         );
@@ -82,176 +82,163 @@ export default function ProfilePage() {
     const netChangePct = stats?.netWorthChangePercent ?? 0;
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-gray-900">
-            {/* Header */}
-            <div className="bg-gradient-to-br from-green-600 via-green-500 to-emerald-600 pb-24 sm:pb-28 md:pb-32">
-                <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8">
-                    <div className="flex flex-wrap items-center justify-between gap-3">
-                        <Link
-                            href="/"
-                            className="text-white/90 hover:text-white text-sm font-medium flex items-center gap-1 transition"
-                        >
-                            ← Back to Stocks
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-900/95">
+            {/* Slim Top Bar */}
+            <div className="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                <div className="container mx-auto px-6 py-4 max-w-7xl">
+                    <div className="flex items-center justify-between">
+                        <Link href="/" className="text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white text-sm font-medium transition">
+                            ← Back
                         </Link>
                         {isAdmin && (
-                            <Link
-                                href="/admin"
-                                className="flex items-center gap-2 px-4 py-2 bg-white/15 hover:bg-white/25 rounded-xl text-white text-sm font-medium transition backdrop-blur-sm"
-                            >
+                            <Link href="/admin" className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-sm font-medium transition">
                                 <Shield className="h-4 w-4" />
-                                Admin Panel
+                                Admin
                             </Link>
                         )}
                     </div>
                 </div>
             </div>
 
-            {/* Profile Card */}
-            <div className="container mx-auto px-4 sm:px-6 -mt-16 sm:-mt-20 md:-mt-24 max-w-7xl">
-                <div className="bg-white dark:bg-gray-800 rounded-2xl sm:rounded-3xl shadow-xl border border-slate-100 dark:border-gray-700 overflow-hidden">
-                    {/* Profile Header */}
-                    <div className="p-4 sm:p-6 md:p-8 border-b border-slate-100 dark:border-gray-700">
-                        <div className="flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-8">
-                            <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
-                                <div className="relative flex-shrink-0">
-                                    {user.avatarUrl ? (
-                                        <img
-                                            src={user.avatarUrl}
-                                            alt={user.name}
-                                            className="h-20 w-20 sm:h-24 sm:w-24 rounded-full object-cover ring-4 ring-white dark:ring-gray-700 shadow-lg"
-                                        />
-                                    ) : (
-                                        <div className="h-20 w-20 sm:h-24 sm:w-24 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center ring-4 ring-white dark:ring-gray-700 shadow-lg">
-                                            <span className="text-xl sm:text-2xl font-bold text-white">{initials}</span>
-                                        </div>
-                                    )}
-                                    <div className="absolute -bottom-0.5 -right-0.5 h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-green-500 border-2 border-white dark:border-gray-800 flex items-center justify-center">
-                                        <span className="text-white text-[10px] sm:text-xs">✓</span>
-                                    </div>
-                                </div>
-                                <div className="flex-1 text-center sm:text-left">
-                                    <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
-                                        Welcome back, {firstName}!
-                                    </h1>
-                                    <p className="text-slate-500 dark:text-gray-400 text-sm sm:text-base mt-0.5">{user.email}</p>
-                                    <div className="flex flex-wrap gap-2 mt-3 justify-center sm:justify-start">
-                                        <span className="px-3 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300">
-                                            {user.role?.charAt(0).toUpperCase() + user.role?.slice(1) || 'User'}
-                                        </span>
-                                        {isVendor && (
-                                            <span className="px-3 py-1 rounded-full text-xs font-medium bg-violet-100 dark:bg-violet-900/50 text-violet-700 dark:text-violet-300">
-                                                Vendor
-                                            </span>
-                                        )}
-                                    </div>
-                                </div>
+            {/* Main Content */}
+            <div className="container mx-auto px-6 py-6 md:py-20 max-w-7xl">
+                {/* User Profile Header */}
+                <div className="flex items-center gap-4 mb-8 md:mb-12 bg-white dark:bg-gray-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 md:p-6">
+                    <div className="relative">
+                        {user.avatarUrl ? (
+                            <img src={user.avatarUrl} alt={user.name} className="h-16 w-16 rounded-2xl object-cover" />
+                        ) : (
+                            <div className="h-16 w-16 rounded-2xl bg-slate-900 dark:bg-slate-800 flex items-center justify-center">
+                                <span className="text-xl font-bold text-white">{initials}</span>
                             </div>
+                        )}
+                    </div>
+                    <div className="flex-1">
+                        <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-1">{user.name || 'User'}</h1>
+                        <p className="text-sm text-slate-500 dark:text-slate-400">{user.email}</p>
+                    </div>
+                    <button onClick={handleLogout} className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-red-500 hover:bg-red-600 text-white font-medium transition-colors whitespace-nowrap">
+                        <LogOut className="h-4 w-4" />
+                        <span>Sign Out</span>
+                    </button>
+                </div>
 
-                            {/* Quick Stats */}
-                            <div className="flex flex-wrap justify-center sm:justify-start gap-4 sm:gap-6 lg:gap-8 lg:ml-auto border-t lg:border-t-0 pt-4 lg:pt-0">
-                                <Link
-                                    href="/profile/watchlist"
-                                    className="flex flex-col items-center min-w-[4rem] p-3 rounded-xl bg-slate-50 dark:bg-gray-700 hover:bg-green-50 dark:hover:bg-green-900/30 transition"
-                                >
+                {/* Bento Grid Layout */}
+                <div className="space-y-3 md:space-y-4">
+                    {/* Large Portfolio Card - Full Width */}
+                    <Link href="/profile/portfolio" className="block bg-white dark:bg-gray-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 md:p-8 hover:shadow-lg hover:border-slate-300 dark:hover:border-slate-600 transition-all group">
+                        <div className="flex items-start justify-between mb-6 md:mb-8">
+                            <div>
+                                <div className="flex items-center gap-2 md:gap-3 mb-2 md:mb-3">
+                                    <div className="p-2 md:p-3 rounded-xl bg-slate-100 dark:bg-slate-800 group-hover:bg-slate-200 dark:group-hover:bg-slate-700 transition">
+                                        <Briefcase className="h-5 w-5 md:h-6 md:w-6 text-slate-900 dark:text-white" />
+                                    </div>
+                                    <h3 className="text-lg md:text-xl font-bold text-slate-900 dark:text-white">Total Portfolio</h3>
+                                </div>
+                                <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-2 md:mb-3">
                                     {statsLoading ? (
-                                        <RefreshCw className="h-6 w-6 text-green-500 animate-spin" />
+                                        <RefreshCw className="h-10 w-10 animate-spin" />
                                     ) : (
-                                        <span className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">{watchlistCount}</span>
+                                        `$${netWorth.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
                                     )}
-                                    <span className="text-xs text-slate-500 dark:text-gray-400 mt-0.5">Watchlist</span>
-                                </Link>
-                                <Link
-                                    href="/profile/alerts"
-                                    className="flex flex-col items-center min-w-[4rem] p-3 rounded-xl bg-slate-50 dark:bg-gray-700 hover:bg-green-50 dark:hover:bg-green-900/30 transition"
-                                >
-                                    {statsLoading ? (
-                                        <RefreshCw className="h-6 w-6 text-green-500 animate-spin" />
-                                    ) : (
-                                        <span className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">{alertsCount}</span>
-                                    )}
-                                    <span className="text-xs text-slate-500 dark:text-gray-400 mt-0.5">Alerts</span>
-                                </Link>
-                                <Link
-                                    href="/profile/portfolio"
-                                    className="flex flex-col items-center min-w-[4rem] p-3 rounded-xl bg-green-50 dark:bg-green-900/30 hover:bg-green-100 dark:hover:bg-green-900/50 transition"
-                                >
-                                    {statsLoading ? (
-                                        <RefreshCw className="h-6 w-6 text-green-500 animate-spin" />
-                                    ) : (
-                                        <>
-                                            <span className="text-xl sm:text-2xl font-bold text-green-700 dark:text-green-400">
-                                                ${netWorth >= 1000 ? `${(netWorth / 1000).toFixed(1)}k` : netWorth.toFixed(0)}
-                                            </span>
-                                            <span className={`text-xs mt-0.5 ${netChange >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
-                                                {netChange >= 0 ? '+' : ''}{netChangePct.toFixed(1)}%
-                                            </span>
-                                        </>
-                                    )}
-                                    <span className="text-xs text-slate-500 dark:text-gray-400 mt-0.5">Portfolio</span>
-                                </Link>
+                                </h2>
+                                {!statsLoading && (
+                                    <p className={`text-base font-semibold ${netChange >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                                        {netChange >= 0 ? '+' : ''}${netChange.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ({netChange >= 0 ? '+' : ''}{netChangePct.toFixed(2)}%)
+                                    </p>
+                                )}
                             </div>
                         </div>
-                    </div>
-
-                    {/* Menu Grid */}
-                    <div className="p-6 sm:p-8 md:p-10">
-                        <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-6">Your Account</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                            {menuItems.map((item) => (
-                                <Link
-                                    key={item.href}
-                                    href={item.href}
-                                    className="group flex items-center gap-4 p-5 rounded-xl border border-slate-100 dark:border-gray-700 hover:border-green-200 dark:hover:border-green-700 hover:bg-green-50/50 dark:hover:bg-green-900/20 transition-all hover:shadow-md"
-                                >
-                                    <div className={`h-14 w-14 rounded-xl flex items-center justify-center flex-shrink-0 ${item.color}`}>
-                                        <item.icon className="h-7 w-7" />
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <div className="font-semibold text-base text-slate-900 dark:text-white group-hover:text-green-700 dark:group-hover:text-green-400 transition truncate">
-                                            {item.label}
-                                        </div>
-                                        <div className="text-sm text-slate-500 dark:text-gray-400 mt-0.5 truncate">{item.description}</div>
-                                    </div>
-                                    <ChevronRight className="h-5 w-5 text-slate-300 dark:text-gray-600 group-hover:text-green-500 transition flex-shrink-0" />
-                                </Link>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Getting Started */}
-                    <div className="p-6 sm:p-8 md:p-10 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-gray-800 dark:to-gray-800 border-t border-slate-100 dark:border-gray-700">
-                        <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-6">Quick Tips</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+                        <div className="h-24 md:h-32 flex items-end justify-between gap-1">
                             {[
-                                { icon: Star, text: 'Add stocks to Watchlist for real-time tracking', color: 'text-amber-600 bg-amber-100 dark:bg-amber-900/30' },
-                                { icon: Briefcase, text: 'Build Portfolio to monitor investments', color: 'text-green-600 bg-green-100 dark:bg-green-900/30' },
-                                { icon: Bell, text: 'Set Price Alerts for target notifications', color: 'text-violet-600 bg-violet-100 dark:bg-violet-900/30' },
-                                { icon: BarChart3, text: 'Use Screener to find opportunities', color: 'text-orange-600 bg-orange-100 dark:bg-orange-900/30' },
-                            ].map((tip, i) => (
-                                <div key={i} className="flex items-start gap-3 p-4 bg-white dark:bg-gray-700 rounded-xl border border-slate-100 dark:border-gray-600 hover:shadow-md transition-shadow">
-                                    <div className={`h-10 w-10 rounded-lg flex items-center justify-center flex-shrink-0 ${tip.color}`}>
-                                        <tip.icon className="h-5 w-5" />
-                                    </div>
-                                    <span className="text-sm text-slate-600 dark:text-gray-300 leading-relaxed">{tip.text}</span>
-                                </div>
+                                { h: 65, color: 'bg-green-500' },
+                                { h: 45, color: 'bg-red-500' },
+                                { h: 70, color: 'bg-green-500' },
+                                { h: 55, color: 'bg-red-500' },
+                                { h: 80, color: 'bg-green-500' },
+                                { h: 60, color: 'bg-green-500' },
+                                { h: 75, color: 'bg-red-500' },
+                                { h: 85, color: 'bg-green-500' },
+                                { h: 70, color: 'bg-green-500' },
+                                { h: 90, color: 'bg-green-500' },
+                                { h: 75, color: 'bg-red-500' },
+                                { h: 95, color: 'bg-green-500' },
+                            ].map((bar, i) => (
+                                <div key={i} className={`flex-1 ${bar.color} rounded-t hover:opacity-80 transition`} style={{ height: `${bar.h}%` }} />
                             ))}
                         </div>
-                    </div>
+                    </Link>
 
-                    {/* Logout */}
-                    <div className="p-6 sm:p-8 md:p-10 border-t border-slate-100 dark:border-gray-700">
-                        <button
-                            onClick={handleLogout}
-                            className="flex items-center gap-2 text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 font-medium transition"
-                        >
-                            <LogOut className="h-5 w-5" />
-                            Sign out
-                        </button>
+                    {/* Two Column Grid for Other Cards */}
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+                    {/* Watchlist Card */}
+                    <Link href="/profile/watchlist" className="bg-white dark:bg-gray-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 md:p-6 hover:shadow-lg hover:border-slate-300 dark:hover:border-slate-600 transition-all group">
+                        <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
+                            <div className="p-2 md:p-3 rounded-xl bg-slate-100 dark:bg-slate-800 group-hover:bg-slate-200 dark:group-hover:bg-slate-700 transition">
+                                <Star className="h-5 w-5 md:h-6 md:w-6 text-slate-900 dark:text-white" />
+                            </div>
+                            <h3 className="text-base md:text-lg font-bold text-slate-900 dark:text-white">Watchlist</h3>
+                        </div>
+                        <p className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">
+                            {statsLoading ? <RefreshCw className="h-8 w-8 animate-spin" /> : watchlistCount}
+                        </p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">Tracked stocks</p>
+                    </Link>
+
+                    {/* Alerts Card */}
+                    <Link href="/profile/alerts" className="bg-white dark:bg-gray-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 md:p-6 hover:shadow-lg hover:border-slate-300 dark:hover:border-slate-600 transition-all group">
+                        <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
+                            <div className="p-2 md:p-3 rounded-xl bg-slate-100 dark:bg-slate-800 group-hover:bg-slate-200 dark:group-hover:bg-slate-700 transition">
+                                <Bell className="h-5 w-5 md:h-6 md:w-6 text-slate-900 dark:text-white" />
+                            </div>
+                            <h3 className="text-base md:text-lg font-bold text-slate-900 dark:text-white">Alerts</h3>
+                        </div>
+                        <p className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">
+                            {statsLoading ? <RefreshCw className="h-8 w-8 animate-spin" /> : alertsCount}
+                        </p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">Active alerts</p>
+                    </Link>
+
+                    {/* Insights Card */}
+                    <Link href="/profile/insights" className="bg-white dark:bg-gray-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 md:p-6 hover:shadow-lg hover:border-slate-300 dark:hover:border-slate-600 transition-all group">
+                        <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
+                            <div className="p-2 md:p-3 rounded-xl bg-slate-100 dark:bg-slate-800 group-hover:bg-slate-200 dark:group-hover:bg-slate-700 transition">
+                                <Lightbulb className="h-5 w-5 md:h-6 md:w-6 text-slate-900 dark:text-white" />
+                            </div>
+                            <h3 className="text-base md:text-lg font-bold text-slate-900 dark:text-white">Insights</h3>
+                        </div>
+                        <p className="text-sm md:text-base font-semibold text-slate-900 dark:text-white">Market analysis</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Personalized recommendations</p>
+                    </Link>
+
+                    {/* Analytics Card */}
+                    <Link href="/profile/analytics" className="bg-white dark:bg-gray-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 md:p-6 hover:shadow-lg hover:border-slate-300 dark:hover:border-slate-600 transition-all group">
+                        <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
+                            <div className="p-2 md:p-3 rounded-xl bg-slate-100 dark:bg-slate-800 group-hover:bg-slate-200 dark:group-hover:bg-slate-700 transition">
+                                <BarChart3 className="h-5 w-5 md:h-6 md:w-6 text-slate-900 dark:text-white" />
+                            </div>
+                            <h3 className="text-base md:text-lg font-bold text-slate-900 dark:text-white">Analytics</h3>
+                        </div>
+                        <p className="text-sm md:text-base font-semibold text-slate-900 dark:text-white">Performance</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Track your investments</p>
+                    </Link>
+
+                    {/* Settings Card */}
+                    <Link href="/profile/settings" className="bg-white dark:bg-gray-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 md:p-6 hover:shadow-lg hover:border-slate-300 dark:hover:border-slate-600 transition-all group">
+                        <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
+                            <div className="p-2 md:p-3 rounded-xl bg-slate-100 dark:bg-slate-800 group-hover:bg-slate-200 dark:group-hover:bg-slate-700 transition">
+                                <Settings className="h-5 w-5 md:h-6 md:w-6 text-slate-900 dark:text-white" />
+                            </div>
+                            <h3 className="text-base md:text-lg font-bold text-slate-900 dark:text-white">Settings</h3>
+                        </div>
+                        <p className="text-sm md:text-base font-semibold text-slate-900 dark:text-white">Preferences</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Account & security</p>
+                    </Link>
                     </div>
                 </div>
             </div>
 
-            <div className="h-12 sm:h-16" />
+            <div className="h-16" />
         </div>
     );
 }

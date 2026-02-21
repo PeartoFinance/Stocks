@@ -165,7 +165,7 @@ export default function IPOsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900/95">
       <main className="p-8">
         <div>
             {/* Header */}
@@ -242,7 +242,7 @@ export default function IPOsPage() {
                       key={tab}
                       onClick={() => setActiveTab(tab as any)}
                       className={`px-4 py-2 rounded-md text-sm font-medium transition-all capitalize ${activeTab === tab
-                        ? 'bg-white dark:bg-gray-900 text-blue-600 dark:text-blue-400 shadow-sm'
+                        ? 'bg-white dark:bg-slate-900/95 text-blue-600 dark:text-blue-400 shadow-sm'
                         : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
                         }`}
                     >

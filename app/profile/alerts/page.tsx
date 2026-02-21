@@ -210,31 +210,31 @@ export default function AlertsPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-slate-900 pb-20">
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-900/95 pb-20">
             {/* Header */}
-            <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-                <div className="container mx-auto px-4 py-6">
+            <div className="bg-gradient-to-br from-emerald-500 to-green-600 dark:from-slate-900/95 dark:to-slate-900/95 pb-8 pt-16">
+                <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6 border-b border-emerald-600/20 dark:border-slate-800">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
                             <Link
                                 href="/profile"
-                                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition"
+                                className="p-2 rounded-lg bg-white/20 hover:bg-white/30 dark:bg-slate-800 dark:hover:bg-slate-700 text-white dark:text-white transition"
                             >
-                                <ArrowLeft className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+                                <ArrowLeft className="h-5 w-5" />
                             </Link>
                             <div>
-                                <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                                    <Bell className="h-6 w-6 text-emerald-600" />
+                                <h1 className="text-xl sm:text-2xl font-bold text-white dark:text-white flex items-center gap-2">
+                                    <Bell className="h-6 w-6" />
                                     Price Alerts
                                 </h1>
-                                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                                <p className="text-sm text-white/80 dark:text-white/80 mt-1">
                                     {activeAlerts.length} active • {triggeredAlerts.length} triggered
                                 </p>
                             </div>
                         </div>
                         <button
                             onClick={() => setShowCreateAlert(true)}
-                            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-600 via-emerald-500 to-cyan-500 text-white rounded-lg hover:shadow-lg transition font-medium"
+                            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/20 hover:bg-white/30 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-medium transition"
                         >
                             <Plus className="h-5 w-5" />
                             Create Alert

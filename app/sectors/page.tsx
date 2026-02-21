@@ -169,14 +169,14 @@ export default function SectorsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center transition-colors duration-300">
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-900/95 flex items-center justify-center transition-colors duration-300">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900/95 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
         
         {/* Header */}

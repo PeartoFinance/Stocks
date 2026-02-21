@@ -161,8 +161,14 @@ export async function authenticatedFetch<T>(
   url: string,
   options: RequestInit = {}
 ): Promise<T> {
+  // Get user data from localStorage
+  const userCountry = typeof window !== 'undefined' ? localStorage.getItem('userCountry') || 'US' : 'US';
+  const userEmail = typeof window !== 'undefined' ? localStorage.getItem('userEmail') || '' : '';
+  
   const headers = {
     'Content-Type': 'application/json',
+    'x-user-country': userCountry,
+    'x-user-email': userEmail,
     ...getAuthHeaders(),
     ...options.headers,
   };
