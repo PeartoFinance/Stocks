@@ -16,6 +16,7 @@ import {
     RefreshCw,
     BarChart3,
     Lightbulb,
+    Crown,
 } from 'lucide-react';
 
 export default function ProfilePage() {
@@ -103,23 +104,24 @@ export default function ProfilePage() {
             {/* Main Content */}
             <div className="container mx-auto px-6 py-6 md:py-20 max-w-7xl">
                 {/* User Profile Header */}
-                <div className="flex items-center gap-4 mb-8 md:mb-12 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 md:p-6">
-                    <div className="relative">
+                <div className="flex items-center gap-3 sm:gap-4 mb-8 md:mb-12 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-3 sm:p-4 md:p-6">
+                    <div className="relative flex-shrink-0">
                         {user.avatarUrl ? (
-                            <img src={user.avatarUrl} alt={user.name} className="h-16 w-16 rounded-2xl object-cover" />
+                            <img src={user.avatarUrl} alt={user.name} className="h-14 w-14 sm:h-16 sm:w-16 rounded-xl sm:rounded-2xl object-cover" />
                         ) : (
-                            <div className="h-16 w-16 rounded-2xl bg-slate-900 dark:bg-slate-700 flex items-center justify-center">
-                                <span className="text-xl font-bold text-white">{initials}</span>
+                            <div className="h-14 w-14 sm:h-16 sm:w-16 rounded-xl sm:rounded-2xl bg-slate-900 dark:bg-slate-700 flex items-center justify-center">
+                                <span className="text-lg sm:text-xl font-bold text-white">{initials}</span>
                             </div>
                         )}
                     </div>
-                    <div className="flex-1">
-                        <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-1">{user.name || 'User'}</h1>
-                        <p className="text-sm text-slate-500">{user.email}</p>
+                    <div className="flex-1 min-w-0">
+                        <h1 className="text-lg sm:text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-0.5 sm:mb-1 truncate">{user.name || 'User'}</h1>
+                        <p className="text-xs sm:text-sm text-slate-500 truncate">{user.email}</p>
                     </div>
-                    <button onClick={handleLogout} className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-red-500 hover:bg-red-600 text-white font-medium transition-colors whitespace-nowrap text-sm">
-                        <LogOut className="h-4 w-4" />
-                        <span>Sign Out</span>
+                    <button onClick={handleLogout} className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl bg-red-500 hover:bg-red-600 text-white font-medium transition-colors whitespace-nowrap text-xs sm:text-sm flex-shrink-0">
+                        <LogOut className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                        <span className="hidden xs:inline">Sign Out</span>
+                        <span className="xs:hidden">Out</span>
                     </button>
                 </div>
 
@@ -222,6 +224,21 @@ export default function ProfilePage() {
                         <p className="text-sm md:text-base font-medium text-slate-900 dark:text-white">Performance</p>
                         <p className="text-xs text-slate-500 mt-1">Track your investments</p>
                     </Link>
+
+                    {/* Subscription Card */}
+                    <button onClick={() => router.push('/pro')} className="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl p-4 md:p-6 hover:shadow-lg transition-all group relative overflow-hidden text-left w-full">
+                        <div className="absolute inset-0 bg-black/10 group-hover:bg-black/5 transition" />
+                        <div className="relative z-10">
+                            <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
+                                <div className="p-2 md:p-3 rounded-xl bg-white/20 backdrop-blur-sm">
+                                    <Crown className="h-5 w-5 md:h-6 md:w-6 text-white" />
+                                </div>
+                                <h3 className="text-base md:text-lg font-bold text-white">Subscription</h3>
+                            </div>
+                            <p className="text-sm md:text-base font-medium text-white">Upgrade to Pro</p>
+                            <p className="text-xs text-white/80 mt-1">Unlock premium features</p>
+                        </div>
+                    </button>
 
                     {/* Settings Card */}
                     <Link href="/profile/settings" className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 md:p-6 hover:shadow-lg hover:border-slate-300 dark:hover:border-slate-600 transition-all group">

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/app/context/AuthContext';
 import { useCountry } from '@/app/context/CountryContext';
+import { changePassword, deactivateAccount, deleteAccount } from '@/app/utils/auth';
 import {
     ArrowLeft,
     User,
@@ -21,8 +22,272 @@ import {
     Moon,
     Monitor,
     Palette,
+    Eye,
+    EyeOff,
+    XCircle,
+    Trash2,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+
+function ChangePasswordSection() {
+    const [currentPassword, setCurrentPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [showCurrent, setShowCurrent] = useState(false);
+    const [showNew, setShowNew] = useState(false);
+    const [showConfirm, setShowConfirm] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    const handleChangePassword = async () => {
+        if (!currentPassword || !newPassword || !confirmPassword) {
+            toast.error('All fields are required');
+            return;
+        }
+        if (newPassword !== confirmPassword) {
+            toast.error('New passwords do not match');
+            return;
+        }
+        if (newPassword.length < 8) {
+            toast.error('Password must be at least 8 characters');
+            return;
+        }
+
+        setLoading(true);
+        try {
+            await changePassword(currentPassword, newPassword);
+            toast.success('Password changed successfully');
+            setCurrentPassword('');
+            setNewPassword('');
+            setConfirmPassword('');
+        } catch (error: any) {
+            toast.error(error.message || 'Failed to change password');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="p-6 space-y-4">
+            <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
+                    Current Password
+                </label>
+                <div className="relative">
+                    <input
+                        type={showCurrent ? 'text' : 'password'}
+                        value={currentPassword}
+                        onChange={(e) => setCurrentPassword(e.target.value)}
+                        className="w-full px-4 py-2.5 pr-10 rounded-lg border border-slate-300 dark:border-gray-600 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 outline-none transition bg-white dark:bg-gray-700 text-slate-900 dark:text-white"
+                        placeholder="Enter current password"
+                    />
+                    <button
+                        type="button"
+                        onClick={() => setShowCurrent(!showCurrent)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                    >
+                        {showCurrent ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                </div>
+            </div>
+            <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
+                    New Password
+                </label>
+                <div className="relative">
+                    <input
+                        type={showNew ? 'text' : 'password'}
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        className="w-full px-4 py-2.5 pr-10 rounded-lg border border-slate-300 dark:border-gray-600 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 outline-none transition bg-white dark:bg-gray-700 text-slate-900 dark:text-white"
+                        placeholder="Enter new password (min 8 characters)"
+                    />
+                    <button
+                        type="button"
+                        onClick={() => setShowNew(!showNew)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                    >
+                        {showNew ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                </div>
+            </div>
+            <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
+                    Confirm New Password
+                </label>
+                <div className="relative">
+                    <input
+                        type={showConfirm ? 'text' : 'password'}
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        className="w-full px-4 py-2.5 pr-10 rounded-lg border border-slate-300 dark:border-gray-600 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 outline-none transition bg-white dark:bg-gray-700 text-slate-900 dark:text-white"
+                        placeholder="Confirm new password"
+                    />
+                    <button
+                        type="button"
+                        onClick={() => setShowConfirm(!showConfirm)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                    >
+                        {showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                </div>
+            </div>
+            <button
+                onClick={handleChangePassword}
+                disabled={loading}
+                className="w-full px-4 py-2.5 rounded-lg bg-green-600 hover:bg-green-700 disabled:bg-slate-300 dark:disabled:bg-gray-700 text-white font-medium transition flex items-center justify-center gap-2"
+            >
+                {loading ? (
+                    <>
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        Changing...
+                    </>
+                ) : (
+                    <>
+                        <Lock className="h-4 w-4" />
+                        Change Password
+                    </>
+                )}
+            </button>
+        </div>
+    );
+}
+
+function DangerZoneSection() {
+    const [showDeactivateModal, setShowDeactivateModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [deactivateReason, setDeactivateReason] = useState('');
+    const [deletePassword, setDeletePassword] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    const handleDeactivate = async () => {
+        setLoading(true);
+        try {
+            await deactivateAccount(deactivateReason);
+            toast.success('Account deactivated');
+        } catch (error: any) {
+            toast.error(error.message || 'Failed to deactivate account');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleDelete = async () => {
+        if (!deletePassword) {
+            toast.error('Password is required');
+            return;
+        }
+        setLoading(true);
+        try {
+            await deleteAccount(deletePassword);
+            toast.success('Account deleted');
+        } catch (error: any) {
+            toast.error(error.message || 'Failed to delete account');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="p-6 space-y-4">
+            {/* Deactivate Account */}
+            <div className="flex items-start justify-between p-4 rounded-lg border border-orange-200 dark:border-orange-900/50 bg-orange-50 dark:bg-orange-900/10">
+                <div className="flex-1">
+                    <h3 className="font-semibold text-slate-900 dark:text-white mb-1">Deactivate Account</h3>
+                    <p className="text-sm text-slate-600 dark:text-gray-400">Temporarily disable your account. You can reactivate it later.</p>
+                </div>
+                <button
+                    onClick={() => setShowDeactivateModal(true)}
+                    className="ml-4 px-4 py-2 rounded-lg border border-orange-300 dark:border-orange-800 text-orange-600 dark:text-orange-400 hover:bg-orange-100 dark:hover:bg-orange-900/30 font-medium transition flex items-center gap-2"
+                >
+                    <XCircle size={16} />
+                    Deactivate
+                </button>
+            </div>
+
+            {/* Delete Account */}
+            <div className="flex items-start justify-between p-4 rounded-lg border border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-900/10">
+                <div className="flex-1">
+                    <h3 className="font-semibold text-slate-900 dark:text-white mb-1">Delete Account Permanently</h3>
+                    <p className="text-sm text-slate-600 dark:text-gray-400">Permanently delete your account and all data. 30-day recovery window.</p>
+                </div>
+                <button
+                    onClick={() => setShowDeleteModal(true)}
+                    className="ml-4 px-4 py-2 rounded-lg border border-red-300 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 font-medium transition flex items-center gap-2"
+                >
+                    <Trash2 size={16} />
+                    Delete
+                </button>
+            </div>
+
+            {/* Deactivate Modal */}
+            {showDeactivateModal && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                    <div className="bg-white dark:bg-gray-800 rounded-xl max-w-md w-full p-6">
+                        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-4">Deactivate Account</h3>
+                        <p className="text-sm text-slate-600 dark:text-gray-400 mb-4">Your account will be temporarily disabled. You can reactivate it anytime by logging in.</p>
+                        <textarea
+                            value={deactivateReason}
+                            onChange={(e) => setDeactivateReason(e.target.value)}
+                            placeholder="Reason for deactivation (optional)"
+                            className="w-full px-4 py-2.5 rounded-lg border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white mb-4"
+                            rows={3}
+                        />
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() => setShowDeactivateModal(false)}
+                                className="flex-1 px-4 py-2.5 rounded-lg border border-slate-300 dark:border-gray-600 hover:bg-slate-50 dark:hover:bg-gray-700 font-medium transition"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleDeactivate}
+                                disabled={loading}
+                                className="flex-1 px-4 py-2.5 rounded-lg bg-orange-600 hover:bg-orange-700 text-white font-medium transition"
+                            >
+                                {loading ? 'Deactivating...' : 'Deactivate'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Delete Modal */}
+            {showDeleteModal && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                    <div className="bg-white dark:bg-gray-800 rounded-xl max-w-md w-full p-6">
+                        <h3 className="text-xl font-bold text-red-600 dark:text-red-400 mb-4">Delete Account Permanently</h3>
+                        <p className="text-sm text-slate-600 dark:text-gray-400 mb-4">This action cannot be undone. All your data will be permanently deleted after 30 days.</p>
+                        <div className="mb-4">
+                            <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Enter your password to confirm</label>
+                            <input
+                                type="password"
+                                value={deletePassword}
+                                onChange={(e) => setDeletePassword(e.target.value)}
+                                placeholder="Password"
+                                className="w-full px-4 py-2.5 rounded-lg border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white"
+                            />
+                        </div>
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() => setShowDeleteModal(false)}
+                                className="flex-1 px-4 py-2.5 rounded-lg border border-slate-300 dark:border-gray-600 hover:bg-slate-50 dark:hover:bg-gray-700 font-medium transition"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleDelete}
+                                disabled={loading || !deletePassword}
+                                className="flex-1 px-4 py-2.5 rounded-lg bg-red-600 hover:bg-red-700 disabled:bg-slate-300 dark:disabled:bg-gray-700 text-white font-medium transition"
+                            >
+                                {loading ? 'Deleting...' : 'Delete Forever'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}
 
 export default function SettingsPage() {
     const { user, isAuthenticated, isLoading: authLoading, updateProfile, refreshUser } = useAuth();
@@ -254,26 +519,14 @@ export default function SettingsPage() {
                 </div>
 
                 {/* Security Section */}
-                <div className="bg-white dark:bg-gray-800 rounded-2xl border border-slate-200 dark:border-gray-700 mb-6 overflow-hidden">
+                <div className="bg-white dark:bg-gray-800 rounded-2xl border border-slate-200 dark:border-gray-700 mb-6">
                     <div className="px-6 py-4 border-b border-slate-200 dark:border-gray-700">
                         <h2 className="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
                             <Shield className="h-5 w-5" />
                             Security
                         </h2>
                     </div>
-                    <Link
-                        href="/forgot-password"
-                        className="flex items-center justify-between p-6 hover:bg-slate-50 dark:hover:bg-gray-700 transition"
-                    >
-                        <div className="flex items-center gap-4">
-                            <Lock className="h-5 w-5 text-slate-400" />
-                            <div>
-                                <div className="font-medium text-slate-900 dark:text-white">Change Password</div>
-                                <div className="text-sm text-slate-500 dark:text-gray-400">Update your password</div>
-                            </div>
-                        </div>
-                        <ChevronRight className="h-5 w-5 text-slate-300 dark:text-gray-600" />
-                    </Link>
+                    <ChangePasswordSection />
                 </div>
 
                 {/* Notifications Section */}
@@ -358,21 +611,15 @@ export default function SettingsPage() {
                 </div>
 
                 {/* Danger Zone */}
-                <div className="bg-white dark:bg-gray-800 rounded-2xl border border-red-200 dark:border-red-900 overflow-hidden">
+                <div className="bg-white dark:bg-gray-800 rounded-2xl border-2 border-red-200 dark:border-red-900 overflow-hidden">
                     <div className="px-6 py-4 border-b border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-900/20">
                         <h2 className="text-lg font-semibold text-red-900 dark:text-red-400 flex items-center gap-2">
                             <AlertTriangle className="h-5 w-5" />
                             Danger Zone
                         </h2>
+                        <p className="text-sm text-red-700 dark:text-red-400 mt-1">Irreversible account actions</p>
                     </div>
-                    <div className="p-6">
-                        <p className="text-sm text-slate-500 dark:text-gray-400 mb-4">
-                            Deleting your account is permanent and cannot be undone. All your data will be lost.
-                        </p>
-                        <button className="px-4 py-2.5 rounded-lg border border-red-300 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 font-medium transition">
-                            Delete Account
-                        </button>
-                    </div>
+                    <DangerZoneSection />
                 </div>
             </div>
         </div>
