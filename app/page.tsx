@@ -253,7 +253,7 @@ export default function HomePage() {
           </div>
 
           {loading && marketData.length === 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
               {[1, 2, 3, 4].map(i => (
                 <div key={i} className="bg-white/10 dark:bg-slate-800/50 backdrop-blur-sm rounded-xl p-3 sm:p-4 border-2 border-white/20 dark:border-slate-700 animate-pulse">
                   <div className="h-4 bg-white/20 dark:bg-slate-700 rounded mb-2"></div>
@@ -263,7 +263,7 @@ export default function HomePage() {
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
               {marketData.map((index, i) => {
                 const bgColors = [
                   'bg-blue-900/40 dark:bg-slate-800/50',

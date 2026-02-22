@@ -108,12 +108,73 @@ export async function register(userData: RegisterData): Promise<AuthResponse> {
   return data;
 }
 
+// Change password
+export async function changePassword(currentPassword: string, newPassword: string): Promise<void> {
+  const response = await fetch(`${API_BASE}/user/change-password`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...getAuthHeaders(),
+    },
+    body: JSON.stringify({ currentPassword, newPassword }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || 'Failed to change password');
+  }
+}
+
+// Deactivate account
+export async function deactivateAccount(reason?: string): Promise<void> {
+  const response = await fetch(`${API_BASE}/user/deactivate`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...getAuthHeaders(),
+    },
+    body: JSON.stringify({ reason }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || 'Failed to deactivate account');
+  }
+  
+  removeToken();
+  if (typeof window !== 'undefined') {
+    window.location.href = '/';
+  }
+}
+
+// Delete account permanently
+export async function deleteAccount(password: string): Promise<void> {
+  const response = await fetch(`${API_BASE}/user/delete`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      ...getAuthHeaders(),
+    },
+    body: JSON.stringify({ password }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || 'Failed to delete account');
+  }
+  
+  removeToken();
+  if (typeof window !== 'undefined') {
+    window.location.href = '/';
+  }
+}
+
 // Logout user
 export function logout(): void {
   removeToken();
-  // Redirect to login page if needed
+  // Redirect to home page
   if (typeof window !== 'undefined') {
-    window.location.href = '/login';
+    window.location.href = '/';
   }
 }
 

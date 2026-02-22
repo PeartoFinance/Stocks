@@ -170,7 +170,7 @@ export default function MarketSummary({ className = '' }: MarketSummaryProps) {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-2 gap-4 sm:gap-6">
         {/* Donut Chart */}
         <div className="flex flex-col items-center justify-center">
           <div className="w-52 h-52 relative">
@@ -190,7 +190,7 @@ export default function MarketSummary({ className = '' }: MarketSummaryProps) {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
             <div className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-500/10 dark:to-green-500/5 rounded-xl p-3 text-center transition-colors duration-300">
               <div className="text-lg font-medium text-green-600 dark:text-green-400 transition-colors duration-300">{marketStats.advancers}</div>
               <div className="text-xs font-medium text-green-600 dark:text-green-400 mt-1 transition-colors duration-300">Advancers</div>
@@ -199,7 +199,7 @@ export default function MarketSummary({ className = '' }: MarketSummaryProps) {
               <div className="text-lg font-medium text-red-600 dark:text-red-400 transition-colors duration-300">{marketStats.decliners}</div>
               <div className="text-xs font-medium text-red-600 dark:text-red-400 mt-1 transition-colors duration-300">Decliners</div>
             </div>
-            <div className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-700 dark:to-slate-750 rounded-xl p-3 text-center transition-colors duration-300">
+            <div className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-700 dark:to-slate-750 rounded-xl p-3 text-center transition-colors duration-300 col-span-2 sm:col-span-1">
               <div className="text-lg font-medium text-slate-700 dark:text-slate-300 transition-colors duration-300">{marketStats.unchanged}</div>
               <div className="text-xs font-medium text-slate-600 dark:text-slate-400 mt-1 transition-colors duration-300">Unchanged</div>
             </div>

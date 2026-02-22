@@ -27,7 +27,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
       <Sidebar isOpenMobile={isOpenMobile} setIsOpenMobile={setIsOpenMobile} onCollapseChange={setSidebarCollapsed} />
 
       {/* Main content with left padding for sidebar */}
-      <main className={`flex-1 w-full overflow-x-hidden pt-24 transition-all duration-300 ${sidebarCollapsed ? 'lg:pl-20' : 'lg:pl-64'}`}>
+      <main className={`flex-1 w-full overflow-x-hidden pt-32 md:pt-36 transition-all duration-300 ${sidebarCollapsed ? 'lg:pl-20' : 'lg:pl-64'}`}>
         {children}
       </main>
 

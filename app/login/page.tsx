@@ -11,9 +11,11 @@ export default function LoginPage() {
         const authRedirectBase = process.env.NEXT_PUBLIC_AUTH_REDIRECT || 'http://pearto.com';
         const redirectParam = searchParams.get('redirect');
 
-        let redirectUrl = `${authRedirectBase}/login?redirect=true`;
+        let redirectUrl = `${authRedirectBase}/login`;
         if (redirectParam) {
-            redirectUrl += `&redirectTo=${encodeURIComponent(redirectParam)}`;
+            redirectUrl += `?redirect=${encodeURIComponent(redirectParam)}`;
+        } else if (typeof window !== 'undefined') {
+            redirectUrl += `?redirect=${encodeURIComponent(window.location.href)}`;
         }
 
         // Short delay to ensure the user sees the "Secure" branding before jumping

@@ -245,7 +245,7 @@ export default function AlertsPage() {
 
             <div className="container mx-auto px-4 py-8 max-w-6xl">
                 {/* Stats Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-8">
                     <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm">
                         <div className="flex items-center justify-between">
                             <div>
