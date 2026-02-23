@@ -2,7 +2,8 @@
 
 import { ComparisonCrypto } from './types';
 import { useState, useEffect } from 'react';
-import { Activity, Calendar, BarChart3, TrendingUp, X } from 'lucide-react';
+import { Activity, Calendar, BarChart3, TrendingUp, X, Maximize2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { cryptoService } from '../../../utils/cryptoService';
 import toast from 'react-hot-toast';
 import MultiStockChart from '../../../components/MultiStockChart';
@@ -17,10 +18,16 @@ interface ChartTabProps {
 }
 
 export default function ChartTab({ comparedCryptos, formatLargeNumber, removeFromComparison }: ChartTabProps) {
+  const router = useRouter();
   const [chartData, setChartData] = useState<HistoricalData[][]>([]);
   const [loading, setLoading] = useState(false);
   const [period, setPeriod] = useState('1mo');
   const [chartType, setChartType] = useState<ChartType>('line');
+
+  const handleFullscreen = () => {
+    const symbols = comparedCryptos.map(c => c.symbol).join('.');
+    router.push(`/comparedata/crypto/${symbols}/detailedchart`);
+  };
 
   const periods = [
     { value: '1d', label: '1D' },
@@ -138,7 +145,16 @@ export default function ChartTab({ comparedCryptos, formatLargeNumber, removeFro
 
       {/* Charts */}
       <div className="bg-white dark:bg-slate-800 rounded-lg p-2 sm:p-3 border border-slate-200 dark:border-slate-700">
-        <h3 className="text-sm sm:text-base font-medium text-gray-900 dark:text-white mb-2">Price Comparison</h3>
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="text-sm sm:text-base font-medium text-gray-900 dark:text-white">Price Comparison</h3>
+          <button 
+            onClick={handleFullscreen} 
+            className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 sm:py-2 bg-slate-100 dark:bg-slate-700 rounded-lg border border-slate-200 dark:border-slate-600 hover:border-blue-300 dark:hover:border-emerald-500/50 transition-all"
+          >
+            <Maximize2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-gray-600 dark:text-slate-400" />
+            <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-slate-300">Detailed Chart</span>
+          </button>
+        </div>
 
         {/* Crypto Cards */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 mb-2">

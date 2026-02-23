@@ -20,7 +20,8 @@ import {
   ExternalLink,
   Info,
   GitCompare,
-  Brain
+  Brain,
+  Maximize2
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -658,53 +659,135 @@ export default function StockDetailPage({ params }: PageProps) {
 
       case 'chart':
         return (
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-5">
-            <div className="mb-4 lg:mb-6 p-3 lg:p-4 bg-slate-50 dark:bg-slate-700 rounded-xl border border-slate-100 dark:border-slate-600">
-              <div className="flex flex-col gap-3 mb-3">
-                <span className="text-sm font-semibold text-gray-700 dark:text-slate-300 transition-colors duration-300">Duration</span>
-                <div className="flex bg-white dark:bg-slate-700 rounded-lg p-1 border border-gray-200 dark:border-slate-600 transition-colors duration-300 overflow-x-auto scrollbar-hide">
-                  {periods.map((p) => (
-                    <button
-                      key={p}
-                      onClick={() => handlePeriodChange(p)}
-                      className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all whitespace-nowrap ${chartPeriod === p ? "bg-blue-600 dark:bg-emerald-600 text-white shadow-sm" : "text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-600"
-                        }`}
-                    >
-                      {p}
-                    </button>
-                  ))}
+          <div className="space-y-4">
+            {/* Chart Container */}
+            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors duration-300">
+              {/* Chart Header */}
+              <div className="p-4 lg:p-5 border-b border-slate-200 dark:border-slate-700">
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-white transition-colors duration-300">
+                  {stock.name} ({stock.symbol}) Price Chart
+                </h3>
+                <div className="flex items-center gap-2 mt-2">
+                  <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-semibold ${
+                    isPositive ? "text-emerald-700 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-500/10" : "text-red-700 bg-red-50 dark:text-red-400 dark:bg-red-500/10"
+                  }`}>
+                    {isPositive ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
+                    ${formatNumber(stock.price)}
+                  </div>
+                  <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-semibold ${
+                    isPositive ? "text-emerald-700 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-500/10" : "text-red-700 bg-red-50 dark:text-red-400 dark:bg-red-500/10"
+                  }`}>
+                    {isPositive ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
+                    {isPositive ? '+' : ''}{formatNumber(stock.change)} ({isPositive ? '+' : ''}{formatNumber(stock.changePercent)}%)
+                  </div>
                 </div>
               </div>
-              <div className="flex flex-col gap-3">
-                <span className="text-sm font-semibold text-gray-700 dark:text-slate-300 transition-colors duration-300">Type</span>
-                <div className="flex bg-white dark:bg-slate-700 rounded-lg p-1 border border-gray-200 dark:border-slate-600 transition-colors duration-300 overflow-x-auto scrollbar-hide">
-                  {chartTypes.map((type) => (
-                    <button
-                      key={type.key}
-                      onClick={() => setChartType(type.key)}
-                      className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-md transition-all whitespace-nowrap ${chartType === type.key ? "bg-blue-600 text-white shadow-sm" : "text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-600"
-                        }`}
-                    >
-                      <type.icon className="h-3.5 w-3.5" />
-                      <span>{type.label}</span>
-                    </button>
-                  ))}
+
+              {/* Chart Controls */}
+              <div className="p-4 lg:p-5 bg-slate-50 dark:bg-slate-700/50 border-b border-slate-200 dark:border-slate-700 transition-colors duration-300">
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-2 block uppercase tracking-wide transition-colors duration-300">Time Period</label>
+                    <div className="flex flex-wrap gap-2">
+                      {periods.map((p) => (
+                        <button
+                          key={p}
+                          onClick={() => handlePeriodChange(p)}
+                          className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
+                            chartPeriod === p ? "bg-emerald-600 text-white shadow-sm" : "bg-white dark:bg-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-500 border border-slate-200 dark:border-slate-600"
+                          }`}
+                        >
+                          {p}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-2 block uppercase tracking-wide transition-colors duration-300">Chart Type</label>
+                    <div className="grid grid-cols-2 lg:flex lg:flex-wrap gap-2">
+                      {chartTypes.map((type) => (
+                        <button
+                          key={type.key}
+                          onClick={() => setChartType(type.key)}
+                          className={`flex items-center justify-center gap-2 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
+                            chartType === type.key ? "bg-blue-600 text-white shadow-sm" : "bg-white dark:bg-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-500 border border-slate-200 dark:border-slate-600"
+                          }`}
+                        >
+                          <type.icon className="h-3.5 w-3.5" />
+                          <span>{type.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
+              </div>
+
+              {/* Chart Display */}
+              <div className="h-[400px] lg:h-[500px] relative bg-white dark:bg-slate-900 transition-colors duration-300">
+                {chartLoading ? (
+                  <div className="absolute inset-0 flex items-center justify-center bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm z-10">
+                    <div className="text-center">
+                      <Activity className="h-12 w-12 text-emerald-600 animate-spin mx-auto mb-4" />
+                      <p className="text-slate-600 dark:text-slate-400 font-medium">Loading chart data...</p>
+                    </div>
+                  </div>
+                ) : null}
+                {historicalData.length > 0 ? (
+                  <div className="h-full p-2">
+                    <StockChart data={historicalData} isPositive={stock.change >= 0} height={window.innerWidth < 1024 ? 380 : 480} chartType={chartType} />
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-center h-full">
+                    <div className="text-center">
+                      <BarChart3 className="h-16 w-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+                      <p className="text-slate-500 dark:text-slate-400 text-lg font-medium">No chart data available</p>
+                      <p className="text-slate-400 dark:text-slate-500 text-sm mt-2">Try selecting a different time period</p>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
-            <div className="h-64 lg:h-[500px] relative">
-              {chartLoading ? (
-                <div className="absolute inset-0 flex items-center justify-center bg-white/50 dark:bg-slate-800/50 z-10">
-                  <Activity className="h-8 w-8 text-blue-600 animate-spin" />
+
+            {/* Chart Statistics */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
+              {[
+                { label: 'Period High', value: historicalData.length > 0 ? `$${Math.max(...historicalData.map(d => d.high)).toFixed(2)}` : '-', icon: TrendingUp, color: 'emerald' },
+                { label: 'Period Low', value: historicalData.length > 0 ? `$${Math.min(...historicalData.map(d => d.low)).toFixed(2)}` : '-', icon: TrendingDown, color: 'red' },
+                { label: 'Average Price', value: historicalData.length > 0 ? `$${(historicalData.reduce((sum, d) => sum + d.close, 0) / historicalData.length).toFixed(2)}` : '-', icon: BarChart3, color: 'blue' },
+                { label: 'Volatility', value: historicalData.length > 1 ? `${((Math.max(...historicalData.map(d => d.high)) - Math.min(...historicalData.map(d => d.low))) / Math.min(...historicalData.map(d => d.low)) * 100).toFixed(2)}%` : '-', icon: Activity, color: 'purple' },
+              ].map((item, i) => (
+                <div key={i} className={`bg-${item.color}-50 dark:bg-slate-800 p-3 lg:p-4 rounded-xl border border-${item.color}-100 dark:border-slate-700 shadow-sm`}>
+                  <div className="flex items-center gap-1.5 lg:gap-2 mb-1.5 lg:mb-2">
+                    <item.icon className={`h-3.5 w-3.5 lg:h-4 lg:w-4 text-${item.color}-600 dark:text-${item.color}-400`} />
+                    <span className={`text-xs lg:text-sm font-semibold text-${item.color}-700 dark:text-${item.color}-300`}>{item.label}</span>
+                  </div>
+                  <p className="text-base lg:text-lg font-bold text-slate-900 dark:text-white">{item.value}</p>
                 </div>
-              ) : null}
-              {historicalData.length > 0 ? (
-                <StockChart data={historicalData} isPositive={stock.change >= 0} height={window.innerWidth < 1024 ? 256 : 500} chartType={chartType} />
-              ) : (
-                <div className="flex items-center justify-center h-full bg-slate-50 dark:bg-slate-700 rounded-lg text-slate-400 dark:text-slate-500">
-                  No data available for this period.
+              ))}
+            </div>
+
+            {/* Volume Analysis */}
+            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors duration-300">
+              <div className="p-4 lg:p-5 border-b border-slate-200 dark:border-slate-700">
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-white transition-colors duration-300">Volume Analysis</h3>
+              </div>
+              <div className="p-4 lg:p-5">
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4">
+                  {[
+                    { label: 'Total Volume', value: historicalData.length > 0 ? `${(historicalData.reduce((sum, d) => sum + d.volume, 0) / 1e9).toFixed(2)}B` : '-', icon: Activity, color: 'blue' },
+                    { label: 'Average Volume', value: historicalData.length > 0 ? `${(historicalData.reduce((sum, d) => sum + d.volume, 0) / historicalData.length / 1e6).toFixed(2)}M` : '-', icon: BarChart3, color: 'emerald' },
+                    { label: 'Max Volume', value: historicalData.length > 0 ? `${(Math.max(...historicalData.map(d => d.volume)) / 1e6).toFixed(2)}M` : '-', icon: TrendingUp, color: 'purple' },
+                  ].map((item, i) => (
+                    <div key={i} className={`bg-${item.color}-50 dark:bg-slate-700/50 p-3 lg:p-4 rounded-xl border border-${item.color}-100 dark:border-slate-600 shadow-sm`}>
+                      <div className="flex items-center gap-1.5 lg:gap-2 mb-1.5 lg:mb-2">
+                        <item.icon className={`h-3.5 w-3.5 lg:h-4 lg:w-4 text-${item.color}-600 dark:text-${item.color}-400`} />
+                        <span className={`text-xs lg:text-sm font-semibold text-${item.color}-700 dark:text-${item.color}-300`}>{item.label}</span>
+                      </div>
+                      <p className="text-base lg:text-lg font-bold text-slate-900 dark:text-white">{item.value}</p>
+                    </div>
+                  ))}
                 </div>
-              )}
+              </div>
             </div>
           </div>
         );
@@ -781,6 +864,12 @@ export default function StockDetailPage({ params }: PageProps) {
                 className="p-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition"
               >
                 <GitCompare className="h-5 w-5" />
+              </button>
+              <button
+                onClick={() => router.push(`/stockchart/${stock.symbol}/detailedpage`)}
+                className="p-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition"
+              >
+                <Maximize2 className="h-5 w-5" />
               </button>
               <button
                 onClick={() => setShowAIPanel(true)}
@@ -873,6 +962,13 @@ export default function StockDetailPage({ params }: PageProps) {
               >
                 <GitCompare size={16} />
                 Compare
+              </button>
+              <button
+                onClick={() => router.push(`/stockchart/${stock.symbol}/detailedpage`)}
+                className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg transition text-sm font-medium"
+              >
+                <Maximize2 size={16} />
+                Detailed Chart
               </button>
               <button 
                 onClick={() => setShowAIPanel(true)}

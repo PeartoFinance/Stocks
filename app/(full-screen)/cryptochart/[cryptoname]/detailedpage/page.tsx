@@ -24,7 +24,7 @@ export default function CryptoDetailedTradingPage() {
   
   const [cryptoData, setCryptoData] = useState<any>(null);
   const [chartData, setChartData] = useState<any[]>([]);
-  const [selectedPeriod, setSelectedPeriod] = useState('1D');
+  const [selectedPeriod, setSelectedPeriod] = useState('1Y');
   const [selectedChartType, setSelectedChartType] = useState<'candlestick' | 'line' | 'area' | 'bar' | 'baseline' | 'histogram'>('candlestick');
   const [loading, setLoading] = useState(true);
   const [chartLoading, setChartLoading] = useState(false);

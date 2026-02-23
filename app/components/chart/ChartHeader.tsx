@@ -63,8 +63,16 @@ export default function ChartHeader({
           </button>
           <button
             onClick={onFullscreen}
-            className="p-1.5 text-slate-500 hover:text-green-600 hover:bg-green-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
-            title="Open Fullscreen Chart"
+            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-slate-700 dark:text-slate-300 hover:text-green-600 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-gray-700 rounded-lg transition-colors border border-slate-200 dark:border-slate-600"
+            title="Open Detailed Chart"
+          >
+            <Maximize2 className="h-3.5 w-3.5" />
+            <span className="text-xs font-medium">Detailed Chart</span>
+          </button>
+          <button
+            onClick={onFullscreen}
+            className="sm:hidden p-1.5 text-slate-500 hover:text-green-600 hover:bg-green-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
+            title="Open Detailed Chart"
           >
             <Maximize2 className="h-4 w-4" />
           </button>

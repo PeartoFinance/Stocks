@@ -3,6 +3,7 @@
 import { ComparisonStock } from './types';
 import { Activity, Maximize2, X } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import MultiStockChart from '../../../components/MultiStockChart';
 import PriceDisplay from '../../../components/common/PriceDisplay';
 
@@ -29,7 +30,13 @@ export default function ChartTab({
   onRemoveStock,
   onFullscreen
 }: ChartTabProps) {
+  const router = useRouter();
   const stocksWithData = comparedStocks.filter(stock => stock.historicalData && stock.historicalData.length > 0);
+
+  const handleFullscreen = () => {
+    const symbols = stocksWithData.map(s => s.symbol).join('.');
+    router.push(`/comparedata/stocks/${symbols}/detailedchart`);
+  };
 
   if (comparedStocks.length === 0) {
     return (
@@ -92,7 +99,7 @@ export default function ChartTab({
         </div>
       </div>
 
-      <div className="flex justify-between items-start mb-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
         <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 flex-1">
           {stocksWithData.map((stock) => {
             const isPositive = stock.change >= 0;
@@ -126,8 +133,12 @@ export default function ChartTab({
           })}
         </div>
 
-        <button onClick={onFullscreen} className="ml-4 p-3 bg-white dark:bg-slate-800 rounded-lg border-2 border-slate-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-emerald-500/50 transition-all">
-          <Maximize2 className="h-5 w-5 text-gray-600 dark:text-slate-400" />
+        <button 
+          onClick={handleFullscreen} 
+          className="flex items-center gap-2 px-3 py-2 sm:ml-4 bg-slate-100 dark:bg-slate-800 rounded-lg border-2 border-slate-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-emerald-500/50 transition-all"
+        >
+          <Maximize2 className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600 dark:text-slate-400" />
+          <span className="text-sm font-medium text-gray-700 dark:text-slate-300">Detailed Chart</span>
         </button>
       </div>
 
