@@ -187,7 +187,7 @@ export const stockAPI = {
     }
   },
 
-  async getHistoricalData(symbol: string, period: string = '1y'): Promise<APIResponse<HistoricalData[]>> {
+  async getHistoricalData(symbol: string, period: string = '1y', interval: string = '1d'): Promise<APIResponse<HistoricalData[]>> {
     try {
       // Map period to backend format
       const rangeMap: Record<string, string> = {
@@ -197,7 +197,7 @@ export const stockAPI = {
       const range = rangeMap[period] || '1y';
 
       const data = await apiFetch<{ symbol: string; period: string; interval: string; data: Array<{ date: string; open: number; high: number; low: number; close: number; volume: number }> }>(
-        `/api/stocks/history/${encodeURIComponent(symbol)}?period=${range}&interval=1d`
+        `/api/stocks/history/${encodeURIComponent(symbol)}?period=${range}&interval=${interval}`
       );
 
       const historicalData: HistoricalData[] = (data.data || []).map(p => ({
