@@ -23,6 +23,7 @@ export default function CryptoComparison() {
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
   const [isAIPanelOpen, setIsAIPanelOpen] = useState(false);
+  const [hasAddedCrypto, setHasAddedCrypto] = useState(false);
 
   const tabs = [
     { key: 'overview', label: 'Overview', icon: BarChart3 },
@@ -151,6 +152,7 @@ export default function CryptoComparison() {
         setComparedCryptos([...comparedCryptos, fullCrypto]);
         setSearchTerm('');
         setSearchResults([]);
+        setHasAddedCrypto(true);
         toast.success(`${crypto.symbol} added`);
       }
     } catch (error) {
@@ -193,43 +195,45 @@ export default function CryptoComparison() {
               <h2 className="text-xs sm:text-sm font-medium text-slate-900 dark:text-white">Add Cryptocurrencies</h2>
               <span className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400">{comparedCryptos.length}/5</span>
             </div>
-            <div className="relative mb-2 sm:mb-3">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-3 w-3 sm:h-4 sm:w-4 text-slate-400 dark:text-slate-400" />
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
               <input
                 type="text"
-                placeholder="Search cryptocurrencies..."
+                placeholder="Enter crypto symbol or name..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-8 sm:pl-10 pr-4 py-2 text-xs sm:text-sm border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 dark:focus:ring-emerald-500"
+                onKeyDown={(e) => e.key === 'Enter' && searchResults[0] && addToComparison(searchResults[0])}
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm"
               />
-              {loading && <Activity className="absolute right-3 top-1/2 transform -translate-y-1/2 h-3 w-3 sm:h-4 sm:w-4 text-blue-600 dark:text-emerald-500 animate-spin" />}
             </div>
 
             {searchResults.length > 0 && (
-              <div className="border border-slate-200 dark:border-slate-700 rounded-lg max-h-48 sm:max-h-64 overflow-y-auto">
+              <div className="mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg max-h-64 overflow-y-auto">
                 {searchResults.map((crypto) => (
-                  <div key={crypto.symbol} className="flex items-center justify-between p-2 sm:p-3 hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-slate-700 last:border-b-0">
-                    <div className="flex-1 min-w-0">
-                      <h4 className="text-xs sm:text-sm font-medium text-slate-900 dark:text-white truncate">{crypto.symbol}</h4>
-                      <p className="text-[10px] sm:text-xs text-slate-600 dark:text-slate-400 truncate">{crypto.name}</p>
-                    </div>
-                    <div className="flex items-center gap-2 sm:gap-3">
-                      <div className="text-right">
-                        <p className="text-xs sm:text-sm font-medium text-slate-900 dark:text-white">${crypto.price?.toFixed(2) || '0.00'}</p>
-                        <p className={`text-[10px] sm:text-xs font-medium ${(crypto.changePercent || 0) >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
-                          {(crypto.changePercent || 0) >= 0 ? '+' : ''}{(crypto.changePercent || 0).toFixed(2)}%
-                        </p>
+                  <button
+                    key={crypto.symbol}
+                    onClick={() => addToComparison(crypto)}
+                    disabled={loading}
+                    className="w-full px-4 py-3 text-left hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors border-b border-slate-100 dark:border-slate-700 last:border-b-0"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium text-slate-900 dark:text-white">{crypto.symbol}</div>
+                        <div className="text-sm text-slate-500 dark:text-slate-400 truncate">{crypto.name}</div>
                       </div>
-                      <button onClick={() => addToComparison(crypto)} disabled={loading} className="px-2 sm:px-3 py-1 bg-blue-600 dark:bg-emerald-600 text-white text-xs rounded-md hover:bg-blue-700 dark:hover:bg-emerald-700 disabled:opacity-50">
-                        <Plus className="h-3 w-3" />
-                      </button>
+                      <div className="text-right ml-3">
+                        <div className="font-medium text-slate-900 dark:text-white">${crypto.price?.toFixed(2) || '0.00'}</div>
+                        <div className={`text-sm font-medium ${(crypto.changePercent || 0) >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
+                          {(crypto.changePercent || 0) >= 0 ? '+' : ''}{(crypto.changePercent || 0).toFixed(2)}%
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  </button>
                 ))}
               </div>
             )}
 
-            {searchTerm === '' && comparedCryptos.length < 5 && (
+            {searchTerm === '' && comparedCryptos.length < 5 && comparedCryptos.length === 0 && (
               <div>
                 <h4 className="text-[10px] sm:text-xs font-medium text-slate-700 dark:text-slate-400 mb-2">Popular Cryptocurrencies</h4>
                 <div className="flex flex-wrap gap-1.5 sm:gap-2">

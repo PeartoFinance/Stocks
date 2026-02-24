@@ -25,8 +25,12 @@ export default function ChartTab({ comparedCryptos, formatLargeNumber, removeFro
   const [chartType, setChartType] = useState<ChartType>('line');
 
   const handleFullscreen = () => {
-    const symbols = comparedCryptos.map(c => c.symbol).join('.');
-    router.push(`/comparedata/crypto/${symbols}/detailedchart`);
+    if (comparedCryptos.length === 1) {
+      router.push(`/cryptochart/${comparedCryptos[0].symbol.toLowerCase()}/detailedpage`);
+    } else {
+      const symbols = comparedCryptos.map(c => c.symbol).join('.');
+      router.push(`/comparedata/crypto/${symbols}/detailedchart`);
+    }
   };
 
   const periods = [
@@ -48,6 +52,7 @@ export default function ChartTab({ comparedCryptos, formatLargeNumber, removeFro
     if (comparedCryptos.length > 0) {
       loadChartData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [comparedCryptos, period]);
 
   const loadChartData = async () => {
@@ -145,35 +150,35 @@ export default function ChartTab({ comparedCryptos, formatLargeNumber, removeFro
 
       {/* Charts */}
       <div className="bg-white dark:bg-slate-800 rounded-lg p-2 sm:p-3 border border-slate-200 dark:border-slate-700">
-        <div className="flex items-center justify-between mb-2">
-          <h3 className="text-sm sm:text-base font-medium text-gray-900 dark:text-white">Price Comparison</h3>
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white">Price Comparison</h3>
           <button 
             onClick={handleFullscreen} 
-            className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 sm:py-2 bg-slate-100 dark:bg-slate-700 rounded-lg border border-slate-200 dark:border-slate-600 hover:border-blue-300 dark:hover:border-emerald-500/50 transition-all"
+            className="flex items-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-sm hover:shadow-md transition-all font-medium"
           >
-            <Maximize2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-gray-600 dark:text-slate-400" />
-            <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-slate-300">Detailed Chart</span>
+            <Maximize2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+            <span className="text-xs sm:text-sm">Detailed Chart</span>
           </button>
         </div>
 
         {/* Crypto Cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 mb-2">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 mb-3">
           {comparedCryptos.map((crypto) => {
             const isPositive = crypto.changePercent >= 0;
             return (
-              <div key={crypto.symbol} className={`bg-white dark:bg-slate-700 rounded p-2 border ${isPositive ? 'border-green-200 dark:border-green-500/30' : 'border-red-200 dark:border-red-500/30'}`}>
-                <div className="flex items-center justify-between mb-1">
-                  <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: crypto.color }} />
-                    <span className="text-[10px] sm:text-xs font-medium text-gray-900 dark:text-white">{crypto.symbol}</span>
+              <div key={crypto.symbol} className={`bg-gradient-to-br ${isPositive ? 'from-green-50 to-emerald-50 dark:from-green-500/10 dark:to-emerald-500/5 border-green-200 dark:border-green-500/30' : 'from-red-50 to-rose-50 dark:from-red-500/10 dark:to-rose-500/5 border-red-200 dark:border-red-500/30'} rounded-lg p-2.5 border-2 shadow-sm hover:shadow-md transition-all`}>
+                <div className="flex items-center justify-between mb-1.5">
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-2.5 h-2.5 rounded-full border-2 border-white dark:border-slate-800 shadow-sm" style={{ backgroundColor: crypto.color }} />
+                    <span className="text-[10px] sm:text-xs font-semibold text-gray-900 dark:text-white">{crypto.symbol}</span>
                   </div>
-                  <button onClick={() => removeFromComparison(crypto.symbol)} className="text-slate-400 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-500">
+                  <button onClick={() => removeFromComparison(crypto.symbol)} className="text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition-colors p-0.5 hover:bg-white/50 dark:hover:bg-slate-700/50 rounded">
                     <X className="h-3 w-3" />
                   </button>
                 </div>
-                <div className="text-[10px] sm:text-xs font-medium text-gray-900 dark:text-white mb-1">${crypto.price.toFixed(2)}</div>
-                <div className={`text-[9px] sm:text-[10px] font-medium ${isPositive ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
-                  {isPositive ? '+' : ''}{crypto.changePercent.toFixed(2)}%
+                <div className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white mb-1">${crypto.price.toFixed(2)}</div>
+                <div className={`inline-flex items-center px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] font-semibold ${isPositive ? 'bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400' : 'bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-400'}`}>
+                  {isPositive ? '▲' : '▼'} {Math.abs(crypto.changePercent).toFixed(2)}%
                 </div>
               </div>
             );
@@ -181,11 +186,12 @@ export default function ChartTab({ comparedCryptos, formatLargeNumber, removeFro
         </div>
 
         {loading ? (
-          <div className="flex items-center justify-center h-48 sm:h-64">
-            <Activity className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600 dark:text-emerald-500 animate-spin" />
+          <div className="flex flex-col items-center justify-center h-48 sm:h-64 bg-slate-50 dark:bg-slate-900/50 rounded-lg">
+            <Activity className="h-6 w-6 sm:h-8 sm:w-8 text-emerald-600 dark:text-emerald-500 animate-spin mb-2" />
+            <p className="text-xs text-slate-600 dark:text-slate-400">Loading chart data...</p>
           </div>
         ) : chartData.length > 0 && chartData.every(data => data.length > 0) ? (
-          <div className="relative bg-slate-50 dark:bg-slate-700 rounded p-1 sm:p-2">
+          <div className="relative bg-slate-50 dark:bg-slate-900/50 rounded-lg p-2 sm:p-3 border border-slate-200/50 dark:border-slate-700/50">
             <MultiStockChart
               stocks={comparedCryptos.map((crypto, index) => ({
                 symbol: crypto.symbol,
@@ -202,9 +208,9 @@ export default function ChartTab({ comparedCryptos, formatLargeNumber, removeFro
             />
           </div>
         ) : (
-          <div className="text-center py-6 sm:py-8">
-            <Activity className="h-6 w-6 sm:h-8 sm:w-8 text-gray-300 dark:text-gray-600 mx-auto mb-2" />
-            <p className="text-[10px] sm:text-xs text-gray-600 dark:text-slate-400">No chart data available</p>
+          <div className="text-center py-8 sm:py-12 bg-slate-50 dark:bg-slate-900/50 rounded-lg">
+            <Activity className="h-8 w-8 sm:h-10 sm:w-10 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
+            <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-slate-400">No chart data available</p>
           </div>
         )}
       </div>
