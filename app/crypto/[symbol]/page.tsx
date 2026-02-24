@@ -12,7 +12,8 @@ import {
   BarChart3,
   X,
   Brain,
-  GitCompare
+  GitCompare,
+  Maximize2
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import cryptoService from '@/app/utils/cryptoService';
@@ -380,6 +381,12 @@ export default function CryptoDetailPage() {
                 <GitCompare className="h-5 w-5" />
               </button>
               <button
+                onClick={() => router.push(`/cryptochart/${crypto.symbol}/detailedpage`)}
+                className="p-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-lg"
+              >
+                <Maximize2 className="h-5 w-5" />
+              </button>
+              <button
                 onClick={() => setShowAIPanel(true)}
                 className="p-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg"
               >
@@ -473,6 +480,13 @@ export default function CryptoDetailPage() {
               >
                 <GitCompare size={16} />
                 Compare
+              </button>
+              <button 
+                onClick={() => router.push(`/cryptochart/${crypto.symbol}/detailedpage`)}
+                className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg transition text-sm font-medium"
+              >
+                <Maximize2 size={16} />
+                Detailed Chart
               </button>
               <button 
                 onClick={() => setShowAIPanel(true)}

@@ -173,7 +173,7 @@ export default function TechnicalChartPage() {
   const handleSelectStock = (stock: any) => setSymbol(stock.symbol);
 
   const handleOpenDetailedChart = () => {
-    router.push(`/chart/${symbol}/detailedChart`);
+    router.push(`/stockchart/${symbol}/detailedpage`);
   };
 
   const isPositive = stockInfo ? (stockInfo.change || 0) >= 0 : true;

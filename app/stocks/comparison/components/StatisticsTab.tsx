@@ -111,9 +111,9 @@ export default function StatisticsTab({ comparedStocks, formatLargeNumber }: Sta
   const metrics = getMetrics();
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Category Tabs */}
-      <div className="flex gap-2 overflow-x-auto pb-2">
+      <div className="flex gap-1.5 overflow-x-auto pb-2">
         {categories.map((category) => {
           const Icon = category.icon;
           const isActive = activeCategory === category.key;
@@ -121,13 +121,13 @@ export default function StatisticsTab({ comparedStocks, formatLargeNumber }: Sta
             <button
               key={category.key}
               onClick={() => setActiveCategory(category.key)}
-              className={`flex items-center gap-2 px-5 py-3 rounded-lg text-sm font-medium transition-all flex-shrink-0 ${
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all flex-shrink-0 ${
                 isActive
                   ? 'bg-gradient-to-r from-blue-600 to-blue-700 dark:from-emerald-600 dark:to-emerald-700 text-white shadow-lg scale-105'
                   : 'bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#1a1a1a] border border-slate-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-emerald-500/50'
               }`}
             >
-              <Icon className="h-5 w-5" />
+              <Icon className="h-4 w-4" />
               <span>{category.label}</span>
             </button>
           );
@@ -135,7 +135,7 @@ export default function StatisticsTab({ comparedStocks, formatLargeNumber }: Sta
       </div>
 
       {/* Metrics Grid */}
-      <div className="grid grid-cols-1 gap-4">
+      <div className="grid grid-cols-1 gap-3">
         {metrics.map((metric) => {
           const shouldHighlight = metric.format === 'currency' || metric.format === 'marketCap' || metric.format === 'percentage';
           const values = comparedStocks.map(stock => stock[metric.key as keyof ComparisonStock]);
@@ -145,12 +145,12 @@ export default function StatisticsTab({ comparedStocks, formatLargeNumber }: Sta
           const MetricIcon = metric.icon;
 
           return (
-            <div key={metric.key} className="bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-700 hover:shadow-lg dark:hover:shadow-emerald-500/5 transition-all">
-              <div className="flex items-center gap-2 mb-4">
-                {MetricIcon && <MetricIcon className="h-5 w-5 text-blue-600 dark:text-emerald-500" />}
-                <h4 className="text-base font-medium text-gray-900 dark:text-white">{metric.label}</h4>
+            <div key={metric.key} className="bg-white dark:bg-slate-800 rounded-xl p-3 md:p-4 border border-slate-200 dark:border-slate-700 hover:shadow-lg dark:hover:shadow-emerald-500/5 transition-all">
+              <div className="flex items-center gap-1.5 mb-3">
+                {MetricIcon && <MetricIcon className="h-4 w-4 text-blue-600 dark:text-emerald-500" />}
+                <h4 className="text-xs md:text-sm font-medium text-gray-900 dark:text-white">{metric.label}</h4>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
                 {comparedStocks.map((stock) => {
                   const value = stock[metric.key as keyof ComparisonStock];
                   const numValue = Number(value);
@@ -161,7 +161,7 @@ export default function StatisticsTab({ comparedStocks, formatLargeNumber }: Sta
                   return (
                     <div
                       key={stock.symbol}
-                      className={`relative p-4 rounded-lg border-2 transition-all hover:scale-105 ${
+                      className={`relative p-2.5 md:p-3 rounded-lg border-2 transition-all hover:scale-105 ${
                         isBest
                           ? 'bg-gradient-to-br from-green-50 to-green-100 dark:from-green-500/10 dark:to-green-500/5 border-green-500 dark:border-green-500/50 shadow-md'
                           : isWorst
@@ -170,25 +170,25 @@ export default function StatisticsTab({ comparedStocks, formatLargeNumber }: Sta
                       }`}
                     >
                       {isBest && (
-                        <div className="absolute -top-2 -right-2 bg-green-500 text-white text-xs font-medium px-2 py-1 rounded-full shadow-lg">
+                        <div className="absolute -top-1.5 -right-1.5 bg-green-500 text-white text-[10px] font-medium px-1.5 py-0.5 rounded-full shadow-lg">
                           Best
                         </div>
                       )}
                       {isWorst && (
-                        <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full shadow-lg">
+                        <div className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] font-medium px-1.5 py-0.5 rounded-full shadow-lg">
                           Worst
                         </div>
                       )}
-                      <div className="flex items-center gap-2 mb-3">
-                        <div className="w-3 h-3 rounded-full shadow-sm" style={{ backgroundColor: stock.color }} />
+                      <div className="flex items-center gap-1.5 mb-2">
+                        <div className="w-2.5 h-2.5 rounded-full shadow-sm" style={{ backgroundColor: stock.color }} />
                         <Link
                           href={`/stock/${stock.symbol.toLowerCase()}`}
-                          className="text-sm font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-emerald-500 transition-colors"
+                          className="text-xs font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-emerald-500 transition-colors"
                         >
                           {stock.symbol}
                         </Link>
                       </div>
-                      <div className={`text-xl font-medium mb-1 ${
+                      <div className={`text-sm md:text-base font-medium mb-0.5 ${
                         metric.key === 'changePercent' || metric.key === 'change'
                           ? isNegative
                             ? 'text-red-600 dark:text-red-400'
@@ -201,7 +201,7 @@ export default function StatisticsTab({ comparedStocks, formatLargeNumber }: Sta
                       }`}>
                         {formatValue(value, metric.format)}
                       </div>
-                      <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{stock.name}</p>
+                      <p className="text-[10px] md:text-xs text-slate-500 dark:text-slate-400 truncate">{stock.name}</p>
                     </div>
                   );
                 })}

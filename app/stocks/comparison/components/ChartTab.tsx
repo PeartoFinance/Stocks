@@ -3,6 +3,7 @@
 import { ComparisonStock } from './types';
 import { Activity, Maximize2, X } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import MultiStockChart from '../../../components/MultiStockChart';
 import PriceDisplay from '../../../components/common/PriceDisplay';
 
@@ -29,7 +30,17 @@ export default function ChartTab({
   onRemoveStock,
   onFullscreen
 }: ChartTabProps) {
+  const router = useRouter();
   const stocksWithData = comparedStocks.filter(stock => stock.historicalData && stock.historicalData.length > 0);
+
+  const handleFullscreen = () => {
+    if (stocksWithData.length === 1) {
+      router.push(`/stockchart/${stocksWithData[0].symbol.toLowerCase()}/detailedpage`);
+    } else {
+      const symbols = stocksWithData.map(s => s.symbol).join('.');
+      router.push(`/comparedata/stocks/${symbols}/detailedchart`);
+    }
+  };
 
   if (comparedStocks.length === 0) {
     return (
@@ -54,16 +65,16 @@ export default function ChartTab({
   }
 
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-slate-700">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
-        <h3 className="text-lg font-medium text-gray-900 dark:text-white">Price Comparison</h3>
-        <div className="flex flex-wrap items-center gap-3">
+    <div className="bg-white dark:bg-slate-800 rounded-lg p-3 md:p-4 border border-slate-200 dark:border-slate-700">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-2">
+        <h3 className="text-sm md:text-base font-semibold text-gray-900 dark:text-white">Price Comparison</h3>
+        <div className="flex flex-wrap items-center gap-2">
           <div className="flex bg-slate-100 dark:bg-slate-700 rounded-lg p-0.5">
             {[{ key: 'line', label: 'Line' }, { key: 'area', label: 'Area' }, { key: 'candle', label: 'Candle' }].map((type) => (
               <button
                 key={type.key}
                 onClick={() => onChartTypeChange(type.key as 'line' | 'area' | 'candle')}
-                className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+                className={`px-2 md:px-3 py-1 text-xs font-medium rounded-md transition-all ${
                   chartType === type.key
                     ? 'bg-white dark:bg-slate-800 text-gray-900 dark:text-white shadow-sm'
                     : 'text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-[#fafafa]'
@@ -79,7 +90,7 @@ export default function ChartTab({
               <button
                 key={period}
                 onClick={() => onPeriodChange(period)}
-                className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+                className={`px-2 md:px-3 py-1 text-xs font-medium rounded-md transition-all ${
                   chartPeriod === period
                     ? 'bg-white dark:bg-slate-800 text-gray-900 dark:text-white shadow-sm'
                     : 'text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-[#fafafa]'
@@ -92,32 +103,32 @@ export default function ChartTab({
         </div>
       </div>
 
-      <div className="flex justify-between items-start mb-4">
-        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 flex-1">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
+        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-2 flex-1 w-full">
           {stocksWithData.map((stock) => {
             const isPositive = stock.change >= 0;
             return (
-              <div key={stock.symbol} className={`bg-white dark:bg-slate-700 rounded-lg p-3 border-2 ${isPositive ? 'border-green-200 dark:border-green-500/30' : 'border-red-200 dark:border-red-500/30'}`}>
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 rounded-full border-2 border-white dark:border-slate-800" style={{ backgroundColor: stock.color }} />
-                    <Link href={`/stock/${stock.symbol.toLowerCase()}`} className="text-sm font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-emerald-500">
+              <div key={stock.symbol} className={`bg-gradient-to-br ${isPositive ? 'from-green-50 to-emerald-50 dark:from-green-500/10 dark:to-emerald-500/5 border-green-200 dark:border-green-500/30' : 'from-red-50 to-rose-50 dark:from-red-500/10 dark:to-rose-500/5 border-red-200 dark:border-red-500/30'} rounded-lg p-2.5 border-2 shadow-sm hover:shadow-md transition-all`}>
+                <div className="flex items-center justify-between mb-1.5">
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-3 h-3 rounded-full border-2 border-white dark:border-slate-800 shadow-sm" style={{ backgroundColor: stock.color }} />
+                    <Link href={`/stock/${stock.symbol.toLowerCase()}`} className="text-xs font-semibold text-gray-900 dark:text-white hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
                       {stock.symbol}
                     </Link>
                   </div>
-                  <button onClick={() => onRemoveStock(stock.symbol)} className="text-slate-400 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-500">
+                  <button onClick={() => onRemoveStock(stock.symbol)} className="text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition-colors p-0.5 hover:bg-white/50 dark:hover:bg-slate-700/50 rounded">
                     <X className="h-3 w-3" />
                   </button>
                 </div>
                 <div className="space-y-1">
                   <div className="flex justify-between items-center">
-                    <span className="text-xs text-gray-600 dark:text-slate-400">Price</span>
-                    <PriceDisplay amount={stock.price} className="text-sm font-medium dark:text-white" />
+                    <span className="text-[10px] text-gray-600 dark:text-slate-400">Price</span>
+                    <PriceDisplay amount={stock.price} className="text-xs font-bold dark:text-white" />
                   </div>
-                  <div className={`flex justify-between items-center p-1 rounded ${isPositive ? 'bg-green-100 dark:bg-green-500/10' : 'bg-red-100 dark:bg-red-500/10'}`}>
-                    <span className="text-xs text-gray-700 dark:text-slate-400">Change</span>
-                    <span className={`text-sm font-medium ${isPositive ? 'text-green-700 dark:text-green-400' : 'text-red-700 dark:text-red-400'}`}>
-                      {isPositive ? '+' : ''}{stock.changePercent.toFixed(2)}%
+                  <div className={`flex justify-between items-center px-1.5 py-0.5 rounded-md ${isPositive ? 'bg-green-100 dark:bg-green-500/20' : 'bg-red-100 dark:bg-red-500/20'}`}>
+                    <span className="text-[10px] text-gray-700 dark:text-slate-400">Change</span>
+                    <span className={`text-[10px] font-semibold ${isPositive ? 'text-green-700 dark:text-green-400' : 'text-red-700 dark:text-red-400'}`}>
+                      {isPositive ? '▲' : '▼'} {Math.abs(stock.changePercent).toFixed(2)}%
                     </span>
                   </div>
                 </div>
@@ -126,15 +137,20 @@ export default function ChartTab({
           })}
         </div>
 
-        <button onClick={onFullscreen} className="ml-4 p-3 bg-white dark:bg-slate-800 rounded-lg border-2 border-slate-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-emerald-500/50 transition-all">
-          <Maximize2 className="h-5 w-5 text-gray-600 dark:text-slate-400" />
+        <button 
+          onClick={handleFullscreen} 
+          className="flex items-center gap-1.5 px-3 sm:px-4 py-2 sm:ml-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-sm hover:shadow-md transition-all w-full sm:w-auto justify-center font-medium"
+        >
+          <Maximize2 className="h-4 w-4" />
+          <span className="text-xs sm:text-sm">Detailed Chart</span>
         </button>
       </div>
 
-      <div id="chart-container" className="relative bg-slate-50 dark:bg-slate-900 h-[32rem] rounded-lg p-3">
+      <div id="chart-container" className="relative bg-slate-50 dark:bg-slate-900/50 h-[32rem] rounded-lg p-3 border border-slate-200/50 dark:border-slate-700/50">
         {chartLoading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-white/50 dark:bg-slate-900/50 z-10 rounded-lg">
-            <Activity className="h-6 w-6 text-blue-600 dark:text-emerald-500 animate-spin" />
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/50 dark:bg-slate-900/50 z-10 rounded-lg">
+            <Activity className="h-6 w-6 text-emerald-600 dark:text-emerald-500 animate-spin mb-2" />
+            <p className="text-xs text-slate-600 dark:text-slate-400">Loading chart data...</p>
           </div>
         )}
         <div className="w-full h-full">

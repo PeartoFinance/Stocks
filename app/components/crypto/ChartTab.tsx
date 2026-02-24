@@ -9,8 +9,10 @@ import {
   AreaChart,
   LineChart,
   Mountain,
-  CandlestickChart
+  CandlestickChart,
+  BarChart
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import StockChart from '../StockChart';
 
 interface HistoricalData {
@@ -46,7 +48,12 @@ export default function ChartTab({
   onChartTypeChange,
   chartLoading 
 }: ChartTabProps) {
+  const router = useRouter();
   const [showVolume, setShowVolume] = useState(true);
+
+  const handleFullscreen = () => {
+    router.push(`/cryptochart/${crypto.symbol}/detailedpage`);
+  };
 
   const formatPrice = (price: number | null | undefined) => {
     // Check if price is a valid number
@@ -99,12 +106,12 @@ export default function ChartTab({
     <div className="space-y-6">
       {/* Chart Header */}
       <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-4 lg:p-6 transition-colors duration-300">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
-          <div>
-            <h2 className="text-xl lg:text-2xl font-medium text-gray-900 dark:text-white mb-2 transition-colors duration-300">
+        <div className="flex flex-col gap-4 mb-6">
+          <div className="flex-1 min-w-0">
+            <h2 className="text-xl lg:text-2xl font-medium text-gray-900 dark:text-white mb-3 transition-colors duration-300">
               {crypto.name} ({crypto.symbol}) Price Chart
             </h2>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center gap-2">
               <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium ${
                 isPositive ? "text-emerald-700 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-900/20" : "text-red-700 bg-red-50 dark:text-red-400 dark:bg-red-900/20"
               }`}>
@@ -124,7 +131,7 @@ export default function ChartTab({
 
         {/* Chart Controls */}
         <div className="mb-6 p-4 bg-slate-50 dark:bg-slate-700 rounded-xl border border-gray-200 dark:border-gray-600 transition-colors duration-300">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+          <div className="space-y-4 mb-4">
             {/* Period Selector */}
             <div>
               <label className="text-sm font-medium text-gray-700 dark:text-slate-300 mb-2 block transition-colors duration-300">Time Period</label>
@@ -148,12 +155,12 @@ export default function ChartTab({
             {/* Chart Type Selector */}
             <div>
               <label className="text-sm font-medium text-gray-700 dark:text-slate-300 mb-2 block transition-colors duration-300">Chart Type</label>
-              <div className="flex flex-wrap gap-2">
+              <div className="grid grid-cols-2 lg:flex lg:flex-wrap gap-2">
                 {chartTypes.map((type) => (
                   <button
                     key={type.key}
                     onClick={() => onChartTypeChange(type.key as any)}
-                    className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all ${
+                    className={`flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all ${
                       chartType === type.key 
                         ? "bg-blue-600 text-white shadow-sm" 
                         : "bg-white dark:bg-gray-600 text-gray-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-500 border border-gray-200 dark:border-gray-500"
@@ -182,9 +189,9 @@ export default function ChartTab({
         </div>
 
         {/* Main Chart Container */}
-        <div className="h-[500px] lg:h-[600px] relative bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 transition-colors duration-300">
+        <div className="h-[500px] lg:h-[600px] relative bg-slate-50 dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 transition-colors duration-300">
           {chartLoading ? (
-            <div className="absolute inset-0 flex items-center justify-center bg-white dark:bg-slate-800/50 z-10 transition-colors duration-300">
+            <div className="absolute inset-0 flex items-center justify-center bg-slate-50/80 dark:bg-slate-900/80 backdrop-blur-sm z-10 transition-colors duration-300">
               <div className="text-center">
                 <Activity className="h-12 w-12 text-emerald-600 animate-spin mx-auto mb-4 transition-colors duration-300" />
                 <p className="text-gray-600 dark:text-slate-400 font-medium transition-colors duration-300">Loading chart data...</p>
@@ -193,11 +200,11 @@ export default function ChartTab({
           ) : null}
           
           {historicalData.length > 0 ? (
-            <div className="h-full p-4">
+            <div className="h-full p-2">
               <StockChart 
                 data={historicalData} 
                 isPositive={periodChange.change >= 0} 
-                height={450} 
+                height={chartType === 'candlestick' ? 520 : 500} 
                 chartType={chartType} 
               />
             </div>
@@ -214,7 +221,7 @@ export default function ChartTab({
       </div>
 
       {/* Chart Statistics */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { 
             label: 'Period High', 
@@ -255,7 +262,7 @@ export default function ChartTab({
       {showVolume && historicalData.length > 0 && (
         <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-4 lg:p-6 transition-colors duration-300">
           <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4 transition-colors duration-300">Volume Analysis</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
             {[
               { 
                 label: 'Total Volume', 
