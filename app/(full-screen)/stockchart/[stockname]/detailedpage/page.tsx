@@ -20,7 +20,7 @@ interface Indicator {
 export default function DetailedTradingPage() {
   const params = useParams();
   const router = useRouter();
-  const stockname = (params.stockname as string)?.toUpperCase();
+  const stockname = decodeURIComponent((params.stockname as string) || '').toUpperCase();
   
   const [stockData, setStockData] = useState<any>(null);
   const [chartData, setChartData] = useState<any[]>([]);
