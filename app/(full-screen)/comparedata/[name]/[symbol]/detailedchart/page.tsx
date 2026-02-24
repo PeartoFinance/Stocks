@@ -12,7 +12,7 @@ export default function CompareDetailedPage() {
   const params = useParams();
   const router = useRouter();
   const name = params.name as string;
-  const symbolParam = (params.symbol as string)?.toUpperCase();
+  const symbolParam = decodeURIComponent((params.symbol as string) || '').toUpperCase();
   const symbols = symbolParam?.split('.').slice(0, 5) || [];
   const isCrypto = name === 'crypto';
   
