@@ -2,6 +2,9 @@
 
 import { useState } from 'react';
 import { TrendingUp, X, Settings, Plus } from 'lucide-react';
+import { useUsageLimit } from '@/app/context/SubscriptionContext';
+import { UpgradeModal } from '@/app/components/subscription/FeatureGating';
+import { LIMITS } from '@/app/utils/featureKeys';
 
 interface Indicator {
   id: string;
@@ -31,6 +34,8 @@ const AVAILABLE_INDICATORS = [
 export default function IndicatorsPanel({ onAddIndicator, onRemoveIndicator, activeIndicators }: IndicatorsPanelProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const [showUpgrade, setShowUpgrade] = useState(false);
+  const { trackUsage } = useUsageLimit(LIMITS.ADVANCED_CHARTS);
 
   const categories = ['All', 'Trend', 'Momentum', 'Volatility', 'Volume'];
 
@@ -38,7 +43,13 @@ export default function IndicatorsPanel({ onAddIndicator, onRemoveIndicator, act
     ? AVAILABLE_INDICATORS
     : AVAILABLE_INDICATORS.filter(ind => ind.category === selectedCategory);
 
-  const handleAddIndicator = (indicator: typeof AVAILABLE_INDICATORS[0]) => {
+  const handleAddIndicator = async (indicator: typeof AVAILABLE_INDICATORS[0]) => {
+    const result = await trackUsage();
+    if (!result.allowed) {
+      setShowUpgrade(true);
+      return;
+    }
+
     const newIndicator: Indicator = {
       id: `${indicator.id}-${Date.now()}`,
       name: indicator.name,
@@ -156,6 +167,12 @@ export default function IndicatorsPanel({ onAddIndicator, onRemoveIndicator, act
           </div>
         </div>
       )}
+
+      <UpgradeModal
+        isOpen={showUpgrade}
+        onClose={() => setShowUpgrade(false)}
+        featureKey={LIMITS.ADVANCED_CHARTS}
+      />
     </>
   );
 }

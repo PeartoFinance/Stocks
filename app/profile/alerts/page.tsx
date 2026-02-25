@@ -31,6 +31,9 @@ import {
 } from 'lucide-react';
 import { marketService } from '../../utils/marketService';
 import toast from 'react-hot-toast';
+import { useSubscription } from '@/app/context/SubscriptionContext';
+import { UpgradeModal } from '@/app/components/subscription/FeatureGating';
+import { FEATURES, LIMITS } from '@/app/utils/featureKeys';
 
 export default function AlertsPage() {
     const { isAuthenticated, isLoading: authLoading } = useAuth();
@@ -46,6 +49,8 @@ export default function AlertsPage() {
     const [searching, setSearching] = useState(false);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [submitting, setSubmitting] = useState(false);
+    const [showUpgrade, setShowUpgrade] = useState(false);
+    const { trackUsage } = useSubscription();
     
     // Form state
     const [selectedSymbol, setSelectedSymbol] = useState<{ symbol: string; name: string } | null>(null);
@@ -133,6 +138,12 @@ export default function AlertsPage() {
             return;
         }
 
+        const result = await trackUsage(LIMITS.ALERTS);
+        if (!result.allowed) {
+            setShowUpgrade(true);
+            return;
+        }
+
         setSubmitting(true);
         try {
             await createAlert({
@@ -212,7 +223,7 @@ export default function AlertsPage() {
     return (
         <div className="min-h-screen bg-slate-50 dark:bg-slate-900/95 pb-20">
             {/* Header */}
-            <div className="bg-gradient-to-br from-emerald-500 to-green-600 dark:from-slate-900/95 dark:to-slate-900/95 pb-8 pt-16">
+            <div className="bg-gradient-to-br from-emerald-500 to-green-600 dark:from-slate-900/95 dark:to-slate-900/95 pb-8">
                 <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6 border-b border-emerald-600/20 dark:border-slate-800">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
@@ -566,6 +577,12 @@ export default function AlertsPage() {
                     </div>
                 </div>
             )}
+
+            <UpgradeModal
+                isOpen={showUpgrade}
+                onClose={() => setShowUpgrade(false)}
+                featureKey={LIMITS.ALERTS}
+            />
         </div>
     );
 }

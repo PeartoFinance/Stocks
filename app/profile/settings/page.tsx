@@ -365,7 +365,7 @@ export default function SettingsPage() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-900/95 py-8">
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-900/95">
             <div className="container mx-auto px-4 max-w-4xl">
                 {/* Header */}
                 <div className="flex items-center gap-4 mb-8">

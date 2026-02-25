@@ -14,6 +14,8 @@ import MultiCriteriaFilters from '../components/screener/MultiCriteriaFilters';
 import TechnicalFilters from '../components/screener/TechnicalFilters';
 import CompareView from '../components/screener/CompareView';
 import { FilterValues, TechnicalFilterValues } from '../components/screener/types';
+import { FeatureLock } from '@/app/components/subscription/FeatureGating';
+import { FEATURES } from '@/app/utils/featureKeys';
 
 export default function ScreenerPage() {
   const { formatPrice } = useCurrency();
@@ -201,7 +203,9 @@ export default function ScreenerPage() {
           )}
           {activeTab === 'technical' && (
             <motion.div key="technical" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="mb-6">
-              <TechnicalFilters filters={technicalFilters} onChange={setTechnicalFilters} />
+              <FeatureLock featureKey={FEATURES.ADVANCED_CHARTS} title="Technical Filters">
+                <TechnicalFilters filters={technicalFilters} onChange={setTechnicalFilters} />
+              </FeatureLock>
             </motion.div>
           )}
         </AnimatePresence>

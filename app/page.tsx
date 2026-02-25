@@ -9,7 +9,6 @@ import MarketMovers from './components/mainpage/MarketMovers';
 import WorldIndices from './components/mainpage/WorldIndices';
 import SectorsSection from './components/mainpage/SectorsSection';
 import ETFsMutualFunds from './components/mainpage/ETFsMutualFunds';
-import PrivateCompanies from './components/mainpage/PrivateCompanies';
 import MarketSummary from './components/mainpage/MarketSummary';
 import NewsCarousel from './components/mainpage/NewsCarousel';
 import { useCurrency } from './context/CurrencyContext';
@@ -345,11 +344,11 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Market Summary with Donut Chart */}
+            {/* Market Summary with ETFs & Mutual Funds */}
             <div className="mb-8 sm:mb-10 lg:mb-12">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
                 <MarketSummary />
-                <PrivateCompanies />
+                <ETFsMutualFunds />
               </div>
             </div>
 

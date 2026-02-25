@@ -98,7 +98,7 @@ export default function ChartTab({ comparedCryptos, formatLargeNumber, removeFro
   return (
     <div className="space-y-3">
       {/* Combined Period and Chart Type Selector */}
-      <div className="bg-white dark:bg-slate-800 rounded-lg p-2 sm:p-3 border border-slate-200 dark:border-slate-700">
+      <div className="bg-white dark:bg-slate-900/95 rounded-lg p-2 sm:p-3 border border-slate-200 dark:border-slate-700">
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
           {/* Period Selector */}
           <div className="flex items-center gap-2 flex-1">
@@ -149,7 +149,7 @@ export default function ChartTab({ comparedCryptos, formatLargeNumber, removeFro
       </div>
 
       {/* Charts */}
-      <div className="bg-white dark:bg-slate-800 rounded-lg p-2 sm:p-3 border border-slate-200 dark:border-slate-700">
+      <div className="bg-white dark:bg-slate-900/95 rounded-lg p-2 sm:p-3 border border-slate-200 dark:border-slate-700">
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white">Price Comparison</h3>
           <button 
@@ -186,12 +186,12 @@ export default function ChartTab({ comparedCryptos, formatLargeNumber, removeFro
         </div>
 
         {loading ? (
-          <div className="flex flex-col items-center justify-center h-48 sm:h-64 bg-slate-50 dark:bg-slate-900/50 rounded-lg">
+          <div className="flex flex-col items-center justify-center h-48 sm:h-64 bg-slate-50 dark:bg-slate-900/95 rounded-lg">
             <Activity className="h-6 w-6 sm:h-8 sm:w-8 text-emerald-600 dark:text-emerald-500 animate-spin mb-2" />
             <p className="text-xs text-slate-600 dark:text-slate-400">Loading chart data...</p>
           </div>
         ) : chartData.length > 0 && chartData.every(data => data.length > 0) ? (
-          <div className="relative bg-slate-50 dark:bg-slate-900/50 rounded-lg p-2 sm:p-3 border border-slate-200/50 dark:border-slate-700/50">
+          <div className="relative bg-slate-50 dark:bg-slate-900/95 rounded-lg p-2 sm:p-3 border border-slate-200/50 dark:border-slate-700/50">
             <MultiStockChart
               stocks={comparedCryptos.map((crypto, index) => ({
                 symbol: crypto.symbol,
@@ -208,7 +208,7 @@ export default function ChartTab({ comparedCryptos, formatLargeNumber, removeFro
             />
           </div>
         ) : (
-          <div className="text-center py-8 sm:py-12 bg-slate-50 dark:bg-slate-900/50 rounded-lg">
+          <div className="text-center py-8 sm:py-12 bg-slate-50 dark:bg-slate-900/95 rounded-lg">
             <Activity className="h-8 w-8 sm:h-10 sm:w-10 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
             <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-slate-400">No chart data available</p>
           </div>

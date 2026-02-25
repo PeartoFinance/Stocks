@@ -54,7 +54,7 @@ export default function ChartTab({
 
   if (stocksWithData.length === 0) {
     return (
-      <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700">
+      <div className="bg-white dark:bg-slate-900/95 rounded-lg p-6 border border-slate-200 dark:border-slate-700">
         <div className="text-center py-8">
           <Activity className="h-12 w-12 text-blue-600 dark:text-emerald-500 animate-spin mx-auto mb-3" />
           <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Loading Chart Data</h3>
@@ -65,7 +65,7 @@ export default function ChartTab({
   }
 
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-lg p-3 md:p-4 border border-slate-200 dark:border-slate-700">
+    <div className="bg-white dark:bg-slate-900/95 rounded-lg p-3 md:p-4 border border-slate-200 dark:border-slate-700">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-2">
         <h3 className="text-sm md:text-base font-semibold text-gray-900 dark:text-white">Price Comparison</h3>
         <div className="flex flex-wrap items-center gap-2">
@@ -76,7 +76,7 @@ export default function ChartTab({
                 onClick={() => onChartTypeChange(type.key as 'line' | 'area' | 'candle')}
                 className={`px-2 md:px-3 py-1 text-xs font-medium rounded-md transition-all ${
                   chartType === type.key
-                    ? 'bg-white dark:bg-slate-800 text-gray-900 dark:text-white shadow-sm'
+                    ? 'bg-white dark:bg-slate-900/95 text-gray-900 dark:text-white shadow-sm'
                     : 'text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-[#fafafa]'
                 }`}
               >
@@ -92,7 +92,7 @@ export default function ChartTab({
                 onClick={() => onPeriodChange(period)}
                 className={`px-2 md:px-3 py-1 text-xs font-medium rounded-md transition-all ${
                   chartPeriod === period
-                    ? 'bg-white dark:bg-slate-800 text-gray-900 dark:text-white shadow-sm'
+                    ? 'bg-white dark:bg-slate-900/95 text-gray-900 dark:text-white shadow-sm'
                     : 'text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-[#fafafa]'
                 }`}
               >
@@ -146,7 +146,7 @@ export default function ChartTab({
         </button>
       </div>
 
-      <div id="chart-container" className="relative bg-slate-50 dark:bg-slate-900/50 h-[32rem] rounded-lg p-3 border border-slate-200/50 dark:border-slate-700/50">
+      <div id="chart-container" className="relative bg-slate-50 dark:bg-slate-900/95 h-[32rem] rounded-lg p-3 border border-slate-200/50 dark:border-slate-700/50">
         {chartLoading && (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/50 dark:bg-slate-900/50 z-10 rounded-lg">
             <Activity className="h-6 w-6 text-emerald-600 dark:text-emerald-500 animate-spin mb-2" />

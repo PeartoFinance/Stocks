@@ -7,6 +7,9 @@ import { stockAPI } from '@/app/utils/api';
 import TradingChart from '@/app/components/detailedChart/TradingChart';
 import ChartControls from '@/app/components/detailedChart/ChartControls';
 import IndicatorsPanel from '@/app/components/detailedChart/IndicatorsPanel';
+import { useSubscription } from '@/app/context/SubscriptionContext';
+import { UpgradeModal } from '@/app/components/subscription/FeatureGating';
+import { FEATURES } from '@/app/utils/featureKeys';
 
 
 interface Indicator {
@@ -29,6 +32,8 @@ export default function DetailedTradingPage() {
   const [loading, setLoading] = useState(true);
   const [chartLoading, setChartLoading] = useState(false);
   const [activeIndicators, setActiveIndicators] = useState<Indicator[]>([]);
+  const [showUpgrade, setShowUpgrade] = useState(false);
+  const { trackUsage } = useSubscription();
 
   useEffect(() => {
     if (!stockname) return;
@@ -54,6 +59,11 @@ export default function DetailedTradingPage() {
     if (!stockname) return;
     
     const fetchChartData = async () => {
+      const result = await trackUsage('advanced_charts_limit');
+      if (!result.allowed) {
+        setShowUpgrade(true);
+        return;
+      }
       try {
         setChartLoading(true);
         const periodMap: Record<string, string> = {
@@ -186,6 +196,7 @@ export default function DetailedTradingPage() {
           </div>
         </div>
       </div>
+      <UpgradeModal isOpen={showUpgrade} onClose={() => setShowUpgrade(false)} featureKey="advanced_charts" />
     </div>
   );
 }

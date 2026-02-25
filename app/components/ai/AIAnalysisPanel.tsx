@@ -1,15 +1,12 @@
 'use client';
 
-/**
- * AI Analysis Panel for Stock Project
- * Self-contained component with typing animation and markdown rendering
- * Adapted from main project for Next.js App Router
- */
-
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Sparkles, RefreshCw, ChevronDown, ChevronUp, Loader2, MessageSquare } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { UsageLimitBanner, UpgradeModal } from '@/app/components/subscription/FeatureGating';
+import { useUsageLimit } from '@/app/context/SubscriptionContext';
+import { LIMITS } from '@/app/utils/featureKeys';
 
 interface AIAnalysisPanelProps {
     title?: string;
@@ -187,7 +184,7 @@ export default function AIAnalysisPanel({
     title = 'AI Analysis',
     pageType,
     pageData,
-    autoAnalyze = true,
+    autoAnalyze = false,
     compact = false,
     quickPrompts = [],
     className = '',
@@ -199,7 +196,9 @@ export default function AIAnalysisPanel({
     const [isExpanded, setIsExpanded] = useState(true);
     const [isTyping, setIsTyping] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [showUpgrade, setShowUpgrade] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
+    const { canUse, trackUsage } = useUsageLimit(LIMITS.AI_QUERIES);
 
     // Typing effect
     useEffect(() => {
@@ -239,6 +238,12 @@ export default function AIAnalysisPanel({
 
     // Fetch AI analysis - uses same API base as other Stock API calls
     const fetchAnalysis = useCallback(async (prompt?: string) => {
+        const result = await trackUsage();
+        if (!result.allowed) {
+            setShowUpgrade(true);
+            return;
+        }
+
         setIsLoading(true);
         setError(null);
         setAnalysis('');
@@ -297,7 +302,7 @@ Format your response with clean, readable markdown:
         } finally {
             setIsLoading(false);
         }
-    }, [pageType, pageData]);
+    }, [pageType, pageData, trackUsage]);
 
     // Auto-analyze when autoAnalyze becomes true (data is ready)
     const hasAutoAnalyzedRef = useRef(false);
@@ -322,6 +327,7 @@ Format your response with clean, readable markdown:
 
     return (
         <div className={`bg-gradient-to-br from-slate-50 to-purple-50 dark:from-slate-900 dark:to-purple-950/20 rounded-xl border border-purple-200/50 dark:border-purple-800/30 shadow-lg ${className}`}>
+            <UsageLimitBanner featureKey={LIMITS.AI_QUERIES} featureLabel="AI queries" className="mb-3" />
             {/* Header */}
             <div className={`${compact ? 'p-3' : 'p-4'} border-b border-purple-100 dark:border-purple-800/50`}>
                 <div className="flex items-center justify-between">
@@ -509,6 +515,11 @@ Format your response with clean, readable markdown:
                     )}
                 </div>
             )}
+            <UpgradeModal
+                isOpen={showUpgrade}
+                onClose={() => setShowUpgrade(false)}
+                featureKey={LIMITS.AI_QUERIES}
+            />
         </div>
     );
 }

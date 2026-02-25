@@ -13,8 +13,8 @@ export default function OverviewTab({ comparedStocks, formatLargeNumber }: Overv
     return (
       <div className="text-center py-12">
         <Activity className="h-12 w-12 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
-        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No stocks selected</h3>
-        <p className="text-sm text-gray-600 dark:text-slate-400">Add stocks to see the overview</p>
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">No stocks selected</h3>
+        <p className="text-sm text-slate-500 dark:text-slate-400">Add stocks to see the overview</p>
       </div>
     );
   }
@@ -38,8 +38,8 @@ export default function OverviewTab({ comparedStocks, formatLargeNumber }: Overv
   return (
     <div className="space-y-6">
       {/* Performance Summary */}
-      <div className="bg-white dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-slate-700">
-        <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-4">Performance Summary</h3>
+      <div className="bg-white dark:bg-slate-900/95 rounded-lg p-4 border border-slate-200 dark:border-slate-700">
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Performance Summary</h3>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           <div className="text-center p-3 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-500/10 dark:to-green-500/5 rounded-lg border border-green-200 dark:border-green-500/20">
             <div className="flex items-center justify-center gap-1 mb-2">
@@ -84,39 +84,28 @@ export default function OverviewTab({ comparedStocks, formatLargeNumber }: Overv
         {comparedStocks.map((stock) => {
           const isPositive = stock.changePercent >= 0;
           return (
-            <div key={stock.symbol} className={`bg-white dark:bg-slate-800 rounded-lg p-4 border-2 ${isPositive ? 'border-green-200 dark:border-green-500/30' : 'border-red-200 dark:border-red-500/30'}`}>
-              <div className="flex items-center justify-between mb-3">
+            <div key={stock.symbol} className="bg-white dark:bg-slate-900/95 rounded-xl border-2 p-5" style={{ borderColor: stock.color }}>
+              <div className="flex items-start justify-between mb-3">
                 <div>
-                  <h4 className="text-lg font-medium text-gray-900 dark:text-white">{stock.symbol}</h4>
-                  <p className="text-xs text-gray-600 dark:text-slate-400 truncate">{stock.name}</p>
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white">{stock.symbol}</h3>
+                  <p className="text-sm text-slate-500 truncate max-w-[180px]">{stock.name}</p>
                 </div>
-                <div className="w-3 h-3 rounded-full" style={{ backgroundColor: stock.color }} />
+                <div className="w-4 h-4 rounded-full" style={{ backgroundColor: stock.color }} />
               </div>
-              <div className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600 dark:text-slate-400">Price</span>
-                  <span className="text-lg font-medium text-gray-900 dark:text-white">${stock.price.toFixed(2)}</span>
-                </div>
-                <div className={`flex justify-between items-center p-2 rounded ${isPositive ? 'bg-green-50 dark:bg-green-500/10' : 'bg-red-50 dark:bg-red-500/10'}`}>
-                  <span className="text-sm text-gray-700 dark:text-slate-400">Change</span>
-                  <span className={`text-base font-medium ${isPositive ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
-                    {isPositive ? '+' : ''}{stock.changePercent.toFixed(2)}%
-                  </span>
-                </div>
-                <div className="pt-2 border-t border-slate-200 dark:border-slate-700 space-y-1">
-                  <div className="flex justify-between text-xs">
-                    <span className="text-gray-600 dark:text-slate-400">Market Cap</span>
-                    <span className="font-medium text-gray-900 dark:text-white">{formatLargeNumber(stock.marketCap)}</span>
-                  </div>
-                  <div className="flex justify-between text-xs">
-                    <span className="text-gray-600 dark:text-slate-400">P/E Ratio</span>
-                    <span className="font-medium text-gray-900 dark:text-white">{stock.peRatio?.toFixed(2) || '-'}</span>
-                  </div>
-                  <div className="flex justify-between text-xs">
-                    <span className="text-gray-600 dark:text-slate-400">Sector</span>
-                    <span className="font-medium text-gray-900 dark:text-white truncate max-w-[120px]">{stock.sector || '-'}</span>
-                  </div>
-                </div>
+
+              <div className="flex items-baseline gap-2">
+                <span className="text-2xl font-bold text-slate-900 dark:text-white">${stock.price.toFixed(2)}</span>
+                <span className={`flex items-center text-sm font-medium ${isPositive ? 'text-teal-600' : 'text-red-500'}`}>
+                  {isPositive ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
+                  {isPositive ? '+' : ''}{stock.changePercent.toFixed(2)}%
+                </span>
+              </div>
+
+              <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 grid grid-cols-2 gap-2 text-sm">
+                <div><span className="text-slate-500">Mkt Cap</span> <span className="font-medium text-slate-900 dark:text-white ml-1">{formatLargeNumber(stock.marketCap)}</span></div>
+                <div><span className="text-slate-500">P/E</span> <span className="font-medium text-slate-900 dark:text-white ml-1">{stock.peRatio?.toFixed(2) || '-'}</span></div>
+                <div><span className="text-slate-500">EPS</span> <span className="font-medium text-slate-900 dark:text-white ml-1">${stock.eps?.toFixed(2) || '-'}</span></div>
+                <div><span className="text-slate-500">Beta</span> <span className="font-medium text-slate-900 dark:text-white ml-1">{stock.beta?.toFixed(2) || '-'}</span></div>
               </div>
             </div>
           );

@@ -235,7 +235,7 @@ export default function PortfolioPage() {
 
     return (
         <div className="min-h-screen bg-slate-50 dark:bg-slate-900/95">
-            <div className="bg-gradient-to-br from-emerald-500 to-green-600 dark:from-slate-900/95 dark:to-slate-900/95 pb-8 pt-16">
+            <div className="bg-gradient-to-br from-emerald-500 to-green-600 dark:from-slate-900/95 dark:to-slate-900/95 pb-8">
                 <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6 border-b border-emerald-600/20 dark:border-slate-800">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <div className="flex items-center gap-3">
@@ -269,8 +269,8 @@ export default function PortfolioPage() {
                     <div className="mb-6 sm:mb-8">
                         <div className="flex flex-col gap-4">
                             <div>
-                                <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-1">Portfolio View</h2>
-                                <p className="text-sm text-slate-600 dark:text-slate-400">
+                                <h2 className="text-xl sm:text-2xl font-semibold text-slate-900 dark:text-white mb-2">Portfolio View</h2>
+                                <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400">
                                     {currentPortfolioId === 'all' 
                                         ? 'Showing all portfolios' 
                                         : `Showing: ${portfolios.find(p => p.id === currentPortfolioId)?.name || 'Unknown'}`
@@ -281,7 +281,7 @@ export default function PortfolioPage() {
                                 <select
                                     value={currentPortfolioId}
                                     onChange={(e) => setCurrentPortfolioId(e.target.value)}
-                                    className="w-full sm:w-auto px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none bg-white dark:bg-slate-700 text-slate-900 dark:text-white min-w-[200px]"
+                                    className="w-full sm:w-auto px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none bg-white dark:bg-slate-700 text-slate-900 dark:text-white sm:min-w-[250px] text-base"
                                 >
                                     <option value="all">All Portfolios</option>
                                     {portfolios.map((portfolio) => (
@@ -298,52 +298,52 @@ export default function PortfolioPage() {
 
                 {/* Summary */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
-                    <div className="bg-white dark:bg-slate-800 rounded-xl sm:rounded-2xl p-3 sm:p-6 shadow-sm border border-slate-100 dark:border-slate-700">
-                        <div className="flex items-center gap-2 sm:gap-3 mb-2">
-                            <div className="p-1.5 sm:p-2 rounded-lg bg-blue-100 dark:bg-blue-500/20">
-                                <DollarSign className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600 dark:text-blue-400" />
+                    <div className="bg-white dark:bg-slate-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-100 dark:border-slate-700">
+                        <div className="flex items-center gap-2 mb-3">
+                            <div className="p-2 sm:p-2 rounded-lg bg-blue-100 dark:bg-blue-500/20">
+                                <DollarSign className="h-5 w-5 sm:h-5 sm:w-5 text-blue-600 dark:text-blue-400" />
                             </div>
-                            <span className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Total Value</span>
+                            <span className="text-sm sm:text-sm text-slate-500 dark:text-slate-400 font-medium">Total Value</span>
                         </div>
-                        <div className="text-base sm:text-2xl font-bold text-slate-900 dark:text-white">
+                        <div className="text-xl sm:text-3xl font-bold text-slate-900 dark:text-white">
                             ${totalValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </div>
                     </div>
-                    <div className="bg-white dark:bg-slate-800 rounded-xl sm:rounded-2xl p-3 sm:p-6 shadow-sm border border-slate-100 dark:border-slate-700">
-                        <div className="flex items-center gap-2 sm:gap-3 mb-2">
-                            <div className="p-1.5 sm:p-2 rounded-lg bg-emerald-100 dark:bg-emerald-500/20">
-                                <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-600 dark:text-emerald-400" />
+                    <div className="bg-white dark:bg-slate-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-100 dark:border-slate-700">
+                        <div className="flex items-center gap-2 mb-3">
+                            <div className="p-2 sm:p-2 rounded-lg bg-emerald-100 dark:bg-emerald-500/20">
+                                <TrendingUp className="h-5 w-5 sm:h-5 sm:w-5 text-emerald-600 dark:text-emerald-400" />
                             </div>
-                            <span className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Total Gain</span>
+                            <span className="text-sm sm:text-sm text-slate-500 dark:text-slate-400 font-medium">Total Gain</span>
                         </div>
                         <div
-                            className={`text-base sm:text-2xl font-bold flex flex-wrap items-baseline gap-1 ${
+                            className={`text-xl sm:text-3xl font-bold flex flex-col gap-1 ${
                                 totalGain >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'
                             }`}
                         >
-                            {totalGain >= 0 ? '+' : ''}${totalGain.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                            <span className="text-xs sm:text-sm font-medium">
+                            <span>{totalGain >= 0 ? '+' : ''}${totalGain.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                            <span className="text-sm sm:text-base font-medium">
                                 ({totalGainPct >= 0 ? '+' : ''}{totalGainPct.toFixed(2)}%)
                             </span>
                         </div>
                     </div>
-                    <div className="bg-white dark:bg-slate-800 rounded-xl sm:rounded-2xl p-3 sm:p-6 shadow-sm border border-slate-100 dark:border-slate-700">
-                        <div className="flex items-center gap-2 sm:gap-3 mb-2">
-                            <div className="p-1.5 sm:p-2 rounded-lg bg-purple-100 dark:bg-purple-500/20">
-                                <PieChart className="h-4 w-4 sm:h-5 sm:w-5 text-purple-600 dark:text-purple-400" />
+                    <div className="bg-white dark:bg-slate-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-100 dark:border-slate-700">
+                        <div className="flex items-center gap-2 mb-3">
+                            <div className="p-2 sm:p-2 rounded-lg bg-purple-100 dark:bg-purple-500/20">
+                                <PieChart className="h-5 w-5 sm:h-5 sm:w-5 text-purple-600 dark:text-purple-400" />
                             </div>
-                            <span className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Portfolios</span>
+                            <span className="text-sm sm:text-sm text-slate-500 dark:text-slate-400 font-medium">Portfolios</span>
                         </div>
-                        <div className="text-base sm:text-2xl font-bold text-slate-900 dark:text-white">{portfolios.length}</div>
+                        <div className="text-xl sm:text-3xl font-bold text-slate-900 dark:text-white">{portfolios.length}</div>
                     </div>
-                    <div className="bg-white dark:bg-slate-800 rounded-xl sm:rounded-2xl p-3 sm:p-6 shadow-sm border border-slate-100 dark:border-slate-700">
-                        <div className="flex items-center gap-2 sm:gap-3 mb-2">
-                            <div className="p-1.5 sm:p-2 rounded-lg bg-amber-100 dark:bg-amber-500/20">
-                                <BarChart3 className="h-4 w-4 sm:h-5 sm:w-5 text-amber-600 dark:text-amber-400" />
+                    <div className="bg-white dark:bg-slate-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-100 dark:border-slate-700">
+                        <div className="flex items-center gap-2 mb-3">
+                            <div className="p-2 sm:p-2 rounded-lg bg-amber-100 dark:bg-amber-500/20">
+                                <BarChart3 className="h-5 w-5 sm:h-5 sm:w-5 text-amber-600 dark:text-amber-400" />
                             </div>
-                            <span className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Holdings</span>
+                            <span className="text-sm sm:text-sm text-slate-500 dark:text-slate-400 font-medium">Holdings</span>
                         </div>
-                        <div className="text-base sm:text-2xl font-bold text-slate-900 dark:text-white">{filteredHoldings.length}</div>
+                        <div className="text-xl sm:text-3xl font-bold text-slate-900 dark:text-white">{filteredHoldings.length}</div>
                     </div>
                 </div>
 
@@ -521,9 +521,26 @@ export default function PortfolioPage() {
                 {/* Holdings */}
                 <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
                     <div className="px-4 sm:px-6 py-4 border-b border-slate-100 dark:border-slate-700">
-                        <div className="flex items-center justify-between gap-4">
-                            <h2 className="font-semibold text-slate-900 dark:text-white text-lg">Holdings</h2>
+                        <div className="flex items-center justify-between gap-2">
+                            <h2 className="font-semibold text-slate-900 dark:text-white text-xl sm:text-2xl">Holdings</h2>
                             <div className="flex items-center gap-2">
+                                <button
+                                    onClick={() => {
+                                        setSelectedPortfolio(portfolios[0] || null);
+                                        setShowAddHolding(true);
+                                        setSelectedSymbol(null);
+                                        setShares('');
+                                        setAvgCost('');
+                                        setSearchQuery('');
+                                        setSearchResults([]);
+                                    }}
+                                    disabled={portfolios.length === 0}
+                                    className="px-3 sm:px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-medium transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm whitespace-nowrap"
+                                >
+                                    <Plus className="h-4 w-4" />
+                                    <span className="hidden sm:inline">Add Holding</span>
+                                    <span className="sm:hidden">Add</span>
+                                </button>
                                 <TableExportButton
                                     data={filteredHoldings}
                                     columns={[
@@ -537,25 +554,8 @@ export default function PortfolioPage() {
                                     ]}
                                     filename={`portfolio-holdings-${currentPortfolioId === 'all' ? 'all' : currentPortfolioId}`}
                                     title={`${currentPortfolioId === 'all' ? 'All Portfolios' : portfolios.find(p => p.id === currentPortfolioId)?.name || 'Portfolio'} Holdings`}
-                                    variant="compact"
+                                    variant="icon"
                                 />
-                                <button
-                                    onClick={() => {
-                                        setSelectedPortfolio(portfolios[0] || null);
-                                        setShowAddHolding(true);
-                                        setSelectedSymbol(null);
-                                        setShares('');
-                                        setAvgCost('');
-                                        setSearchQuery('');
-                                        setSearchResults([]);
-                                    }}
-                                    disabled={portfolios.length === 0}
-                                    className="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-medium transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                                >
-                                    <Plus className="h-4 w-4" />
-                                    <span className="hidden sm:inline">Add Holding</span>
-                                    <span className="sm:hidden">Add</span>
-                                </button>
                             </div>
                         </div>
                     </div>
