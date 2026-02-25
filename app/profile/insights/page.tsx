@@ -77,7 +77,7 @@ export default function InsightsPage() {
     if (!insights) {
         return (
             <div className="min-h-screen bg-slate-50 dark:bg-slate-900/95">
-                <div className="bg-gradient-to-br from-emerald-500 to-green-600 dark:from-slate-900/95 dark:to-slate-900/95 pb-8 pt-16">
+                <div className="bg-gradient-to-br from-emerald-500 to-green-600 dark:from-slate-900/95 dark:to-slate-900/95 pb-8">
                     <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6 border-b border-emerald-600/20 dark:border-slate-800">
                         <div className="flex items-center gap-4">
                             <Link href="/profile" className="p-2 rounded-lg bg-white/20 hover:bg-white/30 dark:bg-slate-800 dark:hover:bg-slate-700 text-white transition">
@@ -104,7 +104,7 @@ export default function InsightsPage() {
     return (
         <div className="min-h-screen bg-slate-50 dark:bg-slate-900/95">
             {/* Header */}
-            <div className="bg-gradient-to-br from-emerald-500 to-green-600 dark:from-slate-900/95 dark:to-slate-900/95 pb-8 pt-16">
+            <div className="bg-gradient-to-br from-emerald-500 to-green-600 dark:from-slate-900/95 dark:to-slate-900/95 pb-8">
                 <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6 border-b border-emerald-600/20 dark:border-slate-800">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">

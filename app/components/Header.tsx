@@ -37,6 +37,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import TickerTape from './TickerTape';
 import { useTheme } from '@/app/context/ThemeContext';
+import { SignInToContinue } from './common/SignInToContinue';
 
 interface SearchResult {
   symbol: string;
@@ -62,6 +63,7 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
   const [pillarsOpen, setPillarsOpen] = useState(false);
   const [toolsOpen, setToolsOpen] = useState(false);
   const [resourcesOpen, setResourcesOpen] = useState(false);
+  const [showSignIn, setShowSignIn] = useState(false);
 
   const searchRef = useRef<HTMLDivElement>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
@@ -160,8 +162,8 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
   const [toolsItems, setToolsItems] = useState<any[]>([
     { label: 'Stock Screener', href: '/screener' },
     { label: 'Technical Chart', href: '/chart' },
-    { label: 'Portfolio Tracker', href: '/profile/portfolio' },
-    { label: 'Watchlist', href: '/profile/watchlist' },
+    { label: 'Portfolio Tracker', href: '/profile/portfolio', requiresAuth: true },
+    { label: 'Watchlist', href: '/profile/watchlist', requiresAuth: true },
     { label: 'Compare Stocks', href: '/stocks/comparison' },
     { label: 'Compare Crypto', href: '/crypto/comparison' },
     { label: 'All Tools', href: `${mainAppUrl}/tools` },
@@ -570,8 +572,19 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
               </button>
               {toolsOpen && (
                 <div className="absolute left-0 top-full mt-1 w-56 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 py-2 z-50 transition-colors duration-300">
-                  {toolsItems.map((item) => (
-                    item.href.startsWith('http') || item.href.startsWith(mainAppUrl) ? (
+                  {toolsItems.map((item) => {
+                    if (item.requiresAuth && !isAuthenticated) {
+                      return (
+                        <button
+                          key={item.label}
+                          onClick={() => { setShowSignIn(true); setToolsOpen(false); }}
+                          className="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition"
+                        >
+                          {item.label}
+                        </button>
+                      );
+                    }
+                    return item.href.startsWith('http') || item.href.startsWith(mainAppUrl) ? (
                       <a
                         key={item.label}
                         href={item.href}
@@ -587,8 +600,8 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                       >
                         {item.label}
                       </Link>
-                    )
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </div>
@@ -798,8 +811,19 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                         <Wrench size={12} /> Tools
                       </div>
                       <div className="grid grid-cols-2 gap-1">
-                        {toolsItems.map((item) => (
-                          item.href.startsWith('http') || item.href.startsWith(mainAppUrl) ? (
+                        {toolsItems.map((item) => {
+                          if (item.requiresAuth && !isAuthenticated) {
+                            return (
+                              <button
+                                key={item.label}
+                                onClick={() => { setShowSignIn(true); setMobileMenuOpen(false); }}
+                                className="block py-2 px-2 rounded-lg hover:bg-emerald-100 dark:hover:bg-emerald-900/40 hover:text-emerald-700 dark:hover:text-emerald-300 text-xs font-medium transition-all text-slate-700 dark:text-slate-300 hover:scale-105"
+                              >
+                                {item.label}
+                              </button>
+                            );
+                          }
+                          return item.href.startsWith('http') || item.href.startsWith(mainAppUrl) ? (
                             <a key={item.label} href={item.href} className="block py-2 px-2 rounded-lg hover:bg-emerald-100 dark:hover:bg-emerald-900/40 hover:text-emerald-700 dark:hover:text-emerald-300 text-xs font-medium transition-all text-slate-700 dark:text-slate-300 hover:scale-105" onClick={() => setMobileMenuOpen(false)}>
                               {item.label}
                             </a>
@@ -807,8 +831,8 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                             <Link key={item.label} href={item.href} className="block py-2 px-2 rounded-lg hover:bg-emerald-100 dark:hover:bg-emerald-900/40 hover:text-emerald-700 dark:hover:text-emerald-300 text-xs font-medium transition-all text-slate-700 dark:text-slate-300 hover:scale-105" onClick={() => setMobileMenuOpen(false)}>
                               {item.label}
                             </Link>
-                          )
-                        ))}
+                          );
+                        })}
                       </div>
                     </div>
 
@@ -846,6 +870,12 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                             <Star size={18} className="text-emerald-600" />
                             <span className="text-xs font-medium">Watchlist</span>
                           </Link>
+                          <Link href="/profile/alerts" onClick={() => setMobileMenuOpen(false)} className="flex flex-col items-center gap-1.5 py-3 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 dark:hover:border-emerald-500 transition-all">
+                            <Bell size={18} className="text-emerald-600" />
+                            <span className="text-xs font-medium">Alerts</span>
+                          </Link>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
                           <Link href="/profile/settings" onClick={() => setMobileMenuOpen(false)} className="flex flex-col items-center gap-1.5 py-3 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 dark:hover:border-emerald-500 transition-all">
                             <Settings size={18} className="text-emerald-600" />
                             <span className="text-xs font-medium">Settings</span>
@@ -857,14 +887,38 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                         </button>
                       </>
                     ) : (
-                      <div className="space-y-2">
-                        <a href={`${authRedirectBase}/login?redirect=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : mainAppUrl)}`} className="block py-3 text-center rounded-lg border-2 border-emerald-500 font-medium text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all" onClick={() => setMobileMenuOpen(false)}>
-                          Sign In
-                        </a>
-                        <a href={`${authRedirectBase}/signup?redirect=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : mainAppUrl)}`} className="block py-3 text-center rounded-lg text-white bg-gradient-to-r from-emerald-600 via-emerald-500 to-cyan-500 font-medium shadow-md hover:shadow-lg transition-all" onClick={() => setMobileMenuOpen(false)}>
-                          Sign Up
-                        </a>
-                      </div>
+                      <>
+                        <div className="space-y-2">
+                          <a href={`${authRedirectBase}/login?redirect=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : mainAppUrl)}`} className="block py-3 text-center rounded-lg border-2 border-emerald-500 font-medium text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all" onClick={() => setMobileMenuOpen(false)}>
+                            Sign In
+                          </a>
+                          <a href={`${authRedirectBase}/signup?redirect=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : mainAppUrl)}`} className="block py-3 text-center rounded-lg text-white bg-gradient-to-r from-emerald-600 via-emerald-500 to-cyan-500 font-medium shadow-md hover:shadow-lg transition-all" onClick={() => setMobileMenuOpen(false)}>
+                            Sign Up
+                          </a>
+                        </div>
+                        {/* Profile CTAs for non-authenticated users */}
+                        <div className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-700 rounded-xl p-3 border border-slate-200 dark:border-slate-600">
+                          <p className="text-xs text-slate-600 dark:text-slate-400 mb-2 font-medium">Sign in to access:</p>
+                          <div className="grid grid-cols-2 gap-2">
+                            <button onClick={() => { setShowSignIn(true); setMobileMenuOpen(false); }} className="flex flex-col items-center gap-1.5 py-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 transition-all">
+                              <Briefcase size={16} className="text-slate-400" />
+                              <span className="text-xs font-medium text-slate-600 dark:text-slate-400">Portfolio</span>
+                            </button>
+                            <button onClick={() => { setShowSignIn(true); setMobileMenuOpen(false); }} className="flex flex-col items-center gap-1.5 py-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 transition-all">
+                              <Star size={16} className="text-slate-400" />
+                              <span className="text-xs font-medium text-slate-600 dark:text-slate-400">Watchlist</span>
+                            </button>
+                            <button onClick={() => { setShowSignIn(true); setMobileMenuOpen(false); }} className="flex flex-col items-center gap-1.5 py-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 transition-all">
+                              <Bell size={16} className="text-slate-400" />
+                              <span className="text-xs font-medium text-slate-600 dark:text-slate-400">Alerts</span>
+                            </button>
+                            <button onClick={() => { setShowSignIn(true); setMobileMenuOpen(false); }} className="flex flex-col items-center gap-1.5 py-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 transition-all">
+                              <Settings size={16} className="text-slate-400" />
+                              <span className="text-xs font-medium text-slate-600 dark:text-slate-400">Settings</span>
+                            </button>
+                          </div>
+                        </div>
+                      </>
                     )}
                   </div>
                 </div>
@@ -873,6 +927,12 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
           )
         }
       </AnimatePresence >
+
+      <SignInToContinue
+        isOpen={showSignIn}
+        onClose={() => setShowSignIn(false)}
+        message="Sign in to access your portfolio, watchlist, alerts, and more personalized features."
+      />
     </>
   );
 }

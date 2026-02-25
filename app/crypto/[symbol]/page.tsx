@@ -522,7 +522,7 @@ export default function CryptoDetailPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end"
+            className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-[9999] flex items-end"
             onClick={() => setShowAIPanel(false)}
           >
             <motion.div
@@ -579,7 +579,7 @@ export default function CryptoDetailPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="hidden lg:block fixed inset-0 bg-black bg-opacity-50 z-40"
+              className="hidden lg:block fixed inset-0 bg-black bg-opacity-50 z-[9998]"
               onClick={() => setShowAIPanel(false)}
             />
             <motion.div
@@ -587,7 +587,7 @@ export default function CryptoDetailPage() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-              className="hidden lg:block fixed top-0 right-0 h-full w-96 bg-white dark:bg-slate-900 shadow-2xl z-50"
+              className="hidden lg:block fixed top-0 right-0 h-full w-96 bg-white dark:bg-slate-900 shadow-2xl z-[9999]"
             >
               <div className="h-full flex flex-col">
                 {/* AI Panel Header */}
