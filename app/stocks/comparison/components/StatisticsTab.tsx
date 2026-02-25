@@ -102,8 +102,8 @@ export default function StatisticsTab({ comparedStocks, formatLargeNumber }: Sta
     return (
       <div className="text-center py-12">
         <Activity className="h-12 w-12 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
-        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No stocks to compare</h3>
-        <p className="text-sm text-gray-600 dark:text-slate-400">Add stocks to see detailed statistics</p>
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">No stocks to compare</h3>
+        <p className="text-sm text-slate-500 dark:text-slate-400">Add stocks to see detailed statistics</p>
       </div>
     );
   }
@@ -124,7 +124,7 @@ export default function StatisticsTab({ comparedStocks, formatLargeNumber }: Sta
               className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all flex-shrink-0 ${
                 isActive
                   ? 'bg-gradient-to-r from-blue-600 to-blue-700 dark:from-emerald-600 dark:to-emerald-700 text-white shadow-lg scale-105'
-                  : 'bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#1a1a1a] border border-slate-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-emerald-500/50'
+                  : 'bg-white dark:bg-slate-900/95 text-gray-700 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#1a1a1a] border border-slate-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-emerald-500/50'
               }`}
             >
               <Icon className="h-4 w-4" />
@@ -145,10 +145,10 @@ export default function StatisticsTab({ comparedStocks, formatLargeNumber }: Sta
           const MetricIcon = metric.icon;
 
           return (
-            <div key={metric.key} className="bg-white dark:bg-slate-800 rounded-xl p-3 md:p-4 border border-slate-200 dark:border-slate-700 hover:shadow-lg dark:hover:shadow-emerald-500/5 transition-all">
+            <div key={metric.key} className="bg-white dark:bg-slate-900/95 rounded-xl p-3 md:p-4 border border-slate-200 dark:border-slate-700 hover:shadow-lg dark:hover:shadow-emerald-500/5 transition-all">
               <div className="flex items-center gap-1.5 mb-3">
                 {MetricIcon && <MetricIcon className="h-4 w-4 text-blue-600 dark:text-emerald-500" />}
-                <h4 className="text-xs md:text-sm font-medium text-gray-900 dark:text-white">{metric.label}</h4>
+                <h4 className="text-xs md:text-sm font-semibold text-slate-900 dark:text-white">{metric.label}</h4>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
                 {comparedStocks.map((stock) => {
@@ -183,12 +183,12 @@ export default function StatisticsTab({ comparedStocks, formatLargeNumber }: Sta
                         <div className="w-2.5 h-2.5 rounded-full shadow-sm" style={{ backgroundColor: stock.color }} />
                         <Link
                           href={`/stock/${stock.symbol.toLowerCase()}`}
-                          className="text-xs font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-emerald-500 transition-colors"
+                          className="text-xs font-semibold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-emerald-500 transition-colors"
                         >
                           {stock.symbol}
                         </Link>
                       </div>
-                      <div className={`text-sm md:text-base font-medium mb-0.5 ${
+                      <div className={`text-sm md:text-base font-semibold mb-0.5 ${
                         metric.key === 'changePercent' || metric.key === 'change'
                           ? isNegative
                             ? 'text-red-600 dark:text-red-400'

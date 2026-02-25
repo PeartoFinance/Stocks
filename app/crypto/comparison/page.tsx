@@ -13,6 +13,9 @@ import ChartTab from './components/ChartTab';
 import ProfileTab from './components/ProfileTab';
 import { ComparisonCrypto } from './components/types';
 import AIAnalysisPanel from '../../components/ai/AIAnalysisPanel';
+import { useUsageLimit } from '@/app/context/SubscriptionContext';
+import { UpgradeModal } from '@/app/components/subscription/FeatureGating';
+import { LIMITS } from '@/app/utils/featureKeys';
 
 const CRYPTO_COLORS = ['#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6'];
 
@@ -24,6 +27,8 @@ export default function CryptoComparison() {
   const [activeTab, setActiveTab] = useState('overview');
   const [isAIPanelOpen, setIsAIPanelOpen] = useState(false);
   const [hasAddedCrypto, setHasAddedCrypto] = useState(false);
+  const [showUpgrade, setShowUpgrade] = useState(false);
+  const { trackUsage } = useUsageLimit(LIMITS.COMPARISON);
 
   const tabs = [
     { key: 'overview', label: 'Overview', icon: BarChart3 },
@@ -127,6 +132,13 @@ export default function CryptoComparison() {
       toast.error('Cryptocurrency already added');
       return;
     }
+
+    const result = await trackUsage();
+    if (!result.allowed) {
+      setShowUpgrade(true);
+      return;
+    }
+
     try {
       setLoading(true);
       const details: any = await cryptoService.getCoinDetails(crypto.symbol);
@@ -190,7 +202,7 @@ export default function CryptoComparison() {
           </motion.div>
 
           {/* Search Section */}
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white dark:bg-slate-800 rounded-lg p-3 sm:p-4 border border-slate-200 dark:border-slate-700 mb-4 sm:mb-6">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white dark:bg-slate-900/95 rounded-lg p-3 sm:p-4 border border-slate-200 dark:border-slate-700 mb-4 sm:mb-6">
             <div className="flex items-center justify-between mb-2 sm:mb-3">
               <h2 className="text-xs sm:text-sm font-medium text-slate-900 dark:text-white">Add Cryptocurrencies</h2>
               <span className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400">{comparedCryptos.length}/5</span>
@@ -208,7 +220,7 @@ export default function CryptoComparison() {
             </div>
 
             {searchResults.length > 0 && (
-              <div className="mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg max-h-64 overflow-y-auto">
+              <div className="mt-2 bg-white dark:bg-slate-900/95 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg max-h-64 overflow-y-auto">
                 {searchResults.map((crypto) => (
                   <button
                     key={crypto.symbol}
@@ -255,7 +267,7 @@ export default function CryptoComparison() {
           {/* Tabs */}
           {comparedCryptos.length > 0 && (
             <>
-              <div className="bg-white dark:bg-slate-800 rounded-lg p-1 border border-slate-200 dark:border-slate-700 mb-4 sm:mb-6">
+              <div className="bg-white dark:bg-slate-900/95 rounded-lg p-1 border border-slate-200 dark:border-slate-700 mb-4 sm:mb-6">
                 <div className="flex gap-1 overflow-x-auto scrollbar-hide">
                   {tabs.map((tab) => {
                     const Icon = tab.icon;
@@ -293,7 +305,7 @@ export default function CryptoComparison() {
       {/* AI Analysis Panel */}
       {isAIPanelOpen && (
         <>
-          <div className={`fixed bottom-0 md:top-0 md:right-0 left-0 md:left-auto h-[85vh] md:h-full w-full md:w-96 bg-white dark:bg-slate-800 shadow-2xl transform transition-transform duration-300 ease-in-out z-50 rounded-t-2xl md:rounded-none ${
+          <div className={`fixed bottom-0 md:top-0 md:right-0 left-0 md:left-auto h-[85vh] md:h-full w-full md:w-96 bg-white dark:bg-slate-900/95 shadow-2xl transform transition-transform duration-300 ease-in-out z-[9999] rounded-t-2xl md:rounded-none ${
             isAIPanelOpen ? 'translate-y-0 md:translate-x-0' : 'translate-y-full md:translate-y-0 md:translate-x-full'
           }`}>
             <div className="h-full flex flex-col">
@@ -334,9 +346,15 @@ export default function CryptoComparison() {
               </div>
             </div>
           </div>
-          <div className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 z-40" onClick={() => setIsAIPanelOpen(false)} />
+          <div className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 z-[9998]" onClick={() => setIsAIPanelOpen(false)} />
         </>
       )}
+
+      <UpgradeModal
+        isOpen={showUpgrade}
+        onClose={() => setShowUpgrade(false)}
+        featureKey={LIMITS.COMPARISON}
+      />
     </div>
   );
 }

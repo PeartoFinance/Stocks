@@ -7,10 +7,15 @@ import { stockAPI } from '@/app/utils/api';
 import cryptoService from '@/app/utils/cryptoService';
 import ComparisonChart from '@/app/components/detailedChart/ComparisonChart';
 import ChartControls from '@/app/components/detailedChart/ChartControls';
+import { useSubscription } from '@/app/context/SubscriptionContext';
+import { UpgradeModal } from '@/app/components/subscription/FeatureGating';
+import { FEATURES } from '@/app/utils/featureKeys';
+import { useCurrency } from '@/app/context/CurrencyContext';
 
 export default function CompareDetailedPage() {
   const params = useParams();
   const router = useRouter();
+  const { formatPrice } = useCurrency();
   const name = params.name as string;
   const symbolParam = decodeURIComponent((params.symbol as string) || '').toUpperCase();
   const symbols = symbolParam?.split('.').slice(0, 5) || [];
@@ -22,6 +27,8 @@ export default function CompareDetailedPage() {
   const [selectedChartType, setSelectedChartType] = useState<'candlestick' | 'line' | 'area' | 'bar' | 'baseline' | 'histogram'>('line');
   const [loading, setLoading] = useState(true);
   const [chartLoading, setChartLoading] = useState(false);
+  const [showUpgrade, setShowUpgrade] = useState(false);
+  const { trackUsage } = useSubscription();
 
   useEffect(() => {
     if (!symbols.length) return;
@@ -54,6 +61,11 @@ export default function CompareDetailedPage() {
     if (!symbols.length) return;
     
     const fetchChartData = async () => {
+      const result = await trackUsage('advanced_charts_limit');
+      if (!result.allowed) {
+        setShowUpgrade(true);
+        return;
+      }
       try {
         setChartLoading(true);
         const periodMap: Record<string, string> = {
@@ -162,6 +174,7 @@ export default function CompareDetailedPage() {
           </div>
         </div>
       </div>
+      <UpgradeModal isOpen={showUpgrade} onClose={() => setShowUpgrade(false)} featureKey="advanced_charts" />
     </div>
   );
 }

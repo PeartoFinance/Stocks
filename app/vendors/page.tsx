@@ -69,14 +69,14 @@ export default function VendorsPage() {
       // Search filter
       const matchesSearch = vendor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         vendor.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        vendor.services.some(service => service.toLowerCase().includes(searchTerm.toLowerCase()));
+        (vendor.services && vendor.services.some(service => service.toLowerCase().includes(searchTerm.toLowerCase())));
 
       // Category filter
       const matchesCategory = selectedCategory === 'all' || vendor.category === selectedCategory;
 
       // Service filter
       const matchesService = selectedService === 'all' || 
-        vendor.services.some(service => service.toLowerCase().includes(selectedService.toLowerCase()));
+        (vendor.services && vendor.services.some(service => service.toLowerCase().includes(selectedService.toLowerCase())));
 
       // Featured filter
       const matchesFeatured = !showFeaturedOnly || vendor.isFeatured;
