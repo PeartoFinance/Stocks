@@ -26,7 +26,7 @@ export default function ChartAIPanel({
   return (
     <>
       {/* Sliding AI Panel - from bottom on mobile, from right on desktop */}
-      <div className={`fixed bottom-0 md:top-0 md:right-0 left-0 md:left-auto h-[85vh] md:h-full w-full md:w-96 bg-white dark:bg-slate-800 shadow-2xl transform transition-transform duration-300 ease-in-out z-50 rounded-t-2xl md:rounded-none ${
+      <div className={`fixed bottom-0 md:top-0 md:right-0 left-0 md:left-auto h-[85vh] md:h-full w-full md:w-96 bg-white dark:bg-slate-800 shadow-2xl transform transition-transform duration-300 ease-in-out z-[9999] rounded-t-2xl md:rounded-none ${
         isOpen ? 'translate-y-0 md:translate-x-0' : 'translate-y-full md:translate-y-0 md:translate-x-full'
       }`}>
         <div className="h-full flex flex-col">
@@ -80,7 +80,7 @@ export default function ChartAIPanel({
 
       {/* Overlay */}
       <div 
-        className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 z-40"
+        className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 z-[9998]"
         onClick={onClose}
       />
     </>

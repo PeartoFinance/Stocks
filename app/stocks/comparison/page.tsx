@@ -14,6 +14,9 @@ import StatisticsTab from './components/StatisticsTab';
 import ProfileTab from './components/ProfileTab';
 import { ComparisonStock } from './components/types';
 import AIAnalysisPanel from '../../components/ai/AIAnalysisPanel';
+import { useUsageLimit } from '@/app/context/SubscriptionContext';
+import { UpgradeModal } from '@/app/components/subscription/FeatureGating';
+import { LIMITS } from '@/app/utils/featureKeys';
 
 const STOCK_COLORS = ['#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6'];
 
@@ -28,6 +31,8 @@ export default function StockComparison() {
   const [chartType, setChartType] = useState<'line' | 'area' | 'candle'>('line');
   const [isAIPanelOpen, setIsAIPanelOpen] = useState(false);
   const [hasAddedStock, setHasAddedStock] = useState(false);
+  const [showUpgrade, setShowUpgrade] = useState(false);
+  const { trackUsage } = useUsageLimit(LIMITS.COMPARISON);
 
   const periods = ['1D', '5D', '1M', '3M', '6M', '1Y'];
 
@@ -187,6 +192,13 @@ export default function StockComparison() {
       toast.error('Stock already added');
       return;
     }
+
+    const result = await trackUsage();
+    if (!result.allowed) {
+      setShowUpgrade(true);
+      return;
+    }
+
     try {
       setLoading(true);
       const profileResponse = await marketService.getStockProfile(stock.symbol);
@@ -266,7 +278,7 @@ export default function StockComparison() {
           </motion.div>
 
           {/* Search Section */}
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-slate-700 mb-6">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white dark:bg-slate-900/95 rounded-lg p-4 border border-slate-200 dark:border-slate-700 mb-6">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-sm font-medium text-slate-900 dark:text-white">Add Stocks</h2>
               <span className="text-xs text-slate-500 dark:text-slate-400">{comparedStocks.length}/5</span>
@@ -284,7 +296,7 @@ export default function StockComparison() {
             </div>
 
             {searchResults.length > 0 && (
-              <div className="mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg max-h-64 overflow-y-auto">
+              <div className="mt-2 bg-white dark:bg-slate-900/95 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg max-h-64 overflow-y-auto">
                 {searchResults.map((stock) => (
                   <button
                     key={stock.symbol}
@@ -331,7 +343,7 @@ export default function StockComparison() {
           {/* Tabs */}
           {comparedStocks.length > 0 && (
             <>
-              <div className="bg-white dark:bg-slate-800 rounded-lg p-1 border border-slate-200 dark:border-slate-700 mb-6">
+              <div className="bg-white dark:bg-slate-900/95 rounded-lg p-1 border border-slate-200 dark:border-slate-700 mb-6">
                 <div className="flex gap-1 overflow-x-auto">
                   {tabs.map((tab) => {
                     const Icon = tab.icon;
@@ -381,7 +393,7 @@ export default function StockComparison() {
       {/* AI Analysis Panel */}
       {isAIPanelOpen && (
         <>
-          <div className={`fixed bottom-0 md:top-0 md:right-0 left-0 md:left-auto h-[85vh] md:h-full w-full md:w-96 bg-white dark:bg-slate-800 shadow-2xl transform transition-transform duration-300 ease-in-out z-50 rounded-t-2xl md:rounded-none ${
+          <div className={`fixed bottom-0 md:top-0 md:right-0 left-0 md:left-auto h-[85vh] md:h-full w-full md:w-96 bg-white dark:bg-slate-900/95 shadow-2xl transform transition-transform duration-300 ease-in-out z-[9999] rounded-t-2xl md:rounded-none ${
             isAIPanelOpen ? 'translate-y-0 md:translate-x-0' : 'translate-y-full md:translate-y-0 md:translate-x-full'
           }`}>
             <div className="h-full flex flex-col">
@@ -422,9 +434,15 @@ export default function StockComparison() {
               </div>
             </div>
           </div>
-          <div className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 z-40" onClick={() => setIsAIPanelOpen(false)} />
+          <div className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 z-[9998]" onClick={() => setIsAIPanelOpen(false)} />
         </>
       )}
+
+      <UpgradeModal
+        isOpen={showUpgrade}
+        onClose={() => setShowUpgrade(false)}
+        featureKey={LIMITS.COMPARISON}
+      />
     </div>
   );
 }

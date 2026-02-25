@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { worldIndicesService, ETFData } from '../../utils/worldIndicesService';
 import { TrendingUp, TrendingDown, BarChart3, Building } from 'lucide-react';
 import { useCurrency } from '../../context/CurrencyContext';
@@ -76,8 +77,8 @@ export default function ETFsMutualFunds({ className = '' }: ETFsMutualFundsProps
 
   const DataTable = ({ data, title }: { data: ETFData[]; title: string }) => (
     <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden transition-colors duration-300">
-      <div className="px-4 py-3 bg-gradient-to-r from-indigo-50 to-purple-50 border-b border-slate-200 dark:border-slate-700 transition-colors duration-300">
-        <h3 className="font-medium text-slate-900 dark:text-white transition-colors duration-300">{title}</h3>
+      <div className="px-4 py-3 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 border-b border-slate-200 dark:border-slate-700 transition-colors duration-300">
+        <h3 className="font-semibold text-slate-900 dark:text-white transition-colors duration-300">{title}</h3>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full">
@@ -92,9 +93,9 @@ export default function ETFsMutualFunds({ className = '' }: ETFsMutualFundsProps
               <th className="px-4 py-2 text-right text-xs font-medium text-slate-500 dark:text-slate-400 uppercase transition-colors duration-300">Expense Ratio</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200">
-            {data.map((item, i) => (
-              <tr key={item.symbol} className="hover:bg-slate-50 dark:bg-slate-700 transition-colors">
+          <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
+            {data.slice(0, 5).map((item, i) => (
+              <tr key={item.symbol} className="hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2">
                     <span className="font-medium text-slate-900 dark:text-white transition-colors duration-300">{item.symbol}</span>
@@ -132,10 +133,18 @@ export default function ETFsMutualFunds({ className = '' }: ETFsMutualFundsProps
   );
 
   return (
-    <div className={`space-y-6 ${className}`}>
-      <div className="flex items-center gap-2 mb-4">
-        <BarChart3 className="h-5 w-5 text-indigo-600" />
-        <h2 className="text-xl font-medium text-slate-900 dark:text-white transition-colors duration-300">ETFs and Mutual Funds</h2>
+    <div className={`space-y-4 ${className}`}>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <BarChart3 className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+          <h2 className="text-xl font-semibold text-slate-900 dark:text-white transition-colors duration-300">ETFs & Mutual Funds</h2>
+        </div>
+        <Link
+          href="/etfs"
+          className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 rounded-lg transition-colors"
+        >
+          View All
+        </Link>
       </div>
 
       {/* Main Tab Navigation */}
@@ -144,8 +153,8 @@ export default function ETFsMutualFunds({ className = '' }: ETFsMutualFundsProps
           <button
             onClick={() => setActiveTab('etfs')}
             className={`flex items-center gap-2 px-6 py-3 font-medium transition-colors ${activeTab === 'etfs'
-                ? 'text-indigo-600 border-b-2 border-indigo-600 bg-indigo-50'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-slate-50 dark:bg-slate-700'
+                ? 'text-indigo-600 dark:text-indigo-400 border-b-2 border-indigo-600 dark:border-indigo-400 bg-indigo-50 dark:bg-indigo-900/20'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-700'
               }`}
           >
             <BarChart3 className="h-4 w-4" />
@@ -154,8 +163,8 @@ export default function ETFsMutualFunds({ className = '' }: ETFsMutualFundsProps
           <button
             onClick={() => setActiveTab('mutual-funds')}
             className={`flex items-center gap-2 px-6 py-3 font-medium transition-colors ${activeTab === 'mutual-funds'
-                ? 'text-indigo-600 border-b-2 border-indigo-600 bg-indigo-50'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-slate-50 dark:bg-slate-700'
+                ? 'text-indigo-600 dark:text-indigo-400 border-b-2 border-indigo-600 dark:border-indigo-400 bg-indigo-50 dark:bg-indigo-900/20'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-700'
               }`}
           >
             <Building className="h-4 w-4" />
@@ -164,14 +173,14 @@ export default function ETFsMutualFunds({ className = '' }: ETFsMutualFundsProps
         </div>
 
         {/* Sub-Tab Navigation */}
-        <div className="flex border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-700 transition-colors duration-300">
+        <div className="flex border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 transition-colors duration-300">
           {['most-active', 'gainers', 'losers'].map((subTab) => (
             <button
               key={subTab}
               onClick={() => setActiveSubTab(subTab as any)}
               className={`px-4 py-2 text-sm font-medium transition-colors ${activeSubTab === subTab
-                  ? 'text-indigo-600 border-b-2 border-indigo-600 bg-white dark:bg-slate-800'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-white dark:bg-slate-800'
+                  ? 'text-indigo-600 dark:text-indigo-400 border-b-2 border-indigo-600 dark:border-indigo-400 bg-white dark:bg-slate-800'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white dark:hover:bg-slate-800'
                 }`}
             >
               {subTab.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}

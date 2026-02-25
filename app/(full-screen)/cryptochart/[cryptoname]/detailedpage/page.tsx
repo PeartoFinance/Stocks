@@ -8,6 +8,9 @@ import cryptoService from '@/app/utils/cryptoService';
 import TradingChart from '@/app/components/detailedChart/TradingChart';
 import ChartControls from '@/app/components/detailedChart/ChartControls';
 import IndicatorsPanel from '@/app/components/detailedChart/IndicatorsPanel';
+import { useSubscription } from '@/app/context/SubscriptionContext';
+import { UpgradeModal } from '@/app/components/subscription/FeatureGating';
+import { FEATURES } from '@/app/utils/featureKeys';
 
 interface Indicator {
   id: string;
@@ -29,6 +32,8 @@ export default function CryptoDetailedTradingPage() {
   const [loading, setLoading] = useState(true);
   const [chartLoading, setChartLoading] = useState(false);
   const [activeIndicators, setActiveIndicators] = useState<Indicator[]>([]);
+  const [showUpgrade, setShowUpgrade] = useState(false);
+  const { trackUsage } = useSubscription();
 
   useEffect(() => {
     if (!cryptoname) return;
@@ -54,6 +59,11 @@ export default function CryptoDetailedTradingPage() {
     if (!cryptoname) return;
     
     const fetchChartData = async () => {
+      const result = await trackUsage('advanced_charts_limit');
+      if (!result.allowed) {
+        setShowUpgrade(true);
+        return;
+      }
       try {
         setChartLoading(true);
         const periodMap: Record<string, string> = {
@@ -182,6 +192,7 @@ export default function CryptoDetailedTradingPage() {
           </div>
         </div>
       </div>
+      <UpgradeModal isOpen={showUpgrade} onClose={() => setShowUpgrade(false)} featureKey="advanced_charts" />
     </div>
   );
 }
