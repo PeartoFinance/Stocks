@@ -60,7 +60,7 @@ export default function StockRiskAnalysisChart({ className = '', stock }: StockR
     let veryHighRisk = 0;
 
     // Technical Analysis Score (40% weight)
-    if (technicalData) {
+    if (technicalData?.summary?.score !== undefined) {
       const score = technicalData.summary.score;
       if (score >= 5) lowRisk += 40;
       else if (score >= 0) mediumRisk += 40;
@@ -204,7 +204,7 @@ export default function StockRiskAnalysisChart({ className = '', stock }: StockR
       
       {/* Key Metrics - 3 rows */}
       <div className="space-y-1.5 pt-2 border-t border-slate-200 dark:border-slate-700 transition-colors duration-300">
-        {technicalData && (
+        {technicalData?.summary?.score !== undefined && (
           <div className="flex items-center justify-between text-xs">
             <span className="text-gray-600 dark:text-slate-400 transition-colors duration-300">Technical Score</span>
             <span className={`font-medium ${

@@ -14,9 +14,6 @@ import StatisticsTab from './components/StatisticsTab';
 import ProfileTab from './components/ProfileTab';
 import { ComparisonStock } from './components/types';
 import AIAnalysisPanel from '../../components/ai/AIAnalysisPanel';
-import { useUsageLimit } from '@/app/context/SubscriptionContext';
-import { UpgradeModal } from '@/app/components/subscription/FeatureGating';
-import { LIMITS } from '@/app/utils/featureKeys';
 
 const STOCK_COLORS = ['#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6'];
 
@@ -31,8 +28,6 @@ export default function StockComparison() {
   const [chartType, setChartType] = useState<'line' | 'area' | 'candle'>('line');
   const [isAIPanelOpen, setIsAIPanelOpen] = useState(false);
   const [hasAddedStock, setHasAddedStock] = useState(false);
-  const [showUpgrade, setShowUpgrade] = useState(false);
-  const { trackUsage } = useUsageLimit(LIMITS.COMPARISON);
 
   const periods = ['1D', '5D', '1M', '3M', '6M', '1Y'];
 
@@ -190,12 +185,6 @@ export default function StockComparison() {
     }
     if (comparedStocks.find(s => s.symbol === stock.symbol)) {
       toast.error('Stock already added');
-      return;
-    }
-
-    const result = await trackUsage();
-    if (!result.allowed) {
-      setShowUpgrade(true);
       return;
     }
 
@@ -437,12 +426,6 @@ export default function StockComparison() {
           <div className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 z-[9998]" onClick={() => setIsAIPanelOpen(false)} />
         </>
       )}
-
-      <UpgradeModal
-        isOpen={showUpgrade}
-        onClose={() => setShowUpgrade(false)}
-        featureKey={LIMITS.COMPARISON}
-      />
     </div>
   );
 }

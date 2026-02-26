@@ -226,7 +226,7 @@ export default function ProfilePage() {
                     </Link>
 
                     {/* Subscription Card */}
-                    <button onClick={() => router.push('/pro')} className="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl p-4 md:p-6 hover:shadow-lg transition-all group relative overflow-hidden text-left w-full">
+                    <Link href="/profile/subscription" className="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl p-4 md:p-6 hover:shadow-lg transition-all group relative overflow-hidden text-left w-full block">
                         <div className="absolute inset-0 bg-black/10 group-hover:bg-black/5 transition" />
                         <div className="relative z-10">
                             <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
@@ -235,10 +235,10 @@ export default function ProfilePage() {
                                 </div>
                                 <h3 className="text-base md:text-lg font-bold text-white">Subscription</h3>
                             </div>
-                            <p className="text-sm md:text-base font-medium text-white">Upgrade to Pro</p>
-                            <p className="text-xs text-white/80 mt-1">Unlock premium features</p>
+                            <p className="text-sm md:text-base font-medium text-white">View Plan & Usage</p>
+                            <p className="text-xs text-white/80 mt-1">Manage your subscription</p>
                         </div>
-                    </button>
+                    </Link>
 
                     {/* Settings Card */}
                     <Link href="/profile/settings" className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 md:p-6 hover:shadow-lg hover:border-slate-300 dark:hover:border-slate-600 transition-all group">

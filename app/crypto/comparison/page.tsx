@@ -13,9 +13,6 @@ import ChartTab from './components/ChartTab';
 import ProfileTab from './components/ProfileTab';
 import { ComparisonCrypto } from './components/types';
 import AIAnalysisPanel from '../../components/ai/AIAnalysisPanel';
-import { useUsageLimit } from '@/app/context/SubscriptionContext';
-import { UpgradeModal } from '@/app/components/subscription/FeatureGating';
-import { LIMITS } from '@/app/utils/featureKeys';
 
 const CRYPTO_COLORS = ['#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6'];
 
@@ -27,8 +24,6 @@ export default function CryptoComparison() {
   const [activeTab, setActiveTab] = useState('overview');
   const [isAIPanelOpen, setIsAIPanelOpen] = useState(false);
   const [hasAddedCrypto, setHasAddedCrypto] = useState(false);
-  const [showUpgrade, setShowUpgrade] = useState(false);
-  const { trackUsage } = useUsageLimit(LIMITS.COMPARISON);
 
   const tabs = [
     { key: 'overview', label: 'Overview', icon: BarChart3 },
@@ -130,12 +125,6 @@ export default function CryptoComparison() {
     }
     if (comparedCryptos.find(c => c.symbol === crypto.symbol)) {
       toast.error('Cryptocurrency already added');
-      return;
-    }
-
-    const result = await trackUsage();
-    if (!result.allowed) {
-      setShowUpgrade(true);
       return;
     }
 
@@ -349,12 +338,6 @@ export default function CryptoComparison() {
           <div className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 z-[9998]" onClick={() => setIsAIPanelOpen(false)} />
         </>
       )}
-
-      <UpgradeModal
-        isOpen={showUpgrade}
-        onClose={() => setShowUpgrade(false)}
-        featureKey={LIMITS.COMPARISON}
-      />
     </div>
   );
 }
