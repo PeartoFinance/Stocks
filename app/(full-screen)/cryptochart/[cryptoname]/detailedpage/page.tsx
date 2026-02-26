@@ -11,6 +11,7 @@ import IndicatorsPanel from '@/app/components/detailedChart/IndicatorsPanel';
 import { useSubscription } from '@/app/context/SubscriptionContext';
 import { UpgradeModal } from '@/app/components/subscription/FeatureGating';
 import { FEATURES } from '@/app/utils/featureKeys';
+import { useCurrency } from '@/app/context/CurrencyContext';
 
 interface Indicator {
   id: string;
@@ -24,6 +25,7 @@ export default function CryptoDetailedTradingPage() {
   const params = useParams();
   const router = useRouter();
   const cryptoname = (params.cryptoname as string)?.toUpperCase();
+  const { formatPrice } = useCurrency();
   
   const [cryptoData, setCryptoData] = useState<any>(null);
   const [chartData, setChartData] = useState<any[]>([]);
@@ -143,7 +145,7 @@ export default function CryptoDetailedTradingPage() {
               <h1 className="text-base sm:text-xl font-bold text-slate-900 dark:text-white truncate">{cryptoname}</h1>
               {cryptoData && (
                 <div className="flex items-center gap-1 sm:gap-2">
-                  <span className="text-lg sm:text-2xl font-bold text-slate-900 dark:text-white">${currentPrice.toFixed(2)}</span>
+                  <span className="text-lg sm:text-2xl font-bold text-slate-900 dark:text-white">{formatPrice(currentPrice)}</span>
                   <div className={`flex items-center gap-1 text-xs sm:text-sm font-semibold px-2 py-0.5 rounded ${
                     isPositive 
                       ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' 
