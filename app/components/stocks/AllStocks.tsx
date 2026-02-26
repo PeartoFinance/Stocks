@@ -271,18 +271,18 @@ export default function AllStocks({ className = '' }: AllStocksProps) {
                     <tr key={stock.symbol} className="hover:bg-blue-50/50 dark:hover:bg-gray-700/50">
                       <td className="px-3 py-3 whitespace-nowrap">
                         <Link href={`/stock/${stock.symbol.toLowerCase()}`}>
-                          <div className="text-sm font-medium text-slate-900 dark:text-white">{stock.symbol}</div>
-                          <div className="text-xs text-slate-500 dark:text-slate-400 truncate max-w-[100px]">{stock.name}</div>
+                          <div className="text-sm font-semibold text-slate-900 dark:text-white">{stock.symbol}</div>
+                          <div className="text-sm text-slate-500 dark:text-slate-400 truncate max-w-[100px]">{stock.name}</div>
                         </Link>
                       </td>
-                      <td className="px-3 py-3 text-right text-sm font-medium text-slate-900 dark:text-white">
+                      <td className="px-3 py-3 text-right text-sm font-semibold text-slate-900 dark:text-white">
                         <PriceDisplay amount={stock.price} />
                       </td>
-                      <td className={`px-3 py-3 text-right text-sm font-medium ${stock.change >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'}`}>
+                      <td className={`px-3 py-3 text-right text-sm font-semibold ${stock.change >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'}`}>
                         {stock.changePercent.toFixed(2)}%
                       </td>
-                      <td className="px-3 py-3 text-right text-sm text-slate-900 dark:text-white">{formatNumber(stock.volume || 0)}</td>
-                      <td className="px-3 py-3 text-right text-sm text-slate-900 dark:text-white">{formatMarketCap(stock.marketCap)}</td>
+                      <td className="px-3 py-3 text-right text-sm font-medium text-slate-900 dark:text-white">{formatNumber(stock.volume || 0)}</td>
+                      <td className="px-3 py-3 text-right text-sm font-medium text-slate-900 dark:text-white">{formatMarketCap(stock.marketCap)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -308,22 +308,22 @@ export default function AllStocks({ className = '' }: AllStocksProps) {
                     <tr key={stock.symbol} className="hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-transparent dark:hover:from-gray-700/50 dark:hover:to-transparent transition-colors group">
                       <td className="px-3 sm:px-4 py-3 sm:py-4 whitespace-nowrap">
                         <Link href={`/stock/${stock.symbol.toLowerCase()}`}>
-                          <div className="text-sm font-medium text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">{stock.symbol}</div>
-                          <div className="text-xs text-slate-500 dark:text-slate-400 truncate max-w-[120px] transition-colors duration-300">{stock.name}</div>
+                          <div className="text-sm font-semibold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">{stock.symbol}</div>
+                          <div className="text-sm text-slate-500 dark:text-slate-400 truncate max-w-[120px] transition-colors duration-300">{stock.name}</div>
                         </Link>
                       </td>
 
-                      <td className="px-3 sm:px-4 py-3 sm:py-4 text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">
+                      <td className="px-3 sm:px-4 py-3 sm:py-4 text-sm font-semibold text-slate-900 dark:text-white transition-colors duration-300">
                         <PriceDisplay amount={stock.price} />
                       </td>
-                      <td className={`px-3 sm:px-4 py-3 sm:py-4 text-sm font-medium ${stock.change >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'}`}>
+                      <td className={`px-3 sm:px-4 py-3 sm:py-4 text-sm font-semibold ${stock.change >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'}`}>
                         {stock.changePercent.toFixed(2)}%
                       </td>
                       <td className="px-3 sm:px-4 py-3 sm:py-4 text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">{formatNumber(stock.volume || 0)}</td>
                       <td className="px-3 sm:px-4 py-3 sm:py-4 text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">{formatMarketCap(stock.marketCap)}</td>
                       <td className="px-3 sm:px-4 py-3 sm:py-4 text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">{stock.peRatio?.toFixed(2) || '—'}</td>
                       <td className="px-3 sm:px-4 py-3 sm:py-4">
-                        <span className="px-2 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-medium">{stock.sector || 'Unknown'}</span>
+                        <span className="px-2 py-1 rounded-full bg-blue-100 dark:bg-slate-900/95 text-blue-800 dark:text-slate-300 text-xs font-medium">{stock.sector || 'Unknown'}</span>
                       </td>
                     </tr>
                   ))}

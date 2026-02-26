@@ -129,7 +129,7 @@ export default function ScreenerPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-900 px-4">
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-900 pt-32 px-4">
         <div className="flex items-center justify-center h-96">
           <div className="text-center">
             <BarChart3 className="h-12 w-12 text-emerald-600 dark:text-emerald-400 animate-pulse mx-auto mb-4" />
@@ -142,7 +142,7 @@ export default function ScreenerPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 px-4 lg:px-6 pb-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 pt-32 px-4 lg:px-6 pb-8">
       <div className="max-w-7xl mx-auto">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <h1 className="text-3xl lg:text-4xl font-extrabold text-gray-900 dark:text-white mb-3">Stock Screener</h1>
