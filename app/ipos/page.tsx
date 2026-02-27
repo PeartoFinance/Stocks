@@ -354,16 +354,7 @@ export default function IPOsPage() {
                     </div>
                   )}
 
-                  <div className="flex justify-between items-center pt-4 border-t border-slate-100">
-                    <button className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 transition-colors">
-                      <Star className="h-4 w-4" />
-                      <span className="text-sm font-medium">Add to Watchlist</span>
-                    </button>
-                    <button className="flex items-center space-x-1 text-slate-600 dark:text-slate-400 hover:text-gray-700 dark:text-pearto-cloud transition-colors">
-                      <ExternalLink className="h-4 w-4" />
-                      <span className="text-sm font-medium">View Details</span>
-                    </button>
-                  </div>
+
                 </motion.div>
               ))}
             </motion.div>

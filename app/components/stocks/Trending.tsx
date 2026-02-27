@@ -191,7 +191,7 @@ export default function Trending({ className = '' }: TrendingProps) {
                           {formatMarketCap(stock.marketCap)}
                         </td>
                         <td className="px-4 py-2 whitespace-nowrap text-center">
-                          <span className="px-2 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-medium inline-block">
+                          <span className="px-2 py-1 rounded-full bg-blue-100 dark:bg-slate-900/95 dark:text-white text-blue-800 text-xs font-medium inline-block">
                             {stock.sector || 'Unknown'}
                           </span>
                         </td>
