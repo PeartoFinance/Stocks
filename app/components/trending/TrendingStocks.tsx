@@ -16,7 +16,9 @@ import {
   ArrowUpDown,
   ExternalLink,
   Brain,
-  X
+  X,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 import { formatNumber } from '@/lib/utils';
 import { useCurrency } from '../../context/CurrencyContext';
@@ -71,6 +73,7 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState<'changePercent' | 'volume' | 'marketCap'>('changePercent');
   const [isAIPanelOpen, setIsAIPanelOpen] = useState(false);
+  const [isDetailsCollapsed, setIsDetailsCollapsed] = useState(true);
 
   const filterTypes = [
     { key: 'all', label: 'All Trending', icon: Activity },
@@ -346,7 +349,7 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
               className="mb-6 lg:mb-8 mt-4 lg:mt-6"
             >
               <div className="flex items-center justify-between mb-3">
-                <h1 className="text-xl lg:text-2xl font-medium bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                <h1 className="text-xl lg:text-2xl font-bold text-blue-600 dark:text-blue-400">
                   Trending Stocks
                 </h1>
                 <button
@@ -362,8 +365,17 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
               </p>
             </motion.div>
 
+            {/* Collapse Toggle */}
+            <button
+              onClick={() => setIsDetailsCollapsed(!isDetailsCollapsed)}
+              className="w-full mb-4 flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border border-blue-200 dark:border-blue-800 rounded-lg hover:from-blue-100 hover:to-purple-100 dark:hover:from-blue-900/30 dark:hover:to-purple-900/30 transition-all text-sm font-medium text-blue-700 dark:text-blue-400 shadow-sm"
+            >
+              {isDetailsCollapsed ? <ChevronDown className="h-4 w-4" /> : <ChevronUp className="h-4 w-4" />}
+              {isDetailsCollapsed ? 'Show Stats & Charts' : 'Hide Stats & Charts'}
+            </button>
+
             {/* Stats Cards */}
-            <motion.div
+            {!isDetailsCollapsed && <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
@@ -436,10 +448,10 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
                     '0'}
                 </p>
               </div>
-            </motion.div>
+            </motion.div>}
 
             {/* Charts Section */}
-            <motion.div
+            {!isDetailsCollapsed && <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
@@ -576,7 +588,7 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
                   />
                 </div>
               </div>
-            </motion.div>
+            </motion.div>}
 
             {/* Filters */}
             <motion.div
@@ -587,22 +599,23 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
             >
               {/* Mobile Layout */}
               <div className="flex flex-col gap-2 sm:hidden">
-                <div className="flex flex-wrap gap-1">
-                  {filterTypes.map((filter) => {
-                    const Icon = filter.icon;
-                    return (
-                      <button
-                        key={filter.key}
-                        onClick={() => setActiveFilter(filter.key)}
-                        className={`flex items-center space-x-1 px-2 py-1 rounded-md text-[10px] font-medium transition-all ${activeFilter === filter.key
-                          ? 'bg-blue-600 dark:bg-pearto-blue text-white'
-                          : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400 hover:bg-gray-200'
-                          }`}
-                      >
-                        <Icon className="h-3 w-3" />
-                      </button>
-                    );
-                  })}
+                <div className="overflow-x-auto pb-2">
+                  <div className="flex gap-2 min-w-max">
+                    {filterTypes.map((filter) => {
+                      return (
+                        <button
+                          key={filter.key}
+                          onClick={() => setActiveFilter(filter.key)}
+                          className={`flex items-center whitespace-nowrap px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${activeFilter === filter.key
+                            ? 'bg-blue-600 dark:bg-pearto-blue text-white shadow-sm'
+                            : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400'
+                            }`}
+                        >
+                          <span>{filter.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
                 <div className="flex gap-2">
                   <div className="relative flex-1">
@@ -662,7 +675,7 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
             >
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[700px]">
-                  <thead className="bg-slate-50 dark:bg-slate-900/95 border-b-2 border-slate-200 dark:border-slate-700">
+                  <thead className="bg-slate-50 dark:bg-slate-800 border-b-2 border-slate-200 dark:border-slate-700">
                     <tr>
                       <th className="px-3 sm:px-6 py-4 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Stock</th>
                       <th className="px-3 sm:px-6 py-4 text-right text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Price</th>
