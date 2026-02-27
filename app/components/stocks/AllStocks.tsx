@@ -210,7 +210,7 @@ export default function AllStocks({ className = '' }: AllStocksProps) {
                   placeholder="$0"
                   value={filters.minPrice}
                   onChange={(e) => setFilters({ ...filters, minPrice: e.target.value })}
-                  className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg text-sm transition-colors duration-300"
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white transition-colors duration-300"
                 />
               </div>
               <div>
@@ -220,7 +220,7 @@ export default function AllStocks({ className = '' }: AllStocksProps) {
                   placeholder="$∞"
                   value={filters.maxPrice}
                   onChange={(e) => setFilters({ ...filters, maxPrice: e.target.value })}
-                  className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg text-sm transition-colors duration-300"
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white transition-colors duration-300"
                 />
               </div>
             </div>
@@ -229,14 +229,14 @@ export default function AllStocks({ className = '' }: AllStocksProps) {
       </AnimatePresence>
 
       {/* Results Table */}
-      <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden transition-colors duration-300">
-        <div className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between transition-colors duration-300">
-          <h3 className="text-base sm:text-lg font-medium text-slate-900 dark:text-white transition-colors duration-300">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+        <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 flex items-center justify-between">
+          <h3 className="text-base sm:text-lg font-medium text-slate-900 dark:text-white">
             {isLoading ? 'Loading...' : `${filteredStocks.length} Stock${filteredStocks.length !== 1 ? 's' : ''} Found`}
           </h3>
           <button
             onClick={() => window.location.reload()}
-            className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-blue-600 dark:bg-pearto-blue text-white rounded-lg hover:bg-blue-700 dark:hover:bg-pearto-blue-hover transition-colors shadow-sm text-sm"
+            className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm text-sm"
           >
             <RefreshCw className="h-4 w-4" />
             <span className="hidden sm:inline">Refresh</span>
@@ -249,7 +249,7 @@ export default function AllStocks({ className = '' }: AllStocksProps) {
           </div>
         ) : filteredStocks.length === 0 ? (
           <div className="text-center py-12 sm:py-16">
-            <p className="text-slate-500 dark:text-slate-400 transition-colors duration-300">No stocks found matching your criteria.</p>
+            <p className="text-slate-500 dark:text-slate-400">No stocks found matching your criteria.</p>
             <button onClick={clearFilters} className="mt-4 text-blue-600 font-medium text-sm">Clear all filters</button>
           </div>
         ) : (
@@ -257,18 +257,18 @@ export default function AllStocks({ className = '' }: AllStocksProps) {
             {/* Mobile View - Horizontal Scroll Table */}
             <div className="block lg:hidden overflow-x-auto">
               <table className="w-full min-w-[600px] text-sm">
-                <thead className="bg-gradient-to-r from-blue-50 via-indigo-50 to-blue-50 dark:from-gray-800 dark:via-gray-800 dark:to-gray-700 border-b-2 border-blue-200 dark:border-gray-600">
+                <thead className="bg-slate-50 dark:bg-slate-800">
                   <tr>
-                    <th className="px-3 py-3 text-left text-xs font-medium text-blue-700 dark:text-blue-400 uppercase">Stock</th>
-                    <th className="px-3 py-3 text-right text-xs font-medium text-blue-700 dark:text-blue-400 uppercase">Price</th>
-                    <th className="px-3 py-3 text-right text-xs font-medium text-blue-700 dark:text-blue-400 uppercase">Change</th>
-                    <th className="px-3 py-3 text-right text-xs font-medium text-blue-700 dark:text-blue-400 uppercase">Volume</th>
-                    <th className="px-3 py-3 text-right text-xs font-medium text-blue-700 dark:text-blue-400 uppercase">MCap</th>
+                    <th className="px-3 py-3 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Stock</th>
+                    <th className="px-3 py-3 text-right text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Price</th>
+                    <th className="px-3 py-3 text-right text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Change</th>
+                    <th className="px-3 py-3 text-right text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Volume</th>
+                    <th className="px-3 py-3 text-right text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">MCap</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white dark:bg-slate-800 divide-y divide-gray-200 dark:divide-gray-700">
+                <tbody className="bg-white dark:bg-slate-900/95 divide-y divide-slate-100 dark:divide-slate-800">
                   {filteredStocks.map((stock) => (
-                    <tr key={stock.symbol} className="hover:bg-blue-50/50 dark:hover:bg-gray-700/50">
+                    <tr key={stock.symbol} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
                       <td className="px-3 py-3 whitespace-nowrap">
                         <Link href={`/stock/${stock.symbol.toLowerCase()}`}>
                           <div className="text-sm font-semibold text-slate-900 dark:text-white">{stock.symbol}</div>
@@ -278,7 +278,7 @@ export default function AllStocks({ className = '' }: AllStocksProps) {
                       <td className="px-3 py-3 text-right text-sm font-semibold text-slate-900 dark:text-white">
                         <PriceDisplay amount={stock.price} />
                       </td>
-                      <td className={`px-3 py-3 text-right text-sm font-semibold ${stock.change >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'}`}>
+                      <td className={`px-3 py-3 text-right text-sm font-semibold ${stock.change >= 0 ? 'text-emerald-600' : 'text-red-500'}`}>
                         {stock.changePercent.toFixed(2)}%
                       </td>
                       <td className="px-3 py-3 text-right text-sm font-medium text-slate-900 dark:text-white">{formatNumber(stock.volume || 0)}</td>
@@ -291,38 +291,52 @@ export default function AllStocks({ className = '' }: AllStocksProps) {
 
             {/* Desktop View */}
             <div className="hidden lg:block overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200  dark:divide-pearto-border text-sm transition-colors duration-300">
-                <thead className="bg-gradient-to-r from-blue-50 via-indigo-50 to-blue-50 dark:from-gray-800 dark:via-gray-800 dark:to-gray-700 border-b-2 border-blue-200 dark:border-gray-600 transition-colors duration-300">
+              <table className="w-full">
+                <thead className="bg-slate-50 dark:bg-slate-800 sticky top-0">
                   <tr>
-                    <th className="px-3 sm:px-4 py-3 sm:py-4 text-left text-xs font-medium text-blue-700 dark:text-blue-400 uppercase transition-colors duration-300">Stock</th>
-                    {['Price', 'Change', 'Volume', 'MarketCap', 'PE'].map((key) => (
-                      <th key={key} onClick={() => handleSort(key === 'MarketCap' ? 'marketCap' : key.toLowerCase())} className="px-3 sm:px-4 py-3 sm:py-4 text-left text-xs font-medium text-blue-700 dark:text-blue-400 uppercase cursor-pointer hover:bg-blue-100 dark:hover:bg-gray-700 transition-colors duration-300">
-                        <div className="flex items-center gap-1">{key} <ArrowUpDown className="h-3 w-3" /></div>
-                      </th>
-                    ))}
-                    <th className="px-3 sm:px-4 py-3 sm:py-4 text-left text-xs font-medium text-blue-700 dark:text-blue-400 uppercase transition-colors duration-300">Sector</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Stock</th>
+                    <th onClick={() => handleSort('price')} className="px-4 py-3 text-right text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+                      <div className="flex items-center justify-end gap-1">Price <ArrowUpDown className="h-3 w-3" /></div>
+                    </th>
+                    <th onClick={() => handleSort('changePercent')} className="px-4 py-3 text-right text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+                      <div className="flex items-center justify-end gap-1">Change <ArrowUpDown className="h-3 w-3" /></div>
+                    </th>
+                    <th onClick={() => handleSort('volume')} className="px-4 py-3 text-right text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700 transition hidden lg:table-cell">
+                      <div className="flex items-center justify-end gap-1">Volume <ArrowUpDown className="h-3 w-3" /></div>
+                    </th>
+                    <th onClick={() => handleSort('marketCap')} className="px-4 py-3 text-right text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700 transition hidden md:table-cell">
+                      <div className="flex items-center justify-end gap-1">Market Cap <ArrowUpDown className="h-3 w-3" /></div>
+                    </th>
+                    <th className="px-4 py-3 text-center text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider hidden xl:table-cell">Sector</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white dark:bg-slate-800 divide-y divide-gray-200 dark:divide-pearto-border transition-colors duration-300">
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                   {filteredStocks.map((stock) => (
-                    <tr key={stock.symbol} className="hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-transparent dark:hover:from-gray-700/50 dark:hover:to-transparent transition-colors group">
-                      <td className="px-3 sm:px-4 py-3 sm:py-4 whitespace-nowrap">
-                        <Link href={`/stock/${stock.symbol.toLowerCase()}`}>
-                          <div className="text-sm font-semibold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">{stock.symbol}</div>
-                          <div className="text-sm text-slate-500 dark:text-slate-400 truncate max-w-[120px] transition-colors duration-300">{stock.name}</div>
+                    <tr key={stock.symbol} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition cursor-pointer group">
+                      <td className="px-4 py-3">
+                        <Link href={`/stock/${stock.symbol.toLowerCase()}`} className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white font-bold text-xs">
+                            {stock.symbol?.slice(0, 2)}
+                          </div>
+                          <div>
+                            <span className="font-semibold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition">{stock.symbol}</span>
+                            <div className="text-sm text-slate-600 dark:text-slate-300 line-clamp-1 max-w-[200px]">{stock.name}</div>
+                          </div>
                         </Link>
                       </td>
-
-                      <td className="px-3 sm:px-4 py-3 sm:py-4 text-sm font-semibold text-slate-900 dark:text-white transition-colors duration-300">
-                        <PriceDisplay amount={stock.price} />
+                      <td className="px-4 py-3 text-right">
+                        <span className="font-semibold text-slate-900 dark:text-white">
+                          <PriceDisplay amount={stock.price} />
+                        </span>
                       </td>
-                      <td className={`px-3 sm:px-4 py-3 sm:py-4 text-sm font-semibold ${stock.change >= 0 ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'}`}>
-                        {stock.changePercent.toFixed(2)}%
+                      <td className="px-4 py-3 text-right">
+                        <div className={`flex items-center justify-end gap-1 font-medium ${stock.change >= 0 ? 'text-emerald-600' : 'text-red-500'}`}>
+                          <span>{stock.change >= 0 ? '+' : ''}${Math.abs(stock.change || 0).toFixed(2)} ({stock.change >= 0 ? '+' : ''}{(stock.changePercent || 0).toFixed(2)}%)</span>
+                        </div>
                       </td>
-                      <td className="px-3 sm:px-4 py-3 sm:py-4 text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">{formatNumber(stock.volume || 0)}</td>
-                      <td className="px-3 sm:px-4 py-3 sm:py-4 text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">{formatMarketCap(stock.marketCap)}</td>
-                      <td className="px-3 sm:px-4 py-3 sm:py-4 text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">{stock.peRatio?.toFixed(2) || '—'}</td>
-                      <td className="px-3 sm:px-4 py-3 sm:py-4">
+                      <td className="px-4 py-3 text-right text-slate-600 dark:text-slate-400 text-sm hidden lg:table-cell">{formatNumber(stock.volume || 0)}</td>
+                      <td className="px-4 py-3 text-right text-slate-600 dark:text-slate-400 text-sm hidden md:table-cell">{formatMarketCap(stock.marketCap)}</td>
+                      <td className="px-4 py-3 text-center hidden xl:table-cell">
                         <span className="px-2 py-1 rounded-full bg-blue-100 dark:bg-slate-900/95 text-blue-800 dark:text-slate-300 text-xs font-medium">{stock.sector || 'Unknown'}</span>
                       </td>
                     </tr>

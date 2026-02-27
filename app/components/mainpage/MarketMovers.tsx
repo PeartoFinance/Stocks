@@ -308,14 +308,16 @@ export default function MarketMovers({
 
       <div className="p-2 sm:p-3 lg:p-4">
         {selectedTab === 'analysis' ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="space-y-3">
+            {/* Distribution Charts - 2 cols on mobile */}
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-4">
             {/* Market Sentiment */}
-            <div className="bg-gradient-to-br from-green-50 to-red-50 dark:from-slate-800 dark:to-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700">
-              <h3 className="text-sm font-medium text-slate-900 dark:text-white mb-4 text-center">Market Sentiment</h3>
-              <div className="h-52 flex items-center justify-center">
+            <div className="bg-gradient-to-br from-green-50 to-red-50 dark:from-slate-800 dark:to-slate-800 p-3 lg:p-5 rounded-xl border border-slate-200 dark:border-slate-700">
+              <h3 className="text-xs lg:text-sm font-medium text-slate-900 dark:text-white mb-2 lg:mb-4 text-center">Market Sentiment</h3>
+              <div className="h-32 lg:h-52 flex items-center justify-center">
                 <Doughnut data={marketSentimentData} options={donutChartOptions} />
               </div>
-              <div className="mt-4 space-y-2">
+              <div className="mt-2 lg:mt-4 space-y-1 lg:space-y-2">
                 <div className="flex items-center justify-between p-2 bg-white dark:bg-slate-700 rounded-lg">
                   <div className="flex items-center gap-2">
                     <div className="w-3 h-3 rounded-full bg-green-500"></div>
@@ -341,12 +343,12 @@ export default function MarketMovers({
             </div>
 
             {/* Volume Distribution */}
-            <div className="bg-gradient-to-br from-amber-50 to-blue-50 dark:from-slate-800 dark:to-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700">
-              <h3 className="text-sm font-medium text-slate-900 dark:text-white mb-4 text-center">Volume Distribution</h3>
-              <div className="h-52 flex items-center justify-center">
+            <div className="bg-gradient-to-br from-amber-50 to-blue-50 dark:from-slate-800 dark:to-slate-800 p-3 lg:p-5 rounded-xl border border-slate-200 dark:border-slate-700">
+              <h3 className="text-xs lg:text-sm font-medium text-slate-900 dark:text-white mb-2 lg:mb-4 text-center">Volume Distribution</h3>
+              <div className="h-32 lg:h-52 flex items-center justify-center">
                 <Doughnut data={volumeDistributionData} options={donutChartOptions} />
               </div>
-              <div className="mt-4 space-y-2">
+              <div className="mt-2 lg:mt-4 space-y-1 lg:space-y-2">
                 <div className="flex items-center justify-between p-2 bg-white dark:bg-slate-700 rounded-lg">
                   <div className="flex items-center gap-2">
                     <div className="w-3 h-3 rounded-full bg-amber-500"></div>
@@ -372,12 +374,12 @@ export default function MarketMovers({
             </div>
 
             {/* Price Distribution */}
-            <div className="bg-gradient-to-br from-purple-50 to-green-50 dark:from-slate-800 dark:to-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700">
-              <h3 className="text-sm font-medium text-slate-900 dark:text-white mb-4 text-center">Price Distribution</h3>
-              <div className="h-52 flex items-center justify-center">
+            <div className="bg-gradient-to-br from-purple-50 to-green-50 dark:from-slate-800 dark:to-slate-800 p-3 lg:p-5 rounded-xl border border-slate-200 dark:border-slate-700">
+              <h3 className="text-xs lg:text-sm font-medium text-slate-900 dark:text-white mb-2 lg:mb-4 text-center">Price Distribution</h3>
+              <div className="h-32 lg:h-52 flex items-center justify-center">
                 <Doughnut data={priceRangeData} options={donutChartOptions} />
               </div>
-              <div className="mt-4 space-y-2">
+              <div className="mt-2 lg:mt-4 space-y-1 lg:space-y-2">
                 {Object.entries(priceRanges).map(([range, count], i) => {
                   const colors = ['bg-purple-500', 'bg-blue-500', 'bg-green-500', 'bg-orange-500'];
                   const textColors = ['text-purple-600 dark:text-purple-400', 'text-blue-600 dark:text-blue-400', 'text-green-600 dark:text-green-400', 'text-orange-600 dark:text-orange-400'];
@@ -394,79 +396,36 @@ export default function MarketMovers({
               </div>
             </div>
 
-            {/* Sector Performance */}
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700">
-              <h3 className="text-sm font-medium text-slate-900 dark:text-white mb-4">Sector Performance</h3>
-              <div className="space-y-2">
-                {sectorAnalysis.slice(0, 6).map((sector, i) => (
-                  <div key={i} className="flex items-center justify-between p-3 bg-white dark:bg-slate-700 rounded-lg hover:shadow-md transition-shadow">
-                    <div className="flex-1 min-w-0">
-                      <div className="font-medium text-xs text-slate-900 dark:text-white truncate">{sector.sector}</div>
-                      <div className="text-xs text-slate-500 dark:text-slate-400">{sector.stockCount} stocks</div>
-                    </div>
-                    <div className={`font-medium text-sm ${sector.avgChange >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
-                      {sector.avgChange >= 0 ? '+' : ''}{sector.avgChange.toFixed(1)}%
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Top Performers */}
-            <div className="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-slate-800 dark:to-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700">
-              <h3 className="text-sm font-medium text-slate-900 dark:text-white mb-4">Top Performers</h3>
-              <div className="space-y-3">
-                <div>
-                  <div className="text-xs font-medium text-green-600 dark:text-green-400 mb-2">Best Gainers</div>
-                  <div className="space-y-1.5">
-                    {topGainers.slice(0, 3).map((stock, i) => (
-                      <div key={i} className="flex items-center justify-between p-2.5 bg-green-50 dark:bg-green-500/10 rounded-lg">
-                        <span className="font-medium text-xs text-slate-900 dark:text-white">{stock.symbol}</span>
-                        <span className="text-xs font-medium text-green-600 dark:text-green-400">+{stock.changePercent.toFixed(1)}%</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  <div className="text-xs font-medium text-red-600 dark:text-red-400 mb-2">Worst Losers</div>
-                  <div className="space-y-1.5">
-                    {topLosers.slice(0, 3).map((stock, i) => (
-                      <div key={i} className="flex items-center justify-between p-2.5 bg-red-50 dark:bg-red-500/10 rounded-lg">
-                        <span className="font-medium text-xs text-slate-900 dark:text-white">{stock.symbol}</span>
-                        <span className="text-xs font-medium text-red-600 dark:text-red-400">{stock.changePercent.toFixed(1)}%</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-
+            {/* Other Cards - Full width on mobile */}
+            <div className="grid grid-cols-1 lg:grid-cols-1 gap-2 lg:gap-4">
             {/* Market Summary */}
-            <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-slate-800 dark:to-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700">
+            <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-slate-800 dark:to-slate-800 p-3 lg:p-5 rounded-xl border border-slate-200 dark:border-slate-700">
               <h3 className="text-sm font-medium text-slate-900 dark:text-white mb-4">Market Summary</h3>
               <div className="grid grid-cols-2 gap-3">
                 <div className="text-center p-4 bg-white dark:bg-slate-700 rounded-xl">
-                  <div className="text-3xl font-medium text-blue-600 dark:text-blue-400">{allStocks.length}</div>
-                  <div className="text-xs text-slate-600 dark:text-slate-400 mt-1">Total Stocks</div>
+                  <div className="text-xl lg:text-3xl font-medium text-blue-600 dark:text-blue-400">{allStocks.length}</div>
+                  <div className="text-[10px] lg:text-xs text-slate-600 dark:text-slate-400 mt-1">Total Stocks</div>
                 </div>
                 <div className="text-center p-4 bg-white dark:bg-slate-700 rounded-xl">
-                  <div className="text-3xl font-medium text-green-600 dark:text-green-400">{avgGain.toFixed(1)}%</div>
-                  <div className="text-xs text-slate-600 dark:text-slate-400 mt-1">Avg Gain</div>
+                  <div className="text-xl lg:text-3xl font-medium text-green-600 dark:text-green-400">{avgGain.toFixed(1)}%</div>
+                  <div className="text-[10px] lg:text-xs text-slate-600 dark:text-slate-400 mt-1">Avg Gain</div>
                 </div>
                 <div className="text-center p-4 bg-white dark:bg-slate-700 rounded-xl">
-                  <div className="text-2xl font-medium text-purple-600 dark:text-purple-400">{formatPrice(avgPrice)}</div>
-                  <div className="text-xs text-slate-600 dark:text-slate-400 mt-1">Avg Price</div>
+                  <div className="text-lg lg:text-2xl font-medium text-purple-600 dark:text-purple-400">{formatPrice(avgPrice)}</div>
+                  <div className="text-[10px] lg:text-xs text-slate-600 dark:text-slate-400 mt-1">Avg Price</div>
                 </div>
                 <div className="text-center p-4 bg-white dark:bg-slate-700 rounded-xl">
-                  <div className="text-2xl font-medium text-orange-600 dark:text-orange-400">{formatVolume(totalVolume)}</div>
-                  <div className="text-xs text-slate-600 dark:text-slate-400 mt-1">Total Volume</div>
+                  <div className="text-lg lg:text-2xl font-medium text-orange-600 dark:text-orange-400">{formatVolume(totalVolume)}</div>
+                  <div className="text-[10px] lg:text-xs text-slate-600 dark:text-slate-400 mt-1">Total Volume</div>
                 </div>
               </div>
               <div className="mt-4 text-center p-4 bg-white dark:bg-slate-700 rounded-xl">
-                <div className="text-sm font-medium text-slate-900 dark:text-white">
+                <div className="text-xs lg:text-sm font-medium text-slate-900 dark:text-white">
                   {topGainers.length > topLosers.length ? '📈 Bullish Market' : topGainers.length < topLosers.length ? '📉 Bearish Market' : '⚖️ Neutral Market'}
                 </div>
               </div>
+            </div>
+            </div>
             </div>
           </div>
         ) : (

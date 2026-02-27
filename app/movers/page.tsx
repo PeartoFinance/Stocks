@@ -178,7 +178,6 @@ export default function MarketMoversPage() {
                 currentTab: tab,
                 totalCount: data.length
               }}
-              autoAnalyze={!loading && data.length > 0}
               quickPrompts={[
                 'Why are these stocks moving?',
                 'Market sentiment analysis',

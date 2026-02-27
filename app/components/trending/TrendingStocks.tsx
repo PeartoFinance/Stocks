@@ -69,7 +69,7 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState<'trendScore' | 'changePercent' | 'volume' | 'marketCap'>('trendScore');
+  const [sortBy, setSortBy] = useState<'changePercent' | 'volume' | 'marketCap'>('changePercent');
   const [isAIPanelOpen, setIsAIPanelOpen] = useState(false);
 
   const filterTypes = [
@@ -144,9 +144,28 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
         if (mostActiveRes && Array.isArray(mostActiveRes)) {
           mostActiveRes.forEach((stock: any) => {
             const existingStock = trendingStocks.find(s => s.symbol === stock.symbol);
-            if (existingStock && existingStock.trendType === 'gainer') {
+            if (existingStock) {
+              // Update existing stock to volume type
               existingStock.trendType = 'volume';
               existingStock.trendScore = Math.min(100, existingStock.trendScore + 20);
+            } else {
+              // Add new stock as volume type
+              trendingStocks.push({
+                id: `v-${stock.symbol}`,
+                symbol: stock.symbol || '',
+                name: stock.name || '',
+                price: stock.price || 0,
+                change: stock.change || 0,
+                changePercent: stock.changePercent || 0,
+                volume: stock.volume || 0,
+                marketCap: stock.marketCap || 0,
+                sector: stock.sector || 'Technology',
+                trendType: 'volume',
+                trendScore: Math.min(100, 60 + Math.abs(stock.changePercent || 0) * 2),
+                socialMentions: Math.floor((stock.volume || 0) / 100000),
+                newsCount: 0,
+                analyst_rating: 'Hold'
+              });
             }
           });
         }
@@ -170,7 +189,16 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
         stock.symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
         stock.sector.toLowerCase().includes(searchTerm.toLowerCase());
 
-      const matchesFilter = activeFilter === 'all' || stock.trendType === activeFilter;
+      let matchesFilter = false;
+      if (activeFilter === 'all') {
+        matchesFilter = true;
+      } else if (activeFilter === 'gainer') {
+        matchesFilter = stock.changePercent > 0;
+      } else if (activeFilter === 'loser') {
+        matchesFilter = stock.changePercent < 0;
+      } else {
+        matchesFilter = stock.trendType === activeFilter;
+      }
 
       return matchesSearch && matchesFilter;
     });
@@ -577,16 +605,6 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
                   })}
                 </div>
                 <div className="flex gap-2">
-                  <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value as any)}
-                    className="px-2 py-1 text-[10px] border border-slate-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:focus:ring-pearto-green bg-white dark:bg-slate-700 text-slate-900 dark:text-white transition-colors duration-300"
-                  >
-                    <option value="trendScore">Score</option>
-                    <option value="changePercent">Change</option>
-                    <option value="volume">Volume</option>
-                    <option value="marketCap">MCap</option>
-                  </select>
                   <div className="relative flex-1">
                     <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-3 w-3 text-slate-400 dark:text-pearto-gray" />
                     <input
@@ -621,16 +639,6 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
                   })}
                 </div>
                 <div className="flex items-center gap-3">
-                  <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value as any)}
-                    className="px-4 py-2 text-sm border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-pearto-green bg-white dark:bg-slate-700 text-slate-900 dark:text-white transition-colors duration-300"
-                  >
-                    <option value="trendScore">Trend Score</option>
-                    <option value="changePercent">Change %</option>
-                    <option value="volume">Volume</option>
-                    <option value="marketCap">Market Cap</option>
-                  </select>
                   <div className="relative w-64">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-pearto-gray" />
                     <input
@@ -650,27 +658,27 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden transition-all duration-300"
+              className="bg-white dark:bg-slate-900 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden transition-all duration-300"
             >
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[700px]">
-                  <thead className="bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-800 dark:via-gray-800 dark:to-gray-700 border-b-2 border-blue-200 dark:border-gray-600">
+                  <thead className="bg-slate-50 dark:bg-slate-900/95 border-b-2 border-slate-200 dark:border-slate-700">
                     <tr>
-                      <th className="px-3 sm:px-6 py-4 text-left text-xs font-medium text-blue-700 dark:text-blue-400 uppercase tracking-wider">Stock</th>
-                      <th className="px-3 sm:px-6 py-4 text-right text-xs font-medium text-blue-700 dark:text-blue-400 uppercase tracking-wider">Price</th>
-                      <th className="px-3 sm:px-6 py-4 text-right text-xs font-medium text-blue-700 dark:text-blue-400 uppercase tracking-wider">Change</th>
-                      <th className="px-3 sm:px-6 py-4 text-right text-xs font-medium text-blue-700 dark:text-blue-400 uppercase tracking-wider">Volume</th>
-                      <th className="px-3 sm:px-6 py-4 text-right text-xs font-medium text-blue-700 dark:text-blue-400 uppercase tracking-wider">Mkt Cap</th>
-                      <th className="px-3 sm:px-6 py-4 text-center text-xs font-medium text-blue-700 dark:text-blue-400 uppercase tracking-wider">Score</th>
+                      <th className="px-3 sm:px-6 py-4 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Stock</th>
+                      <th className="px-3 sm:px-6 py-4 text-right text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Price</th>
+                      <th className="px-3 sm:px-6 py-4 text-right text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Change</th>
+                      <th className="px-3 sm:px-6 py-4 text-right text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Volume</th>
+                      <th className="px-3 sm:px-6 py-4 text-right text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Mkt Cap</th>
+                      <th className="px-3 sm:px-6 py-4 text-center text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Score</th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white dark:bg-slate-800 divide-y divide-gray-200 dark:divide-gray-700">
+                  <tbody className="bg-white dark:bg-slate-900/95 divide-y divide-slate-100 dark:divide-slate-800">
                     {filteredStocks.map((stock, index) => {
                       const TrendIcon = getTrendIcon(stock.trendType);
                       return (
                         <tr
                           key={stock.id}
-                          className="hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-transparent dark:hover:from-gray-700/50 dark:hover:to-transparent transition-all duration-200 cursor-pointer group"
+                          className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-all duration-200 cursor-pointer group"
                         >
                           <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center">
@@ -732,11 +740,11 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
       </main>
 
       {/* Sliding AI Panel */}
-      <div className={`fixed top-0 right-0 h-full w-96 bg-white dark:bg-slate-800 shadow-2xl transform transition-transform duration-300 ease-in-out z-50 ${isAIPanelOpen ? 'translate-x-0' : 'translate-x-full'
+      <div className={`fixed top-0 right-0 h-full w-96 bg-white dark:bg-slate-800 shadow-2xl transform transition-transform duration-300 ease-in-out z-[60] ${isAIPanelOpen ? 'translate-x-0' : 'translate-x-full'
         }`}>
         <div className="h-full flex flex-col">
           {/* AI Panel Header */}
-          <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-700 bg-gradient-to-r from-blue-50 to-purple-50 transition-colors duration-300">
+          <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-700 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 transition-colors duration-300">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Brain className="h-5 w-5 text-blue-600" />
@@ -771,7 +779,6 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
                 topGainer: filteredStocks.filter(s => s.changePercent > 0)[0]?.symbol,
                 topLoser: filteredStocks.filter(s => s.changePercent < 0)[0]?.symbol
               }}
-              autoAnalyze={!loading && filteredStocks.length > 0}
               quickPrompts={[
                 'Why are these stocks trending?',
                 'Trading signals',
