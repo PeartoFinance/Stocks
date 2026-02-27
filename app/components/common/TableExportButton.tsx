@@ -276,7 +276,7 @@ export function TableExportButton({
                         disabled={isDisabled}
                         className={`p-2 rounded-lg transition ${isDisabled
                             ? 'text-slate-300 cursor-not-allowed'
-                            : 'bg-slate-900/95 dark:bg-slate-900/95 text-white hover:bg-slate-800'
+                            : 'bg-slate-100 dark:bg-slate-900/95 text-slate-900 dark:text-white hover:bg-slate-200 dark:hover:bg-slate-800'
                             } ${className}`}
                         title="Export data"
                     >
@@ -309,11 +309,11 @@ export function TableExportButton({
                         disabled={isDisabled}
                         className={`flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg transition whitespace-nowrap ${isDisabled
                             ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
-                            : 'bg-slate-100 dark:bg-pearto-surface text-slate-600 dark:text-pearto-cloud hover:bg-slate-200 dark:hover:bg-pearto-surface/80'
+                            : 'bg-slate-100 dark:bg-slate-900/95 text-slate-600 dark:text-white hover:bg-slate-200 dark:hover:bg-slate-800'
                             } ${className}`}
                     >
                         <Download size={14} />
-                        <span className="hidden xs:inline">Export</span>
+                        <span className="">Export</span>
                         <ChevronDown size={14} className={`transition-transform ${isOpen ? 'rotate-180' : ''}`} />
                     </button>
 

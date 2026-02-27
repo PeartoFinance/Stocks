@@ -9,6 +9,7 @@ import { stockAPI } from '../../utils/api';
 import { Stock } from '../../types';
 import Link from 'next/link';
 import PriceDisplay from '../common/PriceDisplay';
+import { TableExportButton } from '../common/TableExportButton';
 
 interface AllStocksProps {
   className?: string;
@@ -234,13 +235,45 @@ export default function AllStocks({ className = '' }: AllStocksProps) {
           <h3 className="text-base sm:text-lg font-medium text-slate-900 dark:text-white">
             {isLoading ? 'Loading...' : `${filteredStocks.length} Stock${filteredStocks.length !== 1 ? 's' : ''} Found`}
           </h3>
-          <button
-            onClick={() => window.location.reload()}
-            className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm text-sm"
-          >
-            <RefreshCw className="h-4 w-4" />
-            <span className="hidden sm:inline">Refresh</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <TableExportButton
+              data={filteredStocks}
+              columns={[
+                { key: 'symbol', label: 'Symbol', format: 'text' },
+                { key: 'name', label: 'Name', format: 'text' },
+                { key: 'price', label: 'Price', format: 'currency' },
+                { key: 'changePercent', label: 'Change %', format: 'percent' },
+                { key: 'volume', label: 'Volume', format: 'number' },
+                { key: 'marketCap', label: 'Market Cap', format: 'number' },
+                { key: 'sector', label: 'Sector', format: 'text' }
+              ]}
+              filename="stocks-data"
+              title="Stocks Data"
+              variant="compact"
+              className="hidden sm:flex"
+            />
+            <TableExportButton
+              data={filteredStocks}
+              columns={[
+                { key: 'symbol', label: 'Symbol', format: 'text' },
+                { key: 'name', label: 'Name', format: 'text' },
+                { key: 'price', label: 'Price', format: 'currency' },
+                { key: 'changePercent', label: 'Change %', format: 'percent' },
+                { key: 'volume', label: 'Volume', format: 'number' },
+                { key: 'marketCap', label: 'Market Cap', format: 'number' }
+              ]}
+              filename="stocks-data"
+              variant="icon"
+              className="sm:hidden"
+            />
+            <button
+              onClick={() => window.location.reload()}
+              className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm text-sm"
+            >
+              <RefreshCw className="h-4 w-4" />
+              <span className="hidden sm:inline">Refresh</span>
+            </button>
+          </div>
         </div>
 
         {isLoading ? (

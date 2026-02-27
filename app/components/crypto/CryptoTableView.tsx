@@ -5,6 +5,7 @@ import { TrendingUp, TrendingDown, ArrowUpRight, ArrowDownRight } from 'lucide-r
 import { CryptoData } from '@/app/crypto/page';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { TableExportButton } from '../common/TableExportButton';
 
 interface CryptoTableViewProps {
   cryptoData: CryptoData[];
@@ -154,6 +155,43 @@ export default function CryptoTableView({ cryptoData, loading = false, viewMode 
 }
   return (
     <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden transition-all duration-300 hover:shadow-xl">
+      {/* Table Header with Export Button */}
+      <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 flex items-center justify-between">
+        <h3 className="text-base sm:text-lg font-medium text-slate-900 dark:text-white">
+          {cryptoData.length} Cryptocurrencies
+        </h3>
+        <div className="flex items-center gap-2">
+          <TableExportButton
+            data={cryptoData}
+            columns={[
+              { key: 'symbol', label: 'Symbol', format: 'text' },
+              { key: 'name', label: 'Name', format: 'text' },
+              { key: 'price', label: 'Price', format: 'currency' },
+              { key: 'changePercent', label: '24h Change %', format: 'percent' },
+              { key: 'marketCap', label: 'Market Cap', format: 'number' },
+              { key: 'volume', label: 'Volume (24h)', format: 'number' }
+            ]}
+            filename="crypto-data"
+            title="Cryptocurrency Data"
+            variant="compact"
+            className="hidden sm:flex"
+          />
+          <TableExportButton
+            data={cryptoData}
+            columns={[
+              { key: 'symbol', label: 'Symbol', format: 'text' },
+              { key: 'name', label: 'Name', format: 'text' },
+              { key: 'price', label: 'Price', format: 'currency' },
+              { key: 'changePercent', label: '24h Change %', format: 'percent' },
+              { key: 'marketCap', label: 'Market Cap', format: 'number' },
+              { key: 'volume', label: 'Volume (24h)', format: 'number' }
+            ]}
+            filename="crypto-data"
+            variant="icon"
+            className="sm:hidden"
+          />
+        </div>
+      </div>
       <div className="overflow-x-auto">
         <table className="w-full min-w-[600px]">
           <thead className="bg-slate-50 dark:bg-slate-800 border-b-2 border-slate-200 dark:border-slate-700 transition-colors duration-300">

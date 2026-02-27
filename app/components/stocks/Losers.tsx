@@ -7,6 +7,7 @@ import { stockAPI } from '../../utils/api';
 import { Stock } from '../../types';
 import Link from 'next/link';
 import PriceDisplay from '../common/PriceDisplay';
+import { TableExportButton } from '../common/TableExportButton';
 
 interface LosersProps {
   className?: string;
@@ -90,7 +91,24 @@ export default function Losers({ className = '' }: LosersProps) {
         ) : (
           <>
             {/* Mobile View - Horizontal Scroll Table */}
-            <div className="block lg:hidden overflow-x-auto">
+            <div className="block lg:hidden">
+              <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 flex items-center justify-between">
+                <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Top Losers</h3>
+                <TableExportButton
+                  data={losers}
+                  columns={[
+                    { key: 'symbol', label: 'Symbol', format: 'text' },
+                    { key: 'name', label: 'Name', format: 'text' },
+                    { key: 'price', label: 'Price', format: 'currency' },
+                    { key: 'changePercent', label: 'Change %', format: 'percent' },
+                    { key: 'volume', label: 'Volume', format: 'number' },
+                    { key: 'marketCap', label: 'Market Cap', format: 'number' }
+                  ]}
+                  filename="top-losers"
+                  variant="icon"
+                />
+              </div>
+              <div className="overflow-x-auto">
               <table className="w-full min-w-[600px] text-sm">
                 <thead className="bg-slate-50 dark:bg-slate-800">
                   <tr>
@@ -122,12 +140,45 @@ export default function Losers({ className = '' }: LosersProps) {
                   ))}
                 </tbody>
               </table>
+              </div>
             </div>
 
             {/* Desktop View */}
             <div className="hidden lg:block">
               <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 flex items-center justify-between">
                 <h3 className="font-semibold text-slate-900 dark:text-white">Top Losers</h3>
+                <div className="flex items-center gap-2">
+                  <TableExportButton
+                    data={losers}
+                    columns={[
+                      { key: 'symbol', label: 'Symbol', format: 'text' },
+                      { key: 'name', label: 'Name', format: 'text' },
+                      { key: 'price', label: 'Price', format: 'currency' },
+                      { key: 'changePercent', label: 'Change %', format: 'percent' },
+                      { key: 'volume', label: 'Volume', format: 'number' },
+                      { key: 'marketCap', label: 'Market Cap', format: 'number' },
+                      { key: 'sector', label: 'Sector', format: 'text' }
+                    ]}
+                    filename="top-losers"
+                    title="Top Losers"
+                    variant="compact"
+                    className="hidden sm:flex"
+                  />
+                  <TableExportButton
+                    data={losers}
+                    columns={[
+                      { key: 'symbol', label: 'Symbol', format: 'text' },
+                      { key: 'name', label: 'Name', format: 'text' },
+                      { key: 'price', label: 'Price', format: 'currency' },
+                      { key: 'changePercent', label: 'Change %', format: 'percent' },
+                      { key: 'volume', label: 'Volume', format: 'number' },
+                      { key: 'marketCap', label: 'Market Cap', format: 'number' }
+                    ]}
+                    filename="top-losers"
+                    variant="icon"
+                    className="sm:hidden"
+                  />
+                </div>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full">
