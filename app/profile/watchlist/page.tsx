@@ -96,8 +96,8 @@ export default function WatchlistPage() {
 
         const dataSource = activeTab === 'stocks' ? availableStocks : availableCrypto;
         const filtered = dataSource.filter(item => 
-            item.symbol.toLowerCase().includes(symbolToAdd.toLowerCase()) ||
-            item.name.toLowerCase().includes(symbolToAdd.toLowerCase())
+            item.symbol?.toLowerCase().includes(symbolToAdd.toLowerCase()) ||
+            item.name?.toLowerCase().includes(symbolToAdd.toLowerCase())
         ).slice(0, 8);
 
         setFilteredStocks(filtered);

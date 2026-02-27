@@ -1042,7 +1042,6 @@ export default function StockDetailPage({ params }: PageProps) {
                     beta: stock.beta,
                     dividendYield: stock.dividendYield
                   } as any}
-                  autoAnalyze={true}
                   quickPrompts={[
                     `Is ${stock.symbol} undervalued?`,
                     'Technical analysis',
@@ -1106,7 +1105,6 @@ export default function StockDetailPage({ params }: PageProps) {
                       beta: stock.beta,
                       dividendYield: stock.dividendYield
                     } as any}
-                    autoAnalyze={true}
                     quickPrompts={[
                       `Is ${stock.symbol} undervalued?`,
                       'Technical analysis',

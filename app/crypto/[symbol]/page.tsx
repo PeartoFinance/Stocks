@@ -558,7 +558,6 @@ export default function CryptoDetailPage() {
                     low: crypto.dayLow,
                     isFeatured: crypto.isFeatured
                   } as any}
-                  autoAnalyze={true}
                   quickPrompts={[
                     `Is ${crypto.symbol} a good investment?`,
                     'Technical analysis',
@@ -623,7 +622,6 @@ export default function CryptoDetailPage() {
                       low: crypto.dayLow,
                       isFeatured: crypto.isFeatured
                     } as any}
-                    autoAnalyze={true}
                     quickPrompts={[
                       `Is ${crypto.symbol} a good investment?`,
                       'Technical analysis',

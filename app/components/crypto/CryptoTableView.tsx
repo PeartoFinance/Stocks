@@ -5,6 +5,7 @@ import { TrendingUp, TrendingDown, ArrowUpRight, ArrowDownRight } from 'lucide-r
 import { CryptoData } from '@/app/crypto/page';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { TableExportButton } from '../common/TableExportButton';
 
 interface CryptoTableViewProps {
   cryptoData: CryptoData[];
@@ -60,7 +61,7 @@ export default function CryptoTableView({ cryptoData, loading = false, viewMode 
 
   if (loading) {
     return (
-      <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-8 transition-colors duration-300">
+      <div className="bg-white dark:bg-slate-900/95 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-8 transition-colors duration-300">
         <div className="flex items-center justify-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600"></div>
           <span className="ml-3 text-slate-600 dark:text-slate-400 transition-colors duration-300">Loading crypto data...</span>
@@ -153,23 +154,60 @@ export default function CryptoTableView({ cryptoData, loading = false, viewMode 
   );
 }
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden transition-all duration-300 hover:shadow-xl">
+    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden transition-all duration-300 hover:shadow-xl">
+      {/* Table Header with Export Button */}
+      <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 flex items-center justify-between">
+        <h3 className="text-base sm:text-lg font-medium text-slate-900 dark:text-white">
+          {cryptoData.length} Cryptocurrencies
+        </h3>
+        <div className="flex items-center gap-2">
+          <TableExportButton
+            data={cryptoData}
+            columns={[
+              { key: 'symbol', label: 'Symbol', format: 'text' },
+              { key: 'name', label: 'Name', format: 'text' },
+              { key: 'price', label: 'Price', format: 'currency' },
+              { key: 'changePercent', label: '24h Change %', format: 'percent' },
+              { key: 'marketCap', label: 'Market Cap', format: 'number' },
+              { key: 'volume', label: 'Volume (24h)', format: 'number' }
+            ]}
+            filename="crypto-data"
+            title="Cryptocurrency Data"
+            variant="compact"
+            className="hidden sm:flex"
+          />
+          <TableExportButton
+            data={cryptoData}
+            columns={[
+              { key: 'symbol', label: 'Symbol', format: 'text' },
+              { key: 'name', label: 'Name', format: 'text' },
+              { key: 'price', label: 'Price', format: 'currency' },
+              { key: 'changePercent', label: '24h Change %', format: 'percent' },
+              { key: 'marketCap', label: 'Market Cap', format: 'number' },
+              { key: 'volume', label: 'Volume (24h)', format: 'number' }
+            ]}
+            filename="crypto-data"
+            variant="icon"
+            className="sm:hidden"
+          />
+        </div>
+      </div>
       <div className="overflow-x-auto">
         <table className="w-full min-w-[600px]">
-          <thead className="bg-gradient-to-r from-emerald-50 via-teal-50 to-cyan-50 dark:from-gray-800 dark:via-gray-800 dark:to-gray-700 border-b-2 border-emerald-200 dark:border-gray-600 transition-colors duration-300">
+          <thead className="bg-slate-50 dark:bg-slate-800 border-b-2 border-slate-200 dark:border-slate-700 transition-colors duration-300">
             <tr>
-              <th className="px-3 sm:px-6 py-4 text-left text-xs font-medium text-emerald-700 dark:text-emerald-400 uppercase tracking-wider transition-colors duration-300">Cryptocurrency</th>
-              <th className="px-3 sm:px-6 py-4 text-right text-xs font-medium text-emerald-700 dark:text-emerald-400 uppercase tracking-wider transition-colors duration-300">Price</th>
-              <th className="px-3 sm:px-6 py-4 text-right text-xs font-medium text-emerald-700 dark:text-emerald-400 uppercase tracking-wider transition-colors duration-300">24h Change</th>
-              <th className="px-3 sm:px-6 py-4 text-right text-xs font-medium text-emerald-700 dark:text-emerald-400 uppercase tracking-wider transition-colors duration-300">Market Cap</th>
-              <th className="px-3 sm:px-6 py-4 text-right text-xs font-medium text-emerald-700 dark:text-emerald-400 uppercase tracking-wider transition-colors duration-300">Volume (24h)</th>
+              <th className="px-3 sm:px-6 py-4 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider transition-colors duration-300">Cryptocurrency</th>
+              <th className="px-3 sm:px-6 py-4 text-right text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider transition-colors duration-300">Price</th>
+              <th className="px-3 sm:px-6 py-4 text-right text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider transition-colors duration-300">24h Change</th>
+              <th className="px-3 sm:px-6 py-4 text-right text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider transition-colors duration-300">Market Cap</th>
+              <th className="px-3 sm:px-6 py-4 text-right text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider transition-colors duration-300">Volume (24h)</th>
             </tr>
           </thead>
-          <tbody className="bg-white dark:bg-slate-800 divide-y divide-gray-200 dark:divide-gray-700 transition-colors duration-300">
+          <tbody className="bg-white dark:bg-slate-900/95 divide-y divide-slate-100 dark:divide-slate-800 transition-colors duration-300">
             {cryptoData.map((crypto, index) => (
               <tr 
                 key={crypto.id || crypto.symbol || index} 
-                className="hover:bg-gradient-to-r hover:from-emerald-50/50 hover:to-transparent dark:hover:from-gray-700/50 dark:hover:to-transparent transition-all duration-200 cursor-pointer group"
+                className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-all duration-200 cursor-pointer group"
                 onClick={() => handleRowClick(crypto.symbol)}                 >
                 <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
