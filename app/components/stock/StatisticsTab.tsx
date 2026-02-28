@@ -139,9 +139,9 @@ export default function StatisticsTab({ stock }: StatisticsTabProps) {
   const performanceMetrics = [
     {
       label: '1 Day Change',
-      value: `${stock.change >= 0 ? '+' : ''}${formatPrice(stock.change)} (${stock.changePercent >= 0 ? '+' : ''}${formatNumber(stock.changePercent)}%)`,
-      icon: stock.change >= 0 ? TrendingUp : TrendingDown,
-      color: stock.change >= 0 ? 'green' : 'red'
+      value: `${(stock.change || 0) >= 0 ? '+' : ''}${formatPrice(stock.change || 0)} (${(stock.changePercent || 0) >= 0 ? '+' : ''}${formatNumber(stock.changePercent || 0)}%)`,
+      icon: (stock.change || 0) >= 0 ? TrendingUp : TrendingDown,
+      color: (stock.change || 0) >= 0 ? 'green' : 'red'
     },
     {
       label: 'Distance from 52W High',

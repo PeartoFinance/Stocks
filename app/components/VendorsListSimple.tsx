@@ -30,7 +30,8 @@ export default function VendorsListSimple({ className = '', limit = 8, category 
         });
 
         if (response.success && response.data) {
-          setVendors(response.data);
+          const filteredVendors = response.data.filter(vendor => vendor.category !== 'Crypto');
+          setVendors(filteredVendors);
         } else {
           setError('Failed to load vendors');
         }
@@ -48,8 +49,8 @@ export default function VendorsListSimple({ className = '', limit = 8, category 
   if (loading) {
     return (
       <div className={`bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-2.5 ${className}`}>
-        <h3 className="text-xs font-medium text-slate-900 dark:text-white mb-2 flex items-center gap-1.5 transition-colors duration-300">
-          <Building2 className="h-3.5 w-3.5 text-blue-600" />
+        <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-2 flex items-center gap-1.5 transition-colors duration-300">
+          <Building2 className="h-4 w-4 text-blue-600" />
           Related Vendors
         </h3>
         <div className="space-y-1.5">
@@ -67,8 +68,8 @@ export default function VendorsListSimple({ className = '', limit = 8, category 
   if (error || vendors.length === 0) {
     return (
       <div className={`bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-2.5 ${className}`}>
-        <h3 className="text-xs font-medium text-slate-900 dark:text-white mb-2 flex items-center gap-1.5 transition-colors duration-300">
-          <Building2 className="h-3.5 w-3.5 text-blue-600" />
+        <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-2 flex items-center gap-1.5 transition-colors duration-300">
+          <Building2 className="h-4 w-4 text-blue-600" />
           Related Vendors
         </h3>
         <div className="text-center py-4">
@@ -83,8 +84,8 @@ export default function VendorsListSimple({ className = '', limit = 8, category 
 
   return (
     <div className={`bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-2.5 ${className}`}>
-      <h3 className="text-xs font-medium text-slate-900 dark:text-white mb-2 flex items-center gap-1.5 transition-colors duration-300">
-        <Building2 className="h-3.5 w-3.5 text-blue-600" />
+      <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-2 flex items-center gap-1.5 transition-colors duration-300">
+        <Building2 className="h-4 w-4 text-blue-600" />
         Related Vendors
       </h3>
       
@@ -111,7 +112,11 @@ export default function VendorsListSimple({ className = '', limit = 8, category 
                     target.style.display = 'none';
                     const parent = target.parentElement;
                     if (parent) {
-                      parent.innerHTML = `<span class="text-white text-[10px] font-medium">${vendor.name.charAt(0).toUpperCase()}</span>`;
+                      const initial = vendor.name.charAt(0).toUpperCase();
+                      const span = document.createElement('span');
+                      span.className = 'text-white text-[10px] font-medium';
+                      span.textContent = initial;
+                      parent.appendChild(span);
                     }
                   }}
                 />
@@ -125,13 +130,13 @@ export default function VendorsListSimple({ className = '', limit = 8, category 
             {/* Vendor Name */}
             <div className="flex-1 min-w-0">
               <h4 
-                className="text-[11px] font-medium text-slate-900 dark:text-white truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors cursor-pointer"
+                className="text-sm font-medium text-slate-900 dark:text-white truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors cursor-pointer"
                 onClick={() => router.push(`/vendor/${vendor.id}`)}
               >
                 {vendor.name}
               </h4>
               {vendor.category && (
-                <span className="text-[10px] text-slate-500 dark:text-slate-400 transition-colors duration-300">
+                <span className="text-xs text-slate-500 dark:text-slate-400 transition-colors duration-300">
                   {vendor.category}
                 </span>
               )}
@@ -144,7 +149,7 @@ export default function VendorsListSimple({ className = '', limit = 8, category 
       <div className="mt-2 pt-2 border-t border-slate-100 dark:border-slate-800 transition-colors duration-300">
       <Link
   href="/vendors"
-  className="flex items-center justify-center gap-1 text-[11px] text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium transition-colors"
+  className="flex items-center justify-center gap-1 text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium transition-colors"
 >
   View All Vendors
   <ExternalLink className="h-2.5 w-2.5" />

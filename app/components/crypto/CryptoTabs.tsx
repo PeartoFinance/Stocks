@@ -77,7 +77,7 @@ export default function CryptoTabs({ activeTab, onTabChange }: CryptoTabsProps) 
                 `}
               >
                 <Icon size={16} className={isActive ? "animate-pulse" : ""} />
-                <span className="text-[9px] lg:text-sm whitespace-nowrap uppercase lg:capitalize tracking-tighter lg:tracking-normal">
+                <span className="text-[10px] lg:text-base whitespace-nowrap uppercase lg:capitalize tracking-tighter lg:tracking-normal">
                   {tab.label}
                 </span>
               </button>

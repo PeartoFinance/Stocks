@@ -1,18 +1,18 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useSearchParams } from 'next/navigation';
-import { Search, Activity, Plus, BarChart3, User, LineChart, Brain } from 'lucide-react';
+import { Search, Activity, Plus, BarChart3, User, LineChart, Brain, Bitcoin } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { cryptoService } from '../../utils/cryptoService';
-import PriceDisplay from '../../components/common/PriceDisplay';
 import OverviewTab from './components/OverviewTab';
 import StatisticsTab from './components/StatisticsTab';
 import ChartTab from './components/ChartTab';
 import ProfileTab from './components/ProfileTab';
 import { ComparisonCrypto } from './components/types';
 import AIAnalysisPanel from '../../components/ai/AIAnalysisPanel';
+import { useCurrency } from '../../context/CurrencyContext';
 
 const CRYPTO_COLORS = ['#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6'];
 
@@ -24,6 +24,7 @@ export default function CryptoComparison() {
   const [activeTab, setActiveTab] = useState('overview');
   const [isAIPanelOpen, setIsAIPanelOpen] = useState(false);
   const [hasAddedCrypto, setHasAddedCrypto] = useState(false);
+  const { formatPrice } = useCurrency();
 
   const tabs = [
     { key: 'overview', label: 'Overview', icon: BarChart3 },
@@ -48,14 +49,18 @@ export default function CryptoComparison() {
       if (cryptoParam) {
         const cryptoSymbols = cryptoParam.split('.').filter(symbol => symbol.trim());
         if (cryptoSymbols.length > 0 && cryptoSymbols.length <= 5) {
-          try {
-            setLoading(true);
-            const cryptoPromises = cryptoSymbols.map(async (symbol) => {
-              const details: any = await cryptoService.getCoinDetails(symbol.trim().toUpperCase());
-              if (details) {
+          setLoading(true);
+          const results = await Promise.allSettled(
+            cryptoSymbols.map(symbol => cryptoService.getCoinDetails(symbol.trim().toUpperCase()))
+          );
+
+          const validCryptos = results
+            .map((result, index) => {
+              if (result.status === 'fulfilled' && result.value) {
+                const details: any = result.value;
                 return {
-                  symbol: details.symbol || symbol.trim().toUpperCase(),
-                  name: details.name || symbol.trim().toUpperCase(),
+                  symbol: details.symbol || cryptoSymbols[index].trim().toUpperCase(),
+                  name: details.name || cryptoSymbols[index].trim().toUpperCase(),
                   price: details.price || 0,
                   change: details.change || 0,
                   changePercent: details.changePercent || 0,
@@ -71,21 +76,19 @@ export default function CryptoComparison() {
                   atl: details.atl,
                   color: CRYPTO_COLORS[0],
                 };
+              } else {
+                toast.error(`${cryptoSymbols[index]} not available`);
+                return null;
               }
-              return null;
-            });
+            })
+            .filter(crypto => crypto !== null);
 
-            const validCryptos = (await Promise.all(cryptoPromises)).filter(crypto => crypto !== null);
-            if (validCryptos.length > 0) {
-              const cryptosWithColors = validCryptos.map((crypto, index) => ({ ...crypto, color: CRYPTO_COLORS[index] }));
-              setComparedCryptos(cryptosWithColors);
-              toast.success(`Loaded ${cryptosWithColors.length} cryptocurrencies`);
-            }
-          } catch (error) {
-            toast.error('Failed to load cryptocurrencies');
-          } finally {
-            setLoading(false);
+          if (validCryptos.length > 0) {
+            const cryptosWithColors = validCryptos.map((crypto, index) => ({ ...crypto, color: CRYPTO_COLORS[index] }));
+            setComparedCryptos(cryptosWithColors);
+            toast.success(`Loaded ${cryptosWithColors.length} cryptocurrencies`);
           }
+          setLoading(false);
         }
       }
     };
@@ -97,16 +100,22 @@ export default function CryptoComparison() {
       if (searchTerm.length >= 2) {
         try {
           setLoading(true);
-          const response = await cryptoService.getMarkets({ limit: 50 });
-          if (response && Array.isArray(response)) {
-            const filtered = response.filter((crypto: any) =>
-              crypto.symbol?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              crypto.name?.toLowerCase().includes(searchTerm.toLowerCase())
-            ).slice(0, 10);
-            setSearchResults(filtered);
+          const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://apipearto.ashlya.com/api';
+          const response = await fetch(`${API_BASE}/stocks/search?q=${encodeURIComponent(searchTerm)}&limit=50`, {
+            headers: { 'Content-Type': 'application/json', 'X-User-Country': 'US' },
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            if (Array.isArray(data)) {
+              const cryptoOnly = data.filter((item: any) => 
+                item.assetType === 'crypto' || (!item.exchange && !item.sector && !item.industry)
+              ).slice(0, 10);
+              setSearchResults(cryptoOnly);
+            }
           }
         } catch (error) {
-          toast.error('Failed to search cryptocurrencies');
+          console.error('Search error:', error);
         } finally {
           setLoading(false);
         }
@@ -198,13 +207,18 @@ export default function CryptoComparison() {
             </div>
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+              {loading && searchTerm.length >= 2 && (
+                <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                  <Activity className="h-5 w-5 text-blue-600 dark:text-emerald-500 animate-spin" />
+                </div>
+              )}
               <input
                 type="text"
                 placeholder="Enter crypto symbol or name..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && searchResults[0] && addToComparison(searchResults[0])}
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm"
+                className="w-full pl-10 pr-12 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm"
               />
             </div>
 
@@ -217,13 +231,16 @@ export default function CryptoComparison() {
                     disabled={loading}
                     className="w-full px-4 py-3 text-left hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors border-b border-slate-100 dark:border-slate-700 last:border-b-0"
                   >
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 bg-amber-500/10">
+                        <Bitcoin size={16} className="text-amber-500" />
+                      </div>
                       <div className="flex-1 min-w-0">
                         <div className="font-medium text-slate-900 dark:text-white">{crypto.symbol}</div>
                         <div className="text-sm text-slate-500 dark:text-slate-400 truncate">{crypto.name}</div>
                       </div>
                       <div className="text-right ml-3">
-                        <div className="font-medium text-slate-900 dark:text-white">${crypto.price?.toFixed(2) || '0.00'}</div>
+                        <div className="font-medium text-slate-900 dark:text-white">{formatPrice(crypto.price || 0)}</div>
                         <div className={`text-sm font-medium ${(crypto.changePercent || 0) >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
                           {(crypto.changePercent || 0) >= 0 ? '+' : ''}{(crypto.changePercent || 0).toFixed(2)}%
                         </div>
@@ -292,11 +309,62 @@ export default function CryptoComparison() {
       </main>
 
       {/* AI Analysis Panel */}
+      <AnimatePresence>
+        {isAIPanelOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-[9999] flex items-end"
+            onClick={() => setIsAIPanelOpen(false)}
+          >
+            <motion.div
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              className="bg-white dark:bg-slate-900 rounded-t-2xl w-full max-h-[85vh] overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="p-4 border-b border-gray-200 dark:border-slate-700 flex items-center justify-between sticky top-0 bg-white dark:bg-slate-900 z-10">
+                <h3 className="font-medium text-lg text-slate-900 dark:text-white">AI Analysis</h3>
+                <button
+                  onClick={() => setIsAIPanelOpen(false)}
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-full"
+                >
+                  <svg className="h-5 w-5 text-slate-600 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <div className="overflow-y-auto" style={{ maxHeight: 'calc(85vh - 64px)' }}>
+                <AIAnalysisPanel
+                  title=""
+                  pageType="crypto-comparison"
+                  pageData={{
+                    cryptos: comparedCryptos.map(c => ({ symbol: c.symbol, name: c.name, price: c.price })),
+                    count: comparedCryptos.length
+                  }}
+                  quickPrompts={[
+                    "Compare all cryptos",
+                    "Best performer",
+                    "Risk analysis",
+                    "Investment recommendation",
+                    "Market trends"
+                  ]}
+                  compact={false}
+                  className="w-full h-full"
+                />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Desktop AI Panel */}
       {isAIPanelOpen && (
         <>
-          <div className={`fixed bottom-0 md:top-0 md:right-0 left-0 md:left-auto h-[85vh] md:h-full w-full md:w-96 bg-white dark:bg-slate-900/95 shadow-2xl transform transition-transform duration-300 ease-in-out z-[9999] rounded-t-2xl md:rounded-none ${
-            isAIPanelOpen ? 'translate-y-0 md:translate-x-0' : 'translate-y-full md:translate-y-0 md:translate-x-full'
-          }`}>
+          <div className="hidden lg:block fixed top-0 right-0 h-full w-96 bg-white dark:bg-slate-900/95 shadow-2xl transform transition-transform duration-300 ease-in-out z-[9999]">
             <div className="h-full flex flex-col">
               <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/95">
                 <div className="flex items-center justify-between">
@@ -335,7 +403,7 @@ export default function CryptoComparison() {
               </div>
             </div>
           </div>
-          <div className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 z-[9998]" onClick={() => setIsAIPanelOpen(false)} />
+          <div className="hidden lg:block fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 z-[9998]" onClick={() => setIsAIPanelOpen(false)} />
         </>
       )}
     </div>

@@ -114,7 +114,6 @@ export default function CryptoDetailPage() {
           
           if (historicalResponse && historicalResponse.data && historicalResponse.data.length > 0) {
             // API returns data in correct OHLC format, use it directly
-            console.log('Setting historical data:', historicalResponse.data);
             setHistoricalData(historicalResponse.data);
           } else {
             console.warn('No historical data available');
@@ -170,7 +169,6 @@ export default function CryptoDetailPage() {
           
           if (historicalResponse && historicalResponse.data && historicalResponse.data.length > 0) {
             // API returns data in correct OHLC format, use it directly
-            console.log('Setting refreshed historical data:', historicalResponse.data);
             setHistoricalData(historicalResponse.data);
           } else {
             setHistoricalData([]);
@@ -208,7 +206,6 @@ export default function CryptoDetailPage() {
       
       if (historicalResponse && historicalResponse.data && historicalResponse.data.length > 0) {
         // API returns data in correct OHLC format, use it directly
-        console.log(`Setting historical data for ${period}:`, historicalResponse.data);
         setHistoricalData(historicalResponse.data);
       } else {
         console.warn(`No historical data available for period ${period}`);
@@ -396,25 +393,29 @@ export default function CryptoDetailPage() {
           </div>
 
           <div>
-            <div className="flex items-center gap-2 mb-1">
-              <h1 className="text-lg font-bold text-slate-900 dark:text-white">{crypto.symbol}</h1>
-              <span className="text-sm text-slate-500 dark:text-slate-400">{crypto.assetType}</span>
-            </div>
-            <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">{crypto.name}</p>
+            <h1 className="text-xl font-bold text-slate-900 dark:text-white">
+              {crypto.name} ({crypto.symbol})
+            </h1>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+              {crypto.assetType} · Real-Time Price · {crypto.currency}
+            </p>
             
-            <div className="flex items-baseline gap-3">
-              <span className="text-2xl font-bold text-slate-900 dark:text-white">
+            <div className="flex items-baseline gap-3 mt-2">
+              <span className="text-3xl font-bold text-slate-900 dark:text-white">
                 {formatPrice(crypto.price)}
               </span>
-              <div className={`flex items-center gap-1 text-sm font-medium ${
-                isPositive ? 'text-emerald-500' : 'text-red-500'
+              <div className={`flex items-center gap-1 text-base font-semibold ${
+                isPositive ? 'text-emerald-600' : 'text-red-500'
               }`}>
-                {isPositive ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
+                {isPositive ? <TrendingUp size={18} /> : <TrendingDown size={18} />}
                 <span>
                   {isPositive ? '+' : ''}{formatNumber(crypto.change)} ({isPositive ? '+' : ''}{formatNumber(crypto.changePercent)}%)
                 </span>
               </div>
             </div>
+            <p className="text-xs text-slate-400 mt-1">
+              Last updated: Just now
+            </p>
           </div>
         </div>
       </div>
@@ -435,22 +436,22 @@ export default function CryptoDetailPage() {
           <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
             {/* Left: Company Info */}
             <div>
-              <h1 className="text-2xl lg:text-3xl font-bold text-slate-900 dark:text-white">
+              <h1 className="text-xl lg:text-2xl font-bold text-slate-900 dark:text-white">
                 {crypto.name} ({crypto.symbol})
               </h1>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                 {crypto.assetType} · Real-Time Price · {crypto.currency}
               </p>
 
               {/* Price Row */}
-              <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4 mt-3">
-                <span className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">
+              <div className="flex items-baseline gap-3 mt-2">
+                <span className="text-3xl font-bold text-slate-900 dark:text-white">
                   {formatPrice(crypto.price)}
                 </span>
-                <div className={`flex items-center gap-1 text-base sm:text-lg font-medium ${
-                  isPositive ? 'text-emerald-500' : 'text-red-500'
+                <div className={`flex items-center gap-1 text-base font-semibold ${
+                  isPositive ? 'text-emerald-600' : 'text-red-500'
                 }`}>
-                  {isPositive ? <TrendingUp size={18} className="sm:w-5 sm:h-5" /> : <TrendingDown size={18} className="sm:w-5 sm:h-5" />}
+                  {isPositive ? <TrendingUp size={18} /> : <TrendingDown size={18} />}
                   <span>
                     {isPositive ? '+' : ''}{formatNumber(crypto.change)} ({isPositive ? '+' : ''}{formatNumber(crypto.changePercent)}%)
                   </span>

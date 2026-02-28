@@ -76,8 +76,6 @@ export default function DetailedTradingPage() {
         
         const response = await stockAPI.getHistoricalData(stockname, mappedPeriod, interval);
         if (response.success && response.data) {
-          console.log('Sample data point:', response.data[0]);
-          console.log('Total data points:', response.data.length);
           const formattedData = response.data
             .filter((item: any) => item.close != null && !isNaN(item.close))
             .map((item: any) => {
@@ -104,8 +102,6 @@ export default function DetailedTradingPage() {
                 };
               }
             });
-          console.log('Formatted sample:', formattedData[0]);
-          console.log('Volume values:', formattedData.slice(0, 5).map((d: any) => d.volume));
           setChartData(formattedData);
         }
       } catch (error) {

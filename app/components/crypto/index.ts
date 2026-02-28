@@ -6,5 +6,6 @@ export { default as ChartTab } from './ChartTab';
 export { default as HistoryTab } from './HistoryTab';
 export { default as ProfileTab } from './ProfileTab';
 export { default as CryptoNewsTab } from './CryptoNewsTab';
+export { default as CryptoVendorList } from './CryptoVendorList';
 
 export type { TabId } from './CryptoTabs';

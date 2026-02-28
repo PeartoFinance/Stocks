@@ -156,13 +156,18 @@ function DangerZoneSection() {
     const [showDeactivateModal, setShowDeactivateModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [deactivateReason, setDeactivateReason] = useState('');
+    const [deactivatePassword, setDeactivatePassword] = useState('');
     const [deletePassword, setDeletePassword] = useState('');
     const [loading, setLoading] = useState(false);
 
     const handleDeactivate = async () => {
+        if (!deactivatePassword) {
+            toast.error('Password is required');
+            return;
+        }
         setLoading(true);
         try {
-            await deactivateAccount(deactivateReason);
+            await deactivateAccount(deactivatePassword, deactivateReason);
             toast.success('Account deactivated');
         } catch (error: any) {
             toast.error(error.message || 'Failed to deactivate account');
@@ -225,6 +230,16 @@ function DangerZoneSection() {
                     <div className="bg-white dark:bg-gray-800 rounded-xl max-w-md w-full p-6">
                         <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-4">Deactivate Account</h3>
                         <p className="text-sm text-slate-600 dark:text-gray-400 mb-4">Your account will be temporarily disabled. You can reactivate it anytime by logging in.</p>
+                        <div className="mb-4">
+                            <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Enter your password to confirm</label>
+                            <input
+                                type="password"
+                                value={deactivatePassword}
+                                onChange={(e) => setDeactivatePassword(e.target.value)}
+                                placeholder="Password"
+                                className="w-full px-4 py-2.5 rounded-lg border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white mb-3"
+                            />
+                        </div>
                         <textarea
                             value={deactivateReason}
                             onChange={(e) => setDeactivateReason(e.target.value)}
@@ -241,8 +256,8 @@ function DangerZoneSection() {
                             </button>
                             <button
                                 onClick={handleDeactivate}
-                                disabled={loading}
-                                className="flex-1 px-4 py-2.5 rounded-lg bg-orange-600 hover:bg-orange-700 text-white font-medium transition"
+                                disabled={loading || !deactivatePassword}
+                                className="flex-1 px-4 py-2.5 rounded-lg bg-orange-600 hover:bg-orange-700 disabled:bg-slate-300 dark:disabled:bg-gray-700 text-white font-medium transition"
                             >
                                 {loading ? 'Deactivating...' : 'Deactivate'}
                             </button>
@@ -365,7 +380,7 @@ export default function SettingsPage() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-900/95">
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-900/95 pt-6">
             <div className="container mx-auto px-4 max-w-4xl">
                 {/* Header */}
                 <div className="flex items-center gap-4 mb-8">

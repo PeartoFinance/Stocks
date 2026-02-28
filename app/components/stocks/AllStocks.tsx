@@ -69,14 +69,15 @@ export default function AllStocks({ className = '' }: AllStocksProps) {
 
   useEffect(() => {
     let filtered = stocks.filter(stock => {
-      const matchesSearch = stock.symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        stock.name.toLowerCase().includes(searchTerm.toLowerCase());
+      if (!stock) return false;
+      const matchesSearch = stock.symbol?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        stock.name?.toLowerCase().includes(searchTerm.toLowerCase());
 
       const matchesSector = filters.sector === 'all' || stock.sector === filters.sector;
       const matchesExchange = filters.exchange === 'all' || stock.exchange === filters.exchange;
 
-      const matchesMinPrice = !filters.minPrice || stock.price >= parseFloat(filters.minPrice);
-      const matchesMaxPrice = !filters.maxPrice || stock.price <= parseFloat(filters.maxPrice);
+      const matchesMinPrice = !filters.minPrice || (stock.price && stock.price >= parseFloat(filters.minPrice));
+      const matchesMaxPrice = !filters.maxPrice || (stock.price && stock.price <= parseFloat(filters.maxPrice));
       const matchesMinVolume = !filters.minVolume || (stock.volume || 0) >= parseInt(filters.minVolume);
 
       return matchesSearch && matchesSector && matchesExchange && matchesMinPrice && matchesMaxPrice && matchesMinVolume;
@@ -84,6 +85,7 @@ export default function AllStocks({ className = '' }: AllStocksProps) {
 
     if (sortConfig.key) {
       filtered.sort((a, b) => {
+        if (!a || !b) return 0;
         let aValue: any = a[sortConfig.key as keyof Stock];
         let bValue: any = b[sortConfig.key as keyof Stock];
 
@@ -300,19 +302,19 @@ export default function AllStocks({ className = '' }: AllStocksProps) {
                   </tr>
                 </thead>
                 <tbody className="bg-white dark:bg-slate-900/95 divide-y divide-slate-100 dark:divide-slate-800">
-                  {filteredStocks.map((stock) => (
+                  {filteredStocks.map((stock) => stock && (
                     <tr key={stock.symbol} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
                       <td className="px-3 py-3 whitespace-nowrap">
-                        <Link href={`/stock/${stock.symbol.toLowerCase()}`}>
-                          <div className="text-sm font-semibold text-slate-900 dark:text-white">{stock.symbol}</div>
-                          <div className="text-sm text-slate-500 dark:text-slate-400 truncate max-w-[100px]">{stock.name}</div>
+                        <Link href={`/stock/${stock.symbol?.toLowerCase() || ''}`}>
+                          <div className="text-sm font-semibold text-slate-900 dark:text-white">{stock.symbol || 'N/A'}</div>
+                          <div className="text-sm text-slate-500 dark:text-slate-400 truncate max-w-[100px]">{stock.name || 'Unknown'}</div>
                         </Link>
                       </td>
                       <td className="px-3 py-3 text-right text-sm font-semibold text-slate-900 dark:text-white">
                         <PriceDisplay amount={stock.price} />
                       </td>
-                      <td className={`px-3 py-3 text-right text-sm font-semibold ${stock.change >= 0 ? 'text-emerald-600' : 'text-red-500'}`}>
-                        {stock.changePercent.toFixed(2)}%
+                      <td className={`px-3 py-3 text-right text-sm font-semibold ${(stock.change || 0) >= 0 ? 'text-emerald-600' : 'text-red-500'}`}>
+                        {(stock.changePercent || 0).toFixed(2)}%
                       </td>
                       <td className="px-3 py-3 text-right text-sm font-medium text-slate-900 dark:text-white">{formatNumber(stock.volume || 0)}</td>
                       <td className="px-3 py-3 text-right text-sm font-medium text-slate-900 dark:text-white">{formatMarketCap(stock.marketCap)}</td>
@@ -344,10 +346,10 @@ export default function AllStocks({ className = '' }: AllStocksProps) {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                  {filteredStocks.map((stock) => (
+                  {filteredStocks.map((stock) => stock && (
                     <tr key={stock.symbol} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition cursor-pointer group">
                       <td className="px-4 py-3">
-                        <Link href={`/stock/${stock.symbol.toLowerCase()}`} className="flex items-center gap-2">
+                        <Link href={`/stock/${stock.symbol?.toLowerCase() || ''}`} className="flex items-center gap-2">
                           <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white font-bold text-xs">
                             {stock.symbol?.slice(0, 2)}
                           </div>
