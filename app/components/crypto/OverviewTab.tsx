@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import StockChart from '../StockChart';
 import RiskAnalysisChart from './RiskAnalysisChart';
+import CryptoVendorList from './CryptoVendorList';
 import AIAnalysisPanel from '../ai/AIAnalysisPanel';
 
 interface CryptoDetails {
@@ -86,14 +87,16 @@ export default function OverviewTab({
     }
   };
 
-  const formatMarketCap = (marketCap: number) => {
+  const formatMarketCap = (marketCap: number | null | undefined) => {
+    if (!marketCap) return 'N/A';
     if (marketCap >= 1e12) return `$${(marketCap / 1e12).toFixed(2)}T`;
     if (marketCap >= 1e9) return `$${(marketCap / 1e9).toFixed(2)}B`;
     if (marketCap >= 1e6) return `$${(marketCap / 1e6).toFixed(2)}M`;
     return `$${marketCap.toLocaleString()}`;
   };
 
-  const formatVolume = (volume: number) => {
+  const formatVolume = (volume: number | null | undefined) => {
+    if (!volume) return 'N/A';
     if (volume >= 1e9) return `$${(volume / 1e9).toFixed(2)}B`;
     if (volume >= 1e6) return `$${(volume / 1e6).toFixed(2)}M`;
     return `$${volume.toLocaleString()}`;
@@ -115,7 +118,7 @@ export default function OverviewTab({
     { key: 'mountain', label: 'Mountain', icon: BarChart3 },
   ];
 
-  const isPositive = crypto.change >= 0;
+  const isPositive = (crypto.change || 0) >= 0;
 
   return (
     <div className="space-y-6">
@@ -197,8 +200,8 @@ export default function OverviewTab({
               { label: 'Day Low', value: crypto.dayLow ? formatPrice(crypto.dayLow) : '-' },
             ].map((item, i) => (
               <div key={i} className="flex justify-between py-1 border-b border-slate-100 dark:border-slate-800 last:border-b-0 transition-colors duration-300">
-                <span className="text-xs text-slate-500 dark:text-slate-400 transition-colors duration-300">{item.label}</span>
-                <span className="text-xs font-medium text-slate-900 dark:text-white transition-colors duration-300">{item.value}</span>
+                <span className="text-sm text-slate-500 dark:text-slate-400 transition-colors duration-300">{item.label}</span>
+                <span className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">{item.value}</span>
               </div>
             ))}
           </div>
@@ -208,17 +211,17 @@ export default function OverviewTab({
         <div className="lg:col-span-3">
           <div className="bg-white  dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-5 transition-colors duration-300">
             {/* Chart Controls */}
-            <div className="mb-4 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden transition-colors duration-300">
+            <div className="mb-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden transition-colors duration-300">
               <div className="p-3 border-b border-slate-200 dark:border-slate-700">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-medium text-slate-700 dark:text-slate-300 transition-colors duration-300">Duration</span>
+                    <span className="text-sm font-medium text-slate-700 dark:text-slate-300 transition-colors duration-300">Duration</span>
                     <div className="flex bg-white dark:bg-slate-900 rounded-lg p-1 border border-slate-200 dark:border-slate-700 gap-1 overflow-x-auto transition-colors duration-300">
                       {periods.map((p) => (
                         <button
                           key={p}
                           onClick={() => onPeriodChange(p)}
-                          className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+                          className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
                             chartPeriod === p ? "bg-emerald-600 dark:bg-emerald-600 text-white shadow-sm" : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700"
                           }`}
                         >
@@ -228,24 +231,24 @@ export default function OverviewTab({
                     </div>
                   </div>
 
-                  <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium ${
+                  <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-base font-medium ${
                     isPositive ? "text-emerald-700 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-900/20" : "text-red-700 bg-red-50 dark:text-red-400 dark:bg-red-900/20"
                   }`}>
                     {isPositive ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
-                    {isPositive ? '+' : ''}{formatNumber(crypto.change)} ({isPositive ? '+' : ''}{formatNumber(crypto.changePercent)}%)
+                    {isPositive ? '+' : ''}{formatNumber(crypto.change || 0)} ({isPositive ? '+' : ''}{formatNumber(crypto.changePercent || 0)}%)
                   </div>
                 </div>
               </div>
 
               <div className="p-3">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-medium text-slate-700 dark:text-slate-300 transition-colors duration-300">Type</span>
+                  <span className="text-sm font-medium text-slate-700 dark:text-slate-300 transition-colors duration-300">Type</span>
                   <div className="flex bg-white dark:bg-slate-900 rounded-lg p-1 border border-slate-200 dark:border-slate-700 gap-1 transition-colors duration-300">
                     {chartTypes.map((type) => (
                       <button
                         key={type.key}
                         onClick={() => onChartTypeChange(type.key as any)}
-                        className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+                        className={`flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
                           chartType === type.key ? "bg-blue-600 dark:bg-blue-600 text-white shadow-sm" : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700"
                         }`}
                       >
@@ -265,7 +268,7 @@ export default function OverviewTab({
                   <Activity className="h-8 w-8 text-emerald-600 dark:text-pearto-green animate-spin transition-colors duration-300" />
                 </div>
               ) : null}
-              {historicalData.length > 0 ? (
+              {historicalData && historicalData.length > 0 ? (
                 <StockChart 
                   data={historicalData} 
                   isPositive={isPositive} 
@@ -284,6 +287,11 @@ export default function OverviewTab({
         {/* Risk Analysis Chart */}
         <div className="lg:col-span-1">
           <RiskAnalysisChart crypto={crypto} />
+          
+          {/* Crypto Vendor List */}
+          <div className="mt-4">
+            <CryptoVendorList sector="crypto" limit={8} />
+          </div>
         </div>
       </div>
 
@@ -367,13 +375,40 @@ export default function OverviewTab({
         <RiskAnalysisChart crypto={crypto} />
       </div>
 
+      {/* Mobile Crypto Vendors */}
+      <div className="lg:hidden mt-4">
+        <CryptoVendorList sector="crypto" limit={8} />
+      </div>
+
+      {/* Quick Stats Row - Desktop Only */}
+      <div className="hidden lg:grid lg:grid-cols-6 gap-3 mb-5">
+        {[
+          { label: "Open", val: crypto.open, color: "blue", Icon: TrendingUp },
+          { label: "High", val: crypto.dayHigh, color: "green", Icon: TrendingUp },
+          { label: "Low", val: crypto.dayLow, color: "red", Icon: TrendingDown },
+          { label: "Prev Close", val: crypto.previousClose, color: "gray", Icon: BarChart3 },
+          { label: "Volume", val: crypto.volume ? formatVolume(crypto.volume) : "N/A", color: "purple", Icon: BarChart3 },
+          { label: "Market Cap", val: formatMarketCap(crypto.marketCap), color: "indigo", Icon: Activity },
+        ].map((item, i) => (
+          <div key={i} className={`bg-${item.color}-50 dark:bg-slate-800 p-3 rounded-xl border border-${item.color}-100 dark:border-slate-700 transition-colors duration-300`}>
+            <div className="flex justify-between items-center mb-1">
+              <span className={`text-sm font-medium text-${item.color}-700 dark:text-slate-300 transition-colors duration-300`}>{item.label}</span>
+              <item.Icon className={`h-3 w-3 text-${item.color}-600 dark:text-${item.color}-400`} />
+            </div>
+            <p className={`text-base font-bold text-${item.color}-900 dark:text-white transition-colors duration-300`}>
+              {typeof item.val === 'number' ? formatPrice(item.val) : item.val}
+            </p>
+          </div>
+        ))}
+      </div>
+
       {/* About Section */}
       <div className="bg-white  dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-4 lg:p-6 transition-colors duration-300">
         <div className="flex items-center gap-3 mb-4">
           <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
             <BarChart3 className="h-4 w-4 text-emerald-600 dark:text-pearto-green transition-colors duration-300" />
           </div>
-          <h3 className="text-base lg:text-lg font-medium text-slate-900 dark:text-white transition-colors duration-300">
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white transition-colors duration-300">
             About {crypto.name}
           </h3>
         </div>
@@ -382,9 +417,9 @@ export default function OverviewTab({
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
           {/* Description */}
           <div className="lg:col-span-2">
-            <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2 transition-colors duration-300">Overview</h4>
+            <h4 className="text-base font-semibold text-slate-700 dark:text-slate-300 mb-2 transition-colors duration-300">Overview</h4>
             {crypto.description ? (
-              <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed transition-colors duration-300">
+              <p className="text-base text-slate-600 dark:text-slate-300 leading-relaxed transition-colors duration-300">
                 {crypto.description}
               </p>
             ) : (
@@ -394,7 +429,7 @@ export default function OverviewTab({
           
           {/* Crypto Details */}
           <div>
-            <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3 transition-colors duration-300">Details</h4>
+            <h4 className="text-base font-semibold text-slate-700 dark:text-slate-300 mb-3 transition-colors duration-300">Details</h4>
             <div className="space-y-2">
               {[
                 { label: 'Symbol', value: crypto.symbol },
@@ -405,14 +440,14 @@ export default function OverviewTab({
               ].map((item, i) => (
                 item.value && (
                   <div key={i} className="flex justify-between py-1.5 border-b border-slate-100 dark:border-slate-800 last:border-0 transition-colors duration-300">
-                    <span className="text-xs text-slate-500 dark:text-slate-400 transition-colors duration-300">{item.label}</span>
+                    <span className="text-sm text-slate-500 dark:text-slate-400 transition-colors duration-300">{item.label}</span>
                     {item.label === 'Website' && crypto.website ? (
-                      <a href={crypto.website} target="_blank" rel="noopener noreferrer" className="text-xs font-medium text-emerald-600 dark:text-pearto-green hover:text-emerald-500 flex items-center gap-1 transition-colors duration-300">
+                      <a href={crypto.website} target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-emerald-600 dark:text-pearto-green hover:text-emerald-500 flex items-center gap-1 transition-colors duration-300">
                         Visit Site
                         <ExternalLink className="h-3 w-3" />
                       </a>
                     ) : (
-                      <span className="text-xs font-medium text-slate-900 dark:text-white transition-colors duration-300">{item.value}</span>
+                      <span className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">{item.value}</span>
                     )}
                   </div>
                 )

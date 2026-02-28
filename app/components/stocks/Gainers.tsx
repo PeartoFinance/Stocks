@@ -120,19 +120,19 @@ export default function Gainers({ className = '' }: GainersProps) {
                   </tr>
                 </thead>
                 <tbody className="bg-white dark:bg-slate-900/95 divide-y divide-slate-100 dark:divide-slate-800">
-                  {gainers.map((stock) => (
+                  {gainers.map((stock) => stock && (
                     <tr key={stock.symbol} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
                       <td className="px-3 py-3 whitespace-nowrap">
-                        <Link href={`/stock/${stock.symbol.toLowerCase()}`}>
-                          <div className="text-sm font-semibold text-slate-900 dark:text-white">{stock.symbol}</div>
-                          <div className="text-sm text-slate-500 dark:text-slate-400 truncate max-w-[100px]">{stock.name}</div>
+                        <Link href={`/stock/${stock.symbol?.toLowerCase() || ''}`}>
+                          <div className="text-sm font-semibold text-slate-900 dark:text-white">{stock.symbol || 'N/A'}</div>
+                          <div className="text-sm text-slate-500 dark:text-slate-400 truncate max-w-[100px]">{stock.name || 'Unknown'}</div>
                         </Link>
                       </td>
                       <td className="px-3 py-3 text-right text-sm font-medium text-slate-900 dark:text-white">
                         <PriceDisplay amount={stock.price} />
                       </td>
                       <td className="px-3 py-3 text-right text-sm font-medium text-emerald-600">
-                        +{stock.changePercent.toFixed(2)}%
+                        +{(stock.changePercent || 0).toFixed(2)}%
                       </td>
                       <td className="px-3 py-3 text-right text-sm text-slate-900 dark:text-white">{formatNumber(stock.volume || 0)}</td>
                       <td className="px-3 py-3 text-right text-sm text-slate-900 dark:text-white">{formatMarketCap(stock.marketCap)}</td>
@@ -194,7 +194,7 @@ export default function Gainers({ className = '' }: GainersProps) {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                    {gainers.map((stock, index) => (
+                    {gainers.map((stock, index) => stock && (
                       <motion.tr
                         key={stock.symbol}
                         initial={{ opacity: 0, x: -20 }}
@@ -206,7 +206,7 @@ export default function Gainers({ className = '' }: GainersProps) {
                           <span className="text-sm font-medium text-slate-900 dark:text-white">#{index + 1}</span>
                         </td>
                         <td className="px-4 py-3">
-                          <Link href={`/stock/${stock.symbol.toLowerCase()}`} className="flex items-center gap-2">
+                          <Link href={`/stock/${stock.symbol?.toLowerCase() || ''}`} className="flex items-center gap-2">
                             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white font-bold text-xs">
                               {stock.symbol?.slice(0, 2)}
                             </div>

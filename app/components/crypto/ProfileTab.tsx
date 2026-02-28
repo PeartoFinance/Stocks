@@ -19,6 +19,7 @@ import {
   BarChart3,
   Activity
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 interface CryptoDetails {
   id: number;
@@ -54,7 +55,9 @@ interface ProfileTabProps {
 }
 
 export default function ProfileTab({ crypto }: ProfileTabProps) {
-  const formatMarketCap = (marketCap: number) => {
+  const router = useRouter();
+  const formatMarketCap = (marketCap: number | null | undefined) => {
+    if (!marketCap) return 'N/A';
     if (marketCap >= 1e12) return `$${(marketCap / 1e12).toFixed(2)}T`;
     if (marketCap >= 1e9) return `$${(marketCap / 1e9).toFixed(2)}B`;
     if (marketCap >= 1e6) return `$${(marketCap / 1e6).toFixed(2)}M`;
@@ -306,19 +309,17 @@ export default function ProfileTab({ crypto }: ProfileTabProps) {
             )}
             
             {additionalInfo.explorers.map((explorer, i) => (
-              <a
+              <button
                 key={i}
-                href={explorer.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                onClick={() => router.push(`/vendors?category=Crypto`)}
+                className="w-full flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
               >
                 <div className="flex items-center gap-3">
                   <Activity className="h-4 w-4 text-slate-600 dark:text-slate-400 transition-colors duration-300" />
                   <span className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">{explorer.name}</span>
                 </div>
                 <ExternalLink className="h-4 w-4 text-slate-400" />
-              </a>
+              </button>
             ))}
           </div>
         </div>
