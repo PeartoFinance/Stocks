@@ -121,6 +121,7 @@ export default function StockDetailPage({ params }: PageProps) {
 
   // Actions
   const loadChartData = async (period: string, interval?: string) => {
+    if (!symbol) return;
     try {
       setChartLoading(true);
       const periodMap: Record<string, string> = {
@@ -130,8 +131,10 @@ export default function StockDetailPage({ params }: PageProps) {
       const dataInterval = period === "1D" && interval ? interval : "1d";
 
       const historyResponse = await marketService.getStockHistory(symbol, mappedPeriod, dataInterval);
-      if ((historyResponse as any)?.data) {
-        const transformedData: HistoricalData[] = (historyResponse as any).data.map((item: any) => ({
+      if ((historyResponse as any)?.data && Array.isArray((historyResponse as any).data)) {
+        const transformedData: HistoricalData[] = (historyResponse as any).data
+          .filter((item: any) => item && item.date)
+          .map((item: any) => ({
           date: item.date,
           open: item.open || item.close,
           high: item.high || item.close,
@@ -230,8 +233,10 @@ export default function StockDetailPage({ params }: PageProps) {
           setStock(transformedStock);
         }
 
-        if ((historyResponse as any)?.data) {
-          const transformedData: HistoricalData[] = (historyResponse as any).data.map((item: any) => ({
+        if ((historyResponse as any)?.data && Array.isArray((historyResponse as any).data)) {
+          const transformedData: HistoricalData[] = (historyResponse as any).data
+            .filter((item: any) => item && item.date)
+            .map((item: any) => ({
             date: item.date,
             open: item.open || item.close,
             high: item.high || item.close,
@@ -261,8 +266,12 @@ export default function StockDetailPage({ params }: PageProps) {
       if (user && symbol) {
         try {
           const watchlist = await getWatchlist();
+          if (!watchlist || !Array.isArray(watchlist)) {
+            setIsWatchlisted(false);
+            return;
+          }
           const decodedSymbol = decodeURIComponent(symbol);
-          setIsWatchlisted(watchlist.some((item) => item.symbol.toUpperCase() === decodedSymbol.toUpperCase()));
+          setIsWatchlisted(watchlist.some((item) => item?.symbol?.toUpperCase() === decodedSymbol.toUpperCase()));
         } catch (error) {
           console.error('Failed to check watchlist status:', error);
         }
@@ -364,7 +373,7 @@ export default function StockDetailPage({ params }: PageProps) {
             <div className="hidden lg:grid lg:grid-cols-5 gap-4 mb-5">
               {/* Key Stats - Smaller */}
               <div className="lg:col-span-1 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-3">
-                <h3 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">
+                <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">
                   Key Statistics
                 </h3>
                 <div className="space-y-1">
@@ -381,8 +390,8 @@ export default function StockDetailPage({ params }: PageProps) {
                     { label: 'Short Ratio', value: formatNumber(stock.shortRatio) },
                   ].map((item, i) => (
                     <div key={i} className="flex justify-between py-1 border-b border-slate-100 dark:border-slate-800 last:border-b-0">
-                      <span className="text-xs text-slate-500 dark:text-slate-400">{item.label}</span>
-                      <span className="text-xs font-medium text-slate-900 dark:text-white">{item.value}</span>
+                      <span className="text-sm text-slate-500 dark:text-slate-400">{item.label}</span>
+                      <span className="text-sm font-medium text-slate-900 dark:text-white">{item.value}</span>
                     </div>
                   ))}
                 </div>
@@ -401,7 +410,7 @@ export default function StockDetailPage({ params }: PageProps) {
                             <button
                               key={p}
                               onClick={() => handlePeriodChange(p)}
-                              className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${chartPeriod === p ? "bg-blue-600 dark:bg-emerald-600 text-white shadow-sm" : "text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-600"
+                              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all ${chartPeriod === p ? "bg-blue-600 dark:bg-emerald-600 text-white shadow-sm" : "text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-600"
                                 }`}
                             >
                               {p}
@@ -410,7 +419,7 @@ export default function StockDetailPage({ params }: PageProps) {
                         </div>
                       </div>
 
-                      <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-bold ${stock.change >= 0 ? "text-green-700 bg-green-50 dark:bg-pearto-green/10" : "text-red-700 bg-red-50 dark:bg-pearto-pink/10"
+                      <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-base font-bold ${stock.change >= 0 ? "text-green-700 bg-green-50 dark:bg-pearto-green/10" : "text-red-700 bg-red-50 dark:bg-pearto-pink/10"
                         }`}>
                         {stock.change >= 0 ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
                         {formatChange(stock.change, stock.changePercent)}
@@ -424,7 +433,7 @@ export default function StockDetailPage({ params }: PageProps) {
                           <button
                             key={type.key}
                             onClick={() => setChartType(type.key)}
-                            className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${chartType === type.key ? "bg-blue-600 dark:bg-purple-600 text-white shadow-sm" : "text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-600"
+                            className={`flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md transition-all ${chartType === type.key ? "bg-blue-600 dark:bg-purple-600 text-white shadow-sm" : "text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-600"
                               }`}
                           >
                             <type.icon className="h-3.5 w-3.5" />
@@ -573,10 +582,10 @@ export default function StockDetailPage({ params }: PageProps) {
               ].map((item, i) => (
                 <div key={i} className={`bg-${item.color}-50 dark:bg-slate-800 p-3 rounded-xl border border-${item.color}-100 dark:border-slate-700`}>
                   <div className="flex justify-between items-center mb-1">
-                    <span className={`text-xs font-medium text-${item.color}-700 dark:text-slate-300`}>{item.label}</span>
+                    <span className={`text-sm font-medium text-${item.color}-700 dark:text-slate-300`}>{item.label}</span>
                     <item.Icon className={`h-3 w-3 text-${item.color}-600 dark:text-${item.color}-400`} />
                   </div>
-                  <p className={`text-sm font-bold text-${item.color}-900 dark:text-white`}>
+                  <p className={`text-base font-bold text-${item.color}-900 dark:text-white`}>
                     {typeof item.val === 'number' ? <PriceDisplay amount={item.val} /> : item.val}
                   </p>
                 </div>
@@ -589,7 +598,7 @@ export default function StockDetailPage({ params }: PageProps) {
                 <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
                   <BarChart3 className="h-4 w-4 text-blue-600" />
                 </div>
-                <h3 className="text-base lg:text-lg font-semibold text-slate-900 dark:text-white">
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
                   About {stock.name}
                 </h3>
               </div>
@@ -598,9 +607,9 @@ export default function StockDetailPage({ params }: PageProps) {
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
                 {/* Description */}
                 <div className="lg:col-span-2">
-                  <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Company Overview</h4>
+                  <h4 className="text-base font-semibold text-slate-700 dark:text-slate-300 mb-2">Company Overview</h4>
                   {stock.description ? (
-                    <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                    <p className="text-base text-slate-600 dark:text-slate-300 leading-relaxed">
                       {stock.description}
                     </p>
                   ) : (
@@ -610,7 +619,7 @@ export default function StockDetailPage({ params }: PageProps) {
 
                 {/* Company Details */}
                 <div>
-                  <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">Company Details</h4>
+                  <h4 className="text-base font-semibold text-slate-700 dark:text-slate-300 mb-3">Company Details</h4>
                   <div className="space-y-2">
                     {[
                       { label: 'Sector', value: stock.sector },
@@ -623,14 +632,14 @@ export default function StockDetailPage({ params }: PageProps) {
                     ].map((item, i) => (
                       item.value && (
                         <div key={i} className="flex justify-between py-1.5 border-b border-slate-100 dark:border-slate-800 last:border-0">
-                          <span className="text-xs text-slate-500 dark:text-slate-400">{item.label}</span>
+                          <span className="text-sm text-slate-500 dark:text-slate-400">{item.label}</span>
                           {item.label === 'Website' && stock.website ? (
-                            <a href={stock.website} target="_blank" rel="noopener noreferrer" className="text-xs font-medium text-blue-600 hover:text-blue-500 flex items-center gap-1">
+                            <a href={stock.website} target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-blue-600 hover:text-blue-500 flex items-center gap-1">
                               Visit Site
                               <ExternalLink className="h-3 w-3" />
                             </a>
                           ) : (
-                            <span className="text-xs font-medium text-slate-900 dark:text-white">{item.value}</span>
+                            <span className="text-sm font-medium text-slate-900 dark:text-white">{item.value}</span>
                           )}
                         </div>
                       )
@@ -685,9 +694,9 @@ export default function StockDetailPage({ params }: PageProps) {
 
               {/* Chart Controls */}
               <div className="p-4 lg:p-5 bg-slate-50 dark:bg-slate-700/50 border-b border-slate-200 dark:border-slate-700 transition-colors duration-300">
-                <div className="space-y-4">
-                  <div>
-                    <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-2 block uppercase tracking-wide transition-colors duration-300">Time Period</label>
+                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wide transition-colors duration-300">Time Period</label>
                     <div className="flex flex-wrap gap-2">
                       {periods.map((p) => (
                         <button
@@ -702,9 +711,9 @@ export default function StockDetailPage({ params }: PageProps) {
                       ))}
                     </div>
                   </div>
-                  <div>
-                    <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-2 block uppercase tracking-wide transition-colors duration-300">Chart Type</label>
-                    <div className="grid grid-cols-2 lg:flex lg:flex-wrap gap-2">
+                  <div className="flex items-center gap-3">
+                    <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wide transition-colors duration-300">Chart Type</label>
+                    <div className="flex flex-wrap gap-2">
                       {chartTypes.map((type) => (
                         <button
                           key={type.key}
@@ -732,9 +741,9 @@ export default function StockDetailPage({ params }: PageProps) {
                     </div>
                   </div>
                 ) : null}
-                {historicalData.length > 0 ? (
+                {historicalData && historicalData.length > 0 ? (
                   <div className="h-full p-2">
-                    <StockChart data={historicalData} isPositive={stock.change >= 0} height={window.innerWidth < 1024 ? 380 : 480} chartType={chartType} />
+                    <StockChart data={historicalData} isPositive={stock.change >= 0} height={typeof window !== 'undefined' && window.innerWidth < 1024 ? 380 : 480} chartType={chartType} />
                   </div>
                 ) : (
                   <div className="flex items-center justify-center h-full">

@@ -59,14 +59,16 @@ export default function StatisticsTab({ crypto }: StatisticsTabProps) {
     }
   };
 
-  const formatMarketCap = (marketCap: number) => {
+  const formatMarketCap = (marketCap: number | null | undefined) => {
+    if (!marketCap) return 'N/A';
     if (marketCap >= 1e12) return `$${(marketCap / 1e12).toFixed(2)}T`;
     if (marketCap >= 1e9) return `$${(marketCap / 1e9).toFixed(2)}B`;
     if (marketCap >= 1e6) return `$${(marketCap / 1e6).toFixed(2)}M`;
     return `$${marketCap.toLocaleString()}`;
   };
 
-  const formatVolume = (volume: number) => {
+  const formatVolume = (volume: number | null | undefined) => {
+    if (!volume) return 'N/A';
     if (volume >= 1e9) return `$${(volume / 1e9).toFixed(2)}B`;
     if (volume >= 1e6) return `$${(volume / 1e6).toFixed(2)}M`;
     return `$${volume.toLocaleString()}`;
@@ -109,7 +111,7 @@ export default function StatisticsTab({ crypto }: StatisticsTabProps) {
     return '-';
   };
 
-  const isPositive = crypto.change >= 0;
+  const isPositive = (crypto.change || 0) >= 0;
 
   return (
     <div className="space-y-6">
@@ -122,10 +124,10 @@ export default function StatisticsTab({ crypto }: StatisticsTabProps) {
           <h3 className="text-lg font-medium text-slate-900 dark:text-white transition-colors duration-300">Price Statistics</h3>
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[
             { label: 'Current Price', value: formatPrice(crypto.price), icon: DollarSign, color: 'emerald' },
-            { label: '24h Change', value: `${isPositive ? '+' : ''}${formatNumber(crypto.change)} (${isPositive ? '+' : ''}${formatNumber(crypto.changePercent)}%)`, icon: isPositive ? TrendingUp : TrendingDown, color: isPositive ? 'emerald' : 'red' },
+            { label: '24h Change', value: `${isPositive ? '+' : ''}${formatNumber(crypto.change || 0)} (${isPositive ? '+' : ''}${formatNumber(crypto.changePercent || 0)}%)`, icon: isPositive ? TrendingUp : TrendingDown, color: isPositive ? 'emerald' : 'red' },
             { label: 'Open', value: crypto.open ? formatPrice(crypto.open) : '-', icon: BarChart3, color: 'blue' },
             { label: 'Day High', value: crypto.dayHigh ? formatPrice(crypto.dayHigh) : '-', icon: TrendingUp, color: 'green' },
             { label: 'Day Low', value: crypto.dayLow ? formatPrice(crypto.dayLow) : '-', icon: TrendingDown, color: 'red' },
@@ -134,9 +136,9 @@ export default function StatisticsTab({ crypto }: StatisticsTabProps) {
             <div key={i} className={`bg-${item.color}-50 dark:bg-slate-800 p-4 rounded-xl border border-${item.color}-100 dark:border-slate-700`}>
               <div className="flex items-center gap-2 mb-2">
                 <item.icon className={`h-4 w-4 text-${item.color}-600 dark:text-${item.color}-400`} />
-                <span className={`text-sm font-medium text-${item.color}-700 dark:text-slate-300`}>{item.label}</span>
+                <span className={`text-base font-medium text-${item.color}-700 dark:text-slate-300`}>{item.label}</span>
               </div>
-              <p className={`text-lg font-medium text-${item.color}-900 dark:text-white`}>{item.value}</p>
+              <p className={`text-xl font-semibold text-${item.color}-900 dark:text-white`}>{item.value}</p>
             </div>
           ))}
         </div>
@@ -151,7 +153,7 @@ export default function StatisticsTab({ crypto }: StatisticsTabProps) {
           <h3 className="text-lg font-medium text-slate-900 dark:text-white transition-colors duration-300">Market Statistics</h3>
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[
             { label: 'Market Cap', value: formatMarketCap(crypto.marketCap), icon: PieChart, color: 'blue' },
             { label: 'Fully Diluted Market Cap', value: calculateFullyDilutedMarketCap(), icon: Target, color: 'purple' },
@@ -163,9 +165,9 @@ export default function StatisticsTab({ crypto }: StatisticsTabProps) {
             <div key={i} className="bg-blue-50 dark:bg-slate-800 p-4 rounded-xl border border-blue-100 dark:border-slate-700">
               <div className="flex items-center gap-2 mb-2">
                 <item.icon className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                <span className="text-sm font-medium text-blue-700 dark:text-blue-300">{item.label}</span>
+                <span className="text-base font-medium text-blue-700 dark:text-blue-300">{item.label}</span>
               </div>
-              <p className="text-lg font-medium text-blue-900 dark:text-white">{item.value}</p>
+              <p className="text-xl font-semibold text-blue-900 dark:text-white">{item.value}</p>
             </div>
           ))}
         </div>
@@ -180,21 +182,21 @@ export default function StatisticsTab({ crypto }: StatisticsTabProps) {
           <h3 className="text-lg font-medium text-slate-900 dark:text-white transition-colors duration-300">Supply Statistics</h3>
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[
             { label: 'Circulating Supply', value: formatSupply(crypto.circulatingSupply), icon: Activity, color: 'purple' },
             { label: 'Max Supply', value: crypto.maxSupply ? formatSupply(crypto.maxSupply) : '∞', icon: Target, color: 'red' },
             { label: 'Supply Percentage', value: crypto.maxSupply ? `${calculateSupplyPercentage()}%` : '-', icon: PieChart, color: 'emerald' },
             { label: 'Total Supply', value: formatSupply(crypto.circulatingSupply), icon: Hash, color: 'blue' },
             { label: 'Price per Unit', value: formatPrice(crypto.price), icon: DollarSign, color: 'green' },
-            { label: 'Market Cap per Supply', value: crypto.circulatingSupply ? formatPrice(crypto.marketCap / crypto.circulatingSupply) : '-', icon: BarChart3, color: 'orange' },
+            { label: 'Market Cap per Supply', value: crypto.circulatingSupply && crypto.circulatingSupply > 0 ? formatPrice(crypto.marketCap / crypto.circulatingSupply) : '-', icon: BarChart3, color: 'orange' },
           ].map((item, i) => (
             <div key={i} className="bg-purple-50 dark:bg-slate-800 p-4 rounded-xl border border-purple-100 dark:border-slate-700">
               <div className="flex items-center gap-2 mb-2">
                 <item.icon className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-                <span className="text-sm font-medium text-purple-700 dark:text-purple-300">{item.label}</span>
+                <span className="text-base font-medium text-purple-700 dark:text-purple-300">{item.label}</span>
               </div>
-              <p className="text-lg font-medium text-purple-900 dark:text-white">{item.value}</p>
+              <p className="text-xl font-semibold text-purple-900 dark:text-white">{item.value}</p>
             </div>
           ))}
         </div>
@@ -209,7 +211,7 @@ export default function StatisticsTab({ crypto }: StatisticsTabProps) {
           <h3 className="text-lg font-medium text-slate-900 dark:text-white transition-colors duration-300">Additional Metrics</h3>
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[
             { label: 'Asset Type', value: crypto.assetType, icon: Globe, color: 'blue' },
             { label: 'Currency', value: crypto.currency, icon: DollarSign, color: 'green' },
@@ -221,9 +223,9 @@ export default function StatisticsTab({ crypto }: StatisticsTabProps) {
             <div key={i} className="bg-orange-50 dark:bg-slate-800 p-4 rounded-xl border border-orange-100 dark:border-slate-700">
               <div className="flex items-center gap-2 mb-2">
                 <item.icon className="h-4 w-4 text-orange-600 dark:text-orange-400" />
-                <span className="text-sm font-medium text-orange-700 dark:text-orange-300">{item.label}</span>
+                <span className="text-base font-medium text-orange-700 dark:text-orange-300">{item.label}</span>
               </div>
-              <p className="text-lg font-medium text-orange-900 dark:text-white">{item.value}</p>
+              <p className="text-xl font-semibold text-orange-900 dark:text-white">{item.value}</p>
             </div>
           ))}
         </div>

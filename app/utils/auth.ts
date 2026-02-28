@@ -126,14 +126,14 @@ export async function changePassword(currentPassword: string, newPassword: strin
 }
 
 // Deactivate account
-export async function deactivateAccount(reason?: string): Promise<void> {
-  const response = await fetch(`${API_BASE}/user/deactivate`, {
+export async function deactivateAccount(password: string, reason?: string): Promise<void> {
+  const response = await fetch(`${API_BASE}/account/deactivate`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       ...getAuthHeaders(),
     },
-    body: JSON.stringify({ reason }),
+    body: JSON.stringify({ password, reason }),
   });
 
   if (!response.ok) {
@@ -149,13 +149,13 @@ export async function deactivateAccount(reason?: string): Promise<void> {
 
 // Delete account permanently
 export async function deleteAccount(password: string): Promise<void> {
-  const response = await fetch(`${API_BASE}/user/delete`, {
-    method: 'DELETE',
+  const response = await fetch(`${API_BASE}/account/delete-permanently`, {
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       ...getAuthHeaders(),
     },
-    body: JSON.stringify({ password }),
+    body: JSON.stringify({ password, confirmation: 'DELETE' }),
   });
 
   if (!response.ok) {

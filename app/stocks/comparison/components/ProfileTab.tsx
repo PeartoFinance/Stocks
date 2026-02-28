@@ -23,7 +23,7 @@ export default function ProfileTab({ comparedStocks, formatLargeNumber }: Profil
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {comparedStocks.map((stock) => {
-        const isPositive = stock.changePercent >= 0;
+        const isPositive = (stock.changePercent ?? 0) >= 0;
         return (
           <div key={stock.symbol} className="bg-white dark:bg-slate-900/95 rounded-lg p-6 border border-slate-200 dark:border-slate-700">
             {/* Header */}
@@ -44,16 +44,16 @@ export default function ProfileTab({ comparedStocks, formatLargeNumber }: Profil
                   ? 'bg-green-50 dark:bg-green-500/10 text-green-700 dark:text-green-400'
                   : 'bg-red-50 dark:bg-red-500/10 text-red-700 dark:text-red-400'
               }`}>
-                {isPositive ? '+' : ''}{stock.changePercent.toFixed(2)}%
+                {isPositive ? '+' : ''}{(stock.changePercent ?? 0).toFixed(2)}%
               </div>
             </div>
 
             {/* Price Info */}
             <div className="mb-6 pb-6 border-b border-slate-200 dark:border-slate-700">
               <div className="flex items-baseline gap-2 mb-2">
-                <span className="text-3xl font-bold text-slate-900 dark:text-white">${stock.price.toFixed(2)}</span>
+                <span className="text-3xl font-bold text-slate-900 dark:text-white">${(stock.price ?? 0).toFixed(2)}</span>
                 <span className={`text-lg font-semibold ${isPositive ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
-                  {isPositive ? '+' : ''}{stock.change?.toFixed(2)}
+                  {isPositive ? '+' : ''}{(stock.change ?? 0).toFixed(2)}
                 </span>
               </div>
               <p className="text-sm text-slate-500 dark:text-slate-400">Current Price</p>
@@ -127,7 +127,7 @@ export default function ProfileTab({ comparedStocks, formatLargeNumber }: Profil
                     <div
                       className="h-full bg-gradient-to-r from-red-500 via-yellow-500 to-green-500"
                       style={{
-                        width: stock.week52Low && stock.week52High
+                        width: stock.week52Low && stock.week52High && stock.week52High > stock.week52Low
                           ? `${((stock.price - stock.week52Low) / (stock.week52High - stock.week52Low)) * 100}%`
                           : '50%'
                       }}

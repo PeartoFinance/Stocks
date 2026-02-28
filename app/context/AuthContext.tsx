@@ -44,7 +44,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Helper to transform backend data to our User interface
   const mapUserData = useCallback((data: any): User => {
-    console.log('Mapping user data:', data); // Debug log
     return {
       id: data.user_id || data.id,
       email: data.email,
