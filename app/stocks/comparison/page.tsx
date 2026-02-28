@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useSearchParams } from 'next/navigation';
-import { Search, Activity, Plus, Download, BarChart3, User, LineChart, FileText, Brain } from 'lucide-react';
+import { Search, Activity, Plus, Download, BarChart3, User, LineChart, FileText, Brain, TrendingUp } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { marketService } from '../../utils/marketService';
 import { Stock, HistoricalData } from '../../types';
@@ -14,6 +14,7 @@ import StatisticsTab from './components/StatisticsTab';
 import ProfileTab from './components/ProfileTab';
 import { ComparisonStock } from './components/types';
 import AIAnalysisPanel from '../../components/ai/AIAnalysisPanel';
+import { useCurrency } from '../../context/CurrencyContext';
 
 const STOCK_COLORS = ['#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6'];
 
@@ -28,6 +29,7 @@ export default function StockComparison() {
   const [chartType, setChartType] = useState<'line' | 'area' | 'candle'>('line');
   const [isAIPanelOpen, setIsAIPanelOpen] = useState(false);
   const [hasAddedStock, setHasAddedStock] = useState(false);
+  const { formatPrice } = useCurrency();
 
   const periods = ['1D', '5D', '1M', '3M', '6M', '1Y'];
 
@@ -63,21 +65,21 @@ export default function StockComparison() {
                 return {
                   symbol: apiResponse.symbol || symbol.trim().toUpperCase(),
                   name: apiResponse.name || symbol.trim().toUpperCase(),
-                  price: apiResponse.price || 0,
-                  change: apiResponse.change || 0,
-                  changePercent: apiResponse.changePercent || 0,
-                  volume: apiResponse.volume,
-                  marketCap: apiResponse.marketCap,
-                  peRatio: apiResponse.peRatio,
-                  eps: apiResponse.eps,
-                  dividendYield: apiResponse.dividendYield,
-                  week52High: apiResponse.high52w,
-                  week52Low: apiResponse.low52w,
-                  beta: apiResponse.beta,
-                  sector: apiResponse.sector,
-                  industry: apiResponse.industry,
-                  exchange: apiResponse.exchange,
-                  currency: apiResponse.currency || 'USD',
+                  price: apiResponse.price ?? 0,
+                  change: apiResponse.change ?? 0,
+                  changePercent: apiResponse.changePercent ?? 0,
+                  volume: apiResponse.volume ?? null,
+                  marketCap: apiResponse.marketCap ?? null,
+                  peRatio: apiResponse.peRatio ?? null,
+                  eps: apiResponse.eps ?? null,
+                  dividendYield: apiResponse.dividendYield ?? null,
+                  week52High: apiResponse.high52w ?? null,
+                  week52Low: apiResponse.low52w ?? null,
+                  beta: apiResponse.beta ?? null,
+                  sector: apiResponse.sector ?? null,
+                  industry: apiResponse.industry ?? null,
+                  exchange: apiResponse.exchange ?? null,
+                  currency: apiResponse.currency ?? 'USD',
                   color: STOCK_COLORS[0],
                 };
               }
@@ -109,21 +111,23 @@ export default function StockComparison() {
           setLoading(true);
           const response = await marketService.searchStocks(searchTerm, 10);
           if (Array.isArray(response)) {
-            const transformedResults: Stock[] = response.map((item: any) => ({
-              symbol: item.symbol,
-              name: item.name,
-              price: item.price || 0,
-              change: item.change || 0,
-              changePercent: item.changePercent || 0,
-              volume: item.volume,
-              marketCap: item.marketCap,
-              peRatio: item.peRatio,
-              eps: item.eps,
-              sector: item.sector,
-              industry: item.industry,
-              exchange: item.exchange,
-              currency: item.currency || 'USD'
-            }));
+            const transformedResults: Stock[] = response
+              .filter((item: any) => item.assetType !== 'crypto')
+              .map((item: any) => ({
+                symbol: item.symbol,
+                name: item.name,
+                price: item.price || 0,
+                change: item.change || 0,
+                changePercent: item.changePercent || 0,
+                volume: item.volume,
+                marketCap: item.marketCap,
+                peRatio: item.peRatio,
+                eps: item.eps,
+                sector: item.sector,
+                industry: item.industry,
+                exchange: item.exchange,
+                currency: item.currency || 'USD'
+              }));
             setSearchResults(transformedResults);
           }
         } catch (error) {
@@ -196,21 +200,21 @@ export default function StockComparison() {
         const fullStock: ComparisonStock = {
           symbol: apiResponse.symbol || stock.symbol,
           name: apiResponse.name || stock.name,
-          price: apiResponse.price || stock.price,
-          change: apiResponse.change || stock.change,
-          changePercent: apiResponse.changePercent || stock.changePercent,
-          volume: apiResponse.volume,
-          marketCap: apiResponse.marketCap,
-          peRatio: apiResponse.peRatio,
-          eps: apiResponse.eps,
-          dividendYield: apiResponse.dividendYield,
-          week52High: apiResponse.high52w,
-          week52Low: apiResponse.low52w,
-          beta: apiResponse.beta,
-          sector: apiResponse.sector,
-          industry: apiResponse.industry,
-          exchange: apiResponse.exchange,
-          currency: apiResponse.currency,
+          price: apiResponse.price ?? stock.price ?? 0,
+          change: apiResponse.change ?? stock.change ?? 0,
+          changePercent: apiResponse.changePercent ?? stock.changePercent ?? 0,
+          volume: apiResponse.volume ?? null,
+          marketCap: apiResponse.marketCap ?? null,
+          peRatio: apiResponse.peRatio ?? null,
+          eps: apiResponse.eps ?? null,
+          dividendYield: apiResponse.dividendYield ?? null,
+          week52High: apiResponse.high52w ?? null,
+          week52Low: apiResponse.low52w ?? null,
+          beta: apiResponse.beta ?? null,
+          sector: apiResponse.sector ?? null,
+          industry: apiResponse.industry ?? null,
+          exchange: apiResponse.exchange ?? null,
+          currency: apiResponse.currency ?? null,
           color: STOCK_COLORS[comparedStocks.length],
         };
         const newStocks = [...comparedStocks, fullStock];
@@ -274,32 +278,40 @@ export default function StockComparison() {
             </div>
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+              {loading && searchTerm.length >= 2 && (
+                <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                  <Activity className="h-5 w-5 text-blue-600 dark:text-emerald-500 animate-spin" />
+                </div>
+              )}
               <input
                 type="text"
                 placeholder="Enter stock symbol or name..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && searchResults[0] && addToComparison(searchResults[0])}
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm"
+                className="w-full pl-10 pr-12 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm"
               />
             </div>
 
-            {searchResults.length > 0 && (
+            {searchResults && searchResults.length > 0 && (
               <div className="mt-2 bg-white dark:bg-slate-900/95 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg max-h-64 overflow-y-auto">
-                {searchResults.map((stock) => (
+                {searchResults.map((stock) => stock && (
                   <button
                     key={stock.symbol}
                     onClick={() => addToComparison(stock)}
                     disabled={loading}
                     className="w-full px-4 py-3 text-left hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors border-b border-slate-100 dark:border-slate-700 last:border-b-0"
                   >
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 bg-emerald-500/10">
+                        <TrendingUp size={16} className="text-emerald-500" />
+                      </div>
                       <div className="flex-1 min-w-0">
                         <div className="font-medium text-slate-900 dark:text-white">{stock.symbol}</div>
                         <div className="text-sm text-slate-500 dark:text-slate-400 truncate">{stock.name}</div>
                       </div>
                       <div className="text-right ml-3">
-                        <div className="font-medium text-slate-900 dark:text-white">${stock.price?.toFixed(2) || '0.00'}</div>
+                        <div className="font-medium text-slate-900 dark:text-white">{formatPrice(stock.price || 0)}</div>
                         <div className={`text-sm font-medium ${(stock.changePercent || 0) >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
                           {(stock.changePercent || 0) >= 0 ? '+' : ''}{stock.changePercent?.toFixed(2) || '0.00'}%
                         </div>
@@ -380,11 +392,62 @@ export default function StockComparison() {
       </main>
 
       {/* AI Analysis Panel */}
+      <AnimatePresence>
+        {isAIPanelOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-[9999] flex items-end"
+            onClick={() => setIsAIPanelOpen(false)}
+          >
+            <motion.div
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              className="bg-white dark:bg-slate-900 rounded-t-2xl w-full max-h-[85vh] overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="p-4 border-b border-gray-200 dark:border-slate-700 flex items-center justify-between sticky top-0 bg-white dark:bg-slate-900 z-10">
+                <h3 className="font-medium text-lg text-slate-900 dark:text-white">AI Analysis</h3>
+                <button
+                  onClick={() => setIsAIPanelOpen(false)}
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-full"
+                >
+                  <svg className="h-5 w-5 text-slate-600 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <div className="overflow-y-auto" style={{ maxHeight: 'calc(85vh - 64px)' }}>
+                <AIAnalysisPanel
+                  title=""
+                  pageType="comparison"
+                  pageData={{
+                    stocks: comparedStocks.map(s => ({ symbol: s.symbol, name: s.name, price: s.price })),
+                    count: comparedStocks.length
+                  }}
+                  quickPrompts={[
+                    "Compare all stocks",
+                    "Best performer",
+                    "Risk analysis",
+                    "Investment recommendation",
+                    "Sector comparison"
+                  ]}
+                  compact={false}
+                  className="w-full h-full"
+                />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Desktop AI Panel */}
       {isAIPanelOpen && (
         <>
-          <div className={`fixed bottom-0 md:top-0 md:right-0 left-0 md:left-auto h-[85vh] md:h-full w-full md:w-96 bg-white dark:bg-slate-900/95 shadow-2xl transform transition-transform duration-300 ease-in-out z-[9999] rounded-t-2xl md:rounded-none ${
-            isAIPanelOpen ? 'translate-y-0 md:translate-x-0' : 'translate-y-full md:translate-y-0 md:translate-x-full'
-          }`}>
+          <div className="hidden lg:block fixed top-0 right-0 h-full w-96 bg-white dark:bg-slate-900/95 shadow-2xl transform transition-transform duration-300 ease-in-out z-[9999]">
             <div className="h-full flex flex-col">
               <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/95">
                 <div className="flex items-center justify-between">
@@ -423,7 +486,7 @@ export default function StockComparison() {
               </div>
             </div>
           </div>
-          <div className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 z-[9998]" onClick={() => setIsAIPanelOpen(false)} />
+          <div className="hidden lg:block fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 z-[9998]" onClick={() => setIsAIPanelOpen(false)} />
         </>
       )}
     </div>

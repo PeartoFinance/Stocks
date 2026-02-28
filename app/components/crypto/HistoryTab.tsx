@@ -7,12 +7,12 @@ import {
   TrendingDown, 
   BarChart3, 
   Activity,
-  Download,
   Filter,
   Search,
   ArrowUpRight,
   ArrowDownRight
 } from 'lucide-react';
+import { TableExportButton } from '../common/TableExportButton';
 
 interface HistoricalData {
   time: string;
@@ -51,13 +51,15 @@ export default function HistoryTab({
     }
   };
 
-  const formatVolume = (volume: number) => {
+  const formatVolume = (volume: number | null | undefined) => {
+    if (!volume) return 'N/A';
     if (volume >= 1e9) return `$${(volume / 1e9).toFixed(2)}B`;
     if (volume >= 1e6) return `$${(volume / 1e6).toFixed(2)}M`;
     return `$${volume.toLocaleString()}`;
   };
 
-  const formatMarketCap = (marketCap: number) => {
+  const formatMarketCap = (marketCap: number | null | undefined) => {
+    if (!marketCap) return 'N/A';
     if (marketCap >= 1e12) return `$${(marketCap / 1e12).toFixed(2)}T`;
     if (marketCap >= 1e9) return `$${(marketCap / 1e9).toFixed(2)}B`;
     if (marketCap >= 1e6) return `$${(marketCap / 1e6).toFixed(2)}M`;
@@ -150,29 +152,6 @@ export default function HistoryTab({
     }
   };
 
-  const exportToCSV = () => {
-    const headers = ['Date', 'Price', 'Volume', 'Market Cap'];
-    const csvContent = [
-      headers.join(','),
-      ...filteredAndSortedData.map(item => [
-        formatDate(item.time),
-        formatPrice(item.price),
-        formatVolume(item.volume),
-        formatMarketCap(item.marketCap)
-      ].join(','))
-    ].join('\n');
-
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${crypto.symbol}_historical_data.csv`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
-  };
-
   // Calculate statistics
   const stats = useMemo(() => {
     if (filteredAndSortedData.length === 0) return null;
@@ -205,18 +184,27 @@ export default function HistoryTab({
               Complete price and volume history for {crypto.symbol}
             </p>
           </div>
-          <button
-            onClick={exportToCSV}
-            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
-          >
-            <Download className="h-4 w-4" />
-            Export CSV
-          </button>
+          <TableExportButton
+            data={filteredAndSortedData.map(item => ({
+              date: formatDate(item.time),
+              price: item.price,
+              volume: item.volume,
+              marketCap: item.marketCap
+            }))}
+            columns={[
+              { key: 'date', label: 'Date', format: 'text' },
+              { key: 'price', label: 'Price', format: 'currency' },
+              { key: 'volume', label: 'Volume', format: 'currency' },
+              { key: 'marketCap', label: 'Market Cap', format: 'currency' }
+            ]}
+            filename={`${crypto.symbol}_historical_data`}
+            title={`${crypto.name} Historical Data`}
+          />
         </div>
 
         {/* Statistics */}
         {stats && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <div className="bg-emerald-50 dark:bg-emerald-900/20 p-3 sm:p-4 rounded-xl border border-emerald-100 dark:border-emerald-800 transition-colors duration-300">
               <div className="flex items-center gap-2 mb-2">
                 <TrendingUp className="h-4 w-4 text-emerald-600 dark:text-emerald-400 transition-colors duration-300" />

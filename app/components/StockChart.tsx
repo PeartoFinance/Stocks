@@ -84,11 +84,11 @@ export default function StockChart({ data, compareData, isPositive, height = 400
 
     if (chartType === 'candlestick') {
       const series = chart.addSeries(CandlestickSeries, {
-        upColor: isDark ? '#0aff8d' : '#2563eb',
-        downColor: isDark ? '#e02d75' : '#1d4ed8',
+        upColor: '#10b981',
+        downColor: '#ef4444',
         borderVisible: false,
-        wickUpColor: isDark ? '#0aff8d' : '#2563eb',
-        wickDownColor: isDark ? '#e02d75' : '#1d4ed8',
+        wickUpColor: '#10b981',
+        wickDownColor: '#ef4444',
       });
       series.setData(data.map(item => ({
         time: formatTime(item.date),

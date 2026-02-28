@@ -31,7 +31,8 @@ import {
   BarChart3,
   Home,
   TrendingUp,
-  Calendar
+  Calendar,
+  Bitcoin
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
@@ -42,6 +43,10 @@ import { SignInToContinue } from './common/SignInToContinue';
 interface SearchResult {
   symbol: string;
   name: string;
+  assetType?: string;
+  price?: number;
+  changePercent?: number;
+  exchange?: string;
 }
 
 export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void }) {
@@ -134,8 +139,9 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleSearchResultClick = (symbol: string) => {
-    router.push(`/stock/${symbol}`);
+  const handleSearchResultClick = (result: SearchResult) => {
+    const path = result.assetType === 'crypto' ? `/crypto/${result.symbol}` : `/stock/${result.symbol}`;
+    router.push(path);
     setSearchQuery('');
     setShowSearchResults(false);
     setMobileMenuOpen(false);
@@ -285,11 +291,40 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                     {searchResults.map((stock) => (
                       <button
                         key={stock.symbol}
-                        onClick={() => handleSearchResultClick(stock.symbol)}
+                        onClick={() => handleSearchResultClick(stock)}
                         className="w-full px-4 py-3 text-left hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-slate-700 last:border-b-0 transition"
                       >
-                        <div className="font-medium text-slate-900 dark:text-white transition-colors duration-300">{stock.symbol}</div>
-                        <div className="text-sm text-slate-600 dark:text-slate-400 truncate transition-colors duration-300">{stock.name}</div>
+                        <div className="flex items-center gap-3">
+                          <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                            stock.assetType === 'crypto' ? 'bg-amber-500/10' : 'bg-emerald-500/10'
+                          }`}>
+                            {stock.assetType === 'crypto' 
+                              ? <Bitcoin size={16} className="text-amber-500" />
+                              : <TrendingUp size={16} className="text-emerald-500" />
+                            }
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2">
+                              <span className="font-medium text-slate-900 dark:text-white transition-colors duration-300">{stock.symbol}</span>
+                              {stock.exchange && (
+                                <span className="text-xs text-slate-400 px-1.5 py-0.5 bg-slate-100 dark:bg-slate-700 rounded">
+                                  {stock.exchange}
+                                </span>
+                              )}
+                            </div>
+                            <div className="text-sm text-slate-600 dark:text-slate-400 truncate transition-colors duration-300">{stock.name}</div>
+                          </div>
+                          {stock.price && (
+                            <div className="text-right">
+                              <div className="text-sm font-medium text-slate-900 dark:text-white">${stock.price.toFixed(2)}</div>
+                              {stock.changePercent != null && (
+                                <div className={`text-xs ${stock.changePercent >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
+                                  {stock.changePercent >= 0 ? '+' : ''}{stock.changePercent.toFixed(2)}%
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
                       </button>
                     ))}
                   </motion.div>
@@ -337,11 +372,40 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                           {searchResults.map((stock) => (
                             <button
                               key={stock.symbol}
-                              onClick={() => handleSearchResultClick(stock.symbol)}
+                              onClick={() => handleSearchResultClick(stock)}
                               className="w-full px-4 py-4 text-left hover:bg-slate-50 dark:hover:bg-slate-800 transition"
                             >
-                              <div className="font-medium text-slate-900 dark:text-white">{stock.symbol}</div>
-                              <div className="text-sm text-slate-600 dark:text-slate-400 truncate">{stock.name}</div>
+                              <div className="flex items-center gap-3">
+                                <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                                  stock.assetType === 'crypto' ? 'bg-amber-500/10' : 'bg-emerald-500/10'
+                                }`}>
+                                  {stock.assetType === 'crypto'
+                                    ? <Bitcoin size={18} className="text-amber-500" />
+                                    : <TrendingUp size={18} className="text-emerald-500" />
+                                  }
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center gap-2">
+                                    <span className="font-medium text-slate-900 dark:text-white">{stock.symbol}</span>
+                                    {stock.exchange && (
+                                      <span className="text-xs text-slate-400 px-1.5 py-0.5 bg-slate-100 dark:bg-slate-700 rounded">
+                                        {stock.exchange}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div className="text-sm text-slate-600 dark:text-slate-400 truncate">{stock.name}</div>
+                                </div>
+                                {stock.price && (
+                                  <div className="text-right">
+                                    <div className="text-sm font-medium text-slate-900 dark:text-white">${stock.price.toFixed(2)}</div>
+                                    {stock.changePercent != null && (
+                                      <div className={`text-xs ${stock.changePercent >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
+                                        {stock.changePercent >= 0 ? '+' : ''}{stock.changePercent.toFixed(2)}%
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
                             </button>
                           ))}
                         </div>

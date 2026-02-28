@@ -254,9 +254,9 @@ export default function MetricsTab({ stock }: MetricsTabProps) {
           <div className="space-y-3">
             <h4 className="font-medium text-slate-700 dark:text-slate-300">Performance Metrics</h4>
             {[
-              { label: 'Current Price', value: formatPrice(stock.price) },
-              { label: '52W High Distance', value: metrics.high52w ? `${(((stock.price - metrics.high52w) / metrics.high52w) * 100).toFixed(1)}%` : '-' },
-              { label: '52W Low Distance', value: metrics.low52w ? `${(((stock.price - metrics.low52w) / metrics.low52w) * 100).toFixed(1)}%` : '-' },
+              { label: 'Current Price', value: formatPrice(stock.price || 0) },
+              { label: '52W High Distance', value: metrics.high52w && stock.price ? `${(((stock.price - metrics.high52w) / metrics.high52w) * 100).toFixed(1)}%` : '-' },
+              { label: '52W Low Distance', value: metrics.low52w && stock.price ? `${(((stock.price - metrics.low52w) / metrics.low52w) * 100).toFixed(1)}%` : '-' },
               { label: 'Market Cap Rank', value: metrics.marketCap && metrics.marketCap > 100e9 ? 'Large Cap' : metrics.marketCap && metrics.marketCap > 10e9 ? 'Mid Cap' : 'Small Cap' },
             ].map((item, i) => (
               <div key={i} className="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800">

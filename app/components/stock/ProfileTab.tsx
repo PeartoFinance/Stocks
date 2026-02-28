@@ -137,15 +137,15 @@ export default function ProfileTab({ stock }: ProfileTabProps) {
     <div className="space-y-6">
       {/* Company Overview */}
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 transition-colors duration-300">
-        <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
+        <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2 transition-colors duration-300">
           <Building2 className="h-5 w-5 text-blue-500" />
           Company Overview
         </h3>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div>
-            <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-3 transition-colors duration-300">About {data.name}</h4>
-            <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4 transition-colors duration-300">
+            <h4 className="text-base font-semibold text-slate-700 dark:text-slate-300 mb-3 transition-colors duration-300">About {data.name}</h4>
+            <p className="text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-4 transition-colors duration-300">
               {data.description || `${data.name} is a leading company in the ${data.sector || 'technology'} sector, operating in the ${data.industry || 'consumer electronics'} industry.`}
             </p>
 
@@ -186,7 +186,7 @@ export default function ProfileTab({ stock }: ProfileTabProps) {
           </div>
 
           <div>
-            <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-3 transition-colors duration-300">Company Details</h4>
+            <h4 className="text-base font-semibold text-slate-700 dark:text-slate-300 mb-3 transition-colors duration-300">Company Details</h4>
             <div className="space-y-3">
               {[
                 { label: 'Symbol', value: data.symbol },
@@ -211,13 +211,13 @@ export default function ProfileTab({ stock }: ProfileTabProps) {
 
       {/* Trading Information */}
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 transition-colors duration-300">
-        <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-4 transition-colors duration-300">
+        <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-4 transition-colors duration-300">
           Trading Information
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
-            <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-3 transition-colors duration-300">Price Data</h4>
+            <h4 className="text-base font-semibold text-slate-700 dark:text-slate-300 mb-3 transition-colors duration-300">Price Data</h4>
             <div className="space-y-2">
               {[
                 { label: 'Current Price', value: data.price ? <PriceDisplay amount={data.price} /> : 'N/A' },
@@ -235,7 +235,7 @@ export default function ProfileTab({ stock }: ProfileTabProps) {
           </div>
 
           <div>
-            <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-3 transition-colors duration-300">Volume & Shares</h4>
+            <h4 className="text-base font-semibold text-slate-700 dark:text-slate-300 mb-3 transition-colors duration-300">Volume & Shares</h4>
             <div className="space-y-2">
               {[
                 { label: 'Volume', value: formatLargeNumber(data.volume) },
@@ -253,7 +253,7 @@ export default function ProfileTab({ stock }: ProfileTabProps) {
           </div>
 
           <div>
-            <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-3 transition-colors duration-300">Risk Metrics</h4>
+            <h4 className="text-base font-semibold text-slate-700 dark:text-slate-300 mb-3 transition-colors duration-300">Risk Metrics</h4>
             <div className="space-y-2">
               {[
                 { label: 'Beta', value: data.beta ? data.beta.toFixed(3) : 'N/A' },
@@ -279,13 +279,13 @@ export default function ProfileTab({ stock }: ProfileTabProps) {
 
       {/* Contact Information */}
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 transition-colors duration-300">
-        <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-4 transition-colors duration-300">
+        <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-4 transition-colors duration-300">
           Additional Information
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-3 transition-colors duration-300">Company Links</h4>
+            <h4 className="text-base font-semibold text-slate-700 dark:text-slate-300 mb-3 transition-colors duration-300">Company Links</h4>
             {data.website ? (
               <div className="space-y-2">
                 <a href={data.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-500 flex items-center gap-2 transition-colors duration-300">
@@ -300,7 +300,7 @@ export default function ProfileTab({ stock }: ProfileTabProps) {
           </div>
 
           <div>
-            <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-3 transition-colors duration-300">Data Information</h4>
+            <h4 className="text-base font-semibold text-slate-700 dark:text-slate-300 mb-3 transition-colors duration-300">Data Information</h4>
             <div className="space-y-2 text-sm text-slate-600 dark:text-slate-400 transition-colors duration-300">
               <p>Asset Type: {data.assetType || 'Stock'}</p>
               <p>Country: {data.countryCode || 'N/A'}</p>

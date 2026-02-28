@@ -47,7 +47,6 @@ async function apiFetch<T>(endpoint: string, options?: RequestInit): Promise<T> 
   if (cached) return cached;
 
   const url = buildUrl(endpoint);
-  console.log('[stockAPI] Fetching:', url);
 
   const response = await fetch(url, {
     ...options,
@@ -141,7 +140,7 @@ export const stockAPI = {
   },
 
   // Stock data endpoints
-  async searchStocks(query: string): Promise<APIResponse<Array<{ symbol: string; name: string }>>> {
+  async searchStocks(query: string): Promise<APIResponse<Array<{ symbol: string; name: string; assetType?: string; price?: number; changePercent?: number; exchange?: string }>>> {
     try {
       const data = await apiFetch<unknown[]>(
         `/api/stocks/search?q=${encodeURIComponent(query)}&limit=10`
@@ -152,6 +151,10 @@ export const stockAPI = {
         return {
           symbol: String(d.symbol || ''),
           name: String(d.name || ''),
+          assetType: String(d.assetType || d.asset_type || 'stock'),
+          price: Number(d.price) || undefined,
+          changePercent: Number(d.changePercent || d.change_percent) || undefined,
+          exchange: String(d.exchange || '') || undefined,
         };
       });
 
@@ -299,28 +302,23 @@ export const stockAPI = {
   },
 
   // Analysis endpoints
-  async getTechnicalAnalysis(symbol: string): Promise<APIResponse<TechnicalIndicators>> {
-    // Technical indicators not available from server yet - generate reasonable defaults
-    const mockIndicators: TechnicalIndicators = {
-      symbol: symbol.toUpperCase(),
-      rsi: 50 + Math.random() * 30,
-      sma20: 150 + Math.random() * 50,
-      sma50: 145 + Math.random() * 55,
-      sma200: 140 + Math.random() * 60,
-      ema12: 155 + Math.random() * 45,
-      ema26: 150 + Math.random() * 50,
-      macd: (Math.random() - 0.5) * 10,
-      macdSignal: (Math.random() - 0.5) * 8,
-      bollingerUpper: 180,
-      bollingerLower: 130,
-      bollingerMiddle: 155,
-    };
-
-    return {
-      data: mockIndicators,
-      success: true,
-      timestamp: new Date().toISOString(),
-    };
+  async getTechnicalAnalysis(symbol: string): Promise<APIResponse<any>> {
+    try {
+      const data = await apiFetch<any>(`/market/technical-analysis/${symbol}`);
+      
+      return {
+        data: data,
+        success: true,
+        timestamp: new Date().toISOString(),
+      };
+    } catch (error) {
+      console.error('[stockAPI] getTechnicalAnalysis error:', error);
+      return {
+        data: null,
+        success: false,
+        timestamp: new Date().toISOString(),
+      };
+    }
   },
 
   async getFundamentalAnalysis(symbol: string): Promise<APIResponse<FundamentalData>> {
@@ -385,7 +383,7 @@ export const stockAPI = {
 
   async getAllStocks(): Promise<APIResponse<Stock[]>> {
     try {
-      const data = await apiFetch<unknown[]>('/api/market/stocks?limit=100');
+      const data = await apiFetch<unknown[]>('/live/stocks?limit=100');
 
       const stocks: Stock[] = (data || []).map((item: unknown) =>
         transformQuote(item as Record<string, unknown>)

@@ -153,10 +153,10 @@ export default function StatisticsTab({ comparedStocks, formatLargeNumber }: Sta
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
                 {comparedStocks.map((stock) => {
                   const value = stock[metric.key as keyof ComparisonStock];
-                  const numValue = Number(value);
-                  const isNegative = metric.format === 'percentage' && numValue < 0;
-                  const isBest = shouldHighlight && numValue === maxValue && numValue > 0 && numValues.length > 1;
-                  const isWorst = shouldHighlight && numValue === minValue && numValue > 0 && numValues.length > 1;
+                  const numValue = value != null && !isNaN(Number(value)) ? Number(value) : null;
+                  const isNegative = metric.format === 'percentage' && numValue !== null && numValue < 0;
+                  const isBest = shouldHighlight && numValue !== null && numValue === maxValue && maxValue > 0 && numValues.length > 1;
+                  const isWorst = shouldHighlight && numValue !== null && numValue === minValue && minValue > 0 && numValues.length > 1 && maxValue !== minValue;
 
                   return (
                     <div

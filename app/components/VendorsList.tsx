@@ -26,7 +26,8 @@ export default function VendorsList({ className = '', limit = 10, category }: Ve
         });
 
         if (response.success && response.data) {
-          setVendors(response.data);
+          const filteredVendors = response.data.filter(vendor => vendor.category !== 'Crypto');
+          setVendors(filteredVendors);
         } else {
           setError('Failed to load vendors');
         }
@@ -122,7 +123,11 @@ export default function VendorsList({ className = '', limit = 10, category }: Ve
                       target.style.display = 'none';
                       const parent = target.parentElement;
                       if (parent) {
-                        parent.innerHTML = `<span class="text-white text-sm font-medium">${vendor.name.charAt(0).toUpperCase()}</span>`;
+                        const initial = vendor.name.charAt(0).toUpperCase();
+                        const span = document.createElement('span');
+                        span.className = 'text-white text-sm font-medium';
+                        span.textContent = initial;
+                        parent.appendChild(span);
                       }
                     }}
                   />
