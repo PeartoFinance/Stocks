@@ -86,11 +86,11 @@ export default function ChartTab({
     { key: 'mountain', label: 'Mountain', icon: Mountain },
   ];
 
-  const isPositive = crypto.change >= 0;
+  const isPositive = (crypto.change || 0) >= 0;
 
   // Calculate price change for the selected period
   const calculatePeriodChange = () => {
-    if (historicalData.length < 2) return { change: 0, changePercent: 0 };
+    if (!historicalData || historicalData.length < 2) return { change: 0, changePercent: 0 };
     
     const firstPrice = historicalData[0].close;
     const lastPrice = historicalData[historicalData.length - 1].close;
@@ -116,7 +116,7 @@ export default function ChartTab({
                 isPositive ? "text-emerald-700 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-900/20" : "text-red-700 bg-red-50 dark:text-red-400 dark:bg-red-900/20"
               }`}>
                 {isPositive ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
-                {formatPrice(historicalData[historicalData.length - 1]?.close || crypto.change)}
+                {formatPrice(historicalData && historicalData.length > 0 ? historicalData[historicalData.length - 1]?.close : crypto.change)}
               </div>
               <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium ${
                 periodChange.change >= 0 ? "text-emerald-700 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-900/20" : "text-red-700 bg-red-50 dark:text-red-400 dark:bg-red-900/20"
@@ -131,7 +131,7 @@ export default function ChartTab({
 
         {/* Chart Controls */}
         <div className="mb-6 p-4 bg-slate-50 dark:bg-slate-700 rounded-xl border border-gray-200 dark:border-gray-600 transition-colors duration-300">
-          <div className="space-y-4 mb-4">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-4">
             {/* Period Selector */}
             <div>
               <label className="text-sm font-medium text-gray-700 dark:text-slate-300 mb-2 block transition-colors duration-300">Time Period</label>
@@ -199,7 +199,7 @@ export default function ChartTab({
             </div>
           ) : null}
           
-          {historicalData.length > 0 ? (
+          {historicalData && historicalData.length > 0 ? (
             <div className="h-full p-2">
               <StockChart 
                 data={historicalData} 
@@ -225,25 +225,25 @@ export default function ChartTab({
         {[
           { 
             label: 'Period High', 
-            value: historicalData.length > 0 ? formatPrice(Math.max(...historicalData.map(d => d.high))) : '-',
+            value: historicalData && historicalData.length > 0 ? formatPrice(Math.max(...historicalData.map(d => d?.high || 0))) : '-',
             icon: TrendingUp,
             color: 'emerald'
           },
           { 
             label: 'Period Low', 
-            value: historicalData.length > 0 ? formatPrice(Math.min(...historicalData.map(d => d.low))) : '-',
+            value: historicalData && historicalData.length > 0 ? formatPrice(Math.min(...historicalData.map(d => d?.low || Infinity))) : '-',
             icon: TrendingDown,
             color: 'red'
           },
           { 
             label: 'Average Price', 
-            value: historicalData.length > 0 ? formatPrice(historicalData.reduce((sum, d) => sum + d.close, 0) / historicalData.length) : '-',
+            value: historicalData && historicalData.length > 0 ? formatPrice(historicalData.reduce((sum, d) => sum + (d?.close || 0), 0) / historicalData.length) : '-',
             icon: BarChart3,
             color: 'blue'
           },
           { 
             label: 'Volatility', 
-            value: historicalData.length > 1 ? `${((Math.max(...historicalData.map(d => d.high)) - Math.min(...historicalData.map(d => d.low))) / Math.min(...historicalData.map(d => d.low)) * 100).toFixed(2)}%` : '-',
+            value: historicalData && historicalData.length > 1 ? `${((Math.max(...historicalData.map(d => d?.high || 0)) - Math.min(...historicalData.map(d => d?.low || Infinity))) / Math.min(...historicalData.map(d => d?.low || 1)) * 100).toFixed(2)}%` : '-',
             icon: Activity,
             color: 'purple'
           },
@@ -259,26 +259,26 @@ export default function ChartTab({
       </div>
 
       {/* Volume Analysis */}
-      {showVolume && historicalData.length > 0 && (
+      {showVolume && historicalData && historicalData.length > 0 && (
         <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-4 lg:p-6 transition-colors duration-300">
           <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4 transition-colors duration-300">Volume Analysis</h3>
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
             {[
               { 
                 label: 'Total Volume', 
-                value: `${(historicalData.reduce((sum, d) => sum + d.volume, 0) / 1e9).toFixed(2)}B`,
+                value: `${(historicalData.reduce((sum, d) => sum + (d?.volume || 0), 0) / 1e9).toFixed(2)}B`,
                 icon: Activity,
                 color: 'blue'
               },
               { 
                 label: 'Average Volume', 
-                value: `${(historicalData.reduce((sum, d) => sum + d.volume, 0) / historicalData.length / 1e6).toFixed(2)}M`,
+                value: `${(historicalData.reduce((sum, d) => sum + (d?.volume || 0), 0) / historicalData.length / 1e6).toFixed(2)}M`,
                 icon: BarChart3,
                 color: 'emerald'
               },
               { 
                 label: 'Max Volume', 
-                value: `${(Math.max(...historicalData.map(d => d.volume)) / 1e6).toFixed(2)}M`,
+                value: `${(Math.max(...historicalData.map(d => d?.volume || 0)) / 1e6).toFixed(2)}M`,
                 icon: TrendingUp,
                 color: 'purple'
               },

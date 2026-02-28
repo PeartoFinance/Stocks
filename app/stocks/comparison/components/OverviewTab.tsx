@@ -20,11 +20,11 @@ export default function OverviewTab({ comparedStocks, formatLargeNumber }: Overv
   }
 
   const bestPerformer = comparedStocks.reduce((best, current) =>
-    current.changePercent > best.changePercent ? current : best
+    (current.changePercent ?? -Infinity) > (best.changePercent ?? -Infinity) ? current : best
   );
 
   const worstPerformer = comparedStocks.reduce((worst, current) =>
-    current.changePercent < worst.changePercent ? current : worst
+    (current.changePercent ?? Infinity) < (worst.changePercent ?? Infinity) ? current : worst
   );
 
   const highestVolume = comparedStocks.reduce((highest, current) =>
@@ -47,7 +47,7 @@ export default function OverviewTab({ comparedStocks, formatLargeNumber }: Overv
               <span className="text-xs font-medium text-green-700 dark:text-green-400 uppercase">Best</span>
             </div>
             <div className="text-base font-medium text-green-900 dark:text-white mb-1">{bestPerformer.symbol}</div>
-            <div className="text-sm font-medium text-green-700 dark:text-green-400">+{bestPerformer.changePercent.toFixed(2)}%</div>
+            <div className="text-sm font-medium text-green-700 dark:text-green-400">+{(bestPerformer.changePercent ?? 0).toFixed(2)}%</div>
           </div>
 
           <div className="text-center p-3 bg-gradient-to-br from-red-50 to-red-100 dark:from-red-500/10 dark:to-red-500/5 rounded-lg border border-red-200 dark:border-red-500/20">
@@ -56,7 +56,7 @@ export default function OverviewTab({ comparedStocks, formatLargeNumber }: Overv
               <span className="text-xs font-medium text-red-700 dark:text-red-400 uppercase">Worst</span>
             </div>
             <div className="text-base font-medium text-red-900 dark:text-white mb-1">{worstPerformer.symbol}</div>
-            <div className="text-sm font-medium text-red-700 dark:text-red-400">{worstPerformer.changePercent.toFixed(2)}%</div>
+            <div className="text-sm font-medium text-red-700 dark:text-red-400">{(worstPerformer.changePercent ?? 0).toFixed(2)}%</div>
           </div>
 
           <div className="text-center p-3 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-500/10 dark:to-blue-500/5 rounded-lg border border-blue-200 dark:border-blue-500/20">
@@ -82,7 +82,7 @@ export default function OverviewTab({ comparedStocks, formatLargeNumber }: Overv
       {/* Stock Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {comparedStocks.map((stock) => {
-          const isPositive = stock.changePercent >= 0;
+          const isPositive = (stock.changePercent ?? 0) >= 0;
           return (
             <div key={stock.symbol} className="bg-white dark:bg-slate-900/95 rounded-xl border-2 p-5" style={{ borderColor: stock.color }}>
               <div className="flex items-start justify-between mb-3">
@@ -94,10 +94,10 @@ export default function OverviewTab({ comparedStocks, formatLargeNumber }: Overv
               </div>
 
               <div className="flex items-baseline gap-2">
-                <span className="text-2xl font-bold text-slate-900 dark:text-white">${stock.price.toFixed(2)}</span>
+                <span className="text-2xl font-bold text-slate-900 dark:text-white">${(stock.price ?? 0).toFixed(2)}</span>
                 <span className={`flex items-center text-sm font-medium ${isPositive ? 'text-teal-600' : 'text-red-500'}`}>
                   {isPositive ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
-                  {isPositive ? '+' : ''}{stock.changePercent.toFixed(2)}%
+                  {isPositive ? '+' : ''}{(stock.changePercent ?? 0).toFixed(2)}%
                 </span>
               </div>
 
