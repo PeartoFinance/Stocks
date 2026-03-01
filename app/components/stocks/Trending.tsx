@@ -8,6 +8,7 @@ import { Stock } from '../../types';
 import Link from 'next/link';
 import PriceDisplay from '../common/PriceDisplay';
 import { TableExportButton } from '../common/TableExportButton';
+import { useCurrency } from '../../context/CurrencyContext';
 
 interface TrendingProps {
   className?: string;
@@ -16,6 +17,7 @@ interface TrendingProps {
 export default function Trending({ className = '' }: TrendingProps) {
   const [trendingStocks, setTrendingStocks] = useState<Stock[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { formatPrice } = useCurrency();
 
   useEffect(() => {
     const fetchTrending = async () => {
@@ -38,10 +40,10 @@ export default function Trending({ className = '' }: TrendingProps) {
 
   const formatMarketCap = (value: number | undefined): string => {
     if (!value) return '—';
-    if (value >= 1e12) return `${(value / 1e12).toFixed(1)}T`;
-    if (value >= 1e9) return `${(value / 1e9).toFixed(1)}B`;
-    if (value >= 1e6) return `${(value / 1e6).toFixed(1)}M`;
-    return value.toLocaleString();
+    if (value >= 1e12) return formatPrice(value / 1e12, 1, 1) + 'T';
+    if (value >= 1e9) return formatPrice(value / 1e9, 1, 1) + 'B';
+    if (value >= 1e6) return formatPrice(value / 1e6, 1, 1) + 'M';
+    return formatPrice(value, 0, 0);
   };
 
   const formatNumber = (num: number) => {
@@ -222,7 +224,7 @@ export default function Trending({ className = '' }: TrendingProps) {
                         </td>
                         <td className="px-4 py-3 text-right">
                           <div className={`flex items-center justify-end gap-1 font-medium ${stock.change >= 0 ? 'text-emerald-600' : 'text-red-500'}`}>
-                            <span>{stock.change >= 0 ? '+' : ''}${Math.abs(stock.change || 0).toFixed(2)} ({stock.change >= 0 ? '+' : ''}{(stock.changePercent || 0).toFixed(2)}%)</span>
+                            {stock.change >= 0 ? '+' : ''}<PriceDisplay amount={Math.abs(stock.change || 0)} showSign={false} /> ({stock.change >= 0 ? '+' : ''}{(stock.changePercent || 0).toFixed(2)}%)
                           </div>
                         </td>
                         <td className="px-4 py-3 text-right text-slate-600 dark:text-slate-400 text-sm hidden lg:table-cell">

@@ -2,6 +2,7 @@
 
 import { ComparisonCrypto } from './types';
 import { Activity, TrendingUp, TrendingDown, DollarSign, BarChart3 } from 'lucide-react';
+import { useCurrency } from '../../../context/CurrencyContext';
 
 interface ProfileTabProps {
   comparedCryptos: ComparisonCrypto[];
@@ -9,6 +10,8 @@ interface ProfileTabProps {
 }
 
 export default function ProfileTab({ comparedCryptos, formatLargeNumber }: ProfileTabProps) {
+  const { formatPrice } = useCurrency();
+  
   if (comparedCryptos.length === 0) {
     return (
       <div className="text-center py-12">
@@ -42,7 +45,7 @@ export default function ProfileTab({ comparedCryptos, formatLargeNumber }: Profi
                 )}
               </div>
               <div className="flex items-baseline gap-2">
-                <span className="text-xl font-bold text-slate-900 dark:text-white">${crypto.price.toFixed(2)}</span>
+                <span className="text-xl font-bold text-slate-900 dark:text-white">{formatPrice(crypto.price, 2, 2)}</span>
                 <span className={`text-sm font-medium ${isPositive ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                   {isPositive ? '+' : ''}{crypto.changePercent.toFixed(2)}%
                 </span>
@@ -80,13 +83,13 @@ export default function ProfileTab({ comparedCryptos, formatLargeNumber }: Profi
                     {crypto.low24h && (
                       <div className="bg-red-50 dark:bg-red-500/10 p-2 rounded border border-red-200 dark:border-red-500/20">
                         <p className="text-[9px] text-red-700 dark:text-red-400 mb-0.5">Low</p>
-                        <p className="text-xs font-medium text-red-900 dark:text-white">${crypto.low24h.toFixed(2)}</p>
+                        <p className="text-xs font-medium text-red-900 dark:text-white">{crypto.low24h ? formatPrice(crypto.low24h, 2, 2) : '-'}</p>
                       </div>
                     )}
                     {crypto.high24h && (
                       <div className="bg-green-50 dark:bg-green-500/10 p-2 rounded border border-green-200 dark:border-green-500/20">
                         <p className="text-[9px] text-green-700 dark:text-green-400 mb-0.5">High</p>
-                        <p className="text-xs font-medium text-green-900 dark:text-white">${crypto.high24h.toFixed(2)}</p>
+                        <p className="text-xs font-medium text-green-900 dark:text-white">{crypto.high24h ? formatPrice(crypto.high24h, 2, 2) : '-'}</p>
                       </div>
                     )}
                   </div>

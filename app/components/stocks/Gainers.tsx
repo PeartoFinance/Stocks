@@ -8,6 +8,7 @@ import { Stock } from '../../types';
 import Link from 'next/link';
 import PriceDisplay from '../common/PriceDisplay';
 import { TableExportButton } from '../common/TableExportButton';
+import { useCurrency } from '../../context/CurrencyContext';
 
 interface GainersProps {
   className?: string;
@@ -16,6 +17,7 @@ interface GainersProps {
 export default function Gainers({ className = '' }: GainersProps) {
   const [gainers, setGainers] = useState<Stock[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { formatPrice } = useCurrency();
 
   useEffect(() => {
     const fetchGainers = async () => {
@@ -38,10 +40,10 @@ export default function Gainers({ className = '' }: GainersProps) {
 
   const formatMarketCap = (value: number | undefined): string => {
     if (!value) return '—';
-    if (value >= 1e12) return `${(value / 1e12).toFixed(1)}T`;
-    if (value >= 1e9) return `${(value / 1e9).toFixed(1)}B`;
-    if (value >= 1e6) return `${(value / 1e6).toFixed(1)}M`;
-    return value.toLocaleString();
+    if (value >= 1e12) return formatPrice(value / 1e12, 1, 1) + 'T';
+    if (value >= 1e9) return formatPrice(value / 1e9, 1, 1) + 'B';
+    if (value >= 1e6) return formatPrice(value / 1e6, 1, 1) + 'M';
+    return formatPrice(value, 0, 0);
   };
 
   const formatNumber = (num: number) => {
@@ -223,7 +225,7 @@ export default function Gainers({ className = '' }: GainersProps) {
                         </td>
                         <td className="px-4 py-3 text-right">
                           <div className="flex items-center justify-end gap-1 font-medium text-emerald-600">
-                            <span>+${Math.abs(stock.change || 0).toFixed(2)} (+{(stock.changePercent || 0).toFixed(2)}%)</span>
+                            +<PriceDisplay amount={Math.abs(stock.change || 0)} showSign={false} /> (+{(stock.changePercent || 0).toFixed(2)}%)
                           </div>
                         </td>
                         <td className="px-4 py-3 text-right text-slate-600 dark:text-slate-400 text-sm hidden lg:table-cell">

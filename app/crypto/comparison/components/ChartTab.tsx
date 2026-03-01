@@ -8,6 +8,7 @@ import { cryptoService } from '../../../utils/cryptoService';
 import toast from 'react-hot-toast';
 import MultiStockChart from '../../../components/MultiStockChart';
 import { HistoricalData } from '../../../types';
+import { useCurrency } from '../../../context/CurrencyContext';
 
 type ChartType = 'line' | 'area' | 'candle';
 
@@ -19,6 +20,7 @@ interface ChartTabProps {
 
 export default function ChartTab({ comparedCryptos, formatLargeNumber, removeFromComparison }: ChartTabProps) {
   const router = useRouter();
+  const { formatPrice } = useCurrency();
   const [chartData, setChartData] = useState<HistoricalData[][]>([]);
   const [loading, setLoading] = useState(false);
   const [period, setPeriod] = useState('1mo');
@@ -176,7 +178,7 @@ export default function ChartTab({ comparedCryptos, formatLargeNumber, removeFro
                     <X className="h-3 w-3" />
                   </button>
                 </div>
-                <div className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white mb-1">${crypto.price.toFixed(2)}</div>
+                <div className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white mb-1">{formatPrice(crypto.price, 2, 2)}</div>
                 <div className={`inline-flex items-center px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] font-semibold ${isPositive ? 'bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400' : 'bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-400'}`}>
                   {isPositive ? '▲' : '▼'} {Math.abs(crypto.changePercent).toFixed(2)}%
                 </div>

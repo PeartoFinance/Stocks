@@ -6,6 +6,8 @@ import { CryptoData } from '@/app/crypto/page';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { TableExportButton } from '../common/TableExportButton';
+import { useCurrency } from '@/app/context/CurrencyContext';
+import PriceDisplay from '../common/PriceDisplay';
 
 interface CryptoTableViewProps {
   cryptoData: CryptoData[];
@@ -15,6 +17,7 @@ interface CryptoTableViewProps {
 
 export default function CryptoTableView({ cryptoData, loading = false, viewMode }: CryptoTableViewProps) {
   const router = useRouter();
+  const { formatPrice: formatCurrencyPrice } = useCurrency();
 
   const handleRowClick = (symbol: string) => {
     // router.push uses client-side routing (no full reload)
@@ -22,20 +25,27 @@ export default function CryptoTableView({ cryptoData, loading = false, viewMode 
   };
 
   const formatPrice = (price: number | undefined | null) => {
-    if (!price || isNaN(price)) return '$0.00';
+    if (!price || isNaN(price)) return formatCurrencyPrice(0);
     if (price >= 1) {
-      return `$${price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      return formatCurrencyPrice(price, 2, 2);
     } else {
-      return `$${price.toLocaleString('en-US', { minimumFractionDigits: 4, maximumFractionDigits: 6 })}`;
+      return formatCurrencyPrice(price, 4, 6);
     }
   };
 
   const formatMarketCap = (marketCap: number | undefined | null) => {
-    if (!marketCap || isNaN(marketCap)) return '$0';
-    if (marketCap >= 1e12) return `$${(marketCap / 1e12).toFixed(2)}T`;
-    if (marketCap >= 1e9) return `$${(marketCap / 1e9).toFixed(2)}B`;
-    if (marketCap >= 1e6) return `$${(marketCap / 1e6).toFixed(2)}M`;
-    return `$${marketCap.toLocaleString()}`;
+    if (!marketCap || isNaN(marketCap)) return formatCurrencyPrice(0);
+    if (marketCap >= 1e12) return formatCurrencyPrice(marketCap / 1e12, 2, 2, { notation: 'compact', compactDisplay: 'short' });
+    if (marketCap >= 1e9) return formatCurrencyPrice(marketCap / 1e9, 2, 2, { notation: 'compact', compactDisplay: 'short' });
+    if (marketCap >= 1e6) return formatCurrencyPrice(marketCap / 1e6, 2, 2, { notation: 'compact', compactDisplay: 'short' });
+    return formatCurrencyPrice(marketCap);
+  };
+
+  const formatVolume = (volume: number | undefined | null) => {
+    if (!volume || isNaN(volume)) return '0';
+    if (volume >= 1e6) return `${(volume / 1e6).toFixed(1)}M`;
+    if (volume >= 1e3) return `${(volume / 1e3).toFixed(1)}K`;
+    return volume.toFixed(0);
   };
 
   const getChangeColor = (change: number) => {
@@ -218,42 +228,27 @@ export default function CryptoTableView({ cryptoData, loading = false, viewMode 
                         <span className="text-[10px] md:text-xs font-medium text-white">{(crypto.symbol || '??').substring(0, 2).toUpperCase()}</span>
                       </div>
                     )}
-                    <div className="flex flex-col md:flex-row md:items-center md:gap-2">
-                      <Link href={`/crypto/${crypto.symbol}`} className="hover:underline transition-colors duration-300">
-                        <span className="text-sm font-medium text-slate-900 dark:text-white truncate max-w-[80px] sm:max-w-[120px] group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors duration-300">{crypto.name || 'Unknown'}</span>
+                    <div>
+                      <Link href={`/crypto/${crypto.symbol}`}>
+                        <span className="font-semibold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition">{crypto.symbol}</span>
                       </Link>
-                      <div className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide transition-colors duration-300">{crypto.symbol || '??'}</div>
+                      <div className="text-sm text-slate-600 dark:text-slate-300 line-clamp-1 max-w-[200px]">{crypto.name}</div>
                     </div>
                   </div>
                 </td>
-                <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right">
-                  <div className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">{formatPrice(crypto.price)}</div>
+                <td className="px-3 sm:px-6 py-4 text-right">
+                  <span className="font-semibold text-slate-900 dark:text-white">
+                    <PriceDisplay amount={crypto.price} />
+                  </span>
                 </td>
-                <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right">
-                  <div className="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium shadow-sm">
-                    {crypto.changePercent === 0 ? (
-                      <span className="text-gray-600 dark:text-slate-400 transition-colors duration-300">0.00%</span>
-                    ) : (
-                      <>
-                        {(crypto.changePercent || 0) > 0 ? (
-                          <ArrowUpRight className="h-3.5 w-3.5 mr-1 text-emerald-600 dark:text-emerald-400" />
-                        ) : (
-                          <ArrowDownRight className="h-3.5 w-3.5 mr-1 text-rose-600 dark:text-rose-400" />
-                        )}
-                        <span className={(crypto.changePercent || 0) >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}>
-                          {(crypto.changePercent || 0) >= 0 ? '+' : ''}{(crypto.changePercent || 0).toFixed(2)}%
-                        </span>
-                      </>
-                    )}
+                <td className="px-3 sm:px-6 py-4 text-right">
+                  <div className={`flex items-center justify-end gap-1 font-medium ${crypto.changePercent >= 0 ? 'text-emerald-600' : 'text-red-500'}`}>
+                    {crypto.changePercent >= 0 ? '+' : ''}{(crypto.changePercent || 0).toFixed(2)}%
                   </div>
                 </td>
-                <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right">
-                  <div className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">{formatMarketCap(crypto.marketCap)}</div>
-                </td>
-                <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right">
-                  <div className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">
-                    {crypto.volume ? `$${(crypto.volume / 1e6).toFixed(1)}M` : '$0M'}
-                  </div>
+                <td className="px-3 sm:px-6 py-4 text-right text-slate-600 dark:text-slate-400 text-sm">{formatMarketCap(crypto.marketCap)}</td>
+                <td className="px-3 sm:px-6 py-4 text-right text-slate-600 dark:text-slate-400 text-sm">
+                  {formatVolume(crypto.volume)}
                 </td>
               </tr>
             ))}

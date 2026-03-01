@@ -11,11 +11,6 @@ export default function StockOverview({ stock }: StockOverviewProps) {
   const { formatPrice } = useCurrency();
 
   const metrics = [
-    { label: "Market Cap", value: stock.marketCap ? formatPrice(stock.marketCap).replace(/[^0-9.,]/g, '') + (stock.marketCap >= 1e12 ? 'T' : (stock.marketCap >= 1e9 ? 'B' : 'M')) : "N/A" }, // Simplified for now, or just use formatPrice directly without T/B if formatPrice doesn't support it yet
-    // Actually formatPrice returns formatted string with symbol.
-    // Let's just use formatPrice for simple prices.
-    // For Market Cap, we might want to keep the T/B/M logic but add symbol.
-    // But formatPrice handles thousands separators.
     {
       label: "Market Cap",
       value: stock.marketCap ? (

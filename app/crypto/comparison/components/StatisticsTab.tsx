@@ -3,6 +3,7 @@
 import { ComparisonCrypto } from './types';
 import { Activity, DollarSign, TrendingUp, BarChart3, Zap, TrendingDown, Percent } from 'lucide-react';
 import { useState } from 'react';
+import { useCurrency } from '../../../context/CurrencyContext';
 
 interface StatisticsTabProps {
   comparedCryptos: ComparisonCrypto[];
@@ -11,6 +12,7 @@ interface StatisticsTabProps {
 
 export default function StatisticsTab({ comparedCryptos, formatLargeNumber }: StatisticsTabProps) {
   const [activeCategory, setActiveCategory] = useState('overview');
+  const { formatPrice } = useCurrency();
 
   const categories = [
     { key: 'overview', label: 'Overview', icon: Activity },
@@ -71,7 +73,7 @@ export default function StatisticsTab({ comparedCryptos, formatLargeNumber }: St
 
     switch (format) {
       case 'currency':
-        return `$${Number(value).toFixed(2)}`;
+        return formatPrice(Number(value), 2, 2);
       case 'percentage':
         return `${Number(value).toFixed(2)}%`;
       case 'number':

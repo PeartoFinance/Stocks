@@ -3,6 +3,8 @@
 import React from 'react';
 import { DollarSign, TrendingUp, Percent, BarChart3, Building2 } from 'lucide-react';
 import { FilterValues } from './types';
+import { useCurrency } from '../../context/CurrencyContext';
+import PriceDisplay from '../common/PriceDisplay';
 
 interface Props {
   filters: FilterValues;
@@ -11,14 +13,9 @@ interface Props {
   availableIndustries: string[];
 }
 
-const MARKET_CAP_PRESETS = [
-  { label: 'Micro', sublabel: '<$300M', min: 0, max: 300000000 },
-  { label: 'Small', sublabel: '$300M-$2B', min: 300000000, max: 2000000000 },
-  { label: 'Mid', sublabel: '$2B-$10B', min: 2000000000, max: 10000000000 },
-  { label: 'Large', sublabel: '$10B+', min: 10000000000, max: undefined },
-];
-
 export default function MultiCriteriaFilters({ filters, onChange, availableSectors, availableIndustries }: Props) {
+  const { formatPrice, currency } = useCurrency();
+  
   const updateFilter = (key: keyof FilterValues, value: any) => {
     onChange({ ...filters, [key]: value });
   };
@@ -42,6 +39,19 @@ export default function MultiCriteriaFilters({ filters, onChange, availableSecto
   const setMarketCapPreset = (min?: number, max?: number) => {
     onChange({ ...filters, minMarketCap: min, maxMarketCap: max });
   };
+  
+  const formatMarketCapLabel = (value: number) => {
+    if (value >= 1e9) return formatPrice(value / 1e9, 0, 0) + 'B';
+    if (value >= 1e6) return formatPrice(value / 1e6, 0, 0) + 'M';
+    return formatPrice(value, 0, 0);
+  };
+  
+  const MARKET_CAP_PRESETS = [
+    { label: 'Micro', sublabel: `<${formatMarketCapLabel(300000000)}`, min: 0, max: 300000000 },
+    { label: 'Small', sublabel: `${formatMarketCapLabel(300000000)}-${formatMarketCapLabel(2000000000)}`, min: 300000000, max: 2000000000 },
+    { label: 'Mid', sublabel: `${formatMarketCapLabel(2000000000)}-${formatMarketCapLabel(10000000000)}`, min: 2000000000, max: 10000000000 },
+    { label: 'Large', sublabel: `${formatMarketCapLabel(10000000000)}+`, min: 10000000000, max: undefined },
+  ];
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-slate-700">

@@ -75,6 +75,27 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
   const [isAIPanelOpen, setIsAIPanelOpen] = useState(false);
   const [isDetailsCollapsed, setIsDetailsCollapsed] = useState(true);
 
+  const formatVolumeNumber = (volume: number) => {
+    if (volume >= 1e9) return `${(volume / 1e9).toFixed(1)}B`;
+    if (volume >= 1e6) return `${(volume / 1e6).toFixed(1)}M`;
+    if (volume >= 1e3) return `${(volume / 1e3).toFixed(1)}K`;
+    return volume.toFixed(0);
+  };
+
+  const formatVolume = (volume: number) => {
+    if (volume >= 1e9) return `${(volume / 1e9).toFixed(1)}B`;
+    if (volume >= 1e6) return `${(volume / 1e6).toFixed(1)}M`;
+    if (volume >= 1e3) return `${(volume / 1e3).toFixed(1)}K`;
+    return volume.toFixed(0);
+  };
+
+  const formatMarketCap = (marketCap: number) => {
+    if (marketCap >= 1e12) return `${formatPrice(marketCap / 1e12, 2, 2)}T`;
+    if (marketCap >= 1e9) return `${formatPrice(marketCap / 1e9, 2, 2)}B`;
+    if (marketCap >= 1e6) return `${formatPrice(marketCap / 1e6, 2, 2)}M`;
+    return formatPrice(marketCap, 0, 0);
+  };
+
   const filterTypes = [
     { key: 'all', label: 'All Trending', icon: Activity },
     { key: 'gainer', label: 'Top Gainers', icon: TrendingUp },
@@ -427,7 +448,7 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
                 </p>
                 <p className="text-xs text-blue-600 font-medium">
                   {filteredStocks.length > 0 ?
-                    formatNumber(Math.max(...filteredStocks.map(s => s.volume))) :
+                    formatVolumeNumber(Math.max(...filteredStocks.map(s => s.volume))) :
                     '0'}
                 </p>
               </div>
@@ -710,12 +731,12 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
                             </div>
                           </td>
                           <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right">
-                            <div className="text-sm font-medium text-slate-900 dark:text-white">{formatPrice(stock.price)}</div>
+                            <div className="text-sm font-medium text-slate-900 dark:text-white">{formatPrice(stock.price, 2, 2)}</div>
                           </td>
                           <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right">
                             <div className="inline-flex flex-col items-end">
                               <span className={`text-sm font-medium ${stock.change >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
-                                {stock.change >= 0 ? '+' : ''}{formatPrice(Math.abs(stock.change))}
+                                {stock.change >= 0 ? '+' : ''}{formatPrice(Math.abs(stock.change), 2, 2)}
                               </span>
                               <span className={`text-xs ${stock.changePercent >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                                 {stock.changePercent >= 0 ? '+' : ''}{formatPercentage(stock.changePercent)}
@@ -723,10 +744,10 @@ export default function TrendingStocks({ className = '' }: TrendingStocksProps) 
                             </div>
                           </td>
                           <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right">
-                            <div className="text-sm font-medium text-slate-900 dark:text-white">{formatNumber(stock.volume)}</div>
+                            <div className="text-sm font-medium text-slate-900 dark:text-white">{formatVolume(stock.volume)}</div>
                           </td>
                           <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right">
-                            <div className="text-sm font-medium text-slate-900 dark:text-white">{formatNumber(stock.marketCap)}</div>
+                            <div className="text-sm font-medium text-slate-900 dark:text-white">{formatMarketCap(stock.marketCap)}</div>
                           </td>
                           <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-center">
                             <div className="inline-flex items-center px-3 py-1.5 rounded-lg bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
