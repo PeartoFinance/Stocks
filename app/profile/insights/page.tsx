@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/app/context/AuthContext';
 import { getPortfolioInsights, getWealthHistory, type PortfolioInsights, type WealthHistoryPoint } from '@/app/utils/portfolioAPI';
+import { useCurrency } from '@/app/context/CurrencyContext';
 import {
     ArrowLeft,
     Loader2,
@@ -23,6 +24,7 @@ const COLORS = ['#10b981', '#3b82f6', '#8b5cf6', '#f59e0b', '#ef4444', '#06b6d4'
 export default function InsightsPage() {
     const { isAuthenticated, isLoading: authLoading } = useAuth();
     const router = useRouter();
+    const { formatPrice } = useCurrency();
     const [loading, setLoading] = useState(true);
     const [insights, setInsights] = useState<PortfolioInsights | null>(null);
     const [wealthHistory, setWealthHistory] = useState<WealthHistoryPoint[]>([]);
@@ -54,12 +56,7 @@ export default function InsightsPage() {
     };
 
     const formatCurrency = (num: number) => {
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0
-        }).format(num);
+        return formatPrice(num, 0, 0);
     };
 
     const formatPercent = (num: number) => {

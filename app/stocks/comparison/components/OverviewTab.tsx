@@ -2,6 +2,7 @@
 
 import { ComparisonStock } from './types';
 import { TrendingUp, TrendingDown, Activity, DollarSign } from 'lucide-react';
+import { useCurrency } from '@/app/context/CurrencyContext';
 
 interface OverviewTabProps {
   comparedStocks: ComparisonStock[];
@@ -9,6 +10,7 @@ interface OverviewTabProps {
 }
 
 export default function OverviewTab({ comparedStocks, formatLargeNumber }: OverviewTabProps) {
+  const { formatPrice } = useCurrency();
   if (comparedStocks.length === 0) {
     return (
       <div className="text-center py-12">
@@ -94,7 +96,7 @@ export default function OverviewTab({ comparedStocks, formatLargeNumber }: Overv
               </div>
 
               <div className="flex items-baseline gap-2">
-                <span className="text-2xl font-bold text-slate-900 dark:text-white">${(stock.price ?? 0).toFixed(2)}</span>
+                <span className="text-2xl font-bold text-slate-900 dark:text-white">{formatPrice(stock.price ?? 0)}</span>
                 <span className={`flex items-center text-sm font-medium ${isPositive ? 'text-teal-600' : 'text-red-500'}`}>
                   {isPositive ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
                   {isPositive ? '+' : ''}{(stock.changePercent ?? 0).toFixed(2)}%
@@ -104,7 +106,7 @@ export default function OverviewTab({ comparedStocks, formatLargeNumber }: Overv
               <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 grid grid-cols-2 gap-2 text-sm">
                 <div><span className="text-slate-500">Mkt Cap</span> <span className="font-medium text-slate-900 dark:text-white ml-1">{formatLargeNumber(stock.marketCap)}</span></div>
                 <div><span className="text-slate-500">P/E</span> <span className="font-medium text-slate-900 dark:text-white ml-1">{stock.peRatio?.toFixed(2) || '-'}</span></div>
-                <div><span className="text-slate-500">EPS</span> <span className="font-medium text-slate-900 dark:text-white ml-1">${stock.eps?.toFixed(2) || '-'}</span></div>
+                <div><span className="text-slate-500">EPS</span> <span className="font-medium text-slate-900 dark:text-white ml-1">{formatPrice(stock.eps ?? 0)}</span></div>
                 <div><span className="text-slate-500">Beta</span> <span className="font-medium text-slate-900 dark:text-white ml-1">{stock.beta?.toFixed(2) || '-'}</span></div>
               </div>
             </div>
