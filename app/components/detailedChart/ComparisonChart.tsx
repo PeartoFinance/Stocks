@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { createChart, IChartApi, ColorType, CandlestickSeries, LineSeries, AreaSeries, BarSeries, BaselineSeries, HistogramSeries } from 'lightweight-charts';
+import { useCurrency } from '@/app/context/CurrencyContext';
 
 interface ComparisonChartProps {
   data: any[][];
@@ -14,6 +15,7 @@ const CHART_COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
 export default function ComparisonChart({ data, chartType, symbols }: ComparisonChartProps) {
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
+  const { formatPrice } = useCurrency();
 
   useEffect(() => {
     if (!chartContainerRef.current || !data || data.length === 0) return;
@@ -37,6 +39,9 @@ export default function ComparisonChart({ data, chartType, symbols }: Comparison
       },
       rightPriceScale: {
         borderColor: isDark ? '#334155' : '#CBD5E1',
+      },
+      localization: {
+        priceFormatter: (price: number) => formatPrice(price, 2, 2),
       },
     });
 

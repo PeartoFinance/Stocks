@@ -18,7 +18,17 @@ import { FeatureLock } from '@/app/components/subscription/FeatureGating';
 import { FEATURES } from '@/app/utils/featureKeys';
 
 export default function ScreenerPage() {
-  const { formatPrice } = useCurrency();
+  const { formatPrice: formatCurrencyPrice } = useCurrency();
+  
+  const formatMarketCap = (value: number | undefined): string => {
+    if (!value) return 'N/A';
+    if (value >= 1e12) return formatCurrencyPrice(value / 1e12, 2, 2) + 'T';
+    if (value >= 1e9) return formatCurrencyPrice(value / 1e9, 2, 2) + 'B';
+    if (value >= 1e6) return formatCurrencyPrice(value / 1e6, 2, 2) + 'M';
+    if (value >= 1e3) return formatCurrencyPrice(value / 1e3, 2, 2) + 'K';
+    return formatCurrencyPrice(value, 0, 0);
+  };
+  
   const [stocks, setStocks] = useState<Stock[]>([]);
   const [filteredStocks, setFilteredStocks] = useState<Stock[]>([]);
   const [loading, setLoading] = useState(true);
@@ -238,7 +248,7 @@ export default function ScreenerPage() {
                         <Link href={`/stock/${stock.symbol}`} className="font-bold text-emerald-600 dark:text-emerald-400 hover:underline">{stock.symbol}</Link>
                       </td>
                       <td className="px-4 py-4 text-slate-900 dark:text-white">{stock.name}</td>
-                      <td className="px-4 py-4 text-right font-semibold text-slate-900 dark:text-white">{formatPrice(stock.price)}</td>
+                      <td className="px-4 py-4 text-right font-semibold text-slate-900 dark:text-white">{formatCurrencyPrice(stock.price)}</td>
                       <td className="px-4 py-4 text-right">
                         <span className={`flex items-center justify-end gap-1 ${stock.change >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                           {stock.change >= 0 ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
@@ -246,7 +256,7 @@ export default function ScreenerPage() {
                         </span>
                       </td>
                       <td className="px-4 py-4 text-right text-slate-600 dark:text-gray-400">{formatVolume(stock.volume)}</td>
-                      <td className="px-4 py-4 text-right text-slate-600 dark:text-gray-400">{stock.marketCap ? formatNumber(stock.marketCap) : 'N/A'}</td>
+                      <td className="px-4 py-4 text-right text-slate-600 dark:text-gray-400">{stock.marketCap ? formatMarketCap(stock.marketCap) : 'N/A'}</td>
                       <td className="px-4 py-4 text-center">
                         <button onClick={() => toggleCompare(stock)} className={`px-3 py-1 rounded-lg text-sm font-medium transition-all ${compareStocks.find(s => s.symbol === stock.symbol) ? 'bg-emerald-500 text-white' : 'bg-slate-100 dark:bg-gray-700 text-slate-700 dark:text-gray-300 hover:bg-slate-200 dark:hover:bg-gray-600'}`}>
                           {compareStocks.find(s => s.symbol === stock.symbol) ? 'Added' : 'Add'}
@@ -273,7 +283,7 @@ export default function ScreenerPage() {
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
-                    <span className="text-2xl font-bold text-slate-900 dark:text-white">{formatPrice(stock.price)}</span>
+                    <span className="text-2xl font-bold text-slate-900 dark:text-white">{formatCurrencyPrice(stock.price)}</span>
                     <span className={`flex items-center gap-1 font-semibold ${stock.change >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                       {stock.change >= 0 ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
                       {formatChange(stock.change, stock.changePercent).value}
@@ -286,7 +296,7 @@ export default function ScreenerPage() {
                     </div>
                     <div>
                       <p className="text-xs text-slate-600 dark:text-gray-400">Market Cap</p>
-                      <p className="text-sm font-semibold text-slate-900 dark:text-white">{stock.marketCap ? formatNumber(stock.marketCap) : 'N/A'}</p>
+                      <p className="text-sm font-semibold text-slate-900 dark:text-white">{stock.marketCap ? formatMarketCap(stock.marketCap) : 'N/A'}</p>
                     </div>
                   </div>
                 </div>

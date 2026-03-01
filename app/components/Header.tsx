@@ -6,6 +6,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/app/context/AuthContext';
 import { useCountry } from '@/app/context/CountryContext';
 import { useSubscription } from '@/app/context/SubscriptionContext';
+import { useCurrency } from '@/app/context/CurrencyContext';
 import { stockAPI } from '@/app/utils/api';
 import { debounce } from '@/lib/utils';
 import { fetchNavigation, getSection, NavigationItem } from '@/app/services/navigationService';
@@ -54,6 +55,7 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
   const { country, countries, setCountry } = useCountry();
   const { theme, toggleTheme } = useTheme();
   const { planName, isPro, status } = useSubscription();
+  const { formatPrice } = useCurrency();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -316,7 +318,7 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                           </div>
                           {stock.price && (
                             <div className="text-right">
-                              <div className="text-sm font-medium text-slate-900 dark:text-white">${stock.price.toFixed(2)}</div>
+                              <div className="text-sm font-medium text-slate-900 dark:text-white">{formatPrice(stock.price, 2, 2)}</div>
                               {stock.changePercent != null && (
                                 <div className={`text-xs ${stock.changePercent >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
                                   {stock.changePercent >= 0 ? '+' : ''}{stock.changePercent.toFixed(2)}%
@@ -397,7 +399,7 @@ export default function Header({ onOpenSidebar }: { onOpenSidebar: () => void })
                                 </div>
                                 {stock.price && (
                                   <div className="text-right">
-                                    <div className="text-sm font-medium text-slate-900 dark:text-white">${stock.price.toFixed(2)}</div>
+                                    <div className="text-sm font-medium text-slate-900 dark:text-white">{formatPrice(stock.price, 2, 2)}</div>
                                     {stock.changePercent != null && (
                                       <div className={`text-xs ${stock.changePercent >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
                                         {stock.changePercent >= 0 ? '+' : ''}{stock.changePercent.toFixed(2)}%

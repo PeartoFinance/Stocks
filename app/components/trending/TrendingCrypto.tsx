@@ -75,6 +75,27 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
   const [isAIPanelOpen, setIsAIPanelOpen] = useState(false);
   const [isDetailsCollapsed, setIsDetailsCollapsed] = useState(true);
 
+  const formatVolumeNumber = (volume: number) => {
+    if (volume >= 1e9) return `${(volume / 1e9).toFixed(1)}B`;
+    if (volume >= 1e6) return `${(volume / 1e6).toFixed(1)}M`;
+    if (volume >= 1e3) return `${(volume / 1e3).toFixed(1)}K`;
+    return volume.toFixed(0);
+  };
+
+  const formatVolume = (volume: number) => {
+    if (volume >= 1e9) return `${(volume / 1e9).toFixed(1)}B`;
+    if (volume >= 1e6) return `${(volume / 1e6).toFixed(1)}M`;
+    if (volume >= 1e3) return `${(volume / 1e3).toFixed(1)}K`;
+    return volume.toFixed(0);
+  };
+
+  const formatMarketCap = (marketCap: number) => {
+    if (marketCap >= 1e12) return `${formatPrice(marketCap / 1e12, 2, 2)}T`;
+    if (marketCap >= 1e9) return `${formatPrice(marketCap / 1e9, 2, 2)}B`;
+    if (marketCap >= 1e6) return `${formatPrice(marketCap / 1e6, 2, 2)}M`;
+    return formatPrice(marketCap, 0, 0);
+  };
+
   const filterTypes = [
     { key: 'all', label: 'All Trending', icon: Activity },
     { key: 'gainer', label: 'Top Gainers', icon: TrendingUp },
@@ -425,7 +446,7 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
                 </p>
                 <p className="text-xs text-blue-600 font-medium">
                   {filteredCryptos.length > 0 ?
-                    formatNumber(Math.max(...filteredCryptos.map(c => c.volume))) :
+                    formatVolumeNumber(Math.max(...filteredCryptos.map(c => c.volume))) :
                     '0'}
                 </p>
               </div>
@@ -693,12 +714,12 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
                             </div>
                           </td>
                           <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right">
-                            <div className="text-sm font-medium text-slate-900 dark:text-white">{formatPrice(crypto.price)}</div>
+                            <div className="text-sm font-medium text-slate-900 dark:text-white">{formatPrice(crypto.price, 2, crypto.price >= 1 ? 2 : 6)}</div>
                           </td>
                           <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right">
                             <div className="inline-flex flex-col items-end">
                               <span className={`text-sm font-medium ${crypto.change >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
-                                {crypto.change >= 0 ? '+' : ''}{formatPrice(Math.abs(crypto.change))}
+                                {crypto.change >= 0 ? '+' : ''}{formatPrice(Math.abs(crypto.change), 2, crypto.change >= 1 ? 2 : 6)}
                               </span>
                               <span className={`text-xs ${crypto.changePercent >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                                 {crypto.changePercent >= 0 ? '+' : ''}{formatPercentage(crypto.changePercent)}
@@ -706,10 +727,10 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
                             </div>
                           </td>
                           <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right">
-                            <div className="text-sm font-medium text-slate-900 dark:text-white">{formatNumber(crypto.volume)}</div>
+                            <div className="text-sm font-medium text-slate-900 dark:text-white">{formatVolume(crypto.volume)}</div>
                           </td>
                           <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right">
-                            <div className="text-sm font-medium text-slate-900 dark:text-white">{formatNumber(crypto.marketCap)}</div>
+                            <div className="text-sm font-medium text-slate-900 dark:text-white">{formatMarketCap(crypto.marketCap)}</div>
                           </td>
                           <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-center">
                             <div className="inline-flex items-center px-3 py-1.5 rounded-lg bg-gradient-to-r from-orange-50 to-pink-50 dark:from-orange-900/20 dark:to-pink-900/20">

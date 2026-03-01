@@ -13,6 +13,8 @@ import {
   ArrowDownRight
 } from 'lucide-react';
 import { TableExportButton } from '../common/TableExportButton';
+import { useCurrency } from '../../context/CurrencyContext';
+import PriceDisplay from '../common/PriceDisplay';
 
 interface HistoricalData {
   time: string;
@@ -43,27 +45,27 @@ export default function HistoryTab({
   const [sortField, setSortField] = useState<'date' | 'price' | 'change' | 'volume' | 'marketCap'>('date');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
 
+  const { formatPrice: formatCurrencyPrice } = useCurrency();
+
   const formatPrice = (price: number) => {
-    if (price >= 1) {
-      return `$${price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-    } else {
-      return `$${price.toLocaleString('en-US', { minimumFractionDigits: 4, maximumFractionDigits: 6 })}`;
-    }
+    const decimals = price >= 1 ? 2 : price >= 0.01 ? 4 : 6;
+    return formatCurrencyPrice(price, decimals, decimals);
   };
 
   const formatVolume = (volume: number | null | undefined) => {
     if (!volume) return 'N/A';
-    if (volume >= 1e9) return `$${(volume / 1e9).toFixed(2)}B`;
-    if (volume >= 1e6) return `$${(volume / 1e6).toFixed(2)}M`;
-    return `$${volume.toLocaleString()}`;
+    if (volume >= 1e9) return `${(volume / 1e9).toFixed(2)}B`;
+    if (volume >= 1e6) return `${(volume / 1e6).toFixed(2)}M`;
+    if (volume >= 1e3) return `${(volume / 1e3).toFixed(2)}K`;
+    return volume.toLocaleString();
   };
 
   const formatMarketCap = (marketCap: number | null | undefined) => {
     if (!marketCap) return 'N/A';
-    if (marketCap >= 1e12) return `$${(marketCap / 1e12).toFixed(2)}T`;
-    if (marketCap >= 1e9) return `$${(marketCap / 1e9).toFixed(2)}B`;
-    if (marketCap >= 1e6) return `$${(marketCap / 1e6).toFixed(2)}M`;
-    return `$${marketCap.toLocaleString()}`;
+    if (marketCap >= 1e12) return formatCurrencyPrice(marketCap / 1e12, 2, 2) + 'T';
+    if (marketCap >= 1e9) return formatCurrencyPrice(marketCap / 1e9, 2, 2) + 'B';
+    if (marketCap >= 1e6) return formatCurrencyPrice(marketCap / 1e6, 2, 2) + 'M';
+    return formatCurrencyPrice(marketCap, 0, 0);
   };
 
   const formatDate = (dateString: string) => {
@@ -368,7 +370,7 @@ export default function HistoryTab({
                     <td className="px-2 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-right">
                       <div className={`flex items-center justify-end gap-1 font-medium ${isPositive ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'}`}>
                         {isPositive ? <ArrowUpRight className="h-3.5 w-3.5" /> : <ArrowDownRight className="h-3.5 w-3.5" />}
-                        {Math.abs(priceChange) >= 0.01 ? formatPrice(Math.abs(priceChange)) : '< $0.01'}
+                        {Math.abs(priceChange) >= 0.01 ? formatPrice(Math.abs(priceChange)) : `< ${formatCurrencyPrice(0.01, 2, 2)}`}
                       </div>
                     </td>
                     <td className="px-2 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-right font-medium text-gray-700 dark:text-slate-300 transition-colors duration-300">

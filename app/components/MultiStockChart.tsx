@@ -48,6 +48,12 @@ export default function MultiStockChart({ stocks, height = 300, period, chartTyp
         textColor: isDark ? '#dadada' : '#6b7280',
         attributionLogo: false,
       },
+      localization: {
+        priceFormatter: (price: number) => {
+          const formatted = price.toFixed(2);
+          return currency === 'USD' ? `$${formatted}` : `€${formatted}`;
+        },
+      },
       width: chartContainerRef.current.clientWidth,
       height,
       grid: {
@@ -109,11 +115,11 @@ export default function MultiStockChart({ stocks, height = 300, period, chartTyp
       if (data.length === 0) return [];
       return data.map(item => ({
         time: formatTime(item.date),
-        value: item.close,
-        open: item.open,
-        high: item.high,
-        low: item.low,
-        close: item.close
+        value: convertPrice(item.close),
+        open: convertPrice(item.open),
+        high: convertPrice(item.high),
+        low: convertPrice(item.low),
+        close: convertPrice(item.close)
       }));
     };
 
@@ -198,7 +204,7 @@ export default function MultiStockChart({ stocks, height = 300, period, chartTyp
       return `<div style="display: flex; align-items: center; margin-bottom: 2px; gap: 4px;">
         <div style="width: 8px; height: 2px; background-color: ${color}; border-radius: 1px;"></div>
         <span style="color: ${textColor}; font-weight: 500; font-size: 9px; line-height: 1.2;">
-          ${stock.symbol}: ${formatPrice(stock.currentPrice)}
+          ${stock.symbol}: ${currency === 'USD' ? '$' : '€'}${convertPrice(stock.currentPrice).toFixed(2)}
         </span>
       </div>`;
     }).join('');

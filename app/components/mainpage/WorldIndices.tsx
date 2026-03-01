@@ -137,7 +137,7 @@ export default function WorldIndices({ className = '' }: WorldIndicesProps) {
         <div className="text-xs text-slate-500 dark:text-slate-400 transition-colors duration-300">{index.symbol}</div>
       </div>
       <div className="text-right">
-        <div className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">{(index.price || index.value || 0).toFixed(2)}</div>
+        <div className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">{formatPrice(index.price || index.value || 0)}</div>
         <div className={`text-xs font-medium flex items-center justify-end ${(index.change || 0) >= 0 ? 'text-emerald-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'}`}>
           {(index.change || 0) >= 0 ? <TrendingUp className="h-3 w-3 mr-1" /> : <TrendingDown className="h-3 w-3 mr-1" />}
           {(index.change || 0) >= 0 ? '+' : ''}{(index.change || 0).toFixed(2)} ({(index.changePercent || 0).toFixed(2)}%)

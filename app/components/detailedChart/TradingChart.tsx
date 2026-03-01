@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { createChart, IChartApi, ISeriesApi, ColorType, CandlestickSeries, LineSeries, AreaSeries, BarSeries, BaselineSeries, HistogramSeries } from 'lightweight-charts';
+import { useCurrency } from '@/app/context/CurrencyContext';
 
 interface Indicator {
   id: string;
@@ -25,6 +26,7 @@ export default function TradingChart({ data, chartType, indicators = [], selecte
   const [drawings, setDrawings] = useState<any[]>([]);
   const [isDrawing, setIsDrawing] = useState(false);
   const [drawStart, setDrawStart] = useState<{ time: number; price: number } | null>(null);
+  const { formatPrice } = useCurrency();
 
   useEffect(() => {
     if (!chartContainerRef.current) return;
@@ -48,6 +50,9 @@ export default function TradingChart({ data, chartType, indicators = [], selecte
       },
       rightPriceScale: {
         borderColor: isDark ? '#334155' : '#CBD5E1',
+      },
+      localization: {
+        priceFormatter: (price: number) => formatPrice(price, 2, 2),
       },
     });
 
