@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import { AreaChart, CandlestickChart, LineChart } from 'lucide-react';
+import React, { useState } from 'react';
+import { AreaChart, CandlestickChart, LineChart, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface ChartControlsProps {
   period: string;
@@ -46,22 +46,128 @@ export default function ChartControls({
   onTogglePercentMode,
   className = ''
 }: ChartControlsProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isMobileExpanded, setIsMobileExpanded] = useState(false);
+
   return (
-    <div className={`px-3 sm:px-4 py-3 border-b border-gray-200 dark:border-slate-700 ${className}`}>
-      {/* Period and Chart Type Filters */}
-      <div className="flex flex-wrap gap-2 sm:gap-3">
+    <div className={`px-4 sm:px-6 py-4 border-b border-gray-200 dark:border-slate-700 ${className}`}>
+      {/* Mobile: Collapsible All Controls */}
+      <div className="md:hidden">
+        <button
+          onClick={() => setIsMobileExpanded(!isMobileExpanded)}
+          className="w-full flex items-center justify-between px-4 py-2.5 bg-slate-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-lg transition-all"
+        >
+          <span className="text-sm font-medium">Chart Controls</span>
+          {isMobileExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+        </button>
+
+        {isMobileExpanded && (
+          <div className="mt-3 space-y-3">
+            {/* Period Selector */}
+            <div>
+              <span className="text-xs font-semibold text-gray-700 dark:text-slate-300 mb-2 block">Period:</span>
+              <div className="grid grid-cols-3 gap-2">
+                {periods.map((p) => (
+                  <button
+                    key={p}
+                    onClick={() => onPeriodChange(p)}
+                    className={`px-3 py-2 text-sm font-medium rounded-lg transition-all ${
+                      period === p
+                        ? 'bg-blue-600 text-white shadow-md'
+                        : 'bg-slate-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
+                    }`}
+                  >
+                    {p}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Chart Type Selector */}
+            <div>
+              <span className="text-xs font-semibold text-gray-700 dark:text-slate-300 mb-2 block">Type:</span>
+              <div className="grid grid-cols-2 gap-2">
+                {chartTypes.map((type) => (
+                  <button
+                    key={type.key}
+                    onClick={() => onChartTypeChange(type.key)}
+                    className={`px-3 py-2 text-sm font-medium rounded-lg transition-all flex items-center justify-center gap-2 ${
+                      chartType === type.key
+                        ? 'bg-blue-600 text-white shadow-md'
+                        : 'bg-slate-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
+                    }`}
+                  >
+                    <type.icon className="h-4 w-4" />
+                    <span>{type.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Filters */}
+            <div>
+              <span className="text-xs font-semibold text-gray-700 dark:text-slate-300 mb-2 block">Filters:</span>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  onClick={onToggleVolumeProfile}
+                  className={`px-3 py-2 text-xs font-medium rounded-lg transition-all ${
+                    showVolumeProfile 
+                      ? 'bg-blue-600 text-white shadow-md' 
+                      : 'bg-slate-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
+                  }`}
+                >
+                  Volume Profile
+                </button>
+                <button
+                  onClick={onToggleMovingAverages}
+                  className={`px-3 py-2 text-xs font-medium rounded-lg transition-all ${
+                    showMovingAverages 
+                      ? 'bg-blue-600 text-white shadow-md' 
+                      : 'bg-slate-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
+                  }`}
+                >
+                  MA Ribbon
+                </button>
+                <button
+                  onClick={onToggleGaps}
+                  className={`px-3 py-2 text-xs font-medium rounded-lg transition-all ${
+                    showGaps 
+                      ? 'bg-blue-600 text-white shadow-md' 
+                      : 'bg-slate-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
+                  }`}
+                >
+                  Price Gaps
+                </button>
+                <button
+                  onClick={onTogglePercentMode}
+                  className={`px-3 py-2 text-xs font-medium rounded-lg transition-all ${
+                    percentMode 
+                      ? 'bg-blue-600 text-white shadow-md' 
+                      : 'bg-slate-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
+                  }`}
+                >
+                  % Mode
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Desktop: Main Controls - Always Visible */}
+      <div className="hidden md:flex flex-wrap items-center gap-4">
         {/* Period Selector */}
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-medium text-gray-700 dark:text-slate-300">Period:</span>
-          <div className="flex gap-1">
+        <div className="flex items-center gap-3">
+          <span className="text-sm font-semibold text-gray-700 dark:text-slate-300">Period:</span>
+          <div className="flex gap-2">
             {periods.map((p) => (
               <button
                 key={p}
                 onClick={() => onPeriodChange(p)}
-                className={`px-2 sm:px-3 py-1 text-xs font-medium rounded-md transition-colors ${
+                className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${
                   period === p
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-slate-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                    ? 'bg-blue-600 text-white shadow-md'
+                    : 'bg-slate-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
                 }`}
               >
                 {p}
@@ -71,70 +177,93 @@ export default function ChartControls({
         </div>
 
         {/* Chart Type Selector */}
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-medium text-gray-700 dark:text-slate-300">Type:</span>
-          <div className="flex gap-1">
+        <div className="flex items-center gap-3">
+          <span className="text-sm font-semibold text-gray-700 dark:text-slate-300">Type:</span>
+          <div className="flex gap-2">
             {chartTypes.map((type) => (
               <button
                 key={type.key}
                 onClick={() => onChartTypeChange(type.key)}
-                className={`px-2 sm:px-3 py-1 text-xs font-medium rounded-md transition-colors flex items-center gap-1 ${
+                className={`px-4 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-2 ${
                   chartType === type.key
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-slate-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                    ? 'bg-blue-600 text-white shadow-md'
+                    : 'bg-slate-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
                 }`}
               >
-                <type.icon className="h-3 w-3" />
-                <span className="hidden sm:inline">{type.label}</span>
+                <type.icon className="h-4 w-4" />
+                <span>{type.label}</span>
               </button>
             ))}
           </div>
         </div>
+
+        {/* Toggle Filters Button */}
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="ml-auto px-4 py-2 text-sm font-medium bg-slate-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-lg transition-all flex items-center gap-2"
+        >
+          <span>Filters</span>
+          {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+        </button>
       </div>
 
-      {/* Analytical Controls */}
-      <div className="flex flex-wrap gap-2 mt-3">
-        <button
-          onClick={onToggleVolumeProfile}
-          className={`px-2 py-1 text-xs rounded transition-colors ${
-            showVolumeProfile ? 'bg-blue-600 text-white' : 'bg-slate-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-          }`}
-        >
-          Volume Profile
-        </button>
-        <button
-          onClick={onToggleMovingAverages}
-          className={`px-2 py-1 text-xs rounded transition-colors ${
-            showMovingAverages ? 'bg-blue-600 text-white' : 'bg-slate-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-          }`}
-        >
-          MA Ribbon
-        </button>
-        <button
-          onClick={onToggleGaps}
-          className={`px-2 py-1 text-xs rounded transition-colors ${
-            showGaps ? 'bg-blue-600 text-white' : 'bg-slate-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-          }`}
-        >
-          Price Gaps
-        </button>
-        <button
-          onClick={onTogglePercentMode}
-          className={`px-2 py-1 text-xs rounded transition-colors ${
-            percentMode ? 'bg-blue-600 text-white' : 'bg-slate-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-          }`}
-        >
-          % Mode
-        </button>
-        <button
-          onClick={onToggleCorrelation}
-          className={`px-2 py-1 text-xs rounded transition-colors ${
-            showCorrelation ? 'bg-blue-600 text-white' : 'bg-slate-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-          }`}
-        >
-          Correlation
-        </button>
-      </div>
+      {/* Collapsible Analytical Controls */}
+      {isExpanded && (
+        <div className="mt-4 pt-4 border-t border-gray-200 dark:border-slate-700">
+          <div className="flex flex-wrap gap-3">
+            <button
+              onClick={onToggleVolumeProfile}
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${
+                showVolumeProfile 
+                  ? 'bg-blue-600 text-white shadow-md' 
+                  : 'bg-slate-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
+              }`}
+            >
+              Volume Profile
+            </button>
+            <button
+              onClick={onToggleMovingAverages}
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${
+                showMovingAverages 
+                  ? 'bg-blue-600 text-white shadow-md' 
+                  : 'bg-slate-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
+              }`}
+            >
+              MA Ribbon
+            </button>
+            <button
+              onClick={onToggleGaps}
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${
+                showGaps 
+                  ? 'bg-blue-600 text-white shadow-md' 
+                  : 'bg-slate-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
+              }`}
+            >
+              Price Gaps
+            </button>
+            <button
+              onClick={onTogglePercentMode}
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${
+                percentMode 
+                  ? 'bg-blue-600 text-white shadow-md' 
+                  : 'bg-slate-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
+              }`}
+            >
+              % Mode
+            </button>
+            <button
+              onClick={onToggleCorrelation}
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${
+                showCorrelation 
+                  ? 'bg-blue-600 text-white shadow-md' 
+                  : 'bg-slate-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
+              }`}
+            >
+              Correlation
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
