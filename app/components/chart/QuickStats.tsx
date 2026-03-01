@@ -15,15 +15,15 @@ export default function QuickStats({ data, formatPrice, className = '' }: QuickS
 
   const latest = data[data.length - 1];
   const first = data[0];
-  const high = Math.max(...data.map(d => d.high));
-  const low = Math.min(...data.map(d => d.low));
-  const avgVolume = data.reduce((sum, d) => sum + (d.volume || 0), 0) / data.length;
+  const high = Math.max(...data.map(d => d?.high ?? 0));
+  const low = Math.min(...data.map(d => d?.low ?? 0));
+  const avgVolume = data.reduce((sum, d) => sum + (d?.volume ?? 0), 0) / data.length;
   
   // Calculate RSI (simplified)
-  const gains = [];
-  const losses = [];
+  const gains: number[] = [];
+  const losses: number[] = [];
   for (let i = 1; i < data.length; i++) {
-    const change = data[i].close - data[i-1].close;
+    const change = (data[i]?.close ?? 0) - (data[i-1]?.close ?? 0);
     if (change > 0) gains.push(change);
     else if (change < 0) losses.push(Math.abs(change));
   }
