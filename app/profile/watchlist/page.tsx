@@ -7,6 +7,7 @@ import { useAuth } from '@/app/context/AuthContext';
 import { getWatchlist, addToWatchlist, removeFromWatchlist, type WatchlistItem } from '@/app/utils/portfolioWatchlistAPI';
 import { stockAPI } from '@/app/utils/api';
 import cryptoService from '@/app/utils/cryptoService';
+import { useCurrency } from '@/app/context/CurrencyContext';
 import {
     ArrowLeft,
     Star,
@@ -28,6 +29,7 @@ type TabType = 'stocks' | 'crypto';
 export default function WatchlistPage() {
     const { isAuthenticated, isLoading: authLoading } = useAuth();
     const router = useRouter();
+    const { formatPrice } = useCurrency();
     const [activeTab, setActiveTab] = useState<TabType>('stocks');
     const [watchlist, setWatchlist] = useState<WatchlistItem[]>([]);
     const [availableStocks, setAvailableStocks] = useState<any[]>([]);
@@ -296,7 +298,7 @@ export default function WatchlistPage() {
                                                 </div>
                                                 <div className="text-right">
                                                     <div className="font-medium text-slate-900 dark:text-white">
-                                                        ${typeof stock.price === 'number' ? stock.price.toFixed(2) : '0.00'}
+                                                        {typeof stock.price === 'number' ? formatPrice(stock.price, 2, 2) : '-'}
                                                     </div>
                                                     <div className={`text-sm font-medium ${
                                                         (stock.change || stock.changePercent || 0) >= 0 ? 'text-emerald-500' : 'text-red-500'
@@ -385,7 +387,7 @@ export default function WatchlistPage() {
                                     </div>
                                     <div className="space-y-2">
                                         <div className="text-2xl font-bold text-slate-900 dark:text-white">
-                                            ${typeof item.price === 'number' && !isNaN(item.price) ? item.price.toFixed(2) : '—'}
+                                            {typeof item.price === 'number' && !isNaN(item.price) ? formatPrice(item.price, 2, 2) : '—'}
                                         </div>
                                         <div className={`flex items-center gap-1 text-sm font-medium ${
                                             (item.changePercent ?? 0) >= 0 ? 'text-emerald-500' : 'text-red-500'
@@ -415,7 +417,7 @@ export default function WatchlistPage() {
                                         <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
                                             <div className="text-right">
                                                 <div className="font-medium text-slate-900 dark:text-white">
-                                                    ${typeof item.price === 'number' && !isNaN(item.price) ? item.price.toFixed(2) : '—'}
+                                                    {typeof item.price === 'number' && !isNaN(item.price) ? formatPrice(item.price, 2, 2) : '—'}
                                                 </div>
                                                 <div
                                                     className={`text-sm flex items-center justify-end gap-1 font-medium ${

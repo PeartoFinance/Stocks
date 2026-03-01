@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/app/context/AuthContext';
 import { fetchProfileStats, type ProfileStats } from '@/app/utils/profileAPI';
+import { useCurrency } from '@/app/context/CurrencyContext';
 import {
     Briefcase,
     Star,
@@ -22,6 +23,7 @@ import {
 export default function ProfilePage() {
     const { user, isAuthenticated, isLoading, logout, isAdmin, isVendor } = useAuth();
     const router = useRouter();
+    const { formatPrice } = useCurrency();
     const [stats, setStats] = useState<ProfileStats | null>(null);
     const [statsLoading, setStatsLoading] = useState(true);
 
@@ -141,12 +143,12 @@ export default function ProfilePage() {
                                     {statsLoading ? (
                                         <RefreshCw className="h-10 w-10 animate-spin" />
                                     ) : (
-                                        `$${netWorth.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                                        formatPrice(netWorth, 2, 2)
                                     )}
                                 </h2>
                                 {!statsLoading && (
                                     <p className={`text-base font-medium ${netChange >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
-                                        {netChange >= 0 ? '+' : ''}${netChange.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ({netChange >= 0 ? '+' : ''}{netChangePct.toFixed(2)}%)
+                                        {netChange >= 0 ? '+' : ''}{formatPrice(Math.abs(netChange), 2, 2)} ({netChange >= 0 ? '+' : ''}{netChangePct.toFixed(2)}%)
                                     </p>
                                 )}
                             </div>

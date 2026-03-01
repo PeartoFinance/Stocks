@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import StockChart from '../StockChart';
+import { useCurrency } from '../../context/CurrencyContext';
 
 interface HistoricalData {
   date: string;
@@ -50,22 +51,18 @@ export default function ChartTab({
 }: ChartTabProps) {
   const router = useRouter();
   const [showVolume, setShowVolume] = useState(true);
+  const { formatPrice: formatCurrencyPrice } = useCurrency();
 
   const handleFullscreen = () => {
     router.push(`/cryptochart/${crypto.symbol}/detailedpage`);
   };
 
   const formatPrice = (price: number | null | undefined) => {
-    // Check if price is a valid number
     if (price === null || price === undefined || isNaN(price)) {
       return '---';
     }
-    
-    if (price >= 1) {
-      return `$${price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-    } else {
-      return `$${price.toLocaleString('en-US', { minimumFractionDigits: 4, maximumFractionDigits: 6 })}`;
-    }
+    const decimals = price >= 1 ? 2 : price >= 0.01 ? 4 : 6;
+    return formatCurrencyPrice(price, decimals, decimals);
   };
 
   const formatNumber = (num: number | null | undefined, decimals = 2): string => {

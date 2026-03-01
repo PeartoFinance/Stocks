@@ -35,11 +35,11 @@ export default function CryptoComparison() {
 
   const formatLargeNumber = (num: number | undefined | null): string => {
     if (num == null) return '-';
-    if (num >= 1e12) return `$${(num / 1e12).toFixed(2)}T`;
-    if (num >= 1e9) return `$${(num / 1e9).toFixed(2)}B`;
-    if (num >= 1e6) return `$${(num / 1e6).toFixed(2)}M`;
-    if (num >= 1e3) return `$${(num / 1e3).toFixed(2)}K`;
-    return `$${num.toLocaleString()}`;
+    if (num >= 1e12) return formatPrice(num / 1e12, 2, 2) + 'T';
+    if (num >= 1e9) return formatPrice(num / 1e9, 2, 2) + 'B';
+    if (num >= 1e6) return formatPrice(num / 1e6, 2, 2) + 'M';
+    if (num >= 1e3) return formatPrice(num / 1e3, 2, 2) + 'K';
+    return formatPrice(num, 0, 0);
   };
 
   const searchParams = useSearchParams();

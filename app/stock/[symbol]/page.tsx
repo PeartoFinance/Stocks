@@ -681,13 +681,13 @@ export default function StockDetailPage({ params }: PageProps) {
                     isPositive ? "text-emerald-700 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-500/10" : "text-red-700 bg-red-50 dark:text-red-400 dark:bg-red-500/10"
                   }`}>
                     {isPositive ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
-                    ${formatNumber(stock.price)}
+                    <PriceDisplay amount={stock.price} />
                   </div>
                   <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-semibold ${
                     isPositive ? "text-emerald-700 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-500/10" : "text-red-700 bg-red-50 dark:text-red-400 dark:bg-red-500/10"
                   }`}>
                     {isPositive ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
-                    {isPositive ? '+' : ''}{formatNumber(stock.change)} ({isPositive ? '+' : ''}{formatNumber(stock.changePercent)}%)
+                    {isPositive ? '+' : ''}<PriceDisplay amount={stock.change} showSign={false} /> ({isPositive ? '+' : ''}{formatNumber(stock.changePercent)}%)
                   </div>
                 </div>
               </div>
@@ -875,6 +875,12 @@ export default function StockDetailPage({ params }: PageProps) {
                 <GitCompare className="h-5 w-5" />
               </button>
               <button
+                onClick={() => router.push(`/analysis?symbol=${stock.symbol}&type=stock`)}
+                className="p-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition"
+              >
+                <BarChart3 className="h-5 w-5" />
+              </button>
+              <button
                 onClick={() => router.push(`/stockchart/${stock.symbol}/detailedpage`)}
                 className="p-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition"
               >
@@ -898,7 +904,7 @@ export default function StockDetailPage({ params }: PageProps) {
 
             <div className="flex items-baseline gap-3">
               <span className="text-2xl font-bold text-slate-900 dark:text-white">
-                ${formatNumber(stock.price)}
+                <PriceDisplay amount={stock.price} />
               </span>
               <div className={`flex items-center gap-1 text-sm font-medium ${isPositive ? 'text-emerald-500' : 'text-red-500'
                 }`}>
@@ -938,7 +944,7 @@ export default function StockDetailPage({ params }: PageProps) {
               {/* Price Row */}
               <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4 mt-3">
                 <span className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">
-                  ${formatNumber(stock.price)}
+                  <PriceDisplay amount={stock.price} />
                 </span>
                 <div className={`flex items-center gap-1 text-base sm:text-lg font-medium ${isPositive ? 'text-emerald-500' : 'text-red-500'
                   }`}>
@@ -971,6 +977,13 @@ export default function StockDetailPage({ params }: PageProps) {
               >
                 <GitCompare size={16} />
                 Compare
+              </button>
+              <button
+                onClick={() => router.push(`/analysis?symbol=${stock.symbol}&type=stock`)}
+                className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg transition text-sm font-medium"
+              >
+                <BarChart3 size={16} />
+                Technical Analysis
               </button>
               <button
                 onClick={() => router.push(`/stockchart/${stock.symbol}/detailedpage`)}
