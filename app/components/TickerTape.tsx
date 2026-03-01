@@ -24,36 +24,40 @@ export default function TickerTape() {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                const [overviewRes, gainersRes] = await Promise.all([
-                    stockAPI.getMarketOverview(),
-                    stockAPI.getMarketMovers('gainers')
+                const [gainersRes, losersRes] = await Promise.all([
+                    stockAPI.getMarketMovers('gainers').catch(() => ({ success: false, data: null })),
+                    stockAPI.getMarketMovers('losers').catch(() => ({ success: false, data: null }))
                 ]);
-
+                
                 const items: TickerItem[] = [];
 
-                // Add market indices
-                if (overviewRes.success && overviewRes.data) {
-                    overviewRes.data.slice(0, 4).forEach((idx: any) => {
-                        const changePercent = idx.changePercent || 0;
-                        items.push({
-                            symbol: idx.name || idx.symbol,
-                            price: idx.price || 0,
-                            change: `${changePercent >= 0 ? '+' : ''}${changePercent.toFixed(2)}%`,
-                            up: changePercent >= 0
-                        });
+                // Add top gainers
+                if (gainersRes?.success && Array.isArray(gainersRes.data)) {
+                    gainersRes.data.slice(0, 8).forEach((stock: any) => {
+                        if (stock?.symbol && typeof stock.price === 'number') {
+                            const changePercent = typeof stock.changePercent === 'number' ? stock.changePercent : 0;
+                            items.push({
+                                symbol: stock.symbol,
+                                price: stock.price,
+                                change: `${changePercent >= 0 ? '+' : ''}${changePercent.toFixed(2)}%`,
+                                up: changePercent >= 0
+                            });
+                        }
                     });
                 }
 
-                // Add top gainers
-                if (gainersRes.success && gainersRes.data) {
-                    gainersRes.data.slice(0, 3).forEach((stock: any) => {
-                        const changePercent = stock.changePercent || 0;
-                        items.push({
-                            symbol: stock.symbol,
-                            price: stock.price || 0,
-                            change: `${changePercent >= 0 ? '+' : ''}${changePercent.toFixed(2)}%`,
-                            up: changePercent >= 0
-                        });
+                // Add top losers
+                if (losersRes?.success && Array.isArray(losersRes.data)) {
+                    losersRes.data.slice(0, 7).forEach((stock: any) => {
+                        if (stock?.symbol && typeof stock.price === 'number') {
+                            const changePercent = typeof stock.changePercent === 'number' ? stock.changePercent : 0;
+                            items.push({
+                                symbol: stock.symbol,
+                                price: stock.price,
+                                change: `${changePercent >= 0 ? '+' : ''}${changePercent.toFixed(2)}%`,
+                                up: changePercent >= 0
+                            });
+                        }
                     });
                 }
 
@@ -102,23 +106,23 @@ export default function TickerTape() {
         <div className="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-100 py-2 text-xs font-medium overflow-hidden border-b border-slate-300 dark:border-slate-700 transition-colors duration-300">
             <div className="flex items-center gap-8 animate-marquee hover:pause-animation">
                 {tickerData.map((ticker, index) => (
-                    <div key={index} className="flex items-center gap-2 flex-shrink-0">
-                        <span className="text-slate-600 dark:text-pearto-gray">{ticker.symbol}</span>
-                        <PriceDisplay amount={ticker.price} className="font-medium" />
+                    <div key={`${ticker.symbol}-${index}`} className="flex items-center gap-2 flex-shrink-0">
+                        <span className="text-slate-600 dark:text-pearto-gray">{ticker.symbol || 'N/A'}</span>
+                        <PriceDisplay amount={ticker.price ?? 0} className="font-medium" />
                         <span className={`flex items-center gap-0.5 ${ticker.up ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'}`}>
                             {ticker.up ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
-                            {ticker.change}
+                            {ticker.change || '0.00%'}
                         </span>
                     </div>
                 ))}
 
                 {tickerData.map((ticker, index) => (
-                    <div key={`dup-${index}`} className="flex items-center gap-2 flex-shrink-0">
-                        <span className="text-slate-600 dark:text-pearto-gray">{ticker.symbol}</span>
-                        <PriceDisplay amount={ticker.price} className="font-medium" />
+                    <div key={`dup-${ticker.symbol}-${index}`} className="flex items-center gap-2 flex-shrink-0">
+                        <span className="text-slate-600 dark:text-pearto-gray">{ticker.symbol || 'N/A'}</span>
+                        <PriceDisplay amount={ticker.price ?? 0} className="font-medium" />
                         <span className={`flex items-center gap-0.5 ${ticker.up ? 'text-green-600 dark:text-pearto-green' : 'text-red-600 dark:text-pearto-pink'}`}>
                             {ticker.up ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
-                            {ticker.change}
+                            {ticker.change || '0.00%'}
                         </span>
                     </div>
                 ))}

@@ -215,11 +215,11 @@ export default function VendorDetailPage() {
             Back
           </button>
 
-          <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 dark:bg-slate-800/80 dark:border-slate-700/50 p-6 sm:p-8">
-            <div className="flex flex-col lg:flex-row gap-6">
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 dark:bg-slate-800/80 dark:border-slate-700/50 p-4 sm:p-6 lg:p-8">
+            <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
               {/* Vendor Logo and Basic Info */}
-              <div className="flex items-center gap-4">
-                <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center overflow-hidden">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 flex-1">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0">
                   {vendor.logoUrl ? (
                     <img 
                       src={vendor.logoUrl} 
@@ -241,17 +241,17 @@ export default function VendorDetailPage() {
                   )}
                 </div>
                 
-                <div className="flex-1">
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                <div className="flex-1 w-full">
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 sm:gap-4">
+                    <div className="flex-1 min-w-0">
+                      <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white mb-2">
                         {vendor.name}
                       </h1>
-                      <div className="flex items-center gap-4 flex-wrap">
+                      <div className="flex items-center gap-2 sm:gap-4 flex-wrap">
                         <div className="flex items-center gap-1">
                           {renderStars(vendor.rating)}
-                          <span className="text-sm text-gray-600 dark:text-gray-400 ml-1">
-                            {vendor.rating.toFixed(1)} ({vendor.reviewCount} reviews)
+                          <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 ml-1">
+                            {vendor.rating.toFixed(1)} ({vendor.reviewCount})
                           </span>
                         </div>
                         {vendor.category && (
@@ -320,8 +320,8 @@ export default function VendorDetailPage() {
         </div>
 
         {/* Tabs */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 dark:bg-slate-800/80 dark:border-slate-700/50 mb-6">
-          <div className="flex border-b border-gray-200 dark:border-slate-700">
+        <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 dark:bg-slate-800/80 dark:border-slate-700/50 mb-4 sm:mb-6 overflow-x-auto">
+          <div className="flex border-b border-gray-200 dark:border-slate-700 min-w-max">
             {[
               { id: 'overview', label: 'Overview', icon: Building2 },
               { id: 'analytics', label: 'Analytics', icon: BarChart3 },
@@ -329,14 +329,14 @@ export default function VendorDetailPage() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-2 px-6 py-3 font-medium transition-colors ${
+                className={`flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 font-medium transition-colors text-sm sm:text-base whitespace-nowrap ${
                   activeTab === tab.id
                     ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400 bg-blue-50 dark:bg-blue-900/30'
                     : 'text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-slate-700'
                 }`}
               >
                 <tab.icon className="h-4 w-4" />
-                {tab.label}
+                <span className="hidden sm:inline">{tab.label}</span>
               </button>
             ))}
           </div>
@@ -351,7 +351,7 @@ export default function VendorDetailPage() {
               className="space-y-6"
             >
               {/* Top Stats Row */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 {[
                   { 
                     label: 'Services', 
@@ -382,24 +382,24 @@ export default function VendorDetailPage() {
                     trend: 'Established' 
                   },
                 ].map((stat, index) => (
-                  <div key={index} className={`bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 dark:bg-slate-800/80 dark:border-slate-700/50 p-4`}>
+                  <div key={index} className={`bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 dark:bg-slate-800/80 dark:border-slate-700/50 p-3 sm:p-4`}>
                     <div className="flex items-center justify-between mb-2">
-                      <stat.icon className={`h-5 w-5 text-${stat.color}-600 dark:text-${stat.color}-400`} />
-                      <span className="text-xs text-green-600 dark:text-green-400 font-medium">{stat.trend}</span>
+                      <stat.icon className={`h-4 w-4 sm:h-5 sm:w-5 text-${stat.color}-600 dark:text-${stat.color}-400`} />
+                      <span className="text-[10px] sm:text-xs text-green-600 dark:text-green-400 font-medium">{stat.trend}</span>
                     </div>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">{stat.label}</p>
+                    <p className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
+                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">{stat.label}</p>
                   </div>
                 ))}
               </div>
 
               {/* Main Content Grid */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
                 {/* Vendor Info & Description */}
-                <div className="lg:col-span-2 space-y-6">
+                <div className="lg:col-span-2 space-y-4 sm:space-y-6">
                   {/* About Section */}
-                  <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 dark:bg-slate-800/80 dark:border-slate-700/50 p-6">
-                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                  <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 dark:bg-slate-800/80 dark:border-slate-700/50 p-4 sm:p-6">
+                    <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4 flex items-center gap-2">
                       <Building2 className="h-5 w-5 text-blue-600" />
                       About {vendor?.name}
                     </h2>
@@ -425,9 +425,9 @@ export default function VendorDetailPage() {
                   </div>
 
                   {/* Reviews Section */}
-                  <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 dark:bg-slate-800/80 dark:border-slate-700/50 p-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <h2 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                  <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 dark:bg-slate-800/80 dark:border-slate-700/50 p-4 sm:p-6">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-0 mb-4">
+                      <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                         <MessageSquare className="h-5 w-5 text-blue-600" />
                         Customer Reviews
                       </h2>
@@ -524,7 +524,7 @@ export default function VendorDetailPage() {
                 </div>
 
                 {/* Sidebar Charts */}
-                <div className="space-y-6">
+                <div className="space-y-4 sm:space-y-6">
                   {/* Performance Chart */}
                   <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-white/20 dark:bg-slate-800/80 dark:border-slate-700/50 p-6">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
