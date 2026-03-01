@@ -735,65 +735,121 @@ export default function TrendingCrypto({ className = '' }: TrendingCryptoProps) 
         </div>
       </main>
 
-      {/* Sliding AI Panel */}
-      <div className={`fixed top-0 right-0 h-full w-96 bg-white dark:bg-slate-800 shadow-2xl transform transition-transform duration-300 ease-in-out z-[60] ${isAIPanelOpen ? 'translate-x-0' : 'translate-x-full'
+      {/* Mobile AI Panel - Slide from bottom */}
+      <div className="lg:hidden">
+        {isAIPanelOpen && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 z-[9998]"
+            onClick={() => setIsAIPanelOpen(false)}
+          />
+        )}
+        <div className={`fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-800 rounded-t-2xl shadow-2xl transform transition-transform duration-300 ease-in-out z-[9999] max-h-[85vh] ${
+          isAIPanelOpen ? 'translate-y-0' : 'translate-y-full'
         }`}>
-        <div className="h-full flex flex-col">
-          {/* AI Panel Header */}
-          <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-700 bg-gradient-to-r from-orange-50 to-pink-50 dark:from-orange-900/20 dark:to-pink-900/20 transition-colors duration-300">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Brain className="h-5 w-5 text-orange-600" />
-                <h3 className="text-sm font-medium text-slate-900 dark:text-white transition-colors duration-300">AI Crypto Analysis</h3>
+          <div className="h-full flex flex-col">
+            <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-700 bg-gradient-to-r from-orange-50 to-pink-50 dark:from-orange-900/20 dark:to-pink-900/20">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Brain className="h-5 w-5 text-orange-600" />
+                  <h3 className="text-sm font-medium text-slate-900 dark:text-white">AI Crypto Analysis</h3>
+                </div>
+                <button
+                  onClick={() => setIsAIPanelOpen(false)}
+                  className="p-1 text-slate-500 hover:text-slate-700 dark:text-slate-400 hover:bg-gray-200 dark:hover:bg-slate-700 rounded-lg transition-colors"
+                >
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
               </div>
-              <button
-                onClick={() => setIsAIPanelOpen(false)}
-                className="p-1 text-slate-500 hover:text-slate-700 dark:text-slate-400 hover:bg-gray-200 rounded-lg transition-colors"
-              >
-                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
             </div>
-          </div>
-
-          {/* AI Panel Content */}
-          <div className="flex-1 overflow-y-auto">
-            <AIAnalysisPanel
-              title=""
-              pageType="trending"
-              pageData={{
-                count: filteredCryptos.length,
-                activeFilter,
-                trending: filteredCryptos.slice(0, 5).map(c => ({
-                  symbol: c.symbol,
-                  name: c.name,
-                  changePercent: c.changePercent,
-                  trendType: c.trendType,
-                  trendScore: c.trendScore
-                })),
-                topGainer: filteredCryptos.filter(c => c.changePercent > 0)[0]?.symbol,
-                topLoser: filteredCryptos.filter(c => c.changePercent < 0)[0]?.symbol
-              }}
-              quickPrompts={[
-                'Why are these cryptos trending?',
-                'Crypto trading signals',
-                'Market momentum analysis'
-              ]}
-              compact={false}
-              className="w-full h-full"
-            />
+            <div className="flex-1 overflow-y-auto">
+              <AIAnalysisPanel
+                title=""
+                pageType="trending"
+                pageData={{
+                  count: filteredCryptos.length,
+                  activeFilter,
+                  trending: filteredCryptos.slice(0, 5).map(c => ({
+                    symbol: c.symbol,
+                    name: c.name,
+                    changePercent: c.changePercent,
+                    trendType: c.trendType,
+                    trendScore: c.trendScore
+                  })),
+                  topGainer: filteredCryptos.filter(c => c.changePercent > 0)[0]?.symbol,
+                  topLoser: filteredCryptos.filter(c => c.changePercent < 0)[0]?.symbol
+                }}
+                quickPrompts={[
+                  'Why are these cryptos trending?',
+                  'Crypto trading signals',
+                  'Market momentum analysis'
+                ]}
+                compact={false}
+                className="w-full h-full"
+              />
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Overlay */}
-      {isAIPanelOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-50"
-          onClick={() => setIsAIPanelOpen(false)}
-        />
-      )}
+      {/* Desktop AI Panel - Slide from right */}
+      <div className="hidden lg:block">
+        {isAIPanelOpen && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 z-[9998]"
+            onClick={() => setIsAIPanelOpen(false)}
+          />
+        )}
+        <div className={`fixed top-0 right-0 h-full w-96 bg-white dark:bg-slate-800 shadow-2xl transform transition-transform duration-300 ease-in-out z-[9999] ${
+          isAIPanelOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}>
+          <div className="h-full flex flex-col">
+            <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-700 bg-gradient-to-r from-orange-50 to-pink-50 dark:from-orange-900/20 dark:to-pink-900/20">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Brain className="h-5 w-5 text-orange-600" />
+                  <h3 className="text-sm font-medium text-slate-900 dark:text-white">AI Crypto Analysis</h3>
+                </div>
+                <button
+                  onClick={() => setIsAIPanelOpen(false)}
+                  className="p-1 text-slate-500 hover:text-slate-700 dark:text-slate-400 hover:bg-gray-200 dark:hover:bg-slate-700 rounded-lg transition-colors"
+                >
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div className="flex-1 overflow-y-auto">
+              <AIAnalysisPanel
+                title=""
+                pageType="trending"
+                pageData={{
+                  count: filteredCryptos.length,
+                  activeFilter,
+                  trending: filteredCryptos.slice(0, 5).map(c => ({
+                    symbol: c.symbol,
+                    name: c.name,
+                    changePercent: c.changePercent,
+                    trendType: c.trendType,
+                    trendScore: c.trendScore
+                  })),
+                  topGainer: filteredCryptos.filter(c => c.changePercent > 0)[0]?.symbol,
+                  topLoser: filteredCryptos.filter(c => c.changePercent < 0)[0]?.symbol
+                }}
+                quickPrompts={[
+                  'Why are these cryptos trending?',
+                  'Crypto trading signals',
+                  'Market momentum analysis'
+                ]}
+                compact={false}
+                className="w-full h-full"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

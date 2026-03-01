@@ -22,6 +22,7 @@ import StockChart from '@/app/components/StockChart';
 import { HistoricalData as StockHistoricalData } from '@/app/types';
 import { addToWatchlist, removeFromWatchlist, getWatchlist } from '@/app/utils/portfolioWatchlistAPI';
 import { useAuth } from '@/app/context/AuthContext';
+import { useCurrency } from '@/app/context/CurrencyContext';
 
 // Import crypto tab components
 import {
@@ -78,6 +79,7 @@ export default function CryptoDetailPage() {
   const router = useRouter();
   const symbol = params.symbol as string;
   const { user } = useAuth();
+  const { formatPrice: formatCurrencyPrice } = useCurrency();
 
   const [crypto, setCrypto] = useState<CryptoDetails | null>(null);
   const [historicalData, setHistoricalData] = useState<StockHistoricalData[]>([]);
@@ -221,11 +223,11 @@ export default function CryptoDetailPage() {
   };
 
   const formatPrice = (price: number | undefined | null) => {
-    if (!price || isNaN(price)) return '$0.00';
+    if (!price || isNaN(price)) return formatCurrencyPrice(0);
     if (price >= 1) {
-      return `$${price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      return formatCurrencyPrice(price, 2, 2);
     } else {
-      return `$${price.toLocaleString('en-US', { minimumFractionDigits: 4, maximumFractionDigits: 6 })}`;
+      return formatCurrencyPrice(price, 4, 6);
     }
   };
 

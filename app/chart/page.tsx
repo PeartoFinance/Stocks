@@ -8,9 +8,6 @@ import { useRouter } from 'next/navigation';
 import { marketService } from '../utils/marketService';
 import { HistoricalData } from '../types';
 import { useCurrency } from '../context/CurrencyContext';
-import { useUsageLimit } from '@/app/context/SubscriptionContext';
-import { UpgradeModal } from '@/app/components/subscription/FeatureGating';
-import { LIMITS } from '@/app/utils/featureKeys';
 import {
   StockSearch,
   ChartHeader,
@@ -25,12 +22,10 @@ import {
 
 export default function TechnicalChartPage() {
   const router = useRouter();
-  // --- Refs ---
   const searchInputRef = useRef<HTMLInputElement>(null);
   const sparklineRefs = useRef<{ [key: string]: HTMLCanvasElement | null }>({});
   const { formatPrice } = useCurrency();
 
-  // --- Core state ---
   const [symbol, setSymbol] = useState('AAPL');
   const [period, setPeriod] = useState('1M');
   const [data, setData] = useState<HistoricalData[]>([]);
@@ -40,32 +35,14 @@ export default function TechnicalChartPage() {
   const [autoRefresh, setAutoRefresh] = useState(false);
   const [isAIPanelOpen, setIsAIPanelOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [showUpgrade, setShowUpgrade] = useState(false);
-  const [hasAccess, setHasAccess] = useState(true);
-  const { trackUsage } = useUsageLimit(LIMITS.ADVANCED_CHARTS);
 
-  useEffect(() => {
-    const checkAccess = async () => {
-      const result = await trackUsage();
-      if (!result.allowed) {
-        setShowUpgrade(true);
-        setHasAccess(false);
-      }
-    };
-    checkAccess();
-  }, []);
-
-  // Analytical features state
   const [showVolumeProfile, setShowVolumeProfile] = useState(false);
   const [showMovingAverages, setShowMovingAverages] = useState(false);
   const [showGaps, setShowGaps] = useState(false);
   const [showCorrelation, setShowCorrelation] = useState(false);
   const [percentMode, setPercentMode] = useState(false);
 
-  // Market movers state
   const [mostActive, setMostActive] = useState<any[]>([]);
-
-  // --- Data Calculations ---
 
   const calculateMovingAverages = useCallback((data: HistoricalData[], periods: number[]) => {
     return periods.map(p => {
@@ -189,12 +166,7 @@ export default function TechnicalChartPage() {
 
   const handleSelectStock = (stock: any) => setSymbol(stock.symbol);
 
-  const handleOpenDetailedChart = async () => {
-    const result = await trackUsage();
-    if (!result.allowed) {
-      setShowUpgrade(true);
-      return;
-    }
+  const handleOpenDetailedChart = () => {
     router.push(`/stockchart/${symbol}/detailedpage`);
   };
 
@@ -202,14 +174,6 @@ export default function TechnicalChartPage() {
 
   return (
     <main className="p-3 sm:p-4 md:p-6 lg:p-8 bg-gray-50 dark:bg-slate-900 min-h-screen">
-      {!hasAccess ? (
-        <UpgradeModal
-          isOpen={showUpgrade}
-          onClose={() => {}}
-          featureKey={LIMITS.ADVANCED_CHARTS}
-        />
-      ) : (
-        <>
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-4 sm:mb-6">
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2 sm:mb-3">
           Technical Analysis
@@ -295,14 +259,6 @@ export default function TechnicalChartPage() {
         chartType={chartType}
         dataLength={data.length}
       />
-
-      <UpgradeModal
-        isOpen={showUpgrade && hasAccess}
-        onClose={() => setShowUpgrade(false)}
-        featureKey={LIMITS.ADVANCED_CHARTS}
-      />
-        </>
-      )}
     </main>
   );
 }

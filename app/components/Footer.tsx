@@ -24,7 +24,7 @@ export default function Footer() {
         tools: [
             { label: 'Stock Screener', href: '/screener' },
             { label: 'Technical Charts', href: '/chart' },
-            { label: 'Watchlist', href: '/watchlist' },
+            { label: 'Watchlist', href: 'profile/watchlist' },
             { label: 'Comparison Tool', href: '/stocks/comparison' },
             { label: 'Trending Stocks', href: '/trending' },
         ],
