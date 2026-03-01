@@ -16,6 +16,7 @@ import {
   Star,
   Clock
 } from 'lucide-react';
+import { useCurrency } from '@/app/context/CurrencyContext';
 
 interface CryptoDetails {
   id: number;
@@ -51,27 +52,30 @@ interface StatisticsTabProps {
 }
 
 export default function StatisticsTab({ crypto }: StatisticsTabProps) {
+  const { formatPrice: formatCurrencyPrice } = useCurrency();
+  
   const formatPrice = (price: number) => {
     if (price >= 1) {
-      return `$${price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      return formatCurrencyPrice(price, 2, 2);
     } else {
-      return `$${price.toLocaleString('en-US', { minimumFractionDigits: 4, maximumFractionDigits: 6 })}`;
+      return formatCurrencyPrice(price, 4, 6);
     }
   };
 
   const formatMarketCap = (marketCap: number | null | undefined) => {
     if (!marketCap) return 'N/A';
-    if (marketCap >= 1e12) return `$${(marketCap / 1e12).toFixed(2)}T`;
-    if (marketCap >= 1e9) return `$${(marketCap / 1e9).toFixed(2)}B`;
-    if (marketCap >= 1e6) return `$${(marketCap / 1e6).toFixed(2)}M`;
-    return `$${marketCap.toLocaleString()}`;
+    if (marketCap >= 1e12) return `${formatCurrencyPrice(marketCap / 1e12, 2, 2)}T`;
+    if (marketCap >= 1e9) return `${formatCurrencyPrice(marketCap / 1e9, 2, 2)}B`;
+    if (marketCap >= 1e6) return `${formatCurrencyPrice(marketCap / 1e6, 2, 2)}M`;
+    return formatCurrencyPrice(marketCap);
   };
 
   const formatVolume = (volume: number | null | undefined) => {
     if (!volume) return 'N/A';
-    if (volume >= 1e9) return `$${(volume / 1e9).toFixed(2)}B`;
-    if (volume >= 1e6) return `$${(volume / 1e6).toFixed(2)}M`;
-    return `$${volume.toLocaleString()}`;
+    if (volume >= 1e9) return `${(volume / 1e9).toFixed(2)}B`;
+    if (volume >= 1e6) return `${(volume / 1e6).toFixed(2)}M`;
+    if (volume >= 1e3) return `${(volume / 1e3).toFixed(2)}K`;
+    return volume.toLocaleString();
   };
 
   const formatNumber = (num: number | undefined | null, decimals = 2): string => {

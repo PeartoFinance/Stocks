@@ -30,7 +30,7 @@ export default function StockChart({ data, compareData, isPositive, height = 400
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
   const { theme } = useTheme();
-  const { convertPrice, currency } = useCurrency();
+  const { convertPrice, currency, formatPrice } = useCurrency();
   const isDark = theme === 'dark';
 
   useEffect(() => {
@@ -55,8 +55,9 @@ export default function StockChart({ data, compareData, isPositive, height = 400
       },
       rightPriceScale: {
         borderVisible: false,
-        // Optional: add currency formatting to axis
-        // localization: { priceFormatter: ... }
+      },
+      localization: {
+        priceFormatter: (price: number) => formatPrice(price, 2, 2),
       },
     });
 
@@ -92,10 +93,10 @@ export default function StockChart({ data, compareData, isPositive, height = 400
       });
       series.setData(data.map(item => ({
         time: formatTime(item.date),
-        open: convertPrice(item.open),
-        high: convertPrice(item.high),
-        low: convertPrice(item.low),
-        close: convertPrice(item.close),
+        open: item.open,
+        high: item.high,
+        low: item.low,
+        close: item.close,
       })));
 
       if (showComparison && compareData && compareData.length > 0) {
@@ -108,10 +109,10 @@ export default function StockChart({ data, compareData, isPositive, height = 400
         });
         compareSeries.setData(compareData.map(item => ({
           time: formatTime(item.date),
-          open: convertPrice(item.open),
-          high: convertPrice(item.high),
-          low: convertPrice(item.low),
-          close: convertPrice(item.close),
+          open: item.open,
+          high: item.high,
+          low: item.low,
+          close: item.close,
         })));
       }
     }
@@ -122,7 +123,7 @@ export default function StockChart({ data, compareData, isPositive, height = 400
       });
       series.setData(data.map(item => ({
         time: formatTime(item.date),
-        value: convertPrice(item.close)
+        value: item.close
       })));
 
       if (showComparison && compareData && compareData.length > 0) {
@@ -132,7 +133,7 @@ export default function StockChart({ data, compareData, isPositive, height = 400
         });
         compareSeries.setData(compareData.map(item => ({
           time: formatTime(item.date),
-          value: convertPrice(item.close)
+          value: item.close
         })));
       }
     }
@@ -150,7 +151,7 @@ export default function StockChart({ data, compareData, isPositive, height = 400
       });
       series.setData(data.map(item => ({
         time: formatTime(item.date),
-        value: convertPrice(item.close)
+        value: item.close
       })));
 
       if (showComparison && compareData && compareData.length > 0) {
@@ -162,7 +163,7 @@ export default function StockChart({ data, compareData, isPositive, height = 400
         });
         compareSeries.setData(compareData.map(item => ({
           time: formatTime(item.date),
-          value: convertPrice(item.close)
+          value: item.close
         })));
       }
     }
@@ -182,7 +183,7 @@ export default function StockChart({ data, compareData, isPositive, height = 400
       resizeObserver.disconnect();
       chart.remove();
     };
-  }, [data, compareData, isPositive, height, chartType, color, showComparison, isDark, theme, convertPrice, currency]);
+  }, [data, compareData, isPositive, height, chartType, color, showComparison, isDark, theme, convertPrice, currency, formatPrice]);
 
   return (
     <div className="w-full overflow-hidden relative">

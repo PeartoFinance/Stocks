@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useCallback } from 'react';
-import { Search } from 'lucide-react';
+import { Search, Bitcoin, TrendingUp } from 'lucide-react';
 import { marketService } from '../../utils/marketService';
 
 interface StockSearchProps {
@@ -56,8 +56,6 @@ export default function StockSearch({ onStockSelect, className = '' }: StockSear
     searchInputRef.current?.blur();
   };
 
-  const formatPrice = (price: number) => `$${price.toFixed(2)}`;
-
   return (
     <div className={`relative flex-1 max-w-md ${className}`}>
       <div className="relative">
@@ -72,21 +70,35 @@ export default function StockSearch({ onStockSelect, className = '' }: StockSear
           className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100"
         />
         {showSuggestions && searchResults.length > 0 && (
-          <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
+          <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg z-50 max-h-80 overflow-y-auto">
             {searchResults.map((stock) => (
-              <div
+              <button
                 key={stock.symbol}
                 onClick={() => handleSelectStock(stock)}
-                className="px-4 py-2 hover:bg-slate-50 dark:hover:bg-gray-700 cursor-pointer border-b border-gray-100 dark:border-slate-700 last:border-b-0"
+                className="w-full px-4 py-3 text-left hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-slate-700 last:border-b-0 transition"
               >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <span className="font-medium text-sm text-gray-900 dark:text-gray-100">{stock.symbol}</span>
-                    <span className="text-xs text-slate-500 dark:text-slate-400 ml-2">{stock.name}</span>
+                <div className="flex items-center gap-3">
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                    stock.assetType === 'crypto' ? 'bg-amber-500/10' : 'bg-emerald-500/10'
+                  }`}>
+                    {stock.assetType === 'crypto' 
+                      ? <Bitcoin size={16} className="text-amber-500" />
+                      : <TrendingUp size={16} className="text-emerald-500" />
+                    }
                   </div>
-                  <span className="text-xs text-slate-500 dark:text-slate-400">{formatPrice(stock.price || 0)}</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-slate-900 dark:text-white">{stock.symbol}</span>
+                      {stock.exchange && (
+                        <span className="text-xs text-slate-400 px-1.5 py-0.5 bg-slate-100 dark:bg-slate-700 rounded">
+                          {stock.exchange}
+                        </span>
+                      )}
+                    </div>
+                    <div className="text-sm text-slate-600 dark:text-slate-400 truncate">{stock.name}</div>
+                  </div>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         )}

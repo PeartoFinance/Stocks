@@ -380,6 +380,12 @@ export default function CryptoDetailPage() {
                 <GitCompare className="h-5 w-5" />
               </button>
               <button
+                onClick={() => router.push(`/analysis?symbol=${crypto.symbol}&type=crypto`)}
+                className="p-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-lg"
+              >
+                <BarChart3 className="h-5 w-5" />
+              </button>
+              <button
                 onClick={() => router.push(`/cryptochart/${crypto.symbol}/detailedpage`)}
                 className="p-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-lg"
               >
@@ -483,6 +489,13 @@ export default function CryptoDetailPage() {
               >
                 <GitCompare size={16} />
                 Compare
+              </button>
+              <button 
+                onClick={() => router.push(`/analysis?symbol=${crypto.symbol}&type=crypto`)}
+                className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg transition text-sm font-medium"
+              >
+                <BarChart3 size={16} />
+                Technical Analysis
               </button>
               <button 
                 onClick={() => router.push(`/cryptochart/${crypto.symbol}/detailedpage`)}

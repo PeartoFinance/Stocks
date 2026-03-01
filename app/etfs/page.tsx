@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Search, Filter, TrendingUp, TrendingDown, Star, BarChart3, DollarSign } from 'lucide-react';
-
+import { useCurrency } from '../context/CurrencyContext';
 import { stockAPI } from '../utils/api';
 import toast from 'react-hot-toast';
 
@@ -22,6 +22,7 @@ interface ETF {
 }
 
 export default function ETFScreener() {
+  const { formatPrice } = useCurrency();
   const [etfs, setETFs] = useState<ETF[]>([]);
   const [filteredETFs, setFilteredETFs] = useState<ETF[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -203,7 +204,7 @@ export default function ETFScreener() {
                   <div>
                     <p className="text-sm text-slate-600 dark:text-slate-400">Total AUM</p>
                     <p className="text-2xl font-medium text-slate-900 dark:text-white">
-                      ${calculateTotalAUM()}T
+                      {formatPrice(parseFloat(calculateTotalAUM()) * 1e12, 2, 2)}
                     </p>
                   </div>
                   <Star className="h-8 w-8 text-yellow-600" />
@@ -258,7 +259,7 @@ export default function ETFScreener() {
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm font-medium text-slate-900 dark:text-white">${etf.price?.toFixed(2) || 'N/A'}</div>
+                            <div className="text-sm font-medium text-slate-900 dark:text-white">{formatPrice(etf.price, 2, 2)}</div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className={`flex items-center space-x-1 ${(etf.changePercent || 0) >= 0 ? 'text-green-600' : 'text-red-600'}`}>

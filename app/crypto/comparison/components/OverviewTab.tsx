@@ -2,6 +2,7 @@
 
 import { ComparisonCrypto } from './types';
 import { TrendingUp, TrendingDown, Activity, DollarSign } from 'lucide-react';
+import { useCurrency } from '../../../context/CurrencyContext';
 
 interface OverviewTabProps {
   comparedCryptos: ComparisonCrypto[];
@@ -9,6 +10,8 @@ interface OverviewTabProps {
 }
 
 export default function OverviewTab({ comparedCryptos, formatLargeNumber }: OverviewTabProps) {
+  const { formatPrice } = useCurrency();
+  
   if (comparedCryptos.length === 0) {
     return (
       <div className="text-center py-12">
@@ -94,7 +97,7 @@ export default function OverviewTab({ comparedCryptos, formatLargeNumber }: Over
               </div>
 
               <div className="flex items-baseline gap-2">
-                <span className="text-2xl font-bold text-slate-900 dark:text-white">${(crypto.price ?? 0).toFixed(2)}</span>
+                <span className="text-2xl font-bold text-slate-900 dark:text-white">{formatPrice(crypto.price ?? 0, 2, 2)}</span>
                 <span className={`flex items-center text-sm font-medium ${isPositive ? 'text-teal-600' : 'text-red-500'}`}>
                   {isPositive ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
                   {isPositive ? '+' : ''}{(crypto.changePercent ?? 0).toFixed(2)}%
@@ -107,7 +110,7 @@ export default function OverviewTab({ comparedCryptos, formatLargeNumber }: Over
                 {crypto.rank && (
                   <div><span className="text-slate-500">Rank</span> <span className="font-medium text-slate-900 dark:text-white ml-1">#{crypto.rank}</span></div>
                 )}
-                <div><span className="text-slate-500">24h High</span> <span className="font-medium text-slate-900 dark:text-white ml-1">${crypto.high24h?.toFixed(2) || '-'}</span></div>
+                <div><span className="text-slate-500">24h High</span> <span className="font-medium text-slate-900 dark:text-white ml-1">{crypto.high24h ? formatPrice(crypto.high24h, 2, 2) : '-'}</span></div>
               </div>
             </div>
           );

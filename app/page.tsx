@@ -104,7 +104,7 @@ export default function HomePage() {
               name: item.name || item.symbol || 'Unknown',
               symbol: item.symbol || '',
               value: formatPrice(item.value || item.price),
-              change: item.change.toFixed(2),
+              change: formatPrice(item.change, 2, 2),
               changePercent: `${item.changePercent.toFixed(2)}%`,
               isPositive: item.change >= 0,
               volume: '—',
@@ -187,7 +187,7 @@ export default function HomePage() {
     fetchData();
     const interval = setInterval(fetchData, 30000);
     return () => clearInterval(interval);
-  }, []);
+  }, [formatPrice]);
 
   // Helper to format volume with proper units
   function formatVolume(vol: number): string {

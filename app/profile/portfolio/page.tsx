@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/app/context/AuthContext';
 import { stockAPI } from '@/app/utils/api';
+import { useCurrency } from '@/app/context/CurrencyContext';
 import {
     getPortfolios,
     getNetWorth,
@@ -42,6 +43,7 @@ import toast from 'react-hot-toast';
 export default function PortfolioPage() {
     const { isAuthenticated, isLoading: authLoading } = useAuth();
     const router = useRouter();
+    const { formatPrice } = useCurrency();
     const [portfolios, setPortfolios] = useState<Portfolio[]>([]);
     const [netWorth, setNetWorth] = useState<NetWorth | null>(null);
     const [availableStocks, setAvailableStocks] = useState<any[]>([]);
@@ -306,7 +308,7 @@ export default function PortfolioPage() {
                             <span className="text-sm sm:text-sm text-slate-500 dark:text-slate-400 font-medium">Total Value</span>
                         </div>
                         <div className="text-xl sm:text-3xl font-bold text-slate-900 dark:text-white">
-                            ${totalValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            {formatPrice(totalValue, 2, 2)}
                         </div>
                     </div>
                     <div className="bg-white dark:bg-slate-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-100 dark:border-slate-700">
@@ -321,7 +323,7 @@ export default function PortfolioPage() {
                                 totalGain >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'
                             }`}
                         >
-                            <span>{totalGain >= 0 ? '+' : ''}${totalGain.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                            <span>{totalGain >= 0 ? '+' : ''}{formatPrice(Math.abs(totalGain), 2, 2)}</span>
                             <span className="text-sm sm:text-base font-medium">
                                 ({totalGainPct >= 0 ? '+' : ''}{totalGainPct.toFixed(2)}%)
                             </span>
@@ -418,7 +420,7 @@ export default function PortfolioPage() {
                                                             </div>
                                                             <div className="text-right">
                                                                 <div className="font-semibold text-slate-900 dark:text-white">
-                                                                    ${stock.price?.toFixed(2) || '0.00'}
+                                                                    {stock.price ? formatPrice(stock.price, 2, 2) : '-'}
                                                                 </div>
                                                                 <div className={`text-sm font-medium ${
                                                                     stock.change >= 0 ? 'text-emerald-500' : 'text-red-500'
