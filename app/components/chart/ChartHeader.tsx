@@ -77,7 +77,7 @@ export default function ChartHeader({
             <Maximize2 className="h-4 w-4" />
           </button>
           <Link
-            href={`${process.env.NEXT_PUBLIC_MAIN_APP_URL || 'https://pearto.com'}/live?symbol=btc&type=crypto`}
+            href={`${process.env.NEXT_PUBLIC_MAIN_APP_URL || 'https://pearto.com'}/live?symbol=${symbol}&type=stock`}
             className="flex px-2 sm:px-3 py-1 bg-red-600 text-white text-xs font-medium rounded-lg hover:bg-red-700 transition-colors items-center gap-1"
             title="Live Chart"
           >
