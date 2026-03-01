@@ -5,5 +5,4 @@ export { default as ChartStats } from './ChartStats';
 export { default as ChartDisplay } from './ChartDisplay';
 export { default as QuickStats } from './QuickStats';
 export { default as MostActiveStocks } from './MostActiveStocks';
-export { default as MarketMovers } from './MarketMovers';
 export { default as ChartAIPanel } from './ChartAIPanel';

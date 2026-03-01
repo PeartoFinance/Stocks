@@ -22,30 +22,30 @@ export default function ChartStats({
 
   const latest = data[data.length - 1];
   const first = data[0];
-  const high = Math.max(...data.map(d => d.high));
-  const low = Math.min(...data.map(d => d.low));
-  const totalVolume = data.reduce((sum, d) => sum + (d.volume || 0), 0);
+  const high = Math.max(...data.map(d => d?.high ?? 0));
+  const low = Math.min(...data.map(d => d?.low ?? 0));
+  const totalVolume = data.reduce((sum, d) => sum + (d?.volume ?? 0), 0);
 
   const stats = [
     { 
       label: 'Current', 
-      value: formatPrice(latest.close), 
-      change: latest.close - first.close,
-      changePercent: ((latest.close - first.close) / first.close * 100),
+      value: formatPrice(latest?.close ?? 0), 
+      change: (latest?.close ?? 0) - (first?.close ?? 0),
+      changePercent: first?.close ? (((latest?.close ?? 0) - first.close) / first.close * 100) : 0,
       color: 'blue' 
     },
     { 
       label: 'High', 
       value: formatPrice(high), 
-      change: high - first.close,
-      changePercent: ((high - first.close) / first.close * 100),
+      change: high - (first?.close ?? 0),
+      changePercent: first?.close ? ((high - first.close) / first.close * 100) : 0,
       color: 'green' 
     },
     { 
       label: 'Low', 
       value: formatPrice(low), 
-      change: low - first.close,
-      changePercent: ((low - first.close) / first.close * 100),
+      change: low - (first?.close ?? 0),
+      changePercent: first?.close ? ((low - first.close) / first.close * 100) : 0,
       color: 'red' 
     },
     { 
@@ -69,7 +69,7 @@ export default function ChartStats({
               </div>
               <div className="flex items-center justify-between">
                 <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{stat.value}</p>
-                {stat.change !== null && (
+                {stat.change !== null && stat.changePercent !== null && (
                   <div className={`text-xs font-medium ${
                     stat.changePercent >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
                   }`}>

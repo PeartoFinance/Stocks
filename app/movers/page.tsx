@@ -2,13 +2,11 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowDownRight, ArrowUpRight, Activity, Search } from 'lucide-react';
-import { formatNumber } from '@/lib/utils';
+import { ArrowDownRight, ArrowUpRight, TrendingUp, TrendingDown, Activity, Search, BarChart3 } from 'lucide-react';
 import { useCurrency } from '../context/CurrencyContext';
 import { stockAPI } from '../utils/api';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
-import AIAnalysisPanel from '../components/ai/AIAnalysisPanel';
 
 interface Mover {
   id: string;
@@ -38,31 +36,35 @@ export default function MarketMoversPage() {
 
         const movers: Mover[] = [];
 
-        if (gainersRes.success && gainersRes.data) {
+        if (gainersRes?.success && Array.isArray(gainersRes.data)) {
           gainersRes.data.forEach((stock: any, i: number) => {
-            movers.push({
-              id: `g-${i}`,
-              symbol: stock.symbol || '',
-              name: stock.name || '',
-              price: stock.price || 0,
-              change: stock.change || 0,
-              changePercent: stock.changePercent || 0,
-              volume: stock.volume || 0,
-            });
+            if (stock && typeof stock === 'object') {
+              movers.push({
+                id: `g-${i}`,
+                symbol: stock.symbol || '',
+                name: stock.name || '',
+                price: Number(stock.price) || 0,
+                change: Number(stock.change) || 0,
+                changePercent: Number(stock.changePercent) || 0,
+                volume: Number(stock.volume) || 0,
+              });
+            }
           });
         }
 
-        if (losersRes.success && losersRes.data) {
+        if (losersRes?.success && Array.isArray(losersRes.data)) {
           losersRes.data.forEach((stock: any, i: number) => {
-            movers.push({
-              id: `l-${i}`,
-              symbol: stock.symbol || '',
-              name: stock.name || '',
-              price: stock.price || 0,
-              change: stock.change || 0,
-              changePercent: stock.changePercent || 0,
-              volume: stock.volume || 0,
-            });
+            if (stock && typeof stock === 'object') {
+              movers.push({
+                id: `l-${i}`,
+                symbol: stock.symbol || '',
+                name: stock.name || '',
+                price: Number(stock.price) || 0,
+                change: Number(stock.change) || 0,
+                changePercent: Number(stock.changePercent) || 0,
+                volume: Number(stock.volume) || 0,
+              });
+            }
           });
         }
 
@@ -78,115 +80,177 @@ export default function MarketMoversPage() {
   }, []);
 
   const filtered = useMemo(() => {
-    let list = data.filter(d =>
-      d.symbol.toLowerCase().includes(search.toLowerCase()) ||
-      d.name.toLowerCase().includes(search.toLowerCase())
-    );
+    let list = data.filter(d => {
+      const sym = d?.symbol?.toLowerCase() || '';
+      const nm = d?.name?.toLowerCase() || '';
+      const searchLower = search.toLowerCase();
+      return sym.includes(searchLower) || nm.includes(searchLower);
+    });
 
     switch (tab) {
-      case 'gainers': list = list.sort((a, b) => b.changePercent - a.changePercent); break;
-      case 'losers': list = list.sort((a, b) => a.changePercent - b.changePercent); break;
-      case 'volume': list = list.sort((a, b) => b.volume - a.volume); break;
+      case 'gainers': 
+        list = list.sort((a, b) => (b?.changePercent || 0) - (a?.changePercent || 0)); 
+        break;
+      case 'losers': 
+        list = list.sort((a, b) => (a?.changePercent || 0) - (b?.changePercent || 0)); 
+        break;
+      case 'volume': 
+        list = list.sort((a, b) => (b?.volume || 0) - (a?.volume || 0)); 
+        break;
     }
 
     return list;
   }, [data, tab, search]);
 
-  // Prepare AI data
-  const gainers = filtered.filter(m => m.changePercent > 0).slice(0, 5);
-  const losers = filtered.filter(m => m.changePercent < 0).slice(0, 5);
-
   return (
-    <main className="p-3 sm:p-4 md:p-6 lg:p-8 dark:bg-slate-900/95">
-      <div className="flex flex-col xl:flex-row gap-4 sm:gap-6 lg:gap-8">
-        {/* Main Content */}
-        <div className="flex-1">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-6 sm:mb-8">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2 sm:mb-3">Market Movers</h1>
-            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">Top gainers, losers, and highest volume across the market.</p>
-          </motion.div>
+    <main className="min-h-screen bg-gray-50 dark:bg-slate-900 p-4 md:p-6 lg:p-8">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }} 
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-8"
+        >
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">Market Movers</h1>
+          <p className="text-gray-600 dark:text-slate-400">Track top gainers, losers, and most active stocks</p>
+        </motion.div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-4 sm:p-6 shadow-lg border border-gray-100 dark:border-gray-700 mb-4 sm:mb-6">
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 sm:items-center sm:justify-between">
-              <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
-                {(['gainers', 'losers', 'volume'] as const).map(t => (
-                  <button key={t} onClick={() => setTab(t)} className={`px-3 py-1.5 rounded-full text-xs sm:text-sm whitespace-nowrap ${tab === t ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'}`}>{t}</button>
-                ))}
-              </div>
-              <div className="relative w-full sm:w-auto sm:min-w-[280px]">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
-                <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search symbol or name…" className="w-full pl-10 pr-4 py-2 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" />
-              </div>
+        {/* Tabs & Search */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} 
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-200 dark:border-slate-700 p-4 mb-6"
+        >
+          <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center justify-between">
+            <div className="flex gap-2">
+              <button
+                onClick={() => setTab('gainers')}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all ${
+                  tab === 'gainers'
+                    ? 'bg-green-600 text-white shadow-md'
+                    : 'bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-600'
+                }`}
+              >
+                <TrendingUp className="h-4 w-4" />
+                <span>Gainers</span>
+              </button>
+              <button
+                onClick={() => setTab('losers')}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all ${
+                  tab === 'losers'
+                    ? 'bg-red-600 text-white shadow-md'
+                    : 'bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-600'
+                }`}
+              >
+                <TrendingDown className="h-4 w-4" />
+                <span>Losers</span>
+              </button>
+              <button
+                onClick={() => setTab('volume')}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all ${
+                  tab === 'volume'
+                    ? 'bg-blue-600 text-white shadow-md'
+                    : 'bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-600'
+                }`}
+              >
+                <BarChart3 className="h-4 w-4" />
+                <span>Volume</span>
+              </button>
+            </div>
+            
+            <div className="relative flex-1 sm:max-w-xs">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search stocks..."
+                className="w-full pl-10 pr-4 py-2.5 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-slate-700 text-gray-900 dark:text-white placeholder-gray-400"
+              />
             </div>
           </div>
+        </motion.div>
 
-          {loading ? (
-            <div className="h-60 sm:h-80 flex items-center justify-center text-gray-500 dark:text-gray-400"><Activity className="h-5 w-5 sm:h-6 sm:w-6 animate-spin mr-2" />Loading movers…</div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-              {filtered.slice(0, 8).map((m, i) => (
-                <Link key={m.id} href={`/stock/${m.symbol.toLowerCase()}`}>
-                  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="bg-white dark:bg-gray-800 rounded-xl p-4 sm:p-6 shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl cursor-pointer transition-all">
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="min-w-0 flex-1">
-                        <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-gray-100">{m.symbol}</h3>
-                        <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 truncate">{m.name}</p>
+        {/* List */}
+        {loading ? (
+          <div className="flex items-center justify-center h-96">
+            <div className="text-center">
+              <Activity className="h-8 w-8 text-blue-600 dark:text-blue-400 animate-spin mx-auto mb-3" />
+              <p className="text-gray-600 dark:text-slate-400">Loading market movers...</p>
+            </div>
+          </div>
+        ) : (
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }}
+            className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-200 dark:border-slate-700 overflow-hidden"
+          >
+            {filtered.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-gray-500 dark:text-slate-400">No stocks found</p>
+              </div>
+            ) : (
+              <div className="divide-y divide-gray-200 dark:divide-slate-700">
+                {filtered.map((m, i) => (
+                  <Link key={m.id} href={`/stock/${m.symbol.toLowerCase()}`}>
+                    <motion.div
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.03 }}
+                      className="flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors cursor-pointer group"
+                    >
+                      {/* Left: Symbol & Name */}
+                      <div className="flex items-center gap-4 flex-1 min-w-0">
+                        <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                          <span className="text-white font-bold text-sm">{(m?.symbol || 'N').charAt(0)}</span>
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <h3 className="font-semibold text-gray-900 dark:text-white text-base group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                            {m?.symbol || 'N/A'}
+                          </h3>
+                          <p className="text-sm text-gray-500 dark:text-slate-400 truncate">{m?.name || 'Unknown'}</p>
+                        </div>
                       </div>
-                      <div className="text-right flex-shrink-0">
-                        <p className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 dark:text-gray-100">{formatPrice(m.price)}</p>
-                        <p className={`text-xs sm:text-sm font-medium flex items-center justify-end gap-1 ${m.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                          {m.change >= 0 ? <ArrowUpRight className="h-3 w-3 sm:h-4 sm:w-4" /> : <ArrowDownRight className="h-3 w-3 sm:h-4 sm:w-4" />}
-                          <span className="hidden sm:inline">{m.change.toFixed(2)} ({m.changePercent.toFixed(2)}%)</span>
-                          <span className="sm:hidden">{m.changePercent.toFixed(1)}%</span>
+
+                      {/* Middle: Volume */}
+                      <div className="hidden lg:flex flex-col items-end mr-6">
+                        <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Volume</p>
+                        <p className="text-base font-semibold text-slate-900 dark:text-white">
+                          {(m?.volume || 0) >= 1e9 
+                            ? `${((m?.volume || 0) / 1e9).toFixed(2)}B`
+                            : (m?.volume || 0) >= 1e6
+                            ? `${((m?.volume || 0) / 1e6).toFixed(2)}M`
+                            : (m?.volume || 0).toLocaleString()}
                         </p>
                       </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3 sm:gap-4 mt-3 sm:mt-4">
-                      <div className="p-2 sm:p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-                        <p className="text-xs text-gray-500 dark:text-gray-400">Volume</p>
-                        <p className="text-sm sm:text-base font-semibold text-gray-900 dark:text-gray-100">{formatNumber(m.volume)}</p>
-                      </div>
-                      <div className="p-2 sm:p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-                        <p className="text-xs text-gray-500 dark:text-gray-400">Intraday Range</p>
-                        <p className="text-sm sm:text-base font-semibold text-gray-900 dark:text-gray-100">High bias</p>
-                      </div>
-                    </div>
-                  </motion.div>
-                </Link>
-              ))}
-            </div>
-          )}
-        </div>
 
-        {/* AI Analysis Sidebar */}
-        <div className="w-full xl:w-80 flex-shrink-0 mt-6 xl:mt-0">
-          <div className="xl:sticky xl:top-4">
-            <AIAnalysisPanel
-              title="Movers Analysis"
-              pageType="market-movers"
-              pageData={{
-                gainers: gainers.map(g => ({
-                  symbol: g.symbol,
-                  price: g.price,
-                  changePercent: g.changePercent
-                })),
-                losers: losers.map(l => ({
-                  symbol: l.symbol,
-                  price: l.price,
-                  changePercent: l.changePercent
-                })),
-                currentTab: tab,
-                totalCount: data.length
-              }}
-              quickPrompts={[
-                'Why are these stocks moving?',
-                'Market sentiment analysis',
-                'Trading opportunities'
-              ]}
-              maxHeight="500px"
-            />
-          </div>
-        </div>
+                      {/* Right: Price & Change */}
+                      <div className="flex flex-col items-end min-w-[140px]">
+                        <p className="text-xl font-bold text-slate-900 dark:text-white mb-1.5">
+                          {formatPrice(m?.price || 0)}
+                        </p>
+                        <div className={`flex items-center gap-1 px-2 py-1 rounded-md ${
+                          (m?.change || 0) >= 0 
+                            ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' 
+                            : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
+                        }`}>
+                          {(m?.change || 0) >= 0 ? (
+                            <ArrowUpRight className="h-3.5 w-3.5" />
+                          ) : (
+                            <ArrowDownRight className="h-3.5 w-3.5" />
+                          )}
+                          <span className="text-sm font-medium">
+                            {Math.abs(m?.changePercent || 0).toFixed(2)}%
+                          </span>
+                        </div>
+                      </div>
+                    </motion.div>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </motion.div>
+        )}
       </div>
     </main>
   );

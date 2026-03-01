@@ -36,7 +36,7 @@ interface Exchange {
 }
 
 export default function StockExchanges() {
-  const { formatPrice } = useCurrency();
+  const { formatPrice, convertPrice } = useCurrency();
   const [exchanges, setExchanges] = useState<Exchange[]>([]);
   const [filteredExchanges, setFilteredExchanges] = useState<Exchange[]>([]);
   const [loading, setLoading] = useState(true);
@@ -281,7 +281,9 @@ export default function StockExchanges() {
               <DollarSign className="h-8 w-8 text-green-600 dark:text-green-400" />
               <span className="text-sm text-gray-500 dark:text-slate-400">Total Market Cap</span>
             </div>
-            <p className="text-3xl font-bold text-gray-900 dark:text-white">$74.1T</p>
+            <p className="text-3xl font-bold text-gray-900 dark:text-white">
+              {formatPrice(convertPrice(exchanges.reduce((sum, e) => sum + e.marketCap, 0) / 1e12), 1, 1)}T
+            </p>
             <p className="text-sm text-gray-600 dark:text-slate-400">Global markets</p>
           </div>
 
@@ -399,7 +401,7 @@ export default function StockExchanges() {
                 </div>
                 <div>
                   <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">Listed Companies</p>
-                  <p className="font-semibold text-gray-900 dark:text-white">{formatNumber(exchange.listedCompanies)}</p>
+                  <p className="font-semibold text-gray-900 dark:text-white">{exchange.listedCompanies.toLocaleString()}</p>
                 </div>
                 <div>
                   <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">Daily Volume</p>

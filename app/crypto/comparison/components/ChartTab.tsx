@@ -100,78 +100,87 @@ export default function ChartTab({ comparedCryptos, formatLargeNumber, removeFro
   return (
     <div className="space-y-3">
       {/* Combined Period and Chart Type Selector */}
-      <div className="bg-white dark:bg-slate-900/95 rounded-lg p-2 sm:p-3 border border-slate-200 dark:border-slate-700">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
-          {/* Period Selector */}
-          <div className="flex items-center gap-2 flex-1">
-            <Calendar className="h-3 w-3 sm:h-4 sm:w-4 text-blue-600 dark:text-emerald-500 flex-shrink-0" />
-            <div className="flex gap-1 overflow-x-auto scrollbar-hide">
-              {periods.map((p) => (
-                <button
-                  key={p.value}
-                  onClick={() => setPeriod(p.value)}
-                  disabled={loading}
-                  className={`px-2 sm:px-3 py-1 rounded text-[10px] sm:text-xs font-medium transition-all flex-shrink-0 ${
-                    period === p.value
-                      ? 'bg-blue-600 dark:bg-emerald-600 text-white'
-                      : 'bg-slate-100 dark:bg-slate-700 text-gray-700 dark:text-slate-400 hover:bg-gray-200 dark:hover:bg-[#262626]'
-                  } disabled:opacity-50`}
-                >
-                  {p.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Chart Type Selector */}
-          <div className="flex items-center gap-2">
-            <BarChart3 className="h-3 w-3 sm:h-4 sm:w-4 text-blue-600 dark:text-emerald-500 flex-shrink-0" />
-            <div className="flex gap-1">
-              {chartTypes.map((type) => {
-                const Icon = type.icon;
-                return (
+      <div className="bg-white dark:bg-slate-900/95 rounded-lg border border-slate-200 dark:border-slate-700">
+        {/* Header Section */}
+        <div className="p-3 sm:p-4 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
+            {/* Period Selector */}
+            <div className="flex items-center gap-2 flex-1">
+              <Calendar className="h-3 w-3 sm:h-4 sm:w-4 text-blue-600 dark:text-emerald-500 flex-shrink-0" />
+              <div className="flex gap-1 overflow-x-auto scrollbar-hide">
+                {periods.map((p) => (
                   <button
-                    key={type.value}
-                    onClick={() => setChartType(type.value)}
+                    key={p.value}
+                    onClick={() => setPeriod(p.value)}
                     disabled={loading}
-                    className={`flex items-center gap-1 px-2 sm:px-3 py-1 rounded text-[10px] sm:text-xs font-medium transition-all flex-shrink-0 ${
-                      chartType === type.value
+                    className={`px-2 sm:px-3 py-1 rounded text-[10px] sm:text-xs font-medium transition-all flex-shrink-0 ${
+                      period === p.value
                         ? 'bg-blue-600 dark:bg-emerald-600 text-white'
-                        : 'bg-slate-100 dark:bg-slate-700 text-gray-700 dark:text-slate-400 hover:bg-gray-200 dark:hover:bg-[#262626]'
+                        : 'bg-slate-100 dark:bg-slate-700 text-gray-700 dark:text-slate-400 hover:bg-gray-200 dark:hover:bg-slate-600'
                     } disabled:opacity-50`}
                   >
-                    <Icon className="h-3 w-3" />
-                    <span className="hidden sm:inline">{type.label}</span>
+                    {p.label}
                   </button>
-                );
-              })}
+                ))}
+              </div>
+            </div>
+
+            {/* Chart Type Selector */}
+            <div className="flex items-center gap-2">
+              <BarChart3 className="h-3 w-3 sm:h-4 sm:w-4 text-blue-600 dark:text-emerald-500 flex-shrink-0" />
+              <div className="flex gap-1">
+                {chartTypes.map((type) => {
+                  const Icon = type.icon;
+                  return (
+                    <button
+                      key={type.value}
+                      onClick={() => setChartType(type.value)}
+                      disabled={loading}
+                      className={`flex items-center gap-1 px-2 sm:px-3 py-1 rounded text-[10px] sm:text-xs font-medium transition-all flex-shrink-0 ${
+                        chartType === type.value
+                          ? 'bg-blue-600 dark:bg-emerald-600 text-white'
+                          : 'bg-slate-100 dark:bg-slate-700 text-gray-700 dark:text-slate-400 hover:bg-gray-200 dark:hover:bg-slate-600'
+                      } disabled:opacity-50`}
+                    >
+                      <Icon className="h-3 w-3" />
+                      <span className="hidden sm:inline">{type.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Charts */}
-      <div className="bg-white dark:bg-slate-900/95 rounded-lg p-2 sm:p-3 border border-slate-200 dark:border-slate-700">
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white">Price Comparison</h3>
-          <button 
-            onClick={handleFullscreen} 
-            className="flex items-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-sm hover:shadow-md transition-all font-medium"
-          >
-            <Maximize2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-            <span className="text-xs sm:text-sm">Detailed Chart</span>
-          </button>
+      <div className="bg-white dark:bg-slate-900/95 rounded-lg border border-slate-200 dark:border-slate-700">
+        {/* Chart Header */}
+        <div className="p-3 sm:p-4 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white">Price Comparison</h3>
+            <button 
+              onClick={handleFullscreen} 
+              className="flex items-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-sm hover:shadow-md transition-all font-medium"
+            >
+              <Maximize2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+              <span className="text-xs sm:text-sm">Detailed Chart</span>
+            </button>
+          </div>
         </div>
 
-        {/* Crypto Cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 mb-3">
+        {/* Chart Content */}
+        <div className="p-3 sm:p-4 bg-white dark:bg-slate-900/95">
+
+          {/* Crypto Cards */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 mb-3">
           {comparedCryptos.map((crypto) => {
             const isPositive = crypto.changePercent >= 0;
             return (
               <div key={crypto.symbol} className={`bg-gradient-to-br ${isPositive ? 'from-green-50 to-emerald-50 dark:from-green-500/10 dark:to-emerald-500/5 border-green-200 dark:border-green-500/30' : 'from-red-50 to-rose-50 dark:from-red-500/10 dark:to-rose-500/5 border-red-200 dark:border-red-500/30'} rounded-lg p-2.5 border-2 shadow-sm hover:shadow-md transition-all`}>
                 <div className="flex items-center justify-between mb-1.5">
                   <div className="flex items-center gap-1.5">
-                    <div className="w-2.5 h-2.5 rounded-full border-2 border-white dark:border-slate-800 shadow-sm" style={{ backgroundColor: crypto.color }} />
+                    <div className="w-2.5 h-2.5 rounded-full border-2 border-white dark:border-slate-900 shadow-sm" style={{ backgroundColor: crypto.color }} />
                     <span className="text-[10px] sm:text-xs font-semibold text-gray-900 dark:text-white">{crypto.symbol}</span>
                   </div>
                   <button onClick={() => removeFromComparison(crypto.symbol)} className="text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition-colors p-0.5 hover:bg-white/50 dark:hover:bg-slate-700/50 rounded">
@@ -185,36 +194,37 @@ export default function ChartTab({ comparedCryptos, formatLargeNumber, removeFro
               </div>
             );
           })}
-        </div>
+          </div>
 
-        {loading ? (
-          <div className="flex flex-col items-center justify-center h-48 sm:h-64 bg-slate-50 dark:bg-slate-900/95 rounded-lg">
-            <Activity className="h-6 w-6 sm:h-8 sm:w-8 text-emerald-600 dark:text-emerald-500 animate-spin mb-2" />
-            <p className="text-xs text-slate-600 dark:text-slate-400">Loading chart data...</p>
-          </div>
-        ) : chartData.length > 0 && chartData.every(data => data.length > 0) ? (
-          <div className="relative bg-slate-50 dark:bg-slate-900/95 rounded-lg p-2 sm:p-3 border border-slate-200/50 dark:border-slate-700/50">
-            <MultiStockChart
-              stocks={comparedCryptos.map((crypto, index) => ({
-                symbol: crypto.symbol,
-                name: crypto.name,
-                color: crypto.color,
-                data: chartData[index] || [],
-                currentPrice: crypto.price,
-                change: crypto.change,
-                changePercent: crypto.changePercent
-              }))}
-              height={window.innerWidth < 640 ? 250 : 400}
-              period={period}
-              chartType={chartType}
-            />
-          </div>
-        ) : (
-          <div className="text-center py-8 sm:py-12 bg-slate-50 dark:bg-slate-900/95 rounded-lg">
-            <Activity className="h-8 w-8 sm:h-10 sm:w-10 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
-            <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-slate-400">No chart data available</p>
-          </div>
-        )}
+          {loading ? (
+            <div className="flex flex-col items-center justify-center h-48 sm:h-64 bg-slate-50 dark:bg-slate-900/95 rounded-lg">
+              <Activity className="h-6 w-6 sm:h-8 sm:w-8 text-emerald-600 dark:text-emerald-500 animate-spin mb-2" />
+              <p className="text-xs text-slate-600 dark:text-slate-400">Loading chart data...</p>
+            </div>
+          ) : chartData.length > 0 && chartData.every(data => data.length > 0) ? (
+            <div className="relative bg-slate-50 dark:bg-slate-900/95 rounded-lg p-2 sm:p-3 border border-slate-200/50 dark:border-slate-700/50">
+              <MultiStockChart
+                stocks={comparedCryptos.map((crypto, index) => ({
+                  symbol: crypto.symbol,
+                  name: crypto.name,
+                  color: crypto.color,
+                  data: chartData[index] || [],
+                  currentPrice: crypto.price,
+                  change: crypto.change,
+                  changePercent: crypto.changePercent
+                }))}
+                height={window.innerWidth < 640 ? 250 : 400}
+                period={period}
+                chartType={chartType}
+              />
+            </div>
+          ) : (
+            <div className="text-center py-8 sm:py-12 bg-slate-50 dark:bg-slate-900/95 rounded-lg">
+              <Activity className="h-8 w-8 sm:h-10 sm:w-10 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
+              <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-slate-400">No chart data available</p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
