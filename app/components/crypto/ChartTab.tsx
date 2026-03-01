@@ -102,7 +102,7 @@ export default function ChartTab({
   return (
     <div className="space-y-6">
       {/* Chart Header */}
-      <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-4 lg:p-6 transition-colors duration-300">
+      <div className="bg-white dark:bg-slate-900/95 rounded-xl border border-gray-200 dark:border-slate-700 p-4 lg:p-6 transition-colors duration-300">
         <div className="flex flex-col gap-4 mb-6">
           <div className="flex-1 min-w-0">
             <h2 className="text-xl lg:text-2xl font-medium text-gray-900 dark:text-white mb-3 transition-colors duration-300">
@@ -127,7 +127,7 @@ export default function ChartTab({
         </div>
 
         {/* Chart Controls */}
-        <div className="mb-6 p-4 bg-slate-50 dark:bg-slate-700 rounded-xl border border-gray-200 dark:border-gray-600 transition-colors duration-300">
+        <div className="mb-6 p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-gray-600 transition-colors duration-300">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-4">
             {/* Period Selector */}
             <div>
@@ -186,7 +186,7 @@ export default function ChartTab({
         </div>
 
         {/* Main Chart Container */}
-        <div className="h-[500px] lg:h-[600px] relative bg-slate-50 dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 transition-colors duration-300">
+        <div className="h-[500px] lg:h-[600px] relative bg-slate-50 dark:bg-slate-900/95 rounded-xl border border-gray-200 dark:border-slate-700 transition-colors duration-300">
           {chartLoading ? (
             <div className="absolute inset-0 flex items-center justify-center bg-slate-50/80 dark:bg-slate-900/80 backdrop-blur-sm z-10 transition-colors duration-300">
               <div className="text-center">
@@ -257,7 +257,7 @@ export default function ChartTab({
 
       {/* Volume Analysis */}
       {showVolume && historicalData && historicalData.length > 0 && (
-        <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-4 lg:p-6 transition-colors duration-300">
+        <div className="bg-white dark:bg-slate-900/95 rounded-xl border border-gray-200 dark:border-slate-700 p-4 lg:p-6 transition-colors duration-300">
           <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4 transition-colors duration-300">Volume Analysis</h3>
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
             {[

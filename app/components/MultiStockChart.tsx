@@ -35,7 +35,7 @@ export default function MultiStockChart({ stocks, height = 300, period, chartTyp
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
   const { theme } = useTheme();
-  const { convertPrice, formatPrice, currency } = useCurrency();
+  const { convertPrice, formatPrice, currency, symbol } = useCurrency();
   const isDark = theme === 'dark';
 
   useEffect(() => {
@@ -49,10 +49,7 @@ export default function MultiStockChart({ stocks, height = 300, period, chartTyp
         attributionLogo: false,
       },
       localization: {
-        priceFormatter: (price: number) => {
-          const formatted = price.toFixed(2);
-          return currency === 'USD' ? `$${formatted}` : `€${formatted}`;
-        },
+        priceFormatter: (price: number) => `${symbol}${price.toFixed(2)}`,
       },
       width: chartContainerRef.current.clientWidth,
       height,
@@ -201,10 +198,12 @@ export default function MultiStockChart({ stocks, height = 300, period, chartTyp
     const legendContent = stocks.map((stock, index) => {
       const color = index === 0 ? '#16a34a' : stock.color;
       const textColor = isDark ? '#F8E1C3' : '#374151';
+      const convertedPrice = convertPrice(stock.currentPrice);
+      const formattedPrice = formatPrice(convertedPrice, 2, 2);
       return `<div style="display: flex; align-items: center; margin-bottom: 2px; gap: 4px;">
         <div style="width: 8px; height: 2px; background-color: ${color}; border-radius: 1px;"></div>
         <span style="color: ${textColor}; font-weight: 500; font-size: 9px; line-height: 1.2;">
-          ${stock.symbol}: ${currency === 'USD' ? '$' : '€'}${convertPrice(stock.currentPrice).toFixed(2)}
+          ${stock.symbol}: ${formattedPrice}
         </span>
       </div>`;
     }).join('');
@@ -236,7 +235,7 @@ export default function MultiStockChart({ stocks, height = 300, period, chartTyp
   }, [stocks, height, period, isDark, theme, convertPrice, formatPrice]);
 
   return (
-    <div className="w-full overflow-hidden relative border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 transition-colors duration-300">
+    <div className="w-full overflow-hidden relative border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-900/95 transition-colors duration-300">
       <div ref={chartContainerRef} className="w-full" />
     </div>
   );
