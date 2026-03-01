@@ -760,9 +760,9 @@ export default function StockDetailPage({ params }: PageProps) {
             {/* Chart Statistics */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
               {[
-                { label: 'Period High', value: historicalData.length > 0 ? `$${Math.max(...historicalData.map(d => d.high)).toFixed(2)}` : '-', icon: TrendingUp, color: 'emerald' },
-                { label: 'Period Low', value: historicalData.length > 0 ? `$${Math.min(...historicalData.map(d => d.low)).toFixed(2)}` : '-', icon: TrendingDown, color: 'red' },
-                { label: 'Average Price', value: historicalData.length > 0 ? `$${(historicalData.reduce((sum, d) => sum + d.close, 0) / historicalData.length).toFixed(2)}` : '-', icon: BarChart3, color: 'blue' },
+                { label: 'Period High', value: historicalData.length > 0 ? formatPrice(Math.max(...historicalData.map(d => d.high))) : '-', icon: TrendingUp, color: 'emerald' },
+                { label: 'Period Low', value: historicalData.length > 0 ? formatPrice(Math.min(...historicalData.map(d => d.low))) : '-', icon: TrendingDown, color: 'red' },
+                { label: 'Average Price', value: historicalData.length > 0 ? formatPrice(historicalData.reduce((sum, d) => sum + d.close, 0) / historicalData.length) : '-', icon: BarChart3, color: 'blue' },
                 { label: 'Volatility', value: historicalData.length > 1 ? `${((Math.max(...historicalData.map(d => d.high)) - Math.min(...historicalData.map(d => d.low))) / Math.min(...historicalData.map(d => d.low)) * 100).toFixed(2)}%` : '-', icon: Activity, color: 'purple' },
               ].map((item, i) => (
                 <div key={i} className={`bg-${item.color}-50 dark:bg-slate-800 p-3 lg:p-4 rounded-xl border border-${item.color}-100 dark:border-slate-700 shadow-sm`}>
