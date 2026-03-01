@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { toast } from 'react-hot-toast';
-import { Search, Brain, RefreshCw, Activity, Maximize2, AreaChart, BarChart3, LineChart, Maximize } from 'lucide-react';
+import { Brain, Activity } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { marketService } from '../utils/marketService';
 import { HistoricalData } from '../types';
@@ -16,7 +16,6 @@ import {
   ChartDisplay,
   QuickStats,
   MostActiveStocks,
-  MarketMovers,
   ChartAIPanel
 } from '../components/chart';
 
@@ -173,9 +172,9 @@ export default function TechnicalChartPage() {
   const isPositive = stockInfo ? (stockInfo.change || 0) >= 0 : true;
 
   return (
-    <main className="p-3 sm:p-4 md:p-6 lg:p-8 bg-gray-50 dark:bg-slate-900 min-h-screen">
+    <main className="min-h-screen bg-gray-50 dark:bg-slate-900 p-2 sm:p-4 md:p-6 lg:p-8">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-4 sm:mb-6">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2 sm:mb-3">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2 sm:mb-3">
           Technical Analysis
         </h1>
         <div className="flex flex-col md:flex-row gap-3 sm:gap-4 items-center">
@@ -185,7 +184,7 @@ export default function TechnicalChartPage() {
 
       <div className="grid grid-cols-1 xl:grid-cols-4 gap-3 sm:gap-4">
         <div className="xl:col-span-3">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700">
+          <div className="bg-white dark:bg-slate-900/95 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700">
             <ChartHeader
               symbol={symbol}
               period={period}
@@ -214,7 +213,7 @@ export default function TechnicalChartPage() {
               onTogglePercentMode={() => setPercentMode(!percentMode)}
             />
 
-            <div className="p-3 sm:p-4">
+            <div className="p-4">
               <ChartDisplay
                 data={data}
                 processedData={getProcessedChartData()}
@@ -234,9 +233,26 @@ export default function TechnicalChartPage() {
                 formatPrice={formatPrice}
                 onToggleFullscreen={() => setIsFullscreen(!isFullscreen)}
               />
+            </div>
 
+            <div className="px-4 pb-4">
               <QuickStats data={data} formatPrice={formatPrice} />
+            </div>
+          </div>
+        </div>
 
+        {/* Right Sidebar */}
+        <div className="xl:col-span-1">
+          {/* Most Active Stocks Card */}
+          <div className="bg-white dark:bg-slate-900/95 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 xl:sticky xl:top-4">
+            <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                <Activity className="h-5 w-5 text-blue-600" />
+                Most Active
+              </h2>
+              <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">Highest volume</p>
+            </div>
+            <div className="p-4 max-h-[calc(100vh-200px)] overflow-y-auto">
               <MostActiveStocks
                 stocks={mostActive}
                 onSelectStock={handleSelectStock}
@@ -244,10 +260,6 @@ export default function TechnicalChartPage() {
               />
             </div>
           </div>
-        </div>
-
-        <div className="xl:col-span-1">
-          <MarketMovers onSelectStock={handleSelectStock} formatPrice={formatPrice} />
         </div>
       </div>
 
