@@ -34,11 +34,12 @@ export default function CryptoTableView({ cryptoData, loading = false, viewMode 
   };
 
   const formatMarketCap = (marketCap: number | undefined | null) => {
-    if (!marketCap || isNaN(marketCap)) return formatCurrencyPrice(0);
-    if (marketCap >= 1e12) return formatCurrencyPrice(marketCap / 1e12, 2, 2, { notation: 'compact', compactDisplay: 'short' });
-    if (marketCap >= 1e9) return formatCurrencyPrice(marketCap / 1e9, 2, 2, { notation: 'compact', compactDisplay: 'short' });
-    if (marketCap >= 1e6) return formatCurrencyPrice(marketCap / 1e6, 2, 2, { notation: 'compact', compactDisplay: 'short' });
-    return formatCurrencyPrice(marketCap);
+    if (!marketCap || isNaN(marketCap)) return '$0';
+    if (marketCap >= 1e12) return `$${(marketCap / 1e12).toFixed(2)}T`;
+    if (marketCap >= 1e9) return `$${(marketCap / 1e9).toFixed(2)}B`;
+    if (marketCap >= 1e6) return `$${(marketCap / 1e6).toFixed(2)}M`;
+    if (marketCap >= 1e3) return `$${(marketCap / 1e3).toFixed(2)}K`;
+    return `$${marketCap.toFixed(2)}`;
   };
 
   const formatVolume = (volume: number | undefined | null) => {
