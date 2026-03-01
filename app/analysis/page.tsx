@@ -51,27 +51,39 @@ export default function AnalysisPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    const symbolParam = searchParams.get('symbol');
     const stockParam = searchParams.get('stock');
-    if (stockParam) {
-      handleSelectStock(stockParam);
+    const symbol = symbolParam || stockParam;
+    if (symbol) {
+      handleSelectStock(symbol);
     }
   }, [searchParams]);
 
   const handleSearch = async (query: string) => {
     setSearchQuery(query);
-    if (query.length < 2) {
+    if (!query || query.length < 2) {
       setSuggestions([]);
       return;
     }
     try {
       const response = await stockAPI.searchStocks(query);
-      setSuggestions(response.data.slice(0, 8));
+      if (response?.data && Array.isArray(response.data)) {
+        setSuggestions(response.data.slice(0, 8));
+      } else {
+        setSuggestions([]);
+      }
     } catch (error) {
       console.error('Search error:', error);
+      setSuggestions([]);
     }
   };
 
   const handleSelectStock = async (symbol: string) => {
+    if (!symbol || symbol.trim() === '') {
+      toast.error('Please enter a valid symbol');
+      return;
+    }
+    
     setSearchQuery(symbol);
     setSuggestions([]);
     setLoading(true);
@@ -80,22 +92,32 @@ export default function AnalysisPage() {
         getTechnicalAnalysis(symbol),
         stockAPI.getStockQuote(symbol)
       ]);
-      setAnalysis({ ...analysisData, quote: quoteData.data });
+      
+      if (!analysisData || !analysisData.symbol) {
+        toast.error('No analysis data available for this symbol');
+        setAnalysis(null);
+        return;
+      }
+      
+      setAnalysis({ ...analysisData, quote: quoteData?.data || undefined });
     } catch (error) {
       toast.error('Failed to fetch analysis');
       console.error(error);
+      setAnalysis(null);
     } finally {
       setLoading(false);
     }
   };
 
-  const getSignalColor = (signal: string) => {
+  const getSignalColor = (signal?: string) => {
+    if (!signal) return 'text-gray-600 dark:text-gray-400';
     if (signal === 'Buy' || signal === 'Strong Buy') return 'text-green-600 dark:text-green-400';
     if (signal === 'Sell' || signal === 'Strong Sell') return 'text-red-600 dark:text-red-400';
     return 'text-gray-600 dark:text-gray-400';
   };
 
-  const getSignalBg = (signal: string) => {
+  const getSignalBg = (signal?: string) => {
+    if (!signal) return 'bg-gray-100 dark:bg-gray-800';
     if (signal === 'Buy' || signal === 'Strong Buy') return 'bg-green-100 dark:bg-green-900/30';
     if (signal === 'Sell' || signal === 'Strong Sell') return 'bg-red-100 dark:bg-red-900/30';
     return 'bg-gray-100 dark:bg-gray-800';
@@ -208,14 +230,14 @@ export default function AnalysisPage() {
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 md:gap-6">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 md:gap-3 mb-2">
-                    <h2 className="text-xl md:text-3xl font-bold text-slate-900 dark:text-white">{analysis.symbol}</h2>
-                    <div className={`px-2 md:px-4 py-1 md:py-1.5 rounded-lg font-bold text-xs md:text-sm ${getSignalBg(analysis.summary.signal)} ${getSignalColor(analysis.summary.signal)}`}>
-                      {analysis.summary.signal}
+                    <h2 className="text-xl md:text-3xl font-bold text-slate-900 dark:text-white">{analysis.symbol || 'N/A'}</h2>
+                    <div className={`px-2 md:px-4 py-1 md:py-1.5 rounded-lg font-bold text-xs md:text-sm ${getSignalBg(analysis.summary?.signal)} ${getSignalColor(analysis.summary?.signal)}`}>
+                      {analysis.summary?.signal || 'Neutral'}
                     </div>
                   </div>
-                  {analysis.quote && <p className="text-slate-600 dark:text-gray-400 text-xs md:text-sm">{analysis.quote.name}</p>}
+                  {analysis.quote?.name && <p className="text-slate-600 dark:text-gray-400 text-xs md:text-sm">{analysis.quote.name}</p>}
                   <div className="flex items-baseline gap-2 md:gap-3 mt-3 md:mt-4">
-                    <span className="text-2xl md:text-4xl font-bold text-slate-900 dark:text-white">{formatPrice(analysis.price)}</span>
+                    <span className="text-2xl md:text-4xl font-bold text-slate-900 dark:text-white">{formatPrice(analysis.price || 0)}</span>
                     {analysis.quote && (
                       <div className="flex items-center gap-2">
                         {analysis.quote.change >= 0 ? (
@@ -274,12 +296,12 @@ export default function AnalysisPage() {
                   </div>
                   <h3 className="text-base md:text-xl font-bold text-slate-900 dark:text-white">Overall Signal</h3>
                 </div>
-                <CompassChart score={analysis.summary.score} />
+                <CompassChart score={analysis.summary?.score || 0} />
                 <div className="text-center mt-4 md:mt-8">
-                  <div className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-2">{analysis.summary.score.toFixed(1)}</div>
+                  <div className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-2">{(analysis.summary?.score || 0).toFixed(1)}</div>
                   <div className="text-xs md:text-sm text-slate-600 dark:text-gray-400 mb-3 md:mb-4">Technical Score (-10 to +10)</div>
-                  <div className={`inline-block px-4 md:px-6 py-2 md:py-3 rounded-xl font-bold text-sm md:text-lg ${getSignalBg(analysis.summary.signal)} ${getSignalColor(analysis.summary.signal)} shadow-lg`}>
-                    {analysis.summary.signal}
+                  <div className={`inline-block px-4 md:px-6 py-2 md:py-3 rounded-xl font-bold text-sm md:text-lg ${getSignalBg(analysis.summary?.signal)} ${getSignalColor(analysis.summary?.signal)} shadow-lg`}>
+                    {analysis.summary?.signal || 'Neutral'}
                   </div>
                 </div>
               </div>
@@ -295,40 +317,40 @@ export default function AnalysisPage() {
                   <div>
                     <div className="flex items-center justify-between mb-2 md:mb-3">
                       <span className="text-xs md:text-sm font-medium text-slate-600 dark:text-gray-400">Oscillators</span>
-                      <span className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">{analysis.summary.oscillatorsScore}</span>
+                      <span className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">{analysis.summary?.oscillatorsScore || 0}</span>
                     </div>
                     <div className="space-y-2">
                       <div className="flex items-center gap-2">
                         <div className="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                          <div className="h-full bg-green-500" style={{ width: `${(analysis.summary.counts.oscillators.buy / 4) * 100}%` }} />
+                          <div className="h-full bg-green-500" style={{ width: `${((analysis.summary?.counts?.oscillators?.buy || 0) / 4) * 100}%` }} />
                         </div>
-                        <span className="text-xs font-semibold text-green-600 dark:text-green-400 w-8">{analysis.summary.counts.oscillators.buy}</span>
+                        <span className="text-xs font-semibold text-green-600 dark:text-green-400 w-8">{analysis.summary?.counts?.oscillators?.buy || 0}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <div className="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                          <div className="h-full bg-red-500" style={{ width: `${(analysis.summary.counts.oscillators.sell / 4) * 100}%` }} />
+                          <div className="h-full bg-red-500" style={{ width: `${((analysis.summary?.counts?.oscillators?.sell || 0) / 4) * 100}%` }} />
                         </div>
-                        <span className="text-xs font-semibold text-red-600 dark:text-red-400 w-8">{analysis.summary.counts.oscillators.sell}</span>
+                        <span className="text-xs font-semibold text-red-600 dark:text-red-400 w-8">{analysis.summary?.counts?.oscillators?.sell || 0}</span>
                       </div>
                     </div>
                   </div>
                   <div className="border-t border-slate-200 dark:border-gray-700 pt-3 md:pt-4">
                     <div className="flex items-center justify-between mb-2 md:mb-3">
                       <span className="text-xs md:text-sm font-medium text-slate-600 dark:text-gray-400">Moving Averages</span>
-                      <span className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">{analysis.summary.movingAveragesScore}</span>
+                      <span className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">{analysis.summary?.movingAveragesScore || 0}</span>
                     </div>
                     <div className="space-y-2">
                       <div className="flex items-center gap-2">
                         <div className="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                          <div className="h-full bg-green-500" style={{ width: `${(analysis.summary.counts.movingAverages.buy / 10) * 100}%` }} />
+                          <div className="h-full bg-green-500" style={{ width: `${((analysis.summary?.counts?.movingAverages?.buy || 0) / 10) * 100}%` }} />
                         </div>
-                        <span className="text-xs font-semibold text-green-600 dark:text-green-400 w-8">{analysis.summary.counts.movingAverages.buy}</span>
+                        <span className="text-xs font-semibold text-green-600 dark:text-green-400 w-8">{analysis.summary?.counts?.movingAverages?.buy || 0}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <div className="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                          <div className="h-full bg-red-500" style={{ width: `${(analysis.summary.counts.movingAverages.sell / 10) * 100}%` }} />
+                          <div className="h-full bg-red-500" style={{ width: `${((analysis.summary?.counts?.movingAverages?.sell || 0) / 10) * 100}%` }} />
                         </div>
-                        <span className="text-xs font-semibold text-red-600 dark:text-red-400 w-8">{analysis.summary.counts.movingAverages.sell}</span>
+                        <span className="text-xs font-semibold text-red-600 dark:text-red-400 w-8">{analysis.summary?.counts?.movingAverages?.sell || 0}</span>
                       </div>
                     </div>
                   </div>
@@ -346,25 +368,25 @@ export default function AnalysisPage() {
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
                 <div className="p-3 md:p-5 rounded-xl bg-white dark:bg-gray-700 border-2 border-slate-100 dark:border-gray-600 hover:shadow-lg transition-shadow">
                   <div className="text-[10px] md:text-xs font-semibold text-slate-500 dark:text-gray-400 mb-1 md:mb-2">RSI (14)</div>
-                  <div className="text-xl md:text-3xl font-black text-slate-900 dark:text-white mb-1 md:mb-2">{analysis.indicators.rsi.value.toFixed(1)}</div>
-                  <RSIGauge value={analysis.indicators.rsi.value} />
-                  <div className={`text-xs md:text-sm font-bold mt-2 md:mt-3 ${getSignalColor(analysis.indicators.rsi.signal)}`}>{analysis.indicators.rsi.signal}</div>
+                  <div className="text-xl md:text-3xl font-black text-slate-900 dark:text-white mb-1 md:mb-2">{(analysis.indicators?.rsi?.value || 0).toFixed(1)}</div>
+                  <RSIGauge value={analysis.indicators?.rsi?.value || 0} />
+                  <div className={`text-xs md:text-sm font-bold mt-2 md:mt-3 ${getSignalColor(analysis.indicators?.rsi?.signal)}`}>{analysis.indicators?.rsi?.signal || 'Neutral'}</div>
                 </div>
                 <div className="p-3 md:p-5 rounded-xl bg-white dark:bg-gray-700 border-2 border-slate-100 dark:border-gray-600 hover:shadow-lg transition-shadow">
                   <div className="text-[10px] md:text-xs font-semibold text-slate-500 dark:text-gray-400 mb-1 md:mb-2">Stochastic %K</div>
-                  <div className="text-xl md:text-3xl font-black text-slate-900 dark:text-white mb-1 md:mb-2">{analysis.indicators.stoch.k.toFixed(1)}</div>
-                  <RSIGauge value={analysis.indicators.stoch.k} />
-                  <div className={`text-xs md:text-sm font-bold mt-2 md:mt-3 ${getSignalColor(analysis.indicators.stoch.signal)}`}>{analysis.indicators.stoch.signal}</div>
+                  <div className="text-xl md:text-3xl font-black text-slate-900 dark:text-white mb-1 md:mb-2">{(analysis.indicators?.stoch?.k || 0).toFixed(1)}</div>
+                  <RSIGauge value={analysis.indicators?.stoch?.k || 0} />
+                  <div className={`text-xs md:text-sm font-bold mt-2 md:mt-3 ${getSignalColor(analysis.indicators?.stoch?.signal)}`}>{analysis.indicators?.stoch?.signal || 'Neutral'}</div>
                 </div>
                 <div className="p-3 md:p-5 rounded-xl bg-white dark:bg-gray-700 border-2 border-slate-100 dark:border-gray-600 hover:shadow-lg transition-shadow">
                   <div className="text-[10px] md:text-xs font-semibold text-slate-500 dark:text-gray-400 mb-1 md:mb-2">MACD (12,26)</div>
-                  <div className="text-xl md:text-3xl font-black text-slate-900 dark:text-white mb-2 md:mb-4">{analysis.indicators.macd.value.toFixed(2)}</div>
-                  <div className={`px-2 md:px-3 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-bold text-center ${getSignalBg(analysis.indicators.macd.signal)} ${getSignalColor(analysis.indicators.macd.signal)}`}>{analysis.indicators.macd.signal}</div>
+                  <div className="text-xl md:text-3xl font-black text-slate-900 dark:text-white mb-2 md:mb-4">{(analysis.indicators?.macd?.value || 0).toFixed(2)}</div>
+                  <div className={`px-2 md:px-3 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-bold text-center ${getSignalBg(analysis.indicators?.macd?.signal)} ${getSignalColor(analysis.indicators?.macd?.signal)}`}>{analysis.indicators?.macd?.signal || 'Neutral'}</div>
                 </div>
                 <div className="p-3 md:p-5 rounded-xl bg-white dark:bg-gray-700 border-2 border-slate-100 dark:border-gray-600 hover:shadow-lg transition-shadow">
                   <div className="text-[10px] md:text-xs font-semibold text-slate-500 dark:text-gray-400 mb-1 md:mb-2">CCI (20)</div>
-                  <div className="text-xl md:text-3xl font-black text-slate-900 dark:text-white mb-2 md:mb-4">{analysis.indicators.cci.value.toFixed(0)}</div>
-                  <div className={`px-2 md:px-3 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-bold text-center ${getSignalBg(analysis.indicators.cci.signal)} ${getSignalColor(analysis.indicators.cci.signal)}`}>{analysis.indicators.cci.signal}</div>
+                  <div className="text-xl md:text-3xl font-black text-slate-900 dark:text-white mb-2 md:mb-4">{(analysis.indicators?.cci?.value || 0).toFixed(0)}</div>
+                  <div className={`px-2 md:px-3 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-bold text-center ${getSignalBg(analysis.indicators?.cci?.signal)} ${getSignalColor(analysis.indicators?.cci?.signal)}`}>{analysis.indicators?.cci?.signal || 'Neutral'}</div>
                 </div>
               </div>
             </div>
@@ -380,19 +402,19 @@ export default function AnalysisPage() {
                 <div className="text-xs md:text-sm text-slate-600 dark:text-gray-400">Price vs MA</div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
-                {analysis.indicators.movingAverages.map((ma, idx) => {
-                  const priceDiff = ((analysis.price - ma.value) / ma.value) * 100;
+                {(analysis.indicators?.movingAverages || []).map((ma, idx) => {
+                  const priceDiff = ((analysis.price - (ma?.value || 0)) / (ma?.value || 1)) * 100;
                   return (
                     <div key={idx} className="flex items-center justify-between p-3 md:p-4 rounded-xl bg-white dark:bg-gray-700 border border-slate-200 dark:border-gray-600 hover:shadow-md transition-all">
                       <div className="flex-1">
-                        <div className="font-bold text-sm md:text-base text-slate-900 dark:text-white mb-1">{ma.name}</div>
-                        <div className="text-xs md:text-sm text-slate-600 dark:text-gray-400">{formatPrice(ma.value)}</div>
+                        <div className="font-bold text-sm md:text-base text-slate-900 dark:text-white mb-1">{ma?.name || 'N/A'}</div>
+                        <div className="text-xs md:text-sm text-slate-600 dark:text-gray-400">{formatPrice(ma?.value || 0)}</div>
                         <div className={`text-[10px] md:text-xs font-semibold mt-1 ${priceDiff >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                           {priceDiff >= 0 ? '+' : ''}{priceDiff.toFixed(2)}%
                         </div>
                       </div>
-                      <div className={`px-2 md:px-4 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-bold ${getSignalBg(ma.signal)} ${getSignalColor(ma.signal)}`}>
-                        {ma.signal}
+                      <div className={`px-2 md:px-4 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-bold ${getSignalBg(ma?.signal)} ${getSignalColor(ma?.signal)}`}>
+                        {ma?.signal || 'Neutral'}
                       </div>
                     </div>
                   );

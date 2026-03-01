@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/app/context/AuthContext';
 import { stockAPI } from '@/app/utils/api';
+import { useCurrency } from '@/app/context/CurrencyContext';
 import {
     getAlerts,
     createAlert,
@@ -51,6 +52,9 @@ export default function AlertsPage() {
     const [submitting, setSubmitting] = useState(false);
     const [showUpgrade, setShowUpgrade] = useState(false);
     const { trackUsage } = useSubscription();
+    const { formatPrice } = useCurrency();
+    
+
     
     // Form state
     const [selectedSymbol, setSelectedSymbol] = useState<{ symbol: string; name: string } | null>(null);
@@ -323,6 +327,7 @@ export default function AlertsPage() {
                                             alert={alert}
                                             onToggle={handleToggleAlert}
                                             onDelete={handleDeleteAlert}
+                                            formatPrice={formatPrice}
                                         />
                                     ))}
                                 </div>
@@ -340,6 +345,7 @@ export default function AlertsPage() {
                                             alert={alert}
                                             onToggle={handleToggleAlert}
                                             onDelete={handleDeleteAlert}
+                                            formatPrice={formatPrice}
                                         />
                                     ))}
                                 </div>
@@ -357,6 +363,7 @@ export default function AlertsPage() {
                                             alert={alert}
                                             onToggle={handleToggleAlert}
                                             onDelete={handleDeleteAlert}
+                                            formatPrice={formatPrice}
                                         />
                                     ))}
                                 </div>
@@ -442,7 +449,7 @@ export default function AlertsPage() {
                                                                 </div>
                                                                 <div className="text-right">
                                                                     <div className="font-semibold text-gray-900 dark:text-white">
-                                                                        ${stock.price?.toFixed(2) || '0.00'}
+                                                                        {stock.price ? formatPrice(stock.price, 2, 2) : '-'}
                                                                     </div>
                                                                     <div className={`text-sm font-medium ${
                                                                         stock.change >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'
@@ -592,10 +599,12 @@ function AlertCard({
     alert,
     onToggle,
     onDelete,
+    formatPrice,
 }: {
     alert: UserAlert;
     onToggle: (id: string) => void;
     onDelete: (id: string) => void;
+    formatPrice: (amount: number, minDecimals?: number, maxDecimals?: number) => string;
 }) {
     const getStatusBadge = () => {
         if (alert.isTriggered) {
@@ -654,7 +663,7 @@ function AlertCard({
                             Alert when {alert.alertType} goes{' '}
                             <span className="font-semibold">{alert.condition}</span>{' '}
                             {alert.targetValue ? (
-                                <span className="font-bold text-gray-900 dark:text-white">${alert.targetValue.toFixed(2)}</span>
+                                <span className="font-bold text-gray-900 dark:text-white">{formatPrice(alert.targetValue, 2, 2)}</span>
                             ) : (
                                 'target'
                             )}
