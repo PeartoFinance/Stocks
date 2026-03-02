@@ -5,6 +5,8 @@ const API_BASE = (process.env.NEXT_PUBLIC_API_URL || '').replace(/\/$/, '');
 interface TechnicalAnalysisResponse {
   symbol: string;
   price: number;
+  status?: string;
+  message?: string;
   summary: {
     score: number;
     signal: string;
