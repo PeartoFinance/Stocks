@@ -40,7 +40,7 @@ export default function RiskAnalysisChart({ symbol, className = '' }: RiskAnalys
     );
   }
 
-  if (!data) return null;
+  if (!data || !data.summary || !data.summary.counts) return null;
 
   const { summary } = data;
   const totalBuy = summary.counts.oscillators.buy + summary.counts.movingAverages.buy;
