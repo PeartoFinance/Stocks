@@ -12,6 +12,8 @@ import { useCurrency } from '@/app/context/CurrencyContext';
 interface TechnicalData {
   symbol: string;
   price: number;
+  status?: string;
+  message?: string;
   summary: {
     score: number;
     signal: string;
@@ -95,6 +97,12 @@ export default function AnalysisPage() {
       
       if (!analysisData || !analysisData.symbol) {
         toast.error('No analysis data available for this symbol');
+        setAnalysis(null);
+        return;
+      }
+      
+      if (analysisData.status === 'error' || analysisData.message === 'Insufficient data for analysis') {
+        toast.error(`Insufficient data for analysis: ${symbol}`);
         setAnalysis(null);
         return;
       }
@@ -203,9 +211,9 @@ export default function AnalysisPage() {
           </div>
           {suggestions.length > 0 && (
             <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-xl shadow-lg max-h-80 overflow-y-auto z-50">
-              {suggestions.map((stock) => (
+              {suggestions.map((stock, index) => (
                 <button
-                  key={stock.symbol}
+                  key={`${stock.symbol}-${index}`}
                   onClick={() => handleSelectStock(stock.symbol)}
                   className="w-full px-4 py-3 text-left hover:bg-slate-50 dark:hover:bg-gray-700 border-b border-slate-100 dark:border-gray-700 last:border-b-0"
                 >
@@ -223,7 +231,7 @@ export default function AnalysisPage() {
           </div>
         )}
 
-        {!loading && analysis && (
+        {!loading && analysis && analysis.summary && analysis.indicators && (
           <div className="space-y-6">
             {/* Stock Header with Details */}
             <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-gray-800 dark:to-gray-800 rounded-2xl p-4 md:p-6 border border-green-200 dark:border-gray-700">
@@ -288,7 +296,7 @@ export default function AnalysisPage() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
-              <RiskAnalysisChart symbol={analysis.symbol} />
+              {analysis.symbol && <RiskAnalysisChart symbol={analysis.symbol} />}
               <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-800 rounded-2xl p-4 md:p-8 border border-slate-200 dark:border-gray-700 shadow-xl">
                 <div className="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
                   <div className="p-1.5 md:p-2 bg-green-100 dark:bg-green-900/30 rounded-lg">
@@ -306,6 +314,7 @@ export default function AnalysisPage() {
                 </div>
               </div>
 
+              {analysis.summary?.counts && (
               <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 md:p-6 border border-slate-200 dark:border-gray-700 shadow-lg">
                 <div className="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
                   <div className="p-1.5 md:p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
@@ -356,8 +365,10 @@ export default function AnalysisPage() {
                   </div>
                 </div>
               </div>
+              )}
             </div>
 
+            {analysis.indicators?.rsi && analysis.indicators?.stoch && analysis.indicators?.macd && analysis.indicators?.cci && (
             <div className="bg-gradient-to-br from-white to-blue-50 dark:from-gray-800 dark:to-gray-800 rounded-2xl p-4 md:p-6 border border-blue-200 dark:border-gray-700 shadow-lg">
               <div className="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
                 <div className="p-1.5 md:p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
@@ -390,7 +401,9 @@ export default function AnalysisPage() {
                 </div>
               </div>
             </div>
+            )}
 
+            {analysis.indicators?.movingAverages && analysis.indicators.movingAverages.length > 0 && (
             <div className="bg-gradient-to-br from-white to-purple-50 dark:from-gray-800 dark:to-gray-800 rounded-2xl p-4 md:p-6 border border-purple-200 dark:border-gray-700 shadow-lg">
               <div className="flex items-center justify-between mb-4 md:mb-6">
                 <div className="flex items-center gap-2 md:gap-3">
@@ -405,7 +418,7 @@ export default function AnalysisPage() {
                 {(analysis.indicators?.movingAverages || []).map((ma, idx) => {
                   const priceDiff = ((analysis.price - (ma?.value || 0)) / (ma?.value || 1)) * 100;
                   return (
-                    <div key={idx} className="flex items-center justify-between p-3 md:p-4 rounded-xl bg-white dark:bg-gray-700 border border-slate-200 dark:border-gray-600 hover:shadow-md transition-all">
+                    <div key={`${ma?.name}-${idx}`} className="flex items-center justify-between p-3 md:p-4 rounded-xl bg-white dark:bg-gray-700 border border-slate-200 dark:border-gray-600 hover:shadow-md transition-all">
                       <div className="flex-1">
                         <div className="font-bold text-sm md:text-base text-slate-900 dark:text-white mb-1">{ma?.name || 'N/A'}</div>
                         <div className="text-xs md:text-sm text-slate-600 dark:text-gray-400">{formatPrice(ma?.value || 0)}</div>
@@ -421,6 +434,7 @@ export default function AnalysisPage() {
                 })}
               </div>
             </div>
+            )}
           </div>
         )}
 
